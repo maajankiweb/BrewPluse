@@ -33,3 +33,7 @@ yarn-error.log*
 # System files
 .DS_Store
 Thumbs.db
+
+# Marketing kit (local only, do not push to git)
+/marketing_kit/
+marketing_kit/
