@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function DownloadPage() {
   const apkFileName = "BrewPluse-Android.apk";
   const apkDownloadUrl = `/${apkFileName}`;
-  const sha256Hash = "F21F1AED4C7BA86BB2E2E27C347CB5E8D5C675B13A4AB6F97248685510666D63";
+  const sha256Hash = "08E9A61AC54B3A2B0BA4461FDD56BD4FA81A418AE7A2B22DF5B848C2907C8039";
 
   return (
     <div className="w-full">
