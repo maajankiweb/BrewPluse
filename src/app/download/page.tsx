@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function DownloadPage() {
   const apkFileName = "BrewPluse-Android.apk";
   const apkDownloadUrl = `/${apkFileName}`;
-  const sha256Hash = "DE868D5931D13EF98184BDF517660B008FC6AE8722FB45309692260821CA4453";
+  const sha256Hash = "F21F1AED4C7BA86BB2E2E27C347CB5E8D5C675B13A4AB6F97248685510666D63";
 
   return (
     <div className="w-full">
@@ -25,7 +25,7 @@ export default function DownloadPage() {
               applicationCategory: "BusinessApplication",
               softwareVersion: "1.0.0",
               downloadUrl: apkDownloadUrl,
-              fileSize: "3.52MB",
+              fileSize: "5.8MB",
               offers: {
                 "@type": "Offer",
                 price: "0",
@@ -82,7 +82,7 @@ export default function DownloadPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-7">
                   <div className="p-3.5 rounded-xl bg-[#FBFBFA] border border-[#E7E5E0]">
                     <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8a857f]">Package Size</div>
-                    <div className="text-sm font-bold text-[#141210] mt-1">3.5 MB</div>
+                    <div className="text-sm font-bold text-[#141210] mt-1">5.8 MB</div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-[#FBFBFA] border border-[#E7E5E0]">
                     <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8a857f]">OS Support</div>
@@ -105,7 +105,7 @@ export default function DownloadPage() {
                   className="w-full inline-flex items-center justify-center gap-2.5 py-4 rounded-full bg-[#0b2b1a] text-white text-base font-bold hover:bg-black shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all mb-4 group"
                 >
                   <span className="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">download</span>
-                  <span>Download Android APK (Direct - 3.5 MB)</span>
+                  <span>Download Android APK (Direct - 5.8 MB)</span>
                 </a>
 
                 {/* Mirror Link */}
