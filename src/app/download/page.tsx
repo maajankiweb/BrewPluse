@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function DownloadPage() {
   const apkFileName = "BrewPluse-Android.apk";
   const apkDownloadUrl = `/${apkFileName}`;
-  const sha256Hash = "08E9A61AC54B3A2B0BA4461FDD56BD4FA81A418AE7A2B22DF5B848C2907C8039";
+  const sha256Hash = "F4141B013643760E01BA5F16D53F6A1195C7E2640C60C3A5DD0B428D2583E675";
 
   return (
     <div className="w-full">
@@ -25,7 +25,7 @@ export default function DownloadPage() {
               applicationCategory: "BusinessApplication",
               softwareVersion: "1.0.0",
               downloadUrl: apkDownloadUrl,
-              fileSize: "5.8MB",
+              fileSize: "5.9MB",
               offers: {
                 "@type": "Offer",
                 price: "0",
