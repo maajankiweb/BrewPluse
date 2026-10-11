@@ -84,19 +84,48 @@ export default function MenuPage() {
   const [extractedDishes, setExtractedDishes] = useState<ExtractedDish[]>([]);
   const [hasScanned, setHasScanned] = useState(false);
 
-  const startAiScan = (photoUrl: string) => {
+  const startAiScan = async (photoUrl: string) => {
     setAiMenuPhoto(photoUrl);
     setIsAiScanning(true);
     setHasScanned(false);
 
-    setScanStepText('Analyzing physical menu layout & typography...');
+    setScanStepText('Analyzing physical menu with NVIDIA Vision OCR...');
     setTimeout(() => {
-      setScanStepText('Extracting menu categories: Coffee, Cold Brew, Bakes...');
-    }, 900);
+      setScanStepText('Extracting categories & prices into structured JSON...');
+    }, 1100);
 
-    setTimeout(() => {
-      setScanStepText('Detecting item names, descriptions & INR prices...');
-    }, 1800);
+    try {
+      const res = await fetch('/api/ai/nemotron', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'digitize_menu',
+          image: photoUrl,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.dishes) && data.dishes.length > 0) {
+          setIsAiScanning(false);
+          setHasScanned(true);
+          setExtractedDishes(
+            data.dishes.map((d: any, idx: number) => ({
+              id: 'ai-' + Date.now() + '-' + idx,
+              name: d.name || 'Untitled Dish',
+              cat: d.cat === 'coffee' || d.cat === 'tea' || d.cat === 'bakes' ? d.cat : 'coffee',
+              price: Number(d.price) || 180,
+              desc: d.desc || '',
+              selected: true,
+              image: d.image || 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=400&q=80',
+            }))
+          );
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('NVIDIA Vision call fallback:', e);
+    }
 
     setTimeout(() => {
       setIsAiScanning(false);
@@ -157,7 +186,7 @@ export default function MenuPage() {
           image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=400&q=80',
         },
       ]);
-    }, 2700);
+    }, 2000);
   };
 
   const handleImportExtracted = () => {

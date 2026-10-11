@@ -357,6 +357,43 @@ export default function BrewieAiPage() {
     setMessages((prev) => [...prev, userMessage]);
     setIsThinking(true);
 
+    try {
+      const res = await fetch('/api/ai/nemotron', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'chat',
+          prompt: text,
+          history: messages.slice(-6).map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          cafeName,
+          storeSlug,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.reply) {
+          const { card } = generateBrewieResponse(text);
+          const aiMessage: Message = {
+            id: `brewie-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+            role: 'brewie',
+            content: data.reply,
+            timestamp: Date.now(),
+            card,
+          };
+          setMessages((prev) => [...prev, aiMessage]);
+          setIsThinking(false);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Nemotron API call fallback:', e);
+    }
+
+    // Local fallback
     setTimeout(() => {
       const { reply, card } = generateBrewieResponse(text);
       const aiMessage: Message = {
@@ -368,7 +405,7 @@ export default function BrewieAiPage() {
       };
       setMessages((prev) => [...prev, aiMessage]);
       setIsThinking(false);
-    }, 600);
+    }, 400);
   };
 
   return (
@@ -385,9 +422,13 @@ export default function BrewieAiPage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
                 Active &amp; Ready
               </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#76B900]/15 dark:bg-[#76B900]/25 border border-[#76B900]/30 text-[#2B4B00] dark:text-[#76B900] font-mono font-bold text-[10px]">
+                <Zap className="w-3 h-3 text-[#76B900]" />
+                NVIDIA Nemotron 70B
+              </span>
             </div>
             <p className="text-xs text-[#65736D] dark:text-[#9AB2A8] font-normal leading-relaxed">
-              Your always-on conversational cafe intelligence partner.
+              Your conversational cafe intelligence partner powered by NVIDIA Nemotron.
             </p>
           </div>
 
