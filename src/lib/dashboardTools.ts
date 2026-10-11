@@ -57,8 +57,8 @@ export const ALL_DASHBOARD_TOOLS: DashboardTool[] = [
   },
   {
     id: 'usage',
-    title: 'CafeFlow Usage',
-    shortLabel: 'CafeFlow Usage',
+    title: 'BrewPluse Usage',
+    shortLabel: 'BrewPluse Usage',
     desc: 'View fee usage & settlement',
     category: 'operations',
     icon: Activity,
@@ -191,6 +191,7 @@ export const ALL_DASHBOARD_TOOLS: DashboardTool[] = [
     path: '/support',
     iconClasses: 'bg-[#DDF5EA] text-[#075C45] border-[#0B8F69]/20 group-hover:bg-[#C8EEDD] dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40',
   },
+  /* Video Guide temporarily hidden until custom BrewPluse video is ready
   {
     id: 'video-guide',
     title: 'Video Setup Guide',
@@ -203,6 +204,7 @@ export const ALL_DASHBOARD_TOOLS: DashboardTool[] = [
     isExternal: true,
     iconClasses: 'bg-[#EBF3FA] text-[#3975C6] border-[#3975C6]/20 group-hover:bg-[#DCEDFC] dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/40',
   },
+  */
   {
     id: 'status',
     title: 'System Status',
@@ -210,16 +212,14 @@ export const ALL_DASHBOARD_TOOLS: DashboardTool[] = [
     desc: 'Live uptime & services health',
     category: 'support',
     icon: Activity,
-    path: 'https://status.cafeflow.fun/',
-    badge: 'External',
-    isExternal: true,
+    path: '/status',
     iconClasses: 'bg-[#DDF5EA] text-[#075C45] border-[#0B8F69]/20 group-hover:bg-[#C8EEDD] dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40',
   },
   {
     id: 'about',
     title: 'About & License',
     shortLabel: 'About & License',
-    desc: 'CaféFlow version & legal info',
+    desc: 'BrewPluse version & legal info',
     category: 'support',
     icon: Info,
     path: '/about',

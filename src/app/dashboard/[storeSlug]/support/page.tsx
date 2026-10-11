@@ -109,7 +109,8 @@ export default function SupportPage() {
         </Link>
       </div>
 
-      {/* Tutorial Video Card */}
+      {/* Tutorial Video Card (Temporarily hidden until custom BrewPluse video is published) */}
+      {/*
       <div className="p-4 border border-stone-200 bg-white rounded-xl space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="space-y-0.5">
@@ -154,6 +155,7 @@ export default function SupportPage() {
           </a>
         </div>
       </div>
+      */}
 
       {/* Direct WhatsApp Box */}
       <div className="p-4 border border-stone-200 bg-white rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">

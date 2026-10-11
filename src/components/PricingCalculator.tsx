@@ -207,7 +207,8 @@ export default function PricingCalculator() {
           </div>
         </div>
 
-        {/* Video Walkthrough Section */}
+        {/* Video Walkthrough Section (Temporarily hidden until custom BrewPluse video is published) */}
+        {/*
         <div className="rounded-3xl p-6 sm:p-10 bg-[#121914] border border-emerald-900/40 shadow-xl mb-16 text-left">
           <div className="max-w-3xl mb-6">
             <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 mb-2">
@@ -221,7 +222,6 @@ export default function PricingCalculator() {
             </p>
           </div>
 
-          {/* 16:9 Video Embed */}
           <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10 shadow-2xl">
             <iframe
               src="https://www.youtube.com/embed/pt-x6OqOvIA?si=brewpluse"
@@ -248,6 +248,7 @@ export default function PricingCalculator() {
             </a>
           </div>
         </div>
+        */}
 
         {/* Bottom Banner of Section 5 */}
         <div className="max-w-2xl mx-auto text-center">
