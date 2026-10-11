@@ -1,0 +1,33 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js build output
+/.next/
+/out/
+!/out/index.html
+
+# Local Tools & Build SDKs
+/.tools/
+.tools/
+
+# Android Build artifacts & local properties
+/android/.gradle/
+/android/build/
+/android/app/build/
+/android/local.properties
+/android/.idea/
+
+# Environment files
+.env*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>BrewPluse Launch Video</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #07130c;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        color: #ffffff;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        background: radial-gradient(circle at 50% 40%, #0d2818 0%, #06110a 100%);
+      }
+
+      /* Ambient Lighting */
+      .glow-orb {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+        filter: blur(60px);
+      }
+
+      /* Scene Containers */
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        padding: 80px;
+      }
+
+      /* Typography */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 24px;
+        border-radius: 9999px;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #34d399;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+      }
+
+      .headline-hero {
+        font-size: 76px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        text-align: center;
+        max-width: 1400px;
+      }
+
+      .sub-text {
+        font-size: 28px;
+        color: #a7f3d0;
+        opacity: 0.85;
+        text-align: center;
+        margin-top: 20px;
+        max-width: 1000px;
+      }
+
+      /* Mockup Tablet Frame */
+      .tablet-frame {
+        width: 1100px;
+        height: 600px;
+        background: #111814;
+        border: 4px solid #1f3d2b;
+        border-radius: 36px;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(16, 185, 129, 0.2);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 260px 1fr 340px;
+        margin-top: 30px;
+      }
+
+      .tablet-sidebar {
+        background: #0b1a11;
+        border-right: 1px solid #1f3d2b;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .tablet-center {
+        background: #0f2217;
+        padding: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        overflow: hidden;
+      }
+
+      .food-card {
+        background: #153322;
+        border: 1px solid #234c34;
+        border-radius: 18px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .tablet-cart {
+        background: #0b1a11;
+        border-left: 1px solid #1f3d2b;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* KDS Ticket Card */
+      .kds-card {
+        width: 480px;
+        background: #111814;
+        border: 2px solid #f59e0b;
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
+      <div class="glow-orb" style="top: 15%; left: 30%;"></div>
+
+      <!-- ================= SCENE 1: THE HOOK (0s - 3.5s) ================= -->
+      <div id="scene1" class="scene">
+        <div class="badge">Legacy POS Problem</div>
+        <h1 class="headline-hero">
+          STILL PAYING <span style="color: #ef4444; text-decoration: line-through;">₹30,000/YR</span><br>
+          FOR CLUNKY RESTAURANT SOFTWARE?
+        </h1>
+        <p class="sub-text">Expensive hardware lock-ins. Clunky slow interfaces. 25% aggregator cuts.</p>
+      </div>
+
+      <!-- ================= SCENE 2: THE REVEAL (3.5s - 7.5s) ================= -->
+      <div id="scene2" class="scene">
+        <div class="badge" style="background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #fbbf24;">The Revolution</div>
+        <h1 class="headline-hero" style="font-size: 64px;">
+          MEET <span style="color: #10b981;">BrewPluse</span>. <span style="color: #f59e0b;">₹0/MONTH</span> FOREVER.
+        </h1>
+        <div class="tablet-frame" id="mockup">
+          <div class="tablet-sidebar">
+            <div style="font-weight: 800; font-size: 20px; color: #34d399;">☕ BrewPluse</div>
+            <div style="padding: 10px 14px; background: #164028; border-radius: 12px; font-size: 13px; font-weight: 700;">🟢 Table 3 Active</div>
+            <div style="font-size: 12px; opacity: 0.6;">Dine-In • 4 Guests</div>
+          </div>
+          <div class="tablet-center">
+            <div class="food-card">
+              <div style="font-size: 28px;">☕</div>
+              <div style="font-weight: 700; font-size: 15px;">Spanish Latte</div>
+              <div style="color: #34d399; font-weight: 800;">₹240</div>
+            </div>
+            <div class="food-card">
+              <div style="font-size: 28px;">🥐</div>
+              <div style="font-weight: 700; font-size: 15px;">Almond Croissant</div>
+              <div style="color: #34d399; font-weight: 800;">₹180</div>
+            </div>
+            <div class="food-card">
+              <div style="font-size: 28px;">🥑</div>
+              <div style="font-weight: 700; font-size: 15px;">Avocado Toast</div>
+              <div style="color: #34d399; font-weight: 800;">₹320</div>
+            </div>
+          </div>
+          <div class="tablet-cart">
+            <div>
+              <div style="font-weight: 800; font-size: 16px; border-bottom: 1px solid #1f3d2b; padding-bottom: 8px;">Order #BP-1042</div>
+              <div style="font-size: 13px; margin-top: 10px; opacity: 0.8;">2x Spanish Latte — ₹480</div>
+              <div style="font-size: 13px; margin-top: 4px; opacity: 0.8;">1x Croissant — ₹180</div>
+            </div>
+            <div style="background: #10b981; color: #042f1a; font-weight: 900; text-align: center; padding: 14px; border-radius: 14px; font-size: 16px;">
+              POST ORDER ➔ ₹693
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SCENE 3: SPEED POS & LIVE KDS (7.5s - 12.0s) ================= -->
+      <div id="scene3" class="scene">
+        <div class="badge">Dual Screen Synchronization</div>
+        <h1 class="headline-hero" style="font-size: 60px;">
+          1-TAP ORDER PUNCHING ➔ <span style="color: #f59e0b;">INSTANT KITCHEN KDS</span>
+        </h1>
+        <div style="display: flex; gap: 40px; margin-top: 36px; align-items: center;">
+          <div class="kds-card" style="border-color: #f59e0b;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+              <span style="font-weight: 900; font-size: 20px;">TICKET #BP-1042</span>
+              <span style="background: #f59e0b; color: #000; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 13px;">PREP: 02:45</span>
+            </div>
+            <div style="margin-top: 16px; font-size: 18px; line-height: 1.8;">
+              <div>✔ 2x Iced Spanish Latte (Oat Milk)</div>
+              <div>✔ 1x Butter Croissant (Heated)</div>
+            </div>
+            <div style="margin-top: 20px; background: rgba(245,158,11,0.15); color: #fbbf24; text-align: center; padding: 12px; border-radius: 14px; font-weight: 800;">
+              FIRE TO BARISTA LINE ⚡
+            </div>
+          </div>
+
+          <div style="font-size: 40px; color: #10b981;">➔</div>
+
+          <div class="kds-card" style="border-color: #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+              <span style="font-weight: 900; font-size: 20px;">BLUETOOTH PRINTER</span>
+              <span style="background: #10b981; color: #000; font-weight: 900; padding: 4px 12px; border-radius: 999px; font-size: 13px;">PRINTED</span>
+            </div>
+            <div style="margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-size: 16px; line-height: 1.6; opacity: 0.9;">
+              <div>================================</div>
+              <div>BREWPLUSE ARTISAN CAFE</div>
+              <div>GSTIN: 29ABCDE1234F1Z5</div>
+              <div>PAID VIA UPI: ₹693.00</div>
+              <div>================================</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SCENE 4: CONTACTLESS QR & UPI (12.0s - 16.0s) ================= -->
+      <div id="scene4" class="scene">
+        <div class="badge" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa;">Contactless Dining</div>
+        <h1 class="headline-hero" style="font-size: 64px;">
+          GUESTS SCAN. ORDER. PAY VIA UPI.<br>
+          <span style="color: #34d399;">0% COMMISSION. ZERO APPS NEEDED.</span>
+        </h1>
+        <p class="sub-text">Turn every dining table into an instant ordering kiosk in under 500ms.</p>
+      </div>
+
+      <!-- ================= SCENE 5: OUTRO & PUNCHLINE (16.0s - 20.0s) ================= -->
+      <div id="scene5" class="scene">
+        <div style="font-size: 72px; margin-bottom: 16px;">☕⚡</div>
+        <h1 class="headline-hero" style="font-size: 80px; letter-spacing: -0.04em;">
+          Brew<span style="color: #10b981;">Pluse</span>
+        </h1>
+        <h2 style="font-size: 36px; font-weight: 800; color: #f59e0b; margin-top: 14px;">
+          Run Your Cafe. Not Your Software.
+        </h2>
+        <div style="display: flex; gap: 20px; margin-top: 36px;">
+          <div class="badge" style="margin-bottom: 0;">✔ ₹0/MONTH SOFTWARE</div>
+          <div class="badge" style="margin-bottom: 0;">✔ SETUP IN &lt; 5 MINS</div>
+          <div class="badge" style="margin-bottom: 0;">✔ WEB BLUETOOTH POS</div>
+        </div>
+        <div style="margin-top: 28px; font-size: 26px; font-family: 'JetBrains Mono', monospace; color: #34d399; font-weight: 700;">
+          https://brewpluse.com
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1: 0s - 3.5s
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.fromTo("#scene1 .badge", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.5)" }, 0.2);
+      tl.fromTo("#scene1 .headline-hero", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.4);
+      tl.fromTo("#scene1 .sub-text", { y: 20, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.6 }, 0.7);
+      tl.to("#scene1", { autoAlpha: 0, scale: 0.96, duration: 0.4, ease: "power2.in" }, 3.1);
+
+      // Scene 2: 3.5s - 7.5s
+      tl.set("#scene2", { autoAlpha: 1 }, 3.5);
+      tl.fromTo("#scene2 .badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, 3.5);
+      tl.fromTo("#scene2 .headline-hero", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 3.7);
+      tl.fromTo("#mockup", { y: 100, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" }, 4.0);
+      tl.to("#scene2", { autoAlpha: 0, y: -40, duration: 0.4, ease: "power2.in" }, 7.1);
+
+      // Scene 3: 7.5s - 12.0s
+      tl.set("#scene3", { autoAlpha: 1 }, 7.5);
+      tl.fromTo("#scene3 .headline-hero", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 7.6);
+      tl.fromTo("#scene3 .kds-card", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, stagger: 0.2, ease: "power3.out" }, 7.9);
+      tl.to("#scene3", { autoAlpha: 0, scale: 1.05, duration: 0.4, ease: "power2.in" }, 11.6);
+
+      // Scene 4: 12.0s - 16.0s
+      tl.set("#scene4", { autoAlpha: 1 }, 12.0);
+      tl.fromTo("#scene4 .headline-hero", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.2)" }, 12.2);
+      tl.fromTo("#scene4 .sub-text", { y: 20, opacity: 0 }, { y: 0, opacity: 0.85, duration: 0.5 }, 12.6);
+      tl.to("#scene4", { autoAlpha: 0, duration: 0.4 }, 15.6);
+
+      // Scene 5: 16.0s - 20.0s
+      tl.set("#scene5", { autoAlpha: 1 }, 16.0);
+      tl.fromTo("#scene5 .headline-hero", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 16.2);
+      tl.fromTo("#scene5 h2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, 16.6);
+      tl.fromTo("#scene5 .badge", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.15, duration: 0.4, ease: "back.out(1.5)" }, 17.0);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

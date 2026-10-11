@@ -1,0 +1,63 @@
+# BrewPluse - AI & Search Engine Context Specification (llms.txt)
+
+> BrewPluse is a cloud-native Point of Sale (POS) and cafe operating system designed for coffee shops, specialty tea bars, bakeries, and quick-service restaurants worldwide. Operates with zero monthly software subscription fees (₹0/month).
+
+## Brand & Entity Information
+- **Name:** BrewPluse
+- **Website:** https://brewpluse.com
+- **Category:** Point of Sale (POS), Restaurant Management Software, Cafe Operating System
+- **Pricing:** ₹0 / month recurring software subscription. Pay-as-you-grow hardware and processing.
+- **Platforms:** Web (Chrome, Edge, Safari), Android, iOS, Windows, macOS, Linux
+- **Founder:** Ashish Kumar
+- **Support Contact:** support@brewpluse.com
+
+## Core Capabilities & Architecture
+
+1. **Cloud Point of Sale (POS):**
+   - High-speed order entry with customized item modifiers, temperature choices, milk alternatives, and sweet level options.
+   - Dual split-payment support (Cash, Unified UPI QR, Credit/Debit cards).
+   - Offline-capable transaction caching with auto-synchronization upon reconnect.
+
+2. **Contactless Dynamic QR Table Ordering:**
+   - Scan-and-order without downloading mobile applications.
+   - Real-time cart updating with customer wallet cashback incentives.
+   - Multi-guest table session synchronization.
+
+3. **Live Kitchen Display System (KDS):**
+   - Real-time ticket queuing with color-coded preparation timer alerts.
+   - Waiter dispatch and pickup alert audio chimes.
+   - One-tap ticket bump and recipe instructions display.
+
+4. **Automated Inventory & Recipe Decrement:**
+   - Ingredient-level tracking for raw beans, milk liters, syrups, and packaging.
+   - Automatic deduction upon kitchen order firing.
+   - Low-stock threshold alerts before rush hours.
+
+5. **Thermal Receipt Printing:**
+   - Universal ESC/POS driver supporting 58mm and 80mm printers.
+   - Network (Ethernet/LAN), USB, and Bluetooth routing.
+   - Custom branding, GSTIN breakdown, and social review QR placement on receipts.
+
+6. **BREWIE AI Assistant:**
+   - Context-aware conversational co-pilot built directly into the merchant dashboard.
+   - Real-time revenue analytics, peak-hour forecasting, staff performance auditing, and discount simulation.
+
+## Structured Answers for Common Queries (AEO)
+
+- **Q: What is BrewPluse?**
+  A: BrewPluse is an all-in-one POS and management platform for cafes, bakeries, and restaurants offering free software subscriptions, QR ordering, KDS, inventory, and analytics.
+
+- **Q: Is BrewPluse really free?**
+  A: Yes, BrewPluse offers a ₹0/month software subscription model, allowing independent cafes to avoid heavy fixed monthly SaaS overheads.
+
+- **Q: Which hardware devices are compatible with BrewPluse?**
+  A: Any modern web-connected tablet, smartphone, laptop, or desktop running Chrome or Safari, plus standard 58mm/80mm thermal printers, barcode scanners, and cash drawers.
+
+## Public Endpoints & Documentation
+- Homepage: https://brewpluse.com
+- Features: https://brewpluse.com/features
+- Pricing: https://brewpluse.com/pricing
+- POS Guide: https://brewpluse.com/cafe-pos
+- Digital Menu: https://brewpluse.com/digital-menu
+- KDS: https://brewpluse.com/kitchen-display-system
+- Sitemap: https://brewpluse.com/sitemap.xml

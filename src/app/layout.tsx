@@ -1,0 +1,297 @@
+import type { Metadata, Viewport } from 'next';
+import '@/styles/globals.css';
+import AppShell from '@/components/AppShell';
+
+export const viewport: Viewport = {
+  themeColor: '#062F23',
+  colorScheme: 'light dark',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://brewpluse.com'),
+  title: {
+    default: 'BrewPluse – Run your cafe. Not your software. | Cloud POS & Cafe Operating System',
+    template: '%s | BrewPluse Cafe Management',
+  },
+  description:
+    'Menus, QR table ordering, billing, inventory, kitchen display system (KDS), loyalty, delivery and your digital storefront — all connected in one simple system with ₹0/month software subscription.',
+  keywords: [
+    'cafe management software',
+    'free cafe software',
+    'coffee shop POS',
+    'restaurant POS software',
+    'QR table ordering system',
+    'kitchen display system KDS',
+    'cafe billing software free',
+    'cafe inventory management',
+    'cloud cafe point of sale',
+    'BrewPluse',
+    'BrewPluse POS',
+  ],
+  authors: [{ name: 'Ashish Kumar', url: 'https://brewpluse.com' }],
+  creator: 'BrewPluse Technologies',
+  publisher: 'BrewPluse',
+  manifest: '/site.webmanifest',
+  alternates: {
+    canonical: 'https://brewpluse.com',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: ['/favicon.ico'],
+  },
+  openGraph: {
+    title: 'BrewPluse – AI-Powered Cafe Management System & POS Software',
+    description:
+      'Cloud-native Point of Sale (POS) and cafe operating system powering independent coffee shops, bakeries, and tea bars worldwide. Zero monthly subscriptions.',
+    url: 'https://brewpluse.com',
+    siteName: 'BrewPluse',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/storefront.png',
+        width: 1200,
+        height: 630,
+        alt: 'BrewPluse – Cloud Point of Sale and Cafe Operating System',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BrewPluse – Cloud POS & Cafe Management Software',
+    description:
+      'Manage billing, QR ordering, KDS, inventory, and staff with BrewPluse with ₹0/month software subscription.',
+    images: ['/storefront.png'],
+    creator: '@brewpluse',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Rich Structured Data Schemas (SEO, AEO, GEO)
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'BrewPluse',
+    legalName: 'Ashish Kumar',
+    url: 'https://brewpluse.com',
+    logo: 'https://brewpluse.com/icon.png',
+    email: 'support@brewpluse.com',
+    telephone: '+91-9006543913',
+    founder: {
+      '@type': 'Person',
+      name: 'Ashish Kumar',
+    },
+    description:
+      'Cloud-native Point of Sale (POS) and cafe operating system powering independent coffee shops, tea bars, and specialty restaurants with zero monthly subscriptions.',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+91-9006543913',
+      contactType: 'customer support',
+      email: 'support@brewpluse.com',
+      availableLanguage: ['English', 'Hindi'],
+    },
+    sameAs: [
+      'https://github.com/BrewPluse',
+      'https://linkedin.com/company/brewpluse',
+      'https://x.com/brewpluse',
+      'https://instagram.com/brewpluse',
+    ],
+  };
+
+  const softwareSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'BrewPluse Cafe POS & Operating System',
+    operatingSystem: 'Web, Android, iOS, Windows, macOS, Linux',
+    applicationCategory: 'BusinessApplication',
+    applicationSubCategory: 'PointOfSale',
+    offers: {
+      '@type': 'Offer',
+      price: '0.00',
+      priceCurrency: 'INR',
+      description: 'Zero monthly subscription plan with full POS, KDS, and QR table ordering access.',
+    },
+    featureList: [
+      'Cloud Point of Sale (POS)',
+      'Contactless QR Table Ordering',
+      'Live Kitchen Display System (KDS)',
+      'Ingredient-level Inventory & Recipe Management',
+      'Thermal Printer Auto-routing (USB/Network/Bluetooth)',
+      'Unified UPI, Cash & Card Register with GST Compliant Invoices',
+      'Customer Loyalty Points & Scratch Cards',
+      'AI Assistant BREWIE for Real-time Cafe Intelligence',
+    ],
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'BrewPluse',
+    url: 'https://brewpluse.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://brewpluse.com/blog?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
+  // Geographic Local Business Schema (GEO Engine Foundation)
+  const geoLocalSchema = {
+    '@context': 'https://schema.org',
+    '@type': ['CafeOrCoffeeShop', 'LocalBusiness'],
+    name: 'BrewPluse Flagship Cafe Experience',
+    image: 'https://brewpluse.com/storefront.png',
+    url: 'https://brewpluse.com',
+    telephone: '+91-9006543913',
+    priceRange: '₹₹',
+    menu: 'https://brewpluse.com/demo/menu',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'BrewPluse Tech Park, Sector 4',
+      addressLocality: 'Bangalore',
+      addressRegion: 'Karnataka',
+      postalCode: '560001',
+      addressCountry: 'IN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 12.9716,
+      longitude: 77.5946,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        opens: '07:00',
+        closes: '23:00',
+      },
+    ],
+    servesCuisine: ['Specialty Coffee', 'Breakfast', 'Artisanal Bakes', 'Tea', 'Snacks'],
+  };
+
+  // Answer Engine Optimization (AEO FAQ Schema for ChatGPT, Perplexity, Gemini, Copilot)
+  const aeoFaqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is BrewPluse?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'BrewPluse is a modern cloud-based Point of Sale (POS) and complete operating system for cafes, coffee shops, bakeries, and quick-service restaurants. It unifies QR table ordering, kitchen display systems (KDS), inventory management, staff tracking, thermal receipt printing, and customer loyalty into one interface with zero monthly software fees.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is BrewPluse free to use for cafes and restaurants?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. BrewPluse charges ₹0 per month for software subscriptions. Cafe owners get full access to the POS, digital QR menus, Kitchen Display System, and analytics without recurring monthly SaaS fees.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How does BrewPluse QR table ordering work?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Customers simply scan a dynamic QR stand on their table using any mobile smartphone camera. The live digital menu opens instantly without requiring any app download. Customers select dishes, add custom modifiers, and pay via UPI or request cash settlement. Orders route instantly to the Kitchen Display System (KDS).',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Does BrewPluse support thermal receipt printers and hardware?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. BrewPluse supports standard 58mm and 80mm ESC/POS thermal printers via USB, Bluetooth, LAN Ethernet, and Wi-Fi, alongside official NFC tap-to-review hardware cards and acrylic QR stands.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is BREWIE AI Assistant in BrewPluse?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'BREWIE is an integrated artificial intelligence assistant trained on cafe operations and restaurant workflows. It provides real-time sales velocity audits, low-stock threshold forecasting, happy-hour discount suggestions, and automated floor layout configurations directly inside the merchant dashboard.',
+        },
+      },
+    ],
+  };
+
+  return (
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+          rel="stylesheet"
+        />
+
+        {/* Structured Data: Organization (SEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        {/* Structured Data: SoftwareApplication (SEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+        />
+        {/* Structured Data: WebSite (SEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        {/* Structured Data: LocalBusiness & GeoCoordinates (GEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(geoLocalSchema) }}
+        />
+        {/* Structured Data: FAQPage (AEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqSchema) }}
+        />
+      </head>
+      <body className="font-sans antialiased text-[#1a1715] bg-[#FBFBFA] min-h-screen flex flex-col selection:bg-emerald-200 selection:text-emerald-950">
+        <AppShell>{children}</AppShell>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,37 @@
+{
+  "name": "brewpluse",
+  "version": "1.0.0",
+  "description": "BrewPluse - Run your cafe. Not your software. Modern Cafe Management & POS System",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "mobile:sync": "npx cap sync android",
+    "mobile:build": "powershell -Command \"$env:JAVA_HOME = 'D:\\BrewPluse\\.tools\\jdk17\\jdk-17.0.20.1+1'; $env:ANDROID_HOME = 'D:\\BrewPluse\\.tools\\android-sdk'; cd android; .\\gradlew.bat assembleDebug; Copy-Item app\\build\\outputs\\apk\\debug\\app-debug.apk ..\\public\\BrewPluse-Android.apk -Force; Copy-Item app\\build\\outputs\\apk\\debug\\app-debug.apk ..\\public\\downloads\\BrewPluse-Android.apk -Force\""
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "clsx": "^2.1.1",
+    "dotenv": "^16.4.5",
+    "gsap": "^3.12.5",
+    "lucide-react": "^0.453.0",
+    "mongoose": "^8.7.1",
+    "next": "14.2.15",
+    "nodemailer": "^10.0.16",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.11",
+    "@types/nodemailer": "^8.0.2",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
+  }
+}
