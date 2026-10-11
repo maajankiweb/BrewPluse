@@ -216,6 +216,18 @@ export default function CouponsPage() {
 
   const handleSaveLoyalty = (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      localStorage.setItem(
+        `brewpluse::loyalty_${storeSlug}`,
+        JSON.stringify({
+          enabled: loyaltyEnabled,
+          ordersRequired: milestoneOrdersRequired,
+          minOrderValue: milestoneMinOrderValue,
+          rewardType: loyaltyRewardType,
+          rewardItemId: loyaltySelectedItemId,
+        })
+      );
+    } catch (err) {}
     setLoyaltySavedSuccess(true);
     setTimeout(() => setLoyaltySavedSuccess(false), 3000);
   };

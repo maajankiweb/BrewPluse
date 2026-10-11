@@ -22,6 +22,7 @@ import {
   Database,
   UtensilsCrossed,
   Sparkles,
+  Mail,
 } from 'lucide-react';
 import { useDemo, MenuItem } from '../demoContext';
 import { thermalPrinter } from '@/lib/thermalPrinter';
@@ -56,6 +57,9 @@ export default function DemoPosPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [couponInput, setCouponInput] = useState('');
   const [completedOrder, setCompletedOrder] = useState<ReturnType<typeof createOrder> | null>(null);
+  const [billEmail, setBillEmail] = useState('');
+  const [isSendingBillEmail, setIsSendingBillEmail] = useState(false);
+  const [billEmailSent, setBillEmailSent] = useState(false);
 
   // Modifiers Modal State
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
@@ -941,9 +945,81 @@ export default function DemoPosPage() {
               </button>
             </div>
 
+            {/* Email Invoice Section (CafeFlow Feature) */}
+            <div className="p-3 rounded-xl bg-[#062F23]/5 dark:bg-[#062F23]/20 border border-[#062F23]/10 dark:border-emerald-500/20 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-[#12201B] dark:text-white flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-emerald-600" />
+                  Email Bill to Customer
+                </span>
+                {billEmailSent && (
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Sent!
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="customer@gmail.com"
+                  value={billEmail}
+                  onChange={(e) => setBillEmail(e.target.value)}
+                  className="flex-1 px-3 py-2 text-xs rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 focus:outline-none focus:border-emerald-500"
+                />
+                <button
+                  type="button"
+                  disabled={!billEmail || isSendingBillEmail}
+                  onClick={async () => {
+                    if (!billEmail) return;
+                    setIsSendingBillEmail(true);
+                    try {
+                      const res = await fetch('/api/send-bill', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          to: billEmail,
+                          customerName: customerName || 'Valued Guest',
+                          orderNumber: completedOrder.orderNumber,
+                          storeName: 'BrewPluse Cafe & Roasters',
+                          table: completedOrder.table,
+                          items: completedOrder.items.map((ci) => ({
+                            name: ci.item.name,
+                            qty: ci.quantity,
+                            price: ci.item.price + (ci.modifierPrice || 0),
+                          })),
+                          subtotal: completedOrder.subtotal,
+                          tax: completedOrder.tax,
+                          total: completedOrder.total,
+                          paymentMode: completedOrder.paymentMode,
+                        }),
+                      });
+                      const data = await res.json();
+                      if (res.ok && data.success) {
+                        setBillEmailSent(true);
+                        notify(data.preview ? 'Simulated digital invoice sent to email!' : `Bill sent to ${billEmail}`);
+                      } else {
+                        notify('Failed to send invoice email');
+                      }
+                    } catch (e) {
+                      notify('Error connecting to email service');
+                    } finally {
+                      setIsSendingBillEmail(false);
+                    }
+                  }}
+                  className="px-3 py-2 rounded-lg bg-[#062F23] hover:bg-[#0B5C45] text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                >
+                  {isSendingBillEmail ? 'Sending...' : 'Send Bill'}
+                </button>
+              </div>
+            </div>
+
             <button
               type="button"
-              onClick={() => setCompletedOrder(null)}
+              onClick={() => {
+                setCompletedOrder(null);
+                setBillEmailSent(false);
+                setBillEmail('');
+              }}
               className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all cursor-pointer"
             >
               Start Next Order
