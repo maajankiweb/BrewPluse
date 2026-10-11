@@ -46,88 +46,92 @@ export default function WhyAndFaqSection() {
 
   return (
     <section className="py-16 sm:py-24 bg-[#FBFBFA] border-t border-[#EBE8E3] px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
-          {/* Left Column: Comparison Table (6 cols) */}
-          <div className="lg:col-span-6 text-left">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-700 mb-2 block">
-              WHY BREWPLUSE?
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight mb-6">
-              Everything connected. Everything under control.
-            </h2>
+      <div className="max-w-7xl mx-auto space-y-20">
+        
+        {/* Section A: Comparison Table */}
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700 mb-2 block">
+            WHY BREWPLUSE?
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#141210] tracking-tight mb-4">
+            Everything connected. Everything under control.
+          </h2>
+          <p className="text-sm sm:text-base text-[#5a554f] max-w-xl mx-auto leading-relaxed mb-8">
+            Compare BrewPluse against outdated traditional POS machines and fragmented multi-app setups.
+          </p>
 
-            <div className="w-full overflow-x-auto rounded-2xl border border-[#E7E5E0] bg-white shadow-2xs">
-              <table className="w-full text-left border-collapse text-[11px]">
-                <thead>
-                  <tr className="border-b border-[#EBE8E3] bg-[#F8F7F4]">
-                    <th className="py-3 px-3.5 font-bold text-gray-700">Features</th>
-                    <th className="py-3 px-3 font-bold text-emerald-800 bg-emerald-50">BrewPluse</th>
-                    <th className="py-3 px-3 font-bold text-gray-500">Traditional POS</th>
-                    <th className="py-3 px-3 font-bold text-gray-500">Multiple Apps</th>
+          <div className="w-full overflow-x-auto rounded-2xl border border-[#E7E5E0] bg-white shadow-2xs text-left">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-[#EBE8E3] bg-[#F8F7F4]">
+                  <th className="py-3.5 px-4 font-bold text-gray-700">Features</th>
+                  <th className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/70">BrewPluse</th>
+                  <th className="py-3.5 px-4 font-bold text-gray-500">Traditional POS</th>
+                  <th className="py-3.5 px-4 font-bold text-gray-500">Multiple Apps</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {comparisonRows.map((r, i) => (
+                  <tr key={i} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-gray-800">{r.name}</td>
+                    <td className="py-3 px-4 font-bold text-emerald-700 bg-emerald-50/40">
+                      {r.brew}
+                    </td>
+                    <td className="py-3 px-4 text-gray-400 font-normal">
+                      {r.trad}
+                    </td>
+                    <td className="py-3 px-4 text-gray-400 font-normal">
+                      {r.multi}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {comparisonRows.map((r, i) => (
-                    <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="py-2.5 px-3.5 font-semibold text-gray-800">{r.name}</td>
-                      <td className="py-2.5 px-3 font-bold text-emerald-700 bg-emerald-50/60">
-                        {r.brew}
-                      </td>
-                      <td className="py-2.5 px-3 text-red-500 font-bold">
-                        {r.trad}
-                      </td>
-                      <td className="py-2.5 px-3 text-red-500 font-bold">
-                        {r.multi}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-
-          {/* Right Column: FAQ Accordion (6 cols) */}
-          <div id="faq" className="lg:col-span-6 text-left">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-700 mb-2 block">
-              YOUR QUESTIONS
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight mb-6">
-              Honest Answers for Cafe Operators
-            </h2>
-
-            <div className="space-y-3">
-              {faqs.map((faq, idx) => {
-                const isOpen = openFaq === idx;
-                return (
-                  <div
-                    key={idx}
-                    className="rounded-2xl border border-[#E7E5E0] bg-white overflow-hidden shadow-2xs transition-all"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(isOpen ? null : idx)}
-                      className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-[13px] text-[#141210] hover:bg-[#F8F7F4] transition-colors cursor-pointer"
-                      aria-expanded={isOpen}
-                    >
-                      <span>{faq.q}</span>
-                      <span className="text-amber-600 text-lg font-bold shrink-0 transition-transform duration-200">
-                        {isOpen ? '−' : '+'}
-                      </span>
-                    </button>
-                    {isOpen && (
-                      <div className="px-4 pb-4 pt-1 text-xs text-[#5a554f] leading-relaxed border-t border-gray-100">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
         </div>
+
+        {/* Section B: FAQ Accordion */}
+        <div id="faq" className="max-w-3xl mx-auto text-center">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700 mb-2 block">
+            YOUR QUESTIONS
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight mb-4">
+            Honest Answers for Cafe Operators
+          </h2>
+          <p className="text-sm sm:text-base text-[#5a554f] max-w-lg mx-auto leading-relaxed mb-8">
+            Clear, transparent answers about our ₹0 software fees, billing modes, and device compatibility.
+          </p>
+
+          <div className="space-y-3 text-left">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-[#E7E5E0] bg-white overflow-hidden shadow-2xs transition-all"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-[#141210] hover:bg-[#F8F7F4] transition-colors cursor-pointer"
+                    aria-expanded={isOpen}
+                  >
+                    <span>{faq.q}</span>
+                    <span className="text-amber-600 text-lg font-bold shrink-0 transition-transform duration-200">
+                      {isOpen ? '−' : '+'}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-[#5a554f] leading-relaxed border-t border-gray-100">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </section>
   );

@@ -4,7 +4,7 @@ export default function SystemComparison() {
   return (
     <section id="solutions" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
       <div className="max-w-3xl mx-auto mb-12 sm:mb-16">
-        <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-emerald-800 mb-2 block">
+        <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-2 block">
           SYSTEM SIMPLIFICATION
         </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#141210] tracking-tight mb-4">
@@ -22,14 +22,14 @@ export default function SystemComparison() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-700">
-                THE TRADITIONAL WAY
+              <span className="text-xs font-mono font-bold tracking-normal text-red-700">
+                The Traditional Way
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-extrabold text-[#141210] mb-3">
               5 apps, 0 communication.
             </h3>
-            <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
               A messy legacy POS misses an order. A PDF menu on Google Drive isn&apos;t updating. You manual Excel sheet. It all adds up to chaos.
             </p>
 
@@ -55,7 +55,7 @@ export default function SystemComparison() {
             </ul>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-red-100 text-[11px] font-mono text-red-700 font-semibold">
+          <div className="mt-8 pt-4 border-t border-red-100 text-xs font-mono text-red-700 font-semibold">
             Result: Lost sales, angry wait-times, unhappy regulars
           </div>
         </div>
@@ -65,14 +65,14 @@ export default function SystemComparison() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-800">
-                THE BREWPLUSE WAY
+              <span className="text-xs font-mono font-bold tracking-normal text-emerald-800">
+                The BrewPluse Way
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-extrabold text-[#141210] mb-3">
               One synchronized heartbeat.
             </h3>
-            <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
               When an order is placed on Table 7, it arrives on the kitchen screen. Stock is updated. Loyalty is earned. Your team stays on the same page, instantly. One system. One flow. Zero manual re-entry.
             </p>
 
@@ -98,7 +98,7 @@ export default function SystemComparison() {
             </ul>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-emerald-100 text-[11px] font-mono text-emerald-800 font-semibold">
+          <div className="mt-8 pt-4 border-t border-emerald-100 text-xs font-mono text-emerald-800 font-semibold">
             Result: More time to focus on food. More smiles at the till.
           </div>
         </div>

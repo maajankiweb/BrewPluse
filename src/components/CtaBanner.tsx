@@ -3,7 +3,7 @@ import React from 'react';
 export default function CtaBanner() {
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="relative w-full rounded-[28px] md:rounded-[36px] bg-[#111713] border border-[#223026] text-white overflow-hidden shadow-2xl flex flex-col lg:block">
+      <div className="relative w-full rounded-3xl bg-[#111713] border border-[#223026] text-white overflow-hidden shadow-2xl flex flex-col lg:block">
         {/* Dot pattern background */}
         <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(#f59e0b_1.5px,transparent_1.5px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_50%,#000_60%,transparent_100%)]" />
 
@@ -26,12 +26,12 @@ export default function CtaBanner() {
 
         {/* Left Half: Typography & Action Buttons */}
         <div className="relative z-20 p-8 sm:p-12 lg:p-14 lg:py-16 max-w-2xl text-left order-1 lg:order-none">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#16271c] border border-emerald-500/30 text-emerald-400 font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-5 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#16271c] border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold tracking-wider uppercase mb-5 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span>BUILT FOR CAFES, LOVED BY CUSTOMERS</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-white tracking-tight leading-[1.15] mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.15] mb-4">
             Your cafe is already crafted with love.<br className="hidden sm:inline" />
             Now give it the operating system it deserves.
           </h2>
@@ -43,10 +43,10 @@ export default function CtaBanner() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8">
             <a
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#006838] hover:bg-[#007a42] text-white text-sm font-bold shadow-lg hover:shadow-emerald-950/50 transition-all hover:scale-[1.02]"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#0b2b1a] hover:bg-black text-white text-sm font-semibold shadow-md hover:-translate-y-0.5 transition-all"
             >
               <span>Start Free</span>
-              <span className="text-emerald-300">→</span>
+              <span className="text-emerald-400">→</span>
             </a>
             <a
               href="/demo"

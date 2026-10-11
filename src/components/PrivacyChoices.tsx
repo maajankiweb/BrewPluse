@@ -26,6 +26,10 @@ export default function PrivacyChoices() {
     } catch (e) {
       setBannerVisible(true);
     }
+
+    const handleOpenModal = () => setModalOpen(true);
+    window.addEventListener('open-privacy-modal', handleOpenModal);
+    return () => window.removeEventListener('open-privacy-modal', handleOpenModal);
   }, []);
 
   async function handleSave(analyticsVal: boolean, marketingVal: boolean, source = 'PREFERENCE_CENTER') {
@@ -129,19 +133,7 @@ export default function PrivacyChoices() {
         </div>
       )}
 
-      {/* 2. Floating Persistent Button in Bottom Left */}
-      <button
-        onClick={() => setModalOpen(true)}
-        aria-label="Manage Privacy Preferences"
-        className="fixed bottom-4 left-4 z-40 p-2.5 rounded-full bg-[#141210]/90 hover:bg-[#141210] text-emerald-400 border border-emerald-500/30 shadow-lg backdrop-blur-md transition-all hover:scale-105 group text-xs font-mono flex items-center gap-2 cursor-pointer"
-      >
-        <span className="material-symbols-outlined text-[18px]">security</span>
-        <span className="hidden sm:inline text-gray-300 group-hover:text-white font-sans text-xs">
-          Privacy Choices
-        </span>
-      </button>
-
-      {/* 3. Detailed Preferences Modal */}
+      {/* Detailed Preferences Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in duration-200">
           <div

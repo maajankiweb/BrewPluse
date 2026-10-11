@@ -101,7 +101,7 @@ export default function PricingCalculator() {
             <div>
               <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                 <div>
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
                     2. ORDER-LEVEL BREWPLUSE FEE
                   </span>
                   <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
@@ -112,13 +112,13 @@ export default function PricingCalculator() {
                   <div className="text-3xl sm:text-4xl font-extrabold text-amber-400 font-mono">
                     ₹1
                   </div>
-                  <div className="text-[10px] font-mono text-gray-400">/ eligible order</div>
+                  <div className="text-xs font-mono text-gray-400">/ eligible order</div>
                 </div>
               </div>
 
               {/* Order summary preview */}
               <div className="rounded-2xl p-4 bg-black/40 border border-white/5 space-y-2 text-xs font-mono mb-6">
-                <div className="flex justify-between text-gray-400 text-[11px] pb-2 border-b border-white/10">
+                <div className="flex justify-between text-gray-400 text-xs pb-2 border-b border-white/10">
                   <span>BREWPLUSE ORDER SUMMARY</span>
                   <span>Order #BP1024 • Table 4</span>
                 </div>
@@ -154,7 +154,7 @@ export default function PricingCalculator() {
               </div>
             </div>
 
-            <p className="text-[11px] text-gray-400 leading-relaxed font-mono">
+            <p className="text-xs text-gray-300 leading-relaxed">
               The ₹1 fee is an order-level platform fee — never a software subscription charge.
             </p>
           </div>

@@ -10,11 +10,11 @@ export default function Footer() {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-14 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-14 text-left">
           
-          {/* Brand Info & Legal box (4 cols) */}
-          <div className="lg:col-span-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-5 focus:outline-none group">
+          {/* Brand Info & Legal box */}
+          <div className="space-y-4">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-2 focus:outline-none group">
               <div className="w-8 h-8 rounded-xl bg-emerald-900 border border-emerald-500/20 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Coffee className="w-4 h-4 text-emerald-400" />
               </div>
@@ -23,7 +23,7 @@ export default function Footer() {
               </span>
             </Link>
 
-            <p className="text-xs sm:text-[13px] text-gray-400 leading-relaxed max-w-sm mb-6">
+            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-4">
               The complete operating system for modern cafes and restaurants. POS billing, contactless QR table ordering, live kitchen display (KDS), waiter ordering, and recipe inventory with ₹0/month software fees.
             </p>
 
@@ -55,12 +55,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Solutions Column (3 cols) */}
-          <div className="lg:col-span-3">
-            <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
+          {/* Solutions Column */}
+          <div>
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>SOLUTIONS</span>
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/qr-ordering-system">
@@ -105,12 +105,12 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources & Free Tools (3 cols) */}
-          <div className="lg:col-span-3">
-            <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400 mb-4 flex items-center gap-2">
+          {/* Resources & Free Tools */}
+          <div>
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
               <span>RESOURCES &amp; FREE TOOLS</span>
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
               <li>
                 <a
@@ -161,12 +161,12 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Help & Legal (2 cols) */}
-          <div className="lg:col-span-2">
-            <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
+          {/* Help & Legal */}
+          <div>
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>HELP &amp; LEGAL</span>
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/contact">
@@ -179,9 +179,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/privacy/preferences">
-                  Privacy &amp; Cookie Choices
-                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new CustomEvent('open-privacy-modal'));
+                    }
+                  }}
+                  className="hover:text-white hover:translate-x-0.5 transition-all inline-block cursor-pointer text-left text-xs text-gray-400"
+                >
+                  Manage Privacy Choices
+                </button>
               </li>
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/privacy/data-rights">

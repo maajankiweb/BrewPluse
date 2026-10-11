@@ -21,12 +21,12 @@ export default function HomePage() {
           {/* Left Column Content */}
           <div className="lg:col-span-5 flex flex-col items-start text-left animate-fadeIn">
             {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#E7E5E0] shadow-2xs text-xs font-mono font-semibold text-[#1a1715] mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#E7E5E0] shadow-2xs text-xs font-mono font-semibold text-[#141210] mb-6">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
               <span>Built for modern cafes &amp; restaurants</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-tight text-[#141210] leading-[1.1] mb-5">
+            <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-[#141210] leading-[1.1] mb-5">
               Run your cafe.<br />
               <span className="text-[#005c36]">Not your software.</span>
             </h1>
@@ -49,7 +49,7 @@ export default function HomePage() {
                 href="/demo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white border border-[#E7E5E0] text-[#1a1715] text-sm font-semibold hover:bg-[#F3F2EE] transition-all"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white border border-[#E7E5E0] text-[#141210] text-sm font-semibold hover:bg-[#F3F2EE] transition-all"
               >
                 <span className="material-symbols-outlined text-emerald-700 text-[18px]">play_circle</span>
                 <span>Explore Live Demo</span>
@@ -57,7 +57,7 @@ export default function HomePage() {
             </div>
 
             {/* Reassurance Checks */}
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs font-mono text-[#66615b]">
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs font-mono text-[#5a554f]">
               <span className="flex items-center gap-1.5">
                 <span className="text-emerald-600 font-bold">✔</span> Free to start
               </span>
