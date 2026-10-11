@@ -33,7 +33,7 @@ export default function HeroPosMockup() {
               </span>
             </div>
 
-            <nav className="space-y-0.5 text-[11px] font-medium text-gray-300">
+            <nav className="space-y-0.5 text-xs font-medium text-gray-300">
               <div className="flex items-center gap-2 px-2 py-1 rounded bg-emerald-600/20 text-emerald-400 font-semibold cursor-default">
                 <span className="material-symbols-outlined text-[14px]">dashboard</span> Dashboard
               </div>
@@ -124,7 +124,7 @@ export default function HeroPosMockup() {
             {/* Live orders widget */}
             <div className="col-span-12 md:col-span-7 p-2.5 rounded-xl bg-white border border-[#EBE8E3]">
               <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-gray-100">
-                <span className="text-[11px] font-bold text-[#1a1715]">Live Orders</span>
+                <span className="text-xs font-bold text-[#141210]">Live Orders</span>
                 <div className="flex gap-1 text-[9px]">
                   <button
                     type="button"
@@ -178,7 +178,7 @@ export default function HeroPosMockup() {
             {/* Sales Overview chart */}
             <div className="col-span-12 md:col-span-5 p-2.5 rounded-xl bg-white border border-[#EBE8E3] flex flex-col justify-between">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-[11px] font-bold text-[#1a1715]">Sales Overview</span>
+                <span className="text-xs font-bold text-[#141210]">Sales Overview</span>
                 <span className="text-[9px] font-mono text-gray-500">This Week ▼</span>
               </div>
 

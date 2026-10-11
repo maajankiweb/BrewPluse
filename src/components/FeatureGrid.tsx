@@ -49,7 +49,7 @@ export default function FeatureGrid() {
   return (
     <section id="features" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
       <div className="max-w-3xl mx-auto mb-12 sm:mb-16">
-        <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-emerald-800 mb-2 block">
+        <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-2 block">
           MADE FOR EVERYONE
         </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#141210] tracking-tight mb-4">

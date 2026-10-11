@@ -39,7 +39,7 @@ export default function Testimonials() {
             
             {/* Left Header Column */}
             <div className="lg:w-1/4 shrink-0 text-left">
-              <span className="text-[11px] font-mono font-bold tracking-widest text-[#8a857f] uppercase mb-2 block">
+              <span className="text-xs font-mono font-bold tracking-wider text-[#8a857f] uppercase mb-2 block">
                 LOVE FROM CAFES
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight leading-snug mb-3">

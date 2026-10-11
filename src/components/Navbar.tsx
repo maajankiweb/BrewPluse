@@ -70,7 +70,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
                           Point of Sale (POS)
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Fast counter billing &amp; print
                         </div>
                       </div>
@@ -87,7 +87,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
                           QR Table Ordering
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Contactless dine-in ordering
                         </div>
                       </div>
@@ -104,7 +104,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
                           Kitchen Display (KDS)
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Paperless kitchen &amp; barista
                         </div>
                       </div>
@@ -121,7 +121,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-rose-800 transition-colors">
                           Digital QR Menu
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Visual photos &amp; live 86 toggle
                         </div>
                       </div>
@@ -138,7 +138,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
                           Waiter Staff Ordering
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Handheld table order taking
                         </div>
                       </div>
@@ -155,7 +155,7 @@ export default function Navbar() {
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
                           Digital Loyalty Stamps
                         </div>
-                        <div className="text-[11px] text-gray-500 leading-snug">
+                        <div className="text-xs text-gray-500 leading-snug">
                           Gamified repeat rewards
                         </div>
                       </div>
@@ -206,7 +206,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
                         Cafe Management Software
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         Designed for coffee shops &amp; bakeries
                       </div>
                     </div>
@@ -223,7 +223,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-orange-800 transition-colors">
                         Restaurant Management Software
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         Dining room tables, split checks &amp; KDS
                       </div>
                     </div>
@@ -240,7 +240,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
                         Free Cafe Software
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         ₹0/month subscription model
                       </div>
                     </div>
@@ -287,7 +287,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
                         How to Use &amp; Setup Guide
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         5-minute step-by-step tutorial
                       </div>
                     </div>
@@ -304,7 +304,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
                         Blog &amp; Knowledge Base
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         Guides on cafe profit &amp; POS setup
                       </div>
                     </div>
@@ -321,7 +321,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
                         FAQ &amp; Honest Answers
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         Pricing, hardware &amp; safety details
                       </div>
                     </div>
@@ -338,7 +338,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
                         Download Software
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         POS Bridge &amp; mobile apps
                       </div>
                     </div>
@@ -355,7 +355,7 @@ export default function Navbar() {
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-rose-800 transition-colors">
                         Contact &amp; Support
                       </div>
-                      <div className="text-[11px] text-gray-500 leading-snug">
+                      <div className="text-xs text-gray-500 leading-snug">
                         Get in touch with our team
                       </div>
                     </div>
@@ -398,7 +398,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-white border-b border-[#EBE8E3] px-5 py-6 space-y-4 animate-fade-in shadow-xl max-h-[85vh] overflow-y-auto">
           <div className="space-y-1">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-2.5 py-1">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 px-2.5 py-1">
               Modules &amp; Features
             </div>
             <Link
@@ -468,7 +468,7 @@ export default function Navbar() {
               <span>→</span>
             </Link>
 
-            <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-2.5 pt-3 pb-1">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 px-2.5 pt-3 pb-1">
               Solutions &amp; Pricing
             </div>
             <Link
@@ -516,7 +516,7 @@ export default function Navbar() {
               <span>→</span>
             </Link>
 
-            <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-2.5 pt-3 pb-1">
+            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 px-2.5 pt-3 pb-1">
               Guides &amp; Resources
             </div>
             <Link

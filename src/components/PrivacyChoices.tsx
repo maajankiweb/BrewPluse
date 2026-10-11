@@ -176,7 +176,7 @@ export default function PrivacyChoices() {
                       Always Active
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
+                  <p className="text-xs text-gray-400 leading-relaxed">
                     Essential for secure authentication, session management, CSRF defense, and cafe POS operation. Cannot be disabled.
                   </p>
                 </div>
@@ -197,7 +197,7 @@ export default function PrivacyChoices() {
                       Optional
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
+                  <p className="text-xs text-gray-400 leading-relaxed">
                     Google Analytics (GA4) with IP anonymization enabled. Helps us understand aggregated visitor flows to improve POS features.
                   </p>
                 </div>
@@ -219,7 +219,7 @@ export default function PrivacyChoices() {
                       Optional
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
+                  <p className="text-xs text-gray-400 leading-relaxed">
                     Promotional hardware deals, cafe growth guides, and relevant POS product announcements.
                   </p>
                 </div>

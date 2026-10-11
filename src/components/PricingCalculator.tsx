@@ -43,7 +43,7 @@ export default function PricingCalculator() {
             <div>
               <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                 <div>
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
                     1. CAFE SOFTWARE SUBSCRIPTION
                   </span>
                   <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
