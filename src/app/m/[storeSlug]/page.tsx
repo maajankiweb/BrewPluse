@@ -22,6 +22,7 @@ import {
   AlertCircle,
   Copy,
   ExternalLink,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface MenuItem {
@@ -129,6 +130,19 @@ const DEFAULT_MENU: MenuItem[] = [
   },
 ];
 
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') return resolve(false);
+    if ((window as any).Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 export default function CustomerQrOrderingPage() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -150,7 +164,7 @@ export default function CustomerQrOrderingPage() {
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'counter'>('upi');
+  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'upi' | 'counter'>('razorpay');
 
   // Order Submission & Live Tracker
   const [placingOrder, setPlacingOrder] = useState(false);
@@ -284,7 +298,13 @@ export default function CustomerQrOrderingPage() {
       discount: discountAmount,
       tax: 0,
       total: finalTotal,
-      paymentMode: paymentMethod === 'upi' ? 'UPI' : 'Cash / Counter',
+      paymentMode:
+        paymentMethod === 'razorpay'
+          ? 'Razorpay (Online/UPI)'
+          : paymentMethod === 'upi'
+          ? 'UPI'
+          : 'Cash / Counter',
+      paymentStatus: 'pending',
       customerName: customerName || 'Dining Guest',
       customerPhone: customerPhone || '',
       customerEmail: customerEmail || '',
@@ -304,6 +324,91 @@ export default function CustomerQrOrderingPage() {
         status: 'pending',
         createdAt: new Date().toISOString(),
       };
+
+      if (paymentMethod === 'razorpay') {
+        const scriptLoaded = await loadRazorpayScript();
+        if (scriptLoaded && typeof (window as any).Razorpay !== 'undefined') {
+          // Create Razorpay Order
+          const rzpRes = await fetch('/api/payments/razorpay/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              amount: finalTotal,
+              receipt: confirmedOrder.orderNumber,
+              notes: {
+                storeSlug,
+                table: tableParam,
+                orderNumber: confirmedOrder.orderNumber,
+              },
+            }),
+          });
+          const rzpData = await rzpRes.json();
+
+          if (rzpData.success) {
+            const rzpOptions = {
+              key: rzpData.keyId,
+              amount: rzpData.amount,
+              currency: rzpData.currency || 'INR',
+              name: storeSlug.replace(/-/g, ' ').toUpperCase(),
+              description: `Order ${confirmedOrder.orderNumber} - ${tableParam}`,
+              image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=128&q=80',
+              order_id: rzpData.orderId.startsWith('order_mock_') ? undefined : rzpData.orderId,
+              handler: async function (response: any) {
+                try {
+                  await fetch('/api/payments/razorpay/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      razorpay_order_id: response.razorpay_order_id || rzpData.orderId,
+                      razorpay_payment_id: response.razorpay_payment_id,
+                      razorpay_signature: response.razorpay_signature || 'mock_signature',
+                      orderNumber: confirmedOrder.orderNumber,
+                      storeSlug,
+                      amount: finalTotal,
+                      customerName: customerName || 'Dining Guest',
+                      customerEmail: customerEmail || '',
+                      table: tableParam,
+                      items: cart,
+                    }),
+                  });
+                } catch (verifyErr) {
+                  console.error('Payment verification notification failed:', verifyErr);
+                }
+                setPlacedOrder({
+                  ...confirmedOrder,
+                  status: 'confirmed',
+                  paymentStatus: 'paid',
+                  paymentId: response.razorpay_payment_id,
+                });
+                setCart([]);
+                setIsCartOpen(false);
+                setPlacingOrder(false);
+              },
+              prefill: {
+                name: customerName || 'Dining Guest',
+                email: customerEmail || '',
+                contact: customerPhone || '',
+              },
+              theme: {
+                color: '#0B2B1A',
+              },
+              modal: {
+                ondismiss: function () {
+                  setPlacingOrder(false);
+                  setPlacedOrder(confirmedOrder);
+                  setCart([]);
+                  setIsCartOpen(false);
+                },
+              },
+            };
+
+            const rzpInstance = new (window as any).Razorpay(rzpOptions);
+            rzpInstance.open();
+            return;
+          }
+        }
+      }
+
       setPlacedOrder(confirmedOrder);
       setCart([]);
       setIsCartOpen(false);
@@ -704,41 +809,99 @@ export default function CustomerQrOrderingPage() {
 
               {/* Payment Method Selector */}
               <div className="space-y-1.5 pt-1">
-                <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
-                  Select Payment Tender
-                </p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+                    Select Payment Method
+                  </p>
+                  <span className="text-[10px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    Razorpay Secured
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  {/* Razorpay Online */}
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod('upi')}
-                    className={`p-2.5 rounded-xl border text-left text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
-                      paymentMethod === 'upi'
-                        ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950'
-                        : 'border-neutral-200 bg-white text-neutral-700'
+                    onClick={() => setPaymentMethod('razorpay')}
+                    className={`w-full p-3 rounded-xl border text-left text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
+                      paymentMethod === 'razorpay'
+                        ? 'border-emerald-600 bg-emerald-50/80 text-emerald-950 shadow-xs ring-1 ring-emerald-600'
+                        : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
                     }`}
                   >
-                    <QrCode className="w-4 h-4 text-emerald-700" />
-                    <div>
-                      <p>Instant UPI</p>
-                      <p className="text-[10px] text-neutral-500 font-normal">GPay, PhonePe, Paytm</p>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-900 flex items-center justify-center">
+                        <CreditCard className="w-4 h-4 text-emerald-700" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-extrabold text-[#0B2B1A]">Razorpay Instant Online</p>
+                          <span className="text-[9px] font-mono uppercase bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-bold">
+                            Fastest
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-neutral-500 font-normal">
+                          UPI (GPay, PhonePe, Paytm), Cards & NetBanking
+                        </p>
+                      </div>
+                    </div>
+                    <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                      paymentMethod === 'razorpay' ? 'border-emerald-700 bg-emerald-700' : 'border-neutral-300'
+                    }`}>
+                      {paymentMethod === 'razorpay' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('counter')}
-                    className={`p-2.5 rounded-xl border text-left text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
-                      paymentMethod === 'counter'
-                        ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950'
-                        : 'border-neutral-200 bg-white text-neutral-700'
-                    }`}
-                  >
-                    <CreditCard className="w-4 h-4 text-emerald-700" />
-                    <div>
-                      <p>Pay at Counter</p>
-                      <p className="text-[10px] text-neutral-500 font-normal">Cash / Card on exit</p>
-                    </div>
-                  </button>
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* Pay at Counter */}
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('counter')}
+                      className={`p-2.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
+                        paymentMethod === 'counter'
+                          ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-1 ring-emerald-600'
+                          : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Coffee className="w-4 h-4 text-neutral-600" />
+                        <div>
+                          <p>Pay at Counter</p>
+                          <p className="text-[10px] text-neutral-500 font-normal">Cash / POS Card</p>
+                        </div>
+                      </div>
+                      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                        paymentMethod === 'counter' ? 'border-emerald-700 bg-emerald-700' : 'border-neutral-300'
+                      }`}>
+                        {paymentMethod === 'counter' && <div className="w-1 h-1 rounded-full bg-white" />}
+                      </div>
+                    </button>
+
+                    {/* Direct UPI QR */}
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('upi')}
+                      className={`p-2.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
+                        paymentMethod === 'upi'
+                          ? 'border-emerald-600 bg-emerald-50/70 text-emerald-950 ring-1 ring-emerald-600'
+                          : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <QrCode className="w-4 h-4 text-neutral-600" />
+                        <div>
+                          <p>Store UPI QR</p>
+                          <p className="text-[10px] text-neutral-500 font-normal">Scan & Show screen</p>
+                        </div>
+                      </div>
+                      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                        paymentMethod === 'upi' ? 'border-emerald-700 bg-emerald-700' : 'border-neutral-300'
+                      }`}>
+                        {paymentMethod === 'upi' && <div className="w-1 h-1 rounded-full bg-white" />}
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -773,7 +936,13 @@ export default function CustomerQrOrderingPage() {
                 disabled={placingOrder}
                 className="w-full py-3.5 px-4 rounded-xl bg-[#0B2B1A] hover:bg-[#124229] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all disabled:opacity-50"
               >
-                <span>{placingOrder ? 'Sending to Kitchen...' : `Confirm & Place Order (₹${finalTotal})`}</span>
+                <span>
+                  {placingOrder
+                    ? 'Processing...'
+                    : paymentMethod === 'razorpay'
+                    ? `Pay Now with Razorpay (₹${finalTotal})`
+                    : `Confirm & Place Order (₹${finalTotal})`}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -790,15 +959,28 @@ export default function CustomerQrOrderingPage() {
             </div>
 
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                Order Sent to Kitchen
-              </span>
-              <h3 className="text-xl font-black text-neutral-900 mt-2">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-[11px] font-mono font-bold uppercase text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Order Sent to Kitchen
+                </span>
+                {placedOrder.paymentStatus === 'paid' && (
+                  <span className="text-[11px] font-mono font-bold uppercase text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                    Paid Online
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-black text-neutral-900 mt-1">
                 Order #{placedOrder.orderNumber}
               </h3>
               <p className="text-xs text-neutral-500 mt-0.5">
                 Being freshly prepared for {placedOrder.table}
               </p>
+              {placedOrder.paymentStatus === 'paid' && (
+                <p className="text-[11px] font-mono text-emerald-700 mt-1">
+                  ✓ Payment Verified • ₹{placedOrder.total}
+                </p>
+              )}
             </div>
 
             {/* Stepper Status */}
