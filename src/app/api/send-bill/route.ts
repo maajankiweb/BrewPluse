@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { syncInvoiceToFirestore } from '@/lib/firebaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -153,12 +154,42 @@ export async function POST(request: Request) {
         html: receiptHtml,
       });
 
+      // Save invoice copy to Firestore collection 'invoices'
+      syncInvoiceToFirestore({
+        orderNumber,
+        storeName,
+        customerName,
+        customerEmail,
+        table,
+        items,
+        subtotal,
+        tax,
+        total,
+        paymentMode,
+        status: 'emailed',
+      }).catch(() => {});
+
       return NextResponse.json({
         success: true,
         sent: true,
         message: `Digital bill emailed to ${customerEmail}`,
       });
     }
+
+    // Save invoice copy to Firestore in simulated/dev mode too
+    syncInvoiceToFirestore({
+      orderNumber,
+      storeName,
+      customerName,
+      customerEmail,
+      table,
+      items,
+      subtotal,
+      tax,
+      total,
+      paymentMode,
+      status: 'simulated_email',
+    }).catch(() => {});
 
     // Graceful fallback simulation when SMTP is not yet configured in local env
     return NextResponse.json({

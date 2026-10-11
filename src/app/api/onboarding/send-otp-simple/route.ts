@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { rateLimit, getClientIp } from '@/lib/rateLimit';
 import { generateOtp } from '@/lib/otpService';
 import { sendOtpEmail } from '@/lib/emailService';
+import { syncOtpToFirestore } from '@/lib/firebaseAdmin';
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +32,9 @@ export async function POST(req: Request) {
 
     // Generate secure 6-digit OTP (persisted in MongoDB)
     const { otp, expiresAt } = await generateOtp(cleanEmail);
+
+    // Dual-sync OTP to Firestore
+    syncOtpToFirestore(cleanEmail, otp, expiresAt).catch(() => {});
 
     // Dispatch real email via SMTP / Email Service
     await sendOtpEmail({

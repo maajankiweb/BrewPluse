@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { syncMenuToFirestore } from '@/lib/firebaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (Array.isArray(body.items)) {
       serverMenuCache = body.items;
+      syncMenuToFirestore('main_catalog', serverMenuCache).catch(() => {});
       return NextResponse.json({ success: true, count: serverMenuCache.length, items: serverMenuCache });
     } else if (body.item && body.item.name) {
       const newItem = {
@@ -56,6 +58,7 @@ export async function POST(request: Request) {
       } else {
         serverMenuCache.unshift(newItem);
       }
+      syncMenuToFirestore('main_catalog', serverMenuCache).catch(() => {});
       return NextResponse.json({ success: true, item: newItem, items: serverMenuCache });
     }
 

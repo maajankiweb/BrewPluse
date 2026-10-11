@@ -4,6 +4,7 @@ import { verifyOtp } from '@/lib/otpService';
 import { hashPassword, createSessionToken } from '@/lib/authService';
 import { connectMongoDB } from '@/lib/mongodb';
 import { User } from '@/lib/models/User';
+import { verifyOtpFromFirestore, getAdminFirestore } from '@/lib/firebaseAdmin';
 
 export async function POST(req: Request) {
   try {
@@ -48,8 +49,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Verify OTP
-    const verifyResult = await verifyOtp(cleanEmail, otp.trim());
+    // 1. Verify OTP (check memory/MongoDB or Firestore)
+    let verifyResult = await verifyOtp(cleanEmail, otp.trim());
+    if (!verifyResult.success) {
+      const firestoreVerified = await verifyOtpFromFirestore(cleanEmail, otp.trim());
+      if (firestoreVerified) {
+        verifyResult = { success: true };
+      }
+    }
+
     if (!verifyResult.success) {
       return NextResponse.json(
         { error: verifyResult.error || 'Invalid verification code.' },
@@ -100,6 +108,24 @@ export async function POST(req: Request) {
     } catch (dbErr: any) {
       console.warn('[verify-otp-simple] MongoDB error, continuing with session issuance:', dbErr.message);
     }
+
+    // 3.5. Sync user to Firestore collection 'users'
+    try {
+      const fdb = getAdminFirestore();
+      if (fdb) {
+        fdb.collection('users').doc(cleanEmail).set(
+          {
+            uid: userId,
+            email: cleanEmail,
+            role: userRole,
+            storeName,
+            isVerified: true,
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        ).catch(() => {});
+      }
+    } catch (e) {}
 
     // 4. Create secure JWT session token
     const sessionUser = {

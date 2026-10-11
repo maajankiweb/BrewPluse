@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '@/lib/mongodb';
 import { Order } from '@/lib/models/Order';
+import { syncOrderToFirestore } from '@/lib/firebaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -78,9 +79,13 @@ export async function POST(request: Request) {
     const conn = await connectMongoDB();
     if (conn) {
       const created = await Order.create(newOrderData);
+      // Dual-sync to Firestore (Unified Web + Mobile Sync)
+      syncOrderToFirestore(newOrderData).catch(() => {});
       return NextResponse.json({ success: true, order: created, source: 'database' }, { status: 201 });
     }
 
+    // Dual-sync to Firestore even if MongoDB is bypassed
+    syncOrderToFirestore(newOrderData).catch(() => {});
     return NextResponse.json({ success: true, order: newOrderData, source: 'local' }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json(
