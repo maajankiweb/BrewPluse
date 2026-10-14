@@ -71,7 +71,7 @@ export default function SupportPage() {
           </p>
         </div>
         <a
-          href="https://wa.me/919173807471"
+          href="https://wa.me/919471273041"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-lg h-8 px-3 shadow-xs transition-all active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
@@ -166,7 +166,7 @@ export default function SupportPage() {
           </p>
         </div>
         <a
-          href="https://wa.me/919173807471"
+          href="https://wa.me/919471273041"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-lg h-8 px-3 shadow-xs transition-all active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"

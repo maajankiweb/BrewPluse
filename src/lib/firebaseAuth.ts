@@ -136,6 +136,8 @@ export async function logoutUser(): Promise<void> {
   }
 }
 
+export const signOutUser = logoutUser;
+
 /**
  * Subscribe to Auth State Changes
  */
@@ -147,3 +149,5 @@ export function onAuthChange(callback: (user: User | null) => void) {
   }
   return onAuthStateChanged(authInstance, callback);
 }
+
+export const subscribeToAuthChanges = onAuthChange;

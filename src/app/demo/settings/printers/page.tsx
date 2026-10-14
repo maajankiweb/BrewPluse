@@ -58,7 +58,7 @@ export default function DemoPrintersSettingsPage() {
     await thermalPrinter.printReceipt({
       storeName: 'BrewPluse Artisan Coffee',
       storeAddress: 'Indiranagar 100ft Rd, Bengaluru',
-      storePhone: '+91 9173807471',
+      storePhone: '+91 9471273041',
       gstin: '29ABCDE1234F1Z5',
       orderNumber: 'TEST-001',
       tableNumber: 'Table 4',

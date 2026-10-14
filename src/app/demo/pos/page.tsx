@@ -915,7 +915,7 @@ export default function DemoPosPage() {
                   await thermalPrinter.printReceipt({
                     storeName: 'BrewPluse Cafe & Roasters',
                     storeAddress: 'Indiranagar 100ft Rd, Bengaluru',
-                    storePhone: '+91 9173807471',
+                    storePhone: '+91 9471273041',
                     gstin: '27AABCB1234F1Z0',
                     orderNumber: completedOrder.orderNumber,
                     tableNumber: completedOrder.table,
