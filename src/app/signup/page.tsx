@@ -349,7 +349,7 @@ function SignupFormContent() {
   }
 
   function handleSkipPartner() {
-    toast('Proceeding to setup...', {
+    toast.info('Proceeding to setup...', {
       description: 'You can link authorized partner codes later in Settings.',
     });
     router.push('/setup');
