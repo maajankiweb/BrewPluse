@@ -88,8 +88,18 @@ export default function PosPage() {
 
   // Payment workflow
   const [payAt, setPayAt] = useState<'pay_now' | 'pay_later'>('pay_now');
+  const [isWorkflowModalOpen, setIsWorkflowModalOpen] = useState(false);
   const [paymentMode, setPaymentMode] = useState<'Cash' | 'UPI' | 'Card'>('UPI');
   const [cashTendered, setCashTendered] = useState<string>('');
+
+  const selectWorkflow = (mode: 'pay_now' | 'pay_later') => {
+    setPayAt(mode);
+    try {
+      localStorage.setItem('brewpluse::pos_payment_workflow', mode);
+      sessionStorage.setItem('brewpluse::pos_workflow_modal_shown', 'true');
+    } catch (e) {}
+    setIsWorkflowModalOpen(false);
+  };
 
   // Modals & UI states
   const [isCustomItemModal, setIsCustomItemModal] = useState(false);
@@ -150,8 +160,17 @@ export default function PosPage() {
         const parsed = JSON.parse(savedMenu);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setMenuItems(parsed);
-          return;
         }
+      }
+
+      // Load payment workflow configuration
+      const savedWorkflow = localStorage.getItem('brewpluse::pos_payment_workflow') as 'pay_now' | 'pay_later' | null;
+      if (savedWorkflow) {
+        setPayAt(savedWorkflow);
+      }
+      const hasSeenPromptInSession = sessionStorage.getItem('brewpluse::pos_workflow_modal_shown') === 'true';
+      if (!hasSeenPromptInSession) {
+        setIsWorkflowModalOpen(true);
       }
     } catch (e) {}
 
@@ -473,7 +492,7 @@ export default function PosPage() {
               <span className="text-[#65736D] px-2 text-[11px]">Workflow:</span>
               <button
                 type="button"
-                onClick={() => setPayAt('pay_now')}
+                onClick={() => selectWorkflow('pay_now')}
                 className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                   payAt === 'pay_now'
                     ? 'bg-[#062F23] text-white shadow-xs'
@@ -484,14 +503,22 @@ export default function PosPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setPayAt('pay_later')}
+                onClick={() => selectWorkflow('pay_later')}
                 className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                   payAt === 'pay_later'
                     ? 'bg-[#062F23] text-white shadow-xs'
                     : 'text-[#65736D] hover:text-[#12201B] dark:hover:text-white'
                 }`}
               >
-                Pay at End (Dine-in)
+                Pay at end
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsWorkflowModalOpen(true)}
+                title="Configure workflow"
+                className="px-2 py-1 text-[11px] font-bold text-[#0B5C45] dark:text-[#10B981] hover:underline cursor-pointer ml-0.5"
+              >
+                (Change)
               </button>
             </div>
           </div>
@@ -1145,6 +1172,80 @@ export default function PosPage() {
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Daily Z-Report Roll</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Workflow Setup Modal (Exact match with CafeFlow screenshot) */}
+      {isWorkflowModalOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="relative w-full max-w-[480px] rounded-[32px] bg-white p-7 sm:p-10 shadow-2xl border border-neutral-100 text-left space-y-6">
+            {/* Top Amber Card Icon Badge */}
+            <div className="flex justify-center">
+              <div className="w-16 h-16 rounded-full bg-[#FFF7ED] border border-[#FFEDD5] flex items-center justify-center shadow-inner">
+                <svg
+                  className="w-8 h-8 text-[#D97706]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="5" width="20" height="14" rx="2.5" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Title & Subtitle */}
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl sm:text-[26px] font-black text-[#111827] tracking-tight leading-snug">
+                How does your cafe usually take payment?
+              </h2>
+              <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed max-w-sm mx-auto">
+                Please select your primary payment workflow. This configures the POS &amp; Orders experience.
+              </p>
+            </div>
+
+            {/* Option Cards */}
+            <div className="space-y-3.5 pt-1">
+              {/* Option 1: Pay First */}
+              <button
+                type="button"
+                onClick={() => selectWorkflow('pay_now')}
+                className={`w-full text-left p-5 rounded-2xl border-2 transition-all cursor-pointer group bg-white shadow-2xs hover:shadow-md ${
+                  payAt === 'pay_now'
+                    ? 'border-[#D97706] bg-[#FFFBEB]/40 ring-1 ring-[#D97706]/30'
+                    : 'border-[#E5E7EB] hover:border-[#D97706] hover:bg-[#FFFBEB]/30'
+                }`}
+              >
+                <p className="font-extrabold text-base text-[#111827] group-hover:text-[#B45309] transition-colors">
+                  Option 1: Pay First
+                </p>
+                <p className="text-xs sm:text-sm text-[#6B7280] mt-1 font-medium">
+                  Customer pays before the order is prepared.
+                </p>
+              </button>
+
+              {/* Option 2: Pay at the end */}
+              <button
+                type="button"
+                onClick={() => selectWorkflow('pay_later')}
+                className={`w-full text-left p-5 rounded-2xl border-2 transition-all cursor-pointer group bg-white shadow-2xs hover:shadow-md ${
+                  payAt === 'pay_later'
+                    ? 'border-[#D97706] bg-[#FFFBEB]/40 ring-1 ring-[#D97706]/30'
+                    : 'border-[#E5E7EB] hover:border-[#D97706] hover:bg-[#FFFBEB]/30'
+                }`}
+              >
+                <p className="font-extrabold text-base text-[#111827] group-hover:text-[#B45309] transition-colors">
+                  Option 2: Pay at the end
+                </p>
+                <p className="text-xs sm:text-sm text-[#6B7280] mt-1 font-medium">
+                  Customer pays after the order is served.
+                </p>
               </button>
             </div>
           </div>
