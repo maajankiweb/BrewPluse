@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     await sendOtpEmail({
       to: cleanEmail,
       otp,
-      expiresInMinutes: 5,
+      expiresInMinutes: 10,
     });
 
     const isDev = process.env.NODE_ENV !== 'production';

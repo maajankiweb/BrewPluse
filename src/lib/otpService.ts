@@ -34,7 +34,7 @@ export async function generateOtp(email: string): Promise<{ otp: string; expires
   // Cryptographically secure 6-digit random code
   const otpNumber = crypto.randomInt(100000, 999999);
   const otp = otpNumber.toString();
-  const expiresAtMs = Date.now() + 5 * 60 * 1000; // 5 minutes
+  const expiresAtMs = Date.now() + 10 * 60 * 1000; // 10 minutes
   const expiresAtDate = new Date(expiresAtMs);
   const hashed = hashOtp(otp);
 
