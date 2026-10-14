@@ -148,6 +148,41 @@ function SignupFormContent() {
     }
   }
 
+  async function handleGoogleSignUp() {
+    setStep1Loading(true);
+    setStep1Error(null);
+    try {
+      const { signInWithGoogle } = await import('@/lib/firebaseAuth');
+      const user = await signInWithGoogle();
+
+      localStorage.setItem(
+        'brewpluse::active_user',
+        JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || user.email?.split('@')[0],
+          storeName: `${user.displayName || 'BrewPluse'}'s Cafe`,
+          loginTime: Date.now(),
+        })
+      );
+
+      toast.success('Account created with Google!', {
+        description: `Welcome, ${user.displayName || user.email}!`,
+      });
+
+      setTimeout(() => {
+        router.replace('/setup');
+      }, 700);
+    } catch (err: any) {
+      console.error('Google Sign-up error:', err);
+      const msg = err.message || 'Google sign-up could not be completed.';
+      setStep1Error(msg);
+      toast.error(msg);
+    } finally {
+      setStep1Loading(false);
+    }
+  }
+
   // STEP 2: Trigger OTP verification
   async function triggerOtpVerify(code: string) {
     if (code.length !== 6 || step2Loading) return;
@@ -169,19 +204,28 @@ function SignupFormContent() {
         throw new Error(data.error || 'Verification failed. Please check the code.');
       }
 
+      const cleanEmail = email.trim().toLowerCase();
+      let fbUser = null;
+      try {
+        const { signUpWithEmail } = await import('@/lib/firebaseAuth');
+        fbUser = await signUpWithEmail(cleanEmail, password, cleanEmail.split('@')[0]);
+      } catch (fbErr: any) {
+        console.warn('[FirebaseAuth] Direct sign-up note:', fbErr.message);
+      }
+
       try {
         localStorage.setItem(
           'brewpluse::active_user',
           JSON.stringify({
-            uid: data.user?.uid || 'user_' + Date.now(),
-            email: email.trim().toLowerCase(),
+            uid: fbUser?.uid || data.user?.uid || 'user_' + Date.now(),
+            email: cleanEmail,
             verified: true,
             loginTime: Date.now(),
           })
         );
       } catch (err) {}
 
-      toast.success('Email verified successfully!', {
+      toast.success('Email verified & account created!', {
         description: 'Proceeding to café setup and account activation...',
       });
 
@@ -586,7 +630,7 @@ function SignupFormContent() {
                 {/* Google Sign-in Button */}
                 <button
                   type="button"
-                  onClick={() => toast.info('Google sign-in available in production OAuth.')}
+                  onClick={handleGoogleSignUp}
                   className="w-full py-3 px-4 bg-[#221e1c] hover:bg-[#282321] border border-white/10 text-white font-bold text-xs rounded-full flex items-center justify-center gap-2.5 transition-all cursor-pointer"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">

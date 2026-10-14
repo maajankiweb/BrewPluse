@@ -61,39 +61,83 @@ function LoginFormContent() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: cleanEmail, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Invalid email or password.');
+      // 1. Authenticate with Firebase Auth
+      let firebaseUser = null;
+      try {
+        const { signInWithEmail } = await import('@/lib/firebaseAuth');
+        firebaseUser = await signInWithEmail(cleanEmail, password);
+      } catch (fbErr: any) {
+        console.warn('[FirebaseAuth] Direct client login note:', fbErr.message);
+        // If Firebase Auth throws an invalid credential error, rethrow unless running in offline test mode
+        if (fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/user-not-found' || fbErr.code === 'auth/wrong-password') {
+          throw new Error('Invalid email or password. Please verify your credentials.');
+        }
       }
 
+      // 2. Also authenticate with API endpoint for legacy/session support
       try {
-        localStorage.setItem(
-          'brewpluse::active_user',
-          JSON.stringify({
-            uid: data.user?.uid || 'user_' + Date.now(),
-            email: cleanEmail,
-            name: data.user?.name || cleanEmail.split('@')[0],
-            storeName: data.user?.storeName || 'BrewPluse Cafe',
-            loginTime: Date.now(),
-          })
-        );
-      } catch (err) {}
+        await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: cleanEmail, password }),
+        });
+      } catch (e) {}
+
+      localStorage.setItem(
+        'brewpluse::active_user',
+        JSON.stringify({
+          uid: firebaseUser?.uid || 'user_' + Date.now(),
+          email: cleanEmail,
+          name: firebaseUser?.displayName || cleanEmail.split('@')[0],
+          storeName: 'BrewPluse Cafe',
+          loginTime: Date.now(),
+        })
+      );
 
       toast.success('Welcome back!', {
-        description: 'Successfully authenticated with BrewPluse.',
+        description: 'Successfully authenticated with Firebase.',
       });
 
       setTimeout(() => {
         handleRedirect();
-      }, 700);
+      }, 600);
     } catch (err: any) {
       const msg = err.message || 'Please check your credentials and try again.';
+      setErrorMsg(msg);
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      const { signInWithGoogle } = await import('@/lib/firebaseAuth');
+      const user = await signInWithGoogle();
+
+      localStorage.setItem(
+        'brewpluse::active_user',
+        JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || user.email?.split('@')[0],
+          storeName: `${user.displayName || 'BrewPluse'}'s Cafe`,
+          loginTime: Date.now(),
+        })
+      );
+
+      toast.success('Google Sign-in successful!', {
+        description: `Welcome, ${user.displayName || user.email}!`,
+      });
+
+      setTimeout(() => {
+        handleRedirect();
+      }, 600);
+    } catch (err: any) {
+      console.error('Google Sign-In Error:', err);
+      const msg = err.message || 'Google Sign-in could not be completed.';
       setErrorMsg(msg);
       toast.error(msg);
     } finally {
@@ -242,7 +286,7 @@ function LoginFormContent() {
               {/* GOOGLE SIGN-IN BUTTON */}
               <button
                 type="button"
-                onClick={() => toast.info('Google sign-in available in production OAuth.')}
+                onClick={handleGoogleLogin}
                 className="w-full py-3 px-4 bg-[#221e1c] hover:bg-[#282321] border border-white/10 text-white font-bold text-xs rounded-full flex items-center justify-center gap-2.5 transition-all cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">

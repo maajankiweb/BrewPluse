@@ -1,0 +1,73 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// /users/{userId}
+//   - email: string
+//   - displayName: string
+//   - role: string ("owner" | "manager" | "staff")
+//   - storeSlug: string
+//
+// /stores/{storeSlug}
+//   - name: string
+//   - ownerUid: string
+//
+// /orders/{orderId}
+//   - storeId: string
+//   - orderNumber: string
+//   - table: string
+//   - items: list
+//   - total: number
+//   - status: string
+//   - paymentMode: string
+//   - paymentStatus: string
+//
+// /menus/{menuId}
+//   - storeSlug: string
+//   - items: list
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Store Profiles
+    match /stores/{storeSlug} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Orders Collection
+    match /orders/{orderId} {
+      // Allow customers to create table orders and check status
+      allow create: if true;
+      allow read: if true;
+      // Allow store staff or authenticated user to update order status
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+
+    // Menus Collection
+    match /menus/{menuId} {
+      // Public read so QR menus load instantly without login
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}
