@@ -288,10 +288,20 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqSchema) }}
         />
-        {/* Automated ChunkLoadError recovery for CDN deploys */}
+        {/* Automated Cache Invalidation & Stale Service Worker Cleanup */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              try {
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (var r of registrations) {
+                      r.unregister();
+                      console.info('[BrewPluse] Unregistered stale service worker');
+                    }
+                  });
+                }
+              } catch (e) {}
               window.addEventListener('error', function(e) {
                 if (e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
                   console.warn('[BrewPluse] New version detected on CDN, auto-refreshing...');
