@@ -170,6 +170,49 @@ export default function CustomerQrOrderingPage() {
   const [placingOrder, setPlacingOrder] = useState(false);
   const [placedOrder, setPlacedOrder] = useState<any | null>(null);
 
+  // Table Service / Call Waiter
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [serviceRequestSent, setServiceRequestSent] = useState<string | null>(null);
+
+  const handleRequestService = async (serviceType: string) => {
+    setServiceRequestSent(serviceType);
+    try {
+      const orderPayload = {
+        storeId: storeSlug,
+        orderNumber: `SRV-${Math.floor(1000 + Math.random() * 9000)}`,
+        table: tableParam,
+        orderType: 'service_request',
+        items: [{ id: 'srv-req', name: `🛎️ Table Service: ${serviceType}`, qty: 1, price: 0 }],
+        subtotal: 0,
+        discount: 0,
+        tax: 0,
+        total: 0,
+        status: 'pending',
+        paymentMode: 'N/A',
+        paymentStatus: 'paid',
+        customerName: customerName || 'Table Guest',
+        notes: `Urgent Table Request: ${serviceType}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload),
+      });
+
+      try {
+        const local = JSON.parse(localStorage.getItem('brewpluse::orders') || '[]');
+        localStorage.setItem('brewpluse::orders', JSON.stringify([orderPayload, ...local]));
+      } catch (e) {}
+    } catch (e) {}
+
+    setTimeout(() => {
+      setIsServiceModalOpen(false);
+      setServiceRequestSent(null);
+    }, 2000);
+  };
+
   // Review prompt
   const [copiedReview, setCopiedReview] = useState(false);
 
@@ -324,6 +367,11 @@ export default function CustomerQrOrderingPage() {
         status: 'pending',
         createdAt: new Date().toISOString(),
       };
+
+      try {
+        const local = JSON.parse(localStorage.getItem('brewpluse::orders') || '[]');
+        localStorage.setItem('brewpluse::orders', JSON.stringify([confirmedOrder, ...local]));
+      } catch (e) {}
 
       if (paymentMethod === 'razorpay') {
         const scriptLoaded = await loadRazorpayScript();
@@ -665,6 +713,68 @@ export default function CustomerQrOrderingPage() {
           )}
         </div>
       </main>
+
+      {/* Floating Call Waiter / Service Button */}
+      <div className="fixed bottom-20 right-4 z-30">
+        <button
+          type="button"
+          onClick={() => setIsServiceModalOpen(true)}
+          className="py-2 px-3.5 rounded-full bg-white text-[#0B2B1A] border border-neutral-300 shadow-lg text-xs font-bold flex items-center gap-1.5 hover:bg-neutral-50 active:scale-95 transition-all cursor-pointer"
+        >
+          <span>🛎️</span>
+          <span>Call Waiter / Water</span>
+        </button>
+      </div>
+
+      {/* Service Request Modal */}
+      {isServiceModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-5 border border-neutral-200 shadow-2xl text-center space-y-4">
+            <div className="flex items-center justify-between border-b pb-2.5">
+              <h3 className="text-sm font-extrabold text-neutral-900 flex items-center gap-2">
+                <span>🛎️</span> Table Service Request
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsServiceModalOpen(false)}
+                className="text-neutral-400 hover:text-black"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-neutral-500">
+              Need assistance at <span className="font-bold text-neutral-900">{tableParam}</span>? Tap an option below:
+            </p>
+
+            {serviceRequestSent ? (
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold space-y-1">
+                <p>✓ Request Sent to Counter &amp; Kitchen!</p>
+                <p className="text-[11px] font-normal text-emerald-700">A staff member is on their way with: {serviceRequestSent}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {[
+                  { label: 'Drinking Water', icon: '💧' },
+                  { label: 'Call Waiter', icon: '🙋' },
+                  { label: 'Bring the Bill', icon: '🧾' },
+                  { label: 'Extra Cutlery', icon: '🥄' },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => handleRequestService(item.label)}
+                    className="p-3 rounded-xl border border-neutral-200 hover:border-emerald-600 hover:bg-emerald-50/50 flex flex-col items-center gap-1.5 transition-all cursor-pointer font-bold text-neutral-800"
+                  >
+                    <span className="text-2xl">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Sticky Bottom Cart Bar */}
       {cart.length > 0 && (

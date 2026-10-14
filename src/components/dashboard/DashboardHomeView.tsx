@@ -47,6 +47,12 @@ export default function DashboardHomeView({
     order: false,
   });
 
+  const [realStats, setRealStats] = useState({
+    ordersCount: 0,
+    todayRevenue: 0,
+    totalRevenue: 0,
+  });
+
   useEffect(() => {
     if (!isDemo) {
       try {
@@ -64,10 +70,11 @@ export default function DashboardHomeView({
         const hasProfile = Boolean(storeProfileRaw && JSON.parse(storeProfileRaw)?.name);
         const menuRaw = localStorage.getItem('brewpluse::menu_items');
         const hasMenu = Boolean(menuRaw && JSON.parse(menuRaw)?.length > 0);
-        const tablesRaw = localStorage.getItem('brewpluse::tables');
+        const tablesRaw = localStorage.getItem(`brewpluse::tables_${storeSlug}`) || localStorage.getItem('brewpluse::tables');
         const hasTables = Boolean(tablesRaw && JSON.parse(tablesRaw)?.length > 0);
         const ordersRaw = localStorage.getItem('brewpluse::orders');
-        const hasOrders = Boolean(ordersRaw && JSON.parse(ordersRaw)?.length > 0);
+        const localOrders = ordersRaw ? JSON.parse(ordersRaw) : [];
+        const hasOrders = Boolean(localOrders?.length > 0);
 
         setChecklist({
           profile: hasProfile,
@@ -75,9 +82,41 @@ export default function DashboardHomeView({
           tables: hasTables,
           order: hasOrders,
         });
+
+        // Compute local order metrics first
+        if (localOrders.length > 0) {
+          let sum = 0;
+          localOrders.forEach((o: any) => {
+            sum += Number(o.total) || 0;
+          });
+          setRealStats({
+            ordersCount: localOrders.length,
+            todayRevenue: sum,
+            totalRevenue: sum,
+          });
+        }
       } catch (e) {
         setUserName(cafeDisplayName);
       }
+
+      // Fetch API orders to get complete server metrics
+      fetch(`/api/orders?storeId=${storeSlug}&limit=100`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data && Array.isArray(data.orders) && data.orders.length > 0) {
+            let rev = 0;
+            data.orders.forEach((o: any) => {
+              rev += Number(o.total) || 0;
+            });
+            setRealStats({
+              ordersCount: data.orders.length,
+              todayRevenue: rev,
+              totalRevenue: rev,
+            });
+            setChecklist((prev) => ({ ...prev, order: true }));
+          }
+        })
+        .catch(() => {});
     }
   }, [isDemo, storeSlug, cafeDisplayName]);
 
@@ -291,7 +330,7 @@ export default function DashboardHomeView({
           </div>
           <div className="mt-2.5">
             <p className="text-2xl sm:text-[26px] font-bold text-[#12201B] dark:text-white tracking-tight leading-none">
-              {isDemo ? '42' : '0'}
+              {isDemo ? '42' : realStats.ordersCount}
             </p>
             <p className="text-xs font-medium text-[#65736D] dark:text-[#9AB2A8] mt-1">
               {isDemo ? (
@@ -299,7 +338,7 @@ export default function DashboardHomeView({
                   <span className="text-[#0B8F68] font-bold">↑</span> Active & Completed
                 </span>
               ) : (
-                '0 active & completed'
+                `${realStats.ordersCount} orders tracked`
               )}
             </p>
           </div>
@@ -323,7 +362,7 @@ export default function DashboardHomeView({
           </div>
           <div className="mt-2.5">
             <p className="text-2xl sm:text-[26px] font-bold text-[#0B8F68] tracking-tight leading-none">
-              {isDemo ? '₹18,450.00' : '₹0.00'}
+              {isDemo ? '₹18,450.00' : `₹${realStats.todayRevenue.toLocaleString()}`}
             </p>
             <p className="text-xs font-medium text-[#65736D] dark:text-[#9AB2A8] mt-1">
               {isDemo ? (
@@ -355,7 +394,7 @@ export default function DashboardHomeView({
           </div>
           <div className="mt-2.5">
             <p className="text-2xl sm:text-[26px] font-bold text-[#12201B] dark:text-white tracking-tight leading-none">
-              {isDemo ? '₹1,42,800.00' : '₹0.00'}
+              {isDemo ? '₹1,42,800.00' : `₹${realStats.totalRevenue.toLocaleString()}`}
             </p>
             <p className="text-xs font-medium text-[#65736D] dark:text-[#9AB2A8] mt-1">
               {isDemo ? (

@@ -280,6 +280,25 @@ class ThermalPrinterManager {
    * Kitchen Order Ticket (KOT) Direct Printing
    * Prints dedicated slip with modifiers for kitchen prep station
    */
+  public async printKOT(
+    data: {
+      orderNumber: string;
+      table: string;
+      timestamp: string;
+      items: Array<{
+        name: string;
+        qty: number;
+        modifiers?: string[];
+        notes?: string;
+      }>;
+      notes?: string;
+      paperWidth?: '58mm' | '80mm';
+    },
+    paperWidth: '58mm' | '80mm' = '80mm'
+  ) {
+    return this.printKot(data, data.paperWidth || paperWidth);
+  }
+
   public async printKot(
     data: {
       orderNumber: string;
@@ -292,9 +311,11 @@ class ThermalPrinterManager {
         notes?: string;
       }>;
       notes?: string;
+      paperWidth?: '58mm' | '80mm';
     },
     paperWidth: '58mm' | '80mm' = '80mm'
   ): Promise<{ success: boolean; error?: string }> {
+    const effectiveWidth = data.paperWidth || paperWidth;
     // If Web Bluetooth characteristic is connected, write ESC/POS bytes
     if (this.characteristic) {
       try {
