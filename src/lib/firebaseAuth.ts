@@ -8,7 +8,7 @@ import {
   User,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db, googleProvider } from './firebaseClient';
+import { auth, db, googleProvider, getFirebaseAuth, getFirebaseDb } from './firebaseClient';
 
 export interface UserProfile {
   uid: string;
@@ -20,12 +20,24 @@ export interface UserProfile {
   createdAt?: any;
 }
 
+function resolveAuth(): any {
+  const instance = auth || getFirebaseAuth();
+  if (!instance) {
+    throw new Error('Firebase Auth is not initialized. Please verify your Firebase configuration in .env.local.');
+  }
+  return instance;
+}
+
+function resolveDb(): any {
+  return db || getFirebaseDb();
+}
+
 /**
  * Sign In with Email & Password
  */
 export async function signInWithEmail(email: string, password: string): Promise<User> {
-  if (!auth) throw new Error('Firebase Auth is not initialized. Please verify your Firebase configuration.');
-  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  const authInstance = resolveAuth();
+  const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
   return userCredential.user;
 }
 
@@ -38,8 +50,9 @@ export async function signUpWithEmail(
   displayName?: string,
   storeName?: string
 ): Promise<User> {
-  if (!auth) throw new Error('Firebase Auth is not initialized. Please verify your Firebase configuration.');
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const authInstance = resolveAuth();
+  const dbInstance = resolveDb();
+  const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
   const user = userCredential.user;
 
   if (displayName) {
@@ -47,14 +60,14 @@ export async function signUpWithEmail(
   }
 
   // Create Firestore User Document
-  if (db) {
+  if (dbInstance) {
     try {
       const storeSlug = (storeName || 'my-cafe')
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
 
-      await setDoc(doc(db, 'users', user.uid), {
+      await setDoc(doc(dbInstance, 'users', user.uid), {
         uid: user.uid,
         email: user.email,
         displayName: displayName || user.email?.split('@')[0],
@@ -75,14 +88,15 @@ export async function signUpWithEmail(
  * Sign In with Google Popup
  */
 export async function signInWithGoogle(): Promise<User> {
-  if (!auth) throw new Error('Firebase Auth is not initialized. Please verify your Firebase configuration.');
-  const result = await signInWithPopup(auth, googleProvider);
+  const authInstance = resolveAuth();
+  const dbInstance = resolveDb();
+  const result = await signInWithPopup(authInstance, googleProvider);
   const user = result.user;
 
   // Sync to Firestore
-  if (db) {
+  if (dbInstance) {
     try {
-      const userRef = doc(db, 'users', user.uid);
+      const userRef = doc(dbInstance, 'users', user.uid);
       const userDoc = await getDoc(userRef);
 
       if (!userDoc.exists()) {
@@ -114,8 +128,9 @@ export async function signInWithGoogle(): Promise<User> {
  * Sign Out
  */
 export async function logoutUser(): Promise<void> {
-  if (!auth) return;
-  await signOut(auth);
+  const authInstance = auth || getFirebaseAuth();
+  if (!authInstance) return;
+  await signOut(authInstance);
   if (typeof window !== 'undefined') {
     localStorage.removeItem('brewpluse::active_user');
   }
@@ -125,9 +140,10 @@ export async function logoutUser(): Promise<void> {
  * Subscribe to Auth State Changes
  */
 export function onAuthChange(callback: (user: User | null) => void) {
-  if (!auth) {
+  const authInstance = auth || getFirebaseAuth();
+  if (!authInstance) {
     callback(null);
     return () => {};
   }
-  return onAuthStateChanged(auth, callback);
+  return onAuthStateChanged(authInstance, callback);
 }
