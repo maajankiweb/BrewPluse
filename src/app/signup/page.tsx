@@ -15,6 +15,7 @@ import {
   Loader2,
   AlertCircle,
   Coffee,
+  Handshake,
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 
@@ -22,7 +23,10 @@ function SignupFormContent() {
   const router = useRouter();
   const toast = useToast();
 
-  const [step, setStep] = useState<'credentials' | 'otp'>('credentials');
+  const [step, setStep] = useState<'credentials' | 'otp' | 'referral'>('credentials');
+  const [partnerCode, setPartnerCode] = useState('');
+  const [partnerLoading, setPartnerLoading] = useState(false);
+  const [partnerError, setPartnerError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -171,8 +175,8 @@ function SignupFormContent() {
       });
 
       setTimeout(() => {
-        router.push('/setup');
-      }, 700);
+        setStep('referral');
+      }, 400);
     } catch (err: any) {
       let msg = err.message || 'Failed to proceed. Please try again.';
       if (err.code === 'auth/email-already-in-use') {
@@ -212,8 +216,8 @@ function SignupFormContent() {
       });
 
       setTimeout(() => {
-        router.replace('/setup');
-      }, 700);
+        setStep('referral');
+      }, 400);
     } catch (err: any) {
       console.error('Google Sign-up error:', err);
       const msg = err.message || 'Google sign-up could not be completed.';
@@ -266,7 +270,7 @@ function SignupFormContent() {
         localStorage.setItem(
           'brewpluse::active_user',
           JSON.stringify({
-            uid: fbUser?.uid || data.user?.uid || 'user_' + Date.now(),
+            uid: fbUser?.uid || data?.user?.uid || 'user_' + Date.now(),
             email: cleanEmail,
             verified: true,
             loginTime: Date.now(),
@@ -275,12 +279,12 @@ function SignupFormContent() {
       } catch (err) {}
 
       toast.success('Email verified & account created!', {
-        description: 'Proceeding to café setup and account activation...',
+        description: 'Just one last step...',
       });
 
       setTimeout(() => {
-        router.push('/setup');
-      }, 700);
+        setStep('referral');
+      }, 400);
     } catch (err: any) {
       const msg = err.message || 'Verification failed. Please check the code.';
       setStep2Error(msg);
@@ -288,6 +292,67 @@ function SignupFormContent() {
     } finally {
       setStep2Loading(false);
     }
+  }
+
+  // STEP 3: Handle Partner Referral
+  async function handlePartnerSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    const cleanCode = partnerCode.trim().toUpperCase();
+    if (!cleanCode) {
+      handleSkipPartner();
+      return;
+    }
+
+    setPartnerLoading(true);
+    setPartnerError(null);
+    try {
+      try {
+        const stored = localStorage.getItem('brewpluse::active_user');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          parsed.referredBy = cleanCode;
+          localStorage.setItem('brewpluse::active_user', JSON.stringify(parsed));
+
+          if (parsed.uid) {
+            const { doc, setDoc } = await import('firebase/firestore');
+            const { getFirebaseDb } = await import('@/lib/firebaseClient');
+            const dbInstance = getFirebaseDb();
+            if (dbInstance) {
+              await setDoc(
+                doc(dbInstance, 'users', parsed.uid),
+                {
+                  referredBy: cleanCode,
+                  referralAppliedAt: new Date().toISOString(),
+                },
+                { merge: true }
+              );
+            }
+          }
+        }
+      } catch (syncErr) {
+        console.warn('[Signup] Referral sync note:', syncErr);
+      }
+
+      toast.success('Partner referral code applied!', {
+        description: `Code ${cleanCode} registered successfully!`,
+      });
+
+      setTimeout(() => {
+        router.push('/setup');
+      }, 500);
+    } catch (err: any) {
+      setPartnerError(err.message || 'Failed to apply partner code.');
+      toast.error('Failed to apply partner code.');
+    } finally {
+      setPartnerLoading(false);
+    }
+  }
+
+  function handleSkipPartner() {
+    toast('Proceeding to setup...', {
+      description: 'You can link authorized partner codes later in Settings.',
+    });
+    router.push('/setup');
   }
 
   function handleOtpFormSubmit(e: React.FormEvent) {
@@ -718,9 +783,16 @@ function SignupFormContent() {
                 </Link>
               </div>
             </div>
-          ) : (
+          ) : step === 'otp' ? (
             /* STEP 2: Email OTP Verification */
             <div className="space-y-6 animate-fade-in">
+              {/* Stepper Progress */}
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
+                <div className="w-7 h-1.5 rounded-full bg-[#eebd8e]" />
+                <div className="w-5 h-1.5 rounded-full bg-white/20" />
+              </div>
+
               <div>
                 <h1 className="font-serif text-3xl sm:text-[38px] font-bold text-white tracking-tight leading-[1.12]">
                   Verify your email<span className="text-[#eebd8e]">.</span>
@@ -814,6 +886,82 @@ function SignupFormContent() {
                   &larr; Change email
                 </button>
               </div>
+            </div>
+          ) : (
+            /* STEP 3: Partner Referral - EXACT MATCH TO SCREENSHOT */
+            <div className="space-y-6 animate-fade-in">
+              {/* Stepper Progress: Green, Green, Amber Active */}
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
+                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
+                <div className="w-7 h-1.5 rounded-full bg-[#eebd8e]" />
+              </div>
+
+              {/* Title & Subtitle */}
+              <div>
+                <h1 className="font-serif text-3xl sm:text-[38px] font-bold text-white tracking-tight leading-[1.12]">
+                  Partner referral<span className="text-[#eebd8e]">.</span>
+                </h1>
+                <p className="text-xs sm:text-[13px] text-[#a8a29e] font-sans leading-relaxed mt-2.5">
+                  Were you referred by an authorized BrewPluse consultant or coffee partner?
+                </p>
+              </div>
+
+              {partnerError && (
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{partnerError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handlePartnerSubmit} className="space-y-5">
+                <div>
+                  <label className="block text-[11px] font-mono uppercase tracking-wider font-bold text-[#eebd8e] mb-2.5">
+                    PARTNER REFERRAL CODE
+                  </label>
+                  <div className="relative flex items-center rounded-2xl bg-[#221e1c] border border-white/10 px-4 py-3.5 focus-within:border-[#eebd8e] focus-within:bg-[#282321] transition-all">
+                    <Handshake className="w-5 h-5 text-neutral-400 mr-3 shrink-0" />
+                    <input
+                      type="text"
+                      value={partnerCode}
+                      onChange={(e) => setPartnerCode(e.target.value.toUpperCase())}
+                      placeholder="e.g. PARTNER10"
+                      className="w-full bg-transparent text-sm sm:text-base font-mono uppercase tracking-wider text-white placeholder-neutral-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={partnerLoading}
+                  className="w-full py-3.5 px-4 bg-[#0c3821] hover:bg-[#0f4429] border border-[#144d2f] text-white font-bold text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {partnerLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Applying...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Apply &amp; Continue</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+
+                <div className="text-center pt-2">
+                  <button
+                    type="button"
+                    onClick={handleSkipPartner}
+                    className="text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    I don&apos;t have a partner code &mdash;{' '}
+                    <span className="text-[#eebd8e] underline underline-offset-4 hover:text-[#ffdcbd]">
+                      Skip this step
+                    </span>
+                  </button>
+                </div>
+              </form>
             </div>
           )}
         </main>
