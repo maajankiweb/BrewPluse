@@ -37,3 +37,6 @@ Thumbs.db
 # Marketing kit (local only, do not push to git)
 /marketing_kit/
 marketing_kit/
+
+# Firebase local CLI cache
+.firebase/

@@ -6,6 +6,7 @@
         "oAuthBrandDisplayName": "BrewPluse",
         "authorizedRedirectUris": [
           "https://brewpluse.firebaseapp.com/__/auth/handler",
+          "https://brewpluse.netlify.app/__/auth/handler",
           "http://localhost"
         ]
       }
@@ -14,13 +15,6 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
-  },
-  "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
   }
 }
+
