@@ -121,28 +121,55 @@ export default function SetupPage() {
     },
   ];
 
-  // Load user details
+  // Load user details & strictly verify payment with server
   useEffect(() => {
+    let email = '';
+    let uid = '';
+
     try {
       const activeUser = localStorage.getItem('brewpluse::active_user');
       if (activeUser) {
         const parsed = JSON.parse(activeUser);
-        if (parsed.email) setUserEmail(parsed.email);
+        if (parsed.email) {
+          email = parsed.email;
+          setUserEmail(parsed.email);
+        }
         if (parsed.displayName) setOwnerName(parsed.displayName);
-        if (parsed.uid) setUserId(parsed.uid);
+        if (parsed.uid) {
+          uid = parsed.uid;
+          setUserId(parsed.uid);
+        }
       }
       const ref = localStorage.getItem('brewpluse_signup_referral_code');
       if (ref) setReferralCode(ref.toUpperCase());
-
-      // Check if user has already verified payment
-      const isPaid = localStorage.getItem('brewpluse::payment_verified') === 'true';
-      if (isPaid) {
-        setPaymentVerified(true);
-      } else {
-        setPaymentVerified(false);
-        setCurrentState('PAYMENT');
-      }
     } catch (e) {}
+
+    // Strictly verify against backend - never trust unverified localStorage alone
+    if (email || uid) {
+      fetch(
+        `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.verified === true) {
+            setPaymentVerified(true);
+            localStorage.setItem('brewpluse::payment_verified', 'true');
+          } else {
+            setPaymentVerified(false);
+            localStorage.removeItem('brewpluse::payment_verified');
+            setCurrentState('PAYMENT');
+          }
+        })
+        .catch(() => {
+          setPaymentVerified(false);
+          localStorage.removeItem('brewpluse::payment_verified');
+          setCurrentState('PAYMENT');
+        });
+    } else {
+      setPaymentVerified(false);
+      localStorage.removeItem('brewpluse::payment_verified');
+      setCurrentState('PAYMENT');
+    }
 
     const unsubscribe = onAuthChange((user) => {
       if (user) {
@@ -158,13 +185,10 @@ export default function SetupPage() {
     return () => unsubscribe();
   }, []);
 
-  // Strict Security Gate: Bina payment kiye koi bhi business setup page open nahi kar sakta
+  // Strict Security Gate: Bina verified payment ke business setup page access nahi ho sakta
   useEffect(() => {
     if (!paymentVerified && currentState !== 'PAYMENT') {
       setCurrentState('PAYMENT');
-      toast.error('Payment Verification Required', {
-        description: 'Bina ₹1.00 account verification payment ke business setup access nahi kiya ja sakta.',
-      });
     }
   }, [currentState, paymentVerified]);
 
@@ -173,15 +197,21 @@ export default function SetupPage() {
   const activeStepIdx = currentStepIndex >= 0 ? currentStepIndex : 0;
   const isReviewOrCompleted = currentState === 'REVIEW' || currentState === 'COMPLETED';
 
-  // Handle ₹1 Verification Payment
+  // Handle ₹1 Verification Payment via real Razorpay
   async function handleVerifyPayment() {
     setPaymentProcessing(true);
     setVerificationError(null);
 
-    // Pre-load checkout script
-    await loadRazorpayCheckoutScript();
+    const scriptLoaded = await loadRazorpayCheckoutScript();
+    if (!scriptLoaded) {
+      setPaymentProcessing(false);
+      setVerificationError('Razorpay Checkout failed to load. Check your internet connection.');
+      toast.error('Razorpay SDK Error', {
+        description: 'Failed to load Razorpay checkout script.',
+      });
+      return;
+    }
 
-    // Try live Razorpay if configured
     try {
       const res = await fetch('/api/payments/razorpay/create-order', {
         method: 'POST',
@@ -195,80 +225,190 @@ export default function SetupPage() {
       });
 
       const orderData = await res.json();
-      if (
-        res.ok &&
-        orderData.orderId &&
-        orderData.keyId &&
-        typeof window !== 'undefined' &&
-        (window as any).Razorpay
-      ) {
-        const rzp = new (window as any).Razorpay({
-          key: orderData.keyId,
-          amount: orderData.amount,
-          currency: orderData.currency,
-          name: 'BrewPluse Account Verification',
-          description: 'Account verification (₹1.00)',
-          image: '/icon.png',
-          order_id: orderData.orderId,
-          prefill: {
-            email: userEmail || 'ashish.maajankiweb@gmail.com',
-            contact: '',
-          },
-          theme: { color: '#875200' },
-          handler: function (response: any) {
-            setPaymentProcessing(false);
-            setPaymentVerified(true);
-            try {
-              localStorage.setItem('brewpluse::payment_verified', 'true');
-            } catch (e) {}
-            toast.success('Account verified successfully!', {
-              description: 'Verification payment of ₹1.00 refunded automatically.',
-            });
-            setTimeout(() => {
-              setCurrentState('CAFE_NAME');
-            }, 600);
-          },
-          modal: {
-            ondismiss: function () {
-              setPaymentProcessing(false);
-            },
-          },
-        });
-        rzp.open();
+      if (!res.ok || !orderData.orderId) {
+        setPaymentProcessing(false);
+        const errMsg = orderData.error || 'Failed to create Razorpay verification order.';
+        setVerificationError(errMsg);
+        toast.error('Order Error', { description: errMsg });
         return;
       }
-    } catch (err) {}
 
-    // Simulated instant verification fallback
-    setTimeout(() => {
-      setPaymentProcessing(false);
-      setPaymentVerified(true);
-      try {
-        localStorage.setItem('brewpluse::payment_verified', 'true');
-      } catch (e) {}
-      toast.success('Account verified successfully!', {
-        description: 'Verification payment of ₹1.00 refunded automatically.',
+      // Check if real keys are configured
+      if (orderData.keyId === 'rzp_test_placeholder' || !orderData.keyId) {
+        setPaymentProcessing(false);
+        const keyMsg =
+          'Razorpay API key (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET) is not configured in .env.local. Please add your Razorpay keys to process live ₹1.00 verification.';
+        setVerificationError(keyMsg);
+        toast.error('Razorpay Gateway Not Configured', {
+          description: 'Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env.local to enable real payments.',
+        });
+        return;
+      }
+
+      if (typeof window === 'undefined' || !(window as any).Razorpay) {
+        setPaymentProcessing(false);
+        setVerificationError('Razorpay runtime not ready. Please try again.');
+        return;
+      }
+
+      const rzp = new (window as any).Razorpay({
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'BrewPluse Account Verification',
+        description: 'Account verification (₹1.00)',
+        image: '/icon.png',
+        order_id: orderData.orderId,
+        prefill: {
+          email: userEmail || '',
+          contact: '',
+        },
+        theme: { color: '#875200' },
+        handler: async function (response: any) {
+          try {
+            // Verify payment signature on the server
+            const verifyRes = await fetch('/api/payments/razorpay/verify-setup', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                email: userEmail,
+                uid: userId,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+            if (verifyRes.ok && verifyData.verified) {
+              setPaymentProcessing(false);
+              setPaymentVerified(true);
+              localStorage.setItem('brewpluse::payment_verified', 'true');
+              toast.success('Account verified successfully!', {
+                description: 'Verification payment of ₹1.00 confirmed and recorded.',
+              });
+              setTimeout(() => {
+                setCurrentState('CAFE_NAME');
+              }, 600);
+            } else {
+              setPaymentProcessing(false);
+              setVerificationError(verifyData.error || 'Payment signature verification failed.');
+              toast.error('Verification Failed', {
+                description: verifyData.error || 'Server rejected payment signature.',
+              });
+            }
+          } catch (vErr: any) {
+            setPaymentProcessing(false);
+            setVerificationError(vErr.message);
+            toast.error('Verification Error', { description: vErr.message });
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setPaymentProcessing(false);
+            toast.info('Verification Cancelled', {
+              description: 'Payment was not completed. You must verify with ₹1.00 to continue setup.',
+            });
+          },
+        },
       });
-      setTimeout(() => {
-        setCurrentState('CAFE_NAME');
-      }, 700);
-    }, 1100);
+
+      rzp.on('payment.failed', function (resp: any) {
+        setPaymentProcessing(false);
+        const failDesc = resp.error?.description || 'Transaction declined.';
+        setVerificationError(failDesc);
+        toast.error('Payment Failed', { description: failDesc });
+      });
+
+      rzp.open();
+    } catch (err: any) {
+      setPaymentProcessing(false);
+      setVerificationError(err.message || 'Payment initiation failed.');
+      toast.error('Payment Error', { description: err.message });
+    }
   }
 
-  // Handle "Already completed payment? Check status"
-  function handleCheckStatus() {
+  // Handle "Already completed payment? Check status" strictly via server check
+  async function handleCheckStatus() {
     setCheckingStatus(true);
-    setTimeout(() => {
+    setVerificationError(null);
+
+    const email = userEmail || '';
+    const uid = userId || '';
+
+    if (!email && !uid) {
       setCheckingStatus(false);
-      setPaymentVerified(true);
-      try {
+      toast.error('Account Not Found', {
+        description: 'Please login or enter your account details first.',
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
+      );
+      const data = await res.json();
+
+      if (res.ok && data.verified === true) {
+        setPaymentVerified(true);
         localStorage.setItem('brewpluse::payment_verified', 'true');
-      } catch (e) {}
-      toast.success('Account verification confirmed!');
-      setTimeout(() => {
-        setCurrentState('CAFE_NAME');
-      }, 500);
-    }, 650);
+        toast.success('Account verification confirmed!', {
+          description: `Payment ID: ${data.paymentId || 'verified'}`,
+        });
+        setTimeout(() => {
+          setCurrentState('CAFE_NAME');
+        }, 500);
+      } else {
+        // Strict denial: No fake pass!
+        setPaymentVerified(false);
+        localStorage.removeItem('brewpluse::payment_verified');
+        setVerificationError(
+          data.message || 'No completed ₹1.00 verification payment found for this account.'
+        );
+        toast.error('Payment Not Verified', {
+          description:
+            data.message || 'No payment record found. Please click "Verify with ₹1.00" to complete payment.',
+        });
+        setCurrentState('PAYMENT');
+      }
+    } catch (err: any) {
+      setPaymentVerified(false);
+      localStorage.removeItem('brewpluse::payment_verified');
+      setVerificationError('Could not verify status. Please check your network connection.');
+      toast.error('Status Check Failed', {
+        description: 'Unable to connect to verification server.',
+      });
+      setCurrentState('PAYMENT');
+    } finally {
+      setCheckingStatus(false);
+    }
+  }
+
+  // Clear dummy data and reset setup state
+  async function handleClearDummyData() {
+    try {
+      localStorage.removeItem('brewpluse::payment_verified');
+      const email = userEmail || '';
+      const uid = userId || '';
+      if (email || uid) {
+        await fetch(
+          `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`,
+          { method: 'DELETE' }
+        );
+      }
+      setPaymentVerified(false);
+      setCurrentState('PAYMENT');
+      setVerificationError(null);
+      toast.success('Test verification data cleared!', {
+        description: 'All local and database payment flags for this account have been reset.',
+      });
+    } catch (e: any) {
+      localStorage.removeItem('brewpluse::payment_verified');
+      setPaymentVerified(false);
+      setCurrentState('PAYMENT');
+      toast.success('Local cache cleared.');
+    }
   }
 
   // Handle GPS detection
@@ -640,6 +780,14 @@ export default function SetupPage() {
                   >
                     <RefreshCw className={`h-3 w-3 ${checkingStatus ? 'animate-spin' : ''}`} />
                     <span>Already completed payment? Check status</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClearDummyData}
+                    className="w-full text-center py-1.5 text-[11px] text-neutral-500 hover:text-red-400 transition cursor-pointer"
+                  >
+                    Clear cached test data &amp; reset
                   </button>
                 </div>
               </div>

@@ -80,6 +80,24 @@ try {
   console.warn('[FirebaseClient] Eager initialization note:', error);
 }
 
+// Suppress harmless Firebase WebChannel stream abort warnings on fast refresh / unmount
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    const reason = event.reason;
+    const message = reason?.message || String(reason || '');
+    const name = reason?.name;
+    if (
+      name === 'AbortError' ||
+      message.includes('signal is aborted without reason') ||
+      message.includes('The user aborted a request') ||
+      message.includes('aborted without reason')
+    ) {
+      event.preventDefault();
+      event.stopImmediatePropagation?.();
+    }
+  });
+}
+
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
