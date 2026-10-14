@@ -50,6 +50,25 @@ const STEPS: StepDef[] = [
   { id: 'preferences', label: 'Preferences', states: ['GEOFENCING'] },
 ];
 
+function loadRazorpayCheckoutScript(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') return resolve(false);
+    if ((window as any).Razorpay) return resolve(true);
+    const existing = document.getElementById('razorpay-checkout-js');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(true));
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'razorpay-checkout-js';
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 export default function SetupPage() {
   const router = useRouter();
   const toast = useToast();
@@ -133,6 +152,9 @@ export default function SetupPage() {
       }
     });
 
+    // Preload Razorpay Checkout SDK
+    loadRazorpayCheckoutScript();
+
     return () => unsubscribe();
   }, []);
 
@@ -155,6 +177,9 @@ export default function SetupPage() {
   async function handleVerifyPayment() {
     setPaymentProcessing(true);
     setVerificationError(null);
+
+    // Pre-load checkout script
+    await loadRazorpayCheckoutScript();
 
     // Try live Razorpay if configured
     try {
@@ -183,10 +208,14 @@ export default function SetupPage() {
           currency: orderData.currency,
           name: 'BrewPluse Account Verification',
           description: 'Account verification (₹1.00)',
+          image: '/icon.png',
           order_id: orderData.orderId,
-          prefill: { email: userEmail },
+          prefill: {
+            email: userEmail || 'ashish.maajankiweb@gmail.com',
+            contact: '',
+          },
           theme: { color: '#875200' },
-          handler: function () {
+          handler: function (response: any) {
             setPaymentProcessing(false);
             setPaymentVerified(true);
             try {
