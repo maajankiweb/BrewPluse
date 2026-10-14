@@ -12,12 +12,18 @@ import PrivacyChoices from '@/components/PrivacyChoices';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDemoOrDashboard = pathname?.startsWith('/demo') || pathname?.startsWith('/dashboard');
-  const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/signup') || pathname?.startsWith('/forgot-password');
+  const isStandalone =
+    pathname?.startsWith('/demo') ||
+    pathname?.startsWith('/dashboard') ||
+    pathname?.startsWith('/setup') ||
+    pathname?.startsWith('/login') ||
+    pathname?.startsWith('/signup') ||
+    pathname?.startsWith('/forgot-password') ||
+    pathname?.startsWith('/m/');
 
   return (
     <ToastProvider>
-      {isAuthPage || isDemoOrDashboard ? (
+      {isStandalone ? (
         <main className="w-full min-h-screen">{children}</main>
       ) : (
         <>
