@@ -18,6 +18,7 @@ import {
   Handshake,
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
+import { isValidEmail, normalizeEmail } from '@/lib/validation';
 
 function SignupFormContent() {
   const router = useRouter();
@@ -103,9 +104,9 @@ function SignupFormContent() {
     e.preventDefault();
     setStep1Error(null);
 
-    const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail || !cleanEmail.includes('@')) {
-      setStep1Error('Please enter a valid email address.');
+    const cleanEmail = normalizeEmail(email);
+    if (!isValidEmail(cleanEmail)) {
+      setStep1Error('Please enter a valid email address (e.g., name@yourcafe.com).');
       return;
     }
 
@@ -126,63 +127,60 @@ function SignupFormContent() {
 
     setStep1Loading(true);
     try {
-      let otpHandled = false;
+      // 1. Strict Duplicate Check: Ensure one account per email ID
       try {
-        const res = await fetch('/api/onboarding/send-otp-simple', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: cleanEmail }),
-        });
-
-        const contentType = res.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-          const data = await res.json();
-          if (res.ok && data?.success) {
-            otpHandled = true;
-            toast.success('Verification code sent!', {
-              description: `Check your inbox at ${cleanEmail}`,
-            });
-            setStep('otp');
-            setCountdown(45);
-            setOtpDigits(['', '', '', '', '', '']);
-            return;
-          } else if (data?.error) {
-            throw new Error(data.error);
-          }
+        const checkRes = await fetch(
+          `/api/auth/check-email?email=${encodeURIComponent(cleanEmail)}`
+        );
+        const checkData = await checkRes.json();
+        if (checkData?.exists) {
+          const existMsg =
+            'An account is already registered with this email address. Please log in instead.';
+          setStep1Error(existMsg);
+          toast.error('Email Already Registered', {
+            description: 'You already have an account with this email. Please click "Sign In" below.',
+          });
+          setStep1Loading(false);
+          return;
         }
-      } catch (otpErr: any) {
-        console.warn('[Signup] OTP service note, proceeding with Firebase Auth:', otpErr?.message);
+      } catch (checkErr) {
+        console.warn('[Signup] Check email availability note:', checkErr);
       }
 
-      // Direct Firebase Authentication
-      const { signUpWithEmail } = await import('@/lib/firebaseAuth');
-      const fbUser = await signUpWithEmail(cleanEmail, password, cleanEmail.split('@')[0]);
-
-      localStorage.setItem(
-        'brewpluse::active_user',
-        JSON.stringify({
-          uid: fbUser.uid,
-          email: cleanEmail,
-          name: cleanEmail.split('@')[0],
-          storeName: 'BrewPluse Cafe',
-          verified: true,
-          loginTime: Date.now(),
-        })
-      );
-
-      toast.success('Account created successfully!', {
-        description: 'Proceeding to café setup...',
+      // 2. Dispatch OTP to verify ownership
+      const res = await fetch('/api/onboarding/send-otp-simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail }),
       });
 
-      setTimeout(() => {
-        setStep('referral');
-      }, 400);
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        if (res.status === 409 || data?.error?.includes('already registered')) {
+          const existMsg =
+            'An account is already registered with this email address. Please log in instead.';
+          setStep1Error(existMsg);
+          toast.error('Email Already Registered', {
+            description: 'Please log in with your existing account password.',
+          });
+          return;
+        }
+        throw new Error(data?.error || 'Failed to send verification code. Please try again.');
+      }
+
+      toast.success('Verification code sent!', {
+        description: `Check your inbox at ${cleanEmail}`,
+      });
+      setStep('otp');
+      setCountdown(45);
+      setOtpDigits(['', '', '', '', '', '']);
     } catch (err: any) {
       let msg = err.message || 'Failed to proceed. Please try again.';
-      if (err.code === 'auth/email-already-in-use') {
+      if (err.code === 'auth/email-already-in-use' || msg.includes('already registered')) {
         msg = 'This email is already registered. Please login instead.';
       } else if (err.code === 'auth/weak-password') {
-        msg = 'Password should be at least 6 characters.';
+        msg = 'Password should be at least 8 characters.';
       } else if (err.code === 'auth/invalid-email') {
         msg = 'Please enter a valid email address.';
       }
@@ -233,50 +231,53 @@ function SignupFormContent() {
     if (code.length !== 6 || step2Loading) return;
     setStep2Error(null);
     setStep2Loading(true);
-    let data: any = null;
-    try {
-      try {
-        const res = await fetch('/api/onboarding/verify-otp-simple', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            otp: code,
-            email: email.trim().toLowerCase(),
-            password,
-          }),
-        });
 
-        const contentType = res.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-          data = await res.json();
-          if (!res.ok) {
-            throw new Error(data?.error || 'Verification failed. Please check the code.');
-          }
+    try {
+      const cleanEmail = normalizeEmail(email);
+      const res = await fetch('/api/onboarding/verify-otp-simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          otp: code,
+          email: cleanEmail,
+          password,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        if (res.status === 409 || data?.error?.includes('already registered')) {
+          const existMsg = 'An account with this email address already exists. Please log in instead.';
+          setStep2Error(existMsg);
+          toast.error('Email Already Registered', {
+            description: existMsg,
+          });
+          return;
         }
-      } catch (verifyErr: any) {
-        console.warn('[Signup] OTP verify note:', verifyErr.message);
+        throw new Error(data?.error || 'Verification failed. Please check the 6-digit code.');
       }
 
-      const cleanEmail = email.trim().toLowerCase();
+      // Sync user to Firebase Auth if direct
       let fbUser = null;
       try {
         const { signUpWithEmail } = await import('@/lib/firebaseAuth');
         fbUser = await signUpWithEmail(cleanEmail, password, cleanEmail.split('@')[0]);
       } catch (fbErr: any) {
-        console.warn('[FirebaseAuth] Direct sign-up note:', fbErr.message);
+        if (fbErr.code === 'auth/email-already-in-use') {
+          console.warn('[FirebaseAuth] Account already in Auth, skipping direct create');
+        }
       }
 
-      try {
-        localStorage.setItem(
-          'brewpluse::active_user',
-          JSON.stringify({
-            uid: fbUser?.uid || data?.user?.uid || 'user_' + Date.now(),
-            email: cleanEmail,
-            verified: true,
-            loginTime: Date.now(),
-          })
-        );
-      } catch (err) {}
+      localStorage.setItem(
+        'brewpluse::active_user',
+        JSON.stringify({
+          uid: fbUser?.uid || data?.user?.id || 'usr_' + Date.now(),
+          email: cleanEmail,
+          verified: true,
+          loginTime: Date.now(),
+        })
+      );
 
       toast.success('Email verified & account created!', {
         description: 'Just one last step...',
@@ -519,9 +520,20 @@ function SignupFormContent() {
               <form onSubmit={handleCredentialsSubmit} className="space-y-4" noValidate>
                 {/* 1. EMAIL ADDRESS */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#eebd8e] block">
-                    EMAIL ADDRESS
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#eebd8e] block">
+                      EMAIL ADDRESS
+                    </label>
+                    {email.length > 0 && (
+                      <span
+                        className={`text-[10px] font-medium flex items-center gap-1 ${
+                          isValidEmail(email) ? 'text-emerald-400' : 'text-amber-400'
+                        }`}
+                      >
+                        {isValidEmail(email) ? '✓ Valid email' : 'Invalid email format'}
+                      </span>
+                    )}
+                  </div>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-[#78716c] absolute left-4 top-1/2 -translate-y-1/2" />
                     <input
@@ -534,8 +546,19 @@ function SignupFormContent() {
                       placeholder="owner@yourcafe.com"
                       required
                       autoComplete="email"
-                      className="w-full pl-11 pr-4 py-3 bg-[#221e1c] border border-white/10 rounded-2xl text-sm text-white placeholder-[#78716c] focus:outline-none focus:border-[#eebd8e] focus:bg-[#282321] transition-all font-medium"
+                      className={`w-full pl-11 pr-11 py-3 bg-[#221e1c] border rounded-2xl text-sm text-white placeholder-[#78716c] focus:outline-none focus:bg-[#282321] transition-all font-medium ${
+                        email.length > 0 && !isValidEmail(email)
+                          ? 'border-amber-400/60 focus:border-amber-400'
+                          : email.length > 0 && isValidEmail(email)
+                          ? 'border-emerald-500/60 focus:border-emerald-400'
+                          : 'border-white/10 focus:border-[#eebd8e]'
+                      }`}
                     />
+                    {email.length > 0 && isValidEmail(email) && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400">
+                        <Check className="w-4 h-4" />
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import { rateLimit, getClientIp } from '@/lib/rateLimit';
 import { generateOtp } from '@/lib/otpService';
 import { sendOtpEmail } from '@/lib/emailService';
-import { syncOtpToFirestore } from '@/lib/firebaseAdmin';
+import { syncOtpToFirestore, getAdminFirestore } from '@/lib/firebaseAdmin';
+import { isValidEmail, normalizeEmail } from '@/lib/validation';
+import { connectMongoDB } from '@/lib/mongodb';
+import { User } from '@/lib/models/User';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
@@ -10,11 +15,50 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { email } = body;
 
-    if (!email || typeof email !== 'string' || !email.includes('@') || email.length > 120) {
-      return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 });
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { error: 'Please enter a valid email address (e.g., name@example.com).' },
+        { status: 400 }
+      );
     }
 
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail = normalizeEmail(email);
+
+    // Prevent duplicate accounts: Ensure an email can only be registered once
+    try {
+      const conn = await connectMongoDB();
+      if (conn) {
+        const existing = await User.findOne({ email: cleanEmail });
+        if (existing) {
+          return NextResponse.json(
+            { error: 'An account is already registered with this email address. Please log in instead.' },
+            { status: 409 }
+          );
+        }
+      }
+    } catch (mErr: any) {
+      console.warn('[send-otp-simple Mongo note]:', mErr?.message);
+    }
+
+    try {
+      const firestore = getAdminFirestore();
+      if (firestore) {
+        const snap = await firestore
+          .collection('users')
+          .where('email', '==', cleanEmail)
+          .limit(1)
+          .get();
+
+        if (!snap.empty) {
+          return NextResponse.json(
+            { error: 'An account is already registered with this email address. Please log in instead.' },
+            { status: 409 }
+          );
+        }
+      }
+    } catch (fErr: any) {
+      console.warn('[send-otp-simple Firestore note]:', fErr?.message);
+    }
 
     // Rate limit: Max 4 OTP requests per 10 minutes per IP/email
     const limiter = rateLimit(`otp:${ip}:${cleanEmail}`, 4, 10 * 60 * 1000);
