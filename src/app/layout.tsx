@@ -288,6 +288,19 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqSchema) }}
         />
+        {/* Automated ChunkLoadError recovery for CDN deploys */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
+                  console.warn('[BrewPluse] New version detected on CDN, auto-refreshing...');
+                  window.location.reload();
+                }
+              });
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased text-[#1a1715] bg-[#FBFBFA] min-h-screen flex flex-col selection:bg-emerald-200 selection:text-emerald-950">
         <AppShell>{children}</AppShell>
