@@ -21,6 +21,7 @@ import {
   Printer,
   ChevronRight,
   CheckCircle2,
+  Lock,
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { onAuthChange, logoutUser } from '@/lib/firebaseAuth';
@@ -113,6 +114,15 @@ export default function SetupPage() {
       }
       const ref = localStorage.getItem('brewpluse_signup_referral_code');
       if (ref) setReferralCode(ref.toUpperCase());
+
+      // Check if user has already verified payment
+      const isPaid = localStorage.getItem('brewpluse::payment_verified') === 'true';
+      if (isPaid) {
+        setPaymentVerified(true);
+      } else {
+        setPaymentVerified(false);
+        setCurrentState('PAYMENT');
+      }
     } catch (e) {}
 
     const unsubscribe = onAuthChange((user) => {
@@ -125,6 +135,16 @@ export default function SetupPage() {
 
     return () => unsubscribe();
   }, []);
+
+  // Strict Security Gate: Bina payment kiye koi bhi business setup page open nahi kar sakta
+  useEffect(() => {
+    if (!paymentVerified && currentState !== 'PAYMENT') {
+      setCurrentState('PAYMENT');
+      toast.error('Payment Verification Required', {
+        description: 'Bina ₹1.00 account verification payment ke business setup access nahi kiya ja sakta.',
+      });
+    }
+  }, [currentState, paymentVerified]);
 
   // Compute active sidebar step index (0 to 3)
   const currentStepIndex = STEPS.findIndex((s) => s.states.includes(currentState));
@@ -169,6 +189,9 @@ export default function SetupPage() {
           handler: function () {
             setPaymentProcessing(false);
             setPaymentVerified(true);
+            try {
+              localStorage.setItem('brewpluse::payment_verified', 'true');
+            } catch (e) {}
             toast.success('Account verified successfully!', {
               description: 'Verification payment of ₹1.00 refunded automatically.',
             });
@@ -191,6 +214,9 @@ export default function SetupPage() {
     setTimeout(() => {
       setPaymentProcessing(false);
       setPaymentVerified(true);
+      try {
+        localStorage.setItem('brewpluse::payment_verified', 'true');
+      } catch (e) {}
       toast.success('Account verified successfully!', {
         description: 'Verification payment of ₹1.00 refunded automatically.',
       });
@@ -206,6 +232,9 @@ export default function SetupPage() {
     setTimeout(() => {
       setCheckingStatus(false);
       setPaymentVerified(true);
+      try {
+        localStorage.setItem('brewpluse::payment_verified', 'true');
+      } catch (e) {}
       toast.success('Account verification confirmed!');
       setTimeout(() => {
         setCurrentState('CAFE_NAME');
@@ -381,21 +410,34 @@ export default function SetupPage() {
                       (step.id === 'business' && Boolean(cafeName.trim()) && idx < activeStepIdx) ||
                       idx < activeStepIdx;
                     const isCurrent = idx === activeStepIdx;
+                    const isLocked = step.id !== 'payment' && !paymentVerified;
 
                     return (
                       <button
                         key={step.id}
                         type="button"
+                        disabled={isLocked}
                         onClick={() => {
-                          if (step.id === 'payment') setCurrentState('PAYMENT');
-                          else if (step.id === 'business') setCurrentState('CAFE_NAME');
-                          else if (step.id === 'location') setCurrentState('MAP_LOCATION');
-                          else if (step.id === 'preferences') setCurrentState('GEOFENCING');
+                          if (step.id === 'payment') {
+                            setCurrentState('PAYMENT');
+                          } else if (!paymentVerified) {
+                            toast.error('Payment Verification Required', {
+                              description: 'Pehle ₹1.00 verification payment complete karein.',
+                            });
+                          } else {
+                            if (step.id === 'business') setCurrentState('CAFE_NAME');
+                            else if (step.id === 'location') setCurrentState('MAP_LOCATION');
+                            else if (step.id === 'preferences') setCurrentState('GEOFENCING');
+                          }
                         }}
-                        className="flex items-center gap-4 relative z-10 text-left focus:outline-none cursor-pointer group"
+                        className={`flex items-center gap-4 relative z-10 text-left focus:outline-none transition-all w-full ${
+                          isLocked
+                            ? 'opacity-40 cursor-not-allowed'
+                            : 'cursor-pointer group'
+                        }`}
                       >
                         <div
-                          className={`w-[15px] h-[15px] rounded-full flex items-center justify-center border-2 transition-colors ${
+                          className={`w-[15px] h-[15px] rounded-full flex items-center justify-center border-2 transition-colors shrink-0 ${
                             isCompleted
                               ? 'bg-[#875200] border-[#875200]'
                               : isCurrent
@@ -410,7 +452,7 @@ export default function SetupPage() {
                           ) : null}
                         </div>
                         <span
-                          className={`text-sm font-bold tracking-wide transition-colors ${
+                          className={`text-sm font-bold tracking-wide transition-colors flex items-center justify-between flex-1 ${
                             isCompleted
                               ? 'text-neutral-300'
                               : isCurrent
@@ -418,7 +460,8 @@ export default function SetupPage() {
                               : 'text-neutral-600 group-hover:text-neutral-400'
                           }`}
                         >
-                          {step.label}
+                          <span>{step.label}</span>
+                          {isLocked && <Lock className="w-3 h-3 text-neutral-500" />}
                         </span>
                       </button>
                     );
