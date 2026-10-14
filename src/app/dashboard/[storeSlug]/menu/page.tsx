@@ -641,7 +641,7 @@ export default function MenuPage() {
           </div>
         )}
 
-        {/* AI Menu Digitizer Modal (CafeFlow Feature 1) */}
+        {/* AI Menu Digitizer Modal (BrewPluse Feature 1) */}
         {isAiModalOpen && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
             <div className="bg-white dark:bg-[#0E2018] w-full max-w-4xl rounded-2xl sm:rounded-3xl border border-[#EAE8E4] dark:border-[#1E382E] shadow-2xl p-4 sm:p-6 my-auto max-h-[90vh] overflow-y-auto">

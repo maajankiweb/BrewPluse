@@ -33,14 +33,14 @@ function getTransporter(): any {
 }
 
 /**
- * Send 6-Digit OTP Email with modern HTML template matching CafeFlow brand
+ * Send 6-Digit OTP Email with modern HTML template matching BrewPluse brand
  */
 export async function sendOtpEmail({
   to,
   otp,
   expiresInMinutes = 10,
-  brandName = process.env.NEXT_PUBLIC_APP_NAME || 'CafeFlow',
-  brandDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || 'cafeflow.fun',
+  brandName = process.env.NEXT_PUBLIC_APP_NAME || 'BrewPluse',
+  brandDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || 'brewpluse.com',
 }: SendOtpEmailParams): Promise<{ success: boolean; previewUrl?: string; messageId?: string }> {
   const mailTransporter = getTransporter();
 

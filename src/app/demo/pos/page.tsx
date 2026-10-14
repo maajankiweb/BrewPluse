@@ -945,7 +945,7 @@ export default function DemoPosPage() {
               </button>
             </div>
 
-            {/* Email Invoice Section (CafeFlow Feature) */}
+            {/* Email Invoice Section (BrewPluse Feature) */}
             <div className="p-3 rounded-xl bg-[#062F23]/5 dark:bg-[#062F23]/20 border border-[#062F23]/10 dark:border-emerald-500/20 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-[#12201B] dark:text-white flex items-center gap-1.5">
