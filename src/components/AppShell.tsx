@@ -40,7 +40,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     pathname?.startsWith('/kitchen') ||
     pathname?.startsWith('/setup') ||
     pathname?.startsWith('/m/') ||
-    pathname?.startsWith('/t/');
+    pathname?.startsWith('/t/') ||
+    pathname?.startsWith('/login') ||
+    pathname?.startsWith('/signup') ||
+    pathname?.startsWith('/forgot-password');
 
   return (
     <ToastProvider>

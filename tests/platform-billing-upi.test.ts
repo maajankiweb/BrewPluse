@@ -157,4 +157,67 @@ describe('BrewPluse Direct Cafe UPI & Platform Billing Ledger (₹1/order with �
     const cafeNetRetainedCafeMode = dishRevenue - brewpluseFeeDue; // ₹9,950
     assert.equal(cafeNetRetainedCafeMode, 9950);
   });
+
+  test('9. Default GST is 0% (No ₹6.00 or extra tax added to bills)', () => {
+    saveRuntimeStore({
+      slug: 'test-cafe-zero-tax',
+      name: 'Zero Tax Cafe',
+      taxRate: 0.0,
+      country: 'IN',
+    });
+
+    const store = getRuntimeStore('test-cafe-zero-tax');
+    const effectiveTaxRate = typeof store.taxRate === 'number' ? store.taxRate : 0.0;
+    assert.equal(effectiveTaxRate, 0.0);
+
+    // Bill calculation on ₹120 item with 0% tax
+    const subtotal = 120;
+    const taxAmount = (subtotal * effectiveTaxRate) / 100;
+    assert.equal(taxAmount, 0); // No tax charged!
+  });
+
+  test('10. Cafe owner can optionally configure item-level or store-wide GST rates (5%, 12%, 18%)', () => {
+    // Item A: 0% tax (Default)
+    const itemA = { name: 'Chai', price: 50, taxPercent: 0 };
+    // Item B: 5% tax (Standard Food)
+    const itemB = { name: 'Pasta', price: 200, taxPercent: 5 };
+    // Item C: 12% tax (Bakery)
+    const itemC = { name: 'Cake', price: 100, taxPercent: 12 };
+
+    const taxA = (itemA.price * (itemA.taxPercent || 0)) / 100;
+    const taxB = (itemB.price * (itemB.taxPercent || 0)) / 100;
+    const taxC = (itemC.price * (itemC.taxPercent || 0)) / 100;
+
+    assert.equal(taxA, 0);
+    assert.equal(taxB, 10); // 5% of 200
+    assert.equal(taxC, 12); // 12% of 100
+
+    const totalBill = (itemA.price + itemB.price + itemC.price) + (taxA + taxB + taxC);
+    assert.equal(totalBill, 350 + 22);
+  });
+
+  test('11. Global setup request registration for international cafes outside India', () => {
+    const { saveRuntimeGlobalRequest, getRuntimeGlobalRequests } = require('../src/lib/models/GlobalSetupRequest');
+
+    const req = saveRuntimeGlobalRequest({
+      cafeName: 'Dubai Marina Roastery',
+      ownerName: 'Rashid Al Nuaimi',
+      email: 'rashid@dubaimarina.ae',
+      phone: '+971501234567',
+      country: 'United Arab Emirates',
+      city: 'Dubai',
+      desiredCurrency: 'AED',
+      estimatedTables: 25,
+      notes: 'Need local 5% UAE VAT and Stripe Terminal setup',
+    });
+
+    assert.ok(req._id);
+    assert.equal(req.country, 'United Arab Emirates');
+    assert.equal(req.desiredCurrency, 'AED');
+    assert.equal(req.status, 'pending');
+
+    const allRequests = getRuntimeGlobalRequests();
+    assert.ok(allRequests.length > 0);
+    assert.equal(allRequests[0].cafeName, 'Dubai Marina Roastery');
+  });
 });

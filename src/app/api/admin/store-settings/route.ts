@@ -12,6 +12,9 @@ const UpdateStoreSettingsSchema = z.object({
   gstin: z.string().trim().max(30).optional(),
   paymentPolicy: z.enum(['pay_first', 'pay_later', 'customer_choice']).optional(),
   serviceChargePercent: z.number().min(0).max(30).optional(),
+  taxRate: z.number().min(0).max(50).optional(),
+  taxInclusive: z.boolean().optional(),
+  country: z.string().trim().max(10).optional(),
   platformFeeMode: z.enum(['customer', 'cafe']).optional(),
   acceptingOrders: z.boolean().optional(),
 });
@@ -47,6 +50,9 @@ export async function GET(request: Request) {
         gstin: '',
         paymentPolicy: 'customer_choice',
         platformFeeMode: 'cafe',
+        taxRate: 0.0,
+        taxInclusive: false,
+        country: 'IN',
         acceptingOrders: true,
       };
     }
@@ -61,6 +67,9 @@ export async function GET(request: Request) {
         gstin: store.gstin || '',
         paymentPolicy: store.paymentPolicy || 'customer_choice',
         platformFeeMode: store.platformFeeMode || 'cafe',
+        taxRate: typeof store.taxRate === 'number' ? store.taxRate : 0.0,
+        taxInclusive: store.taxInclusive || false,
+        country: store.country || 'IN',
         serviceChargePercent: store.serviceChargePercent || 0,
         acceptingOrders: store.acceptingOrders !== false,
         platformBilling: store.platformBilling || {
@@ -121,6 +130,9 @@ export async function POST(request: Request) {
       if (parsed.data.gstin !== undefined) store.gstin = parsed.data.gstin;
       if (parsed.data.paymentPolicy !== undefined) store.paymentPolicy = parsed.data.paymentPolicy;
       if (parsed.data.platformFeeMode !== undefined) store.platformFeeMode = parsed.data.platformFeeMode;
+      if (parsed.data.taxRate !== undefined) store.taxRate = parsed.data.taxRate;
+      if (parsed.data.taxInclusive !== undefined) store.taxInclusive = parsed.data.taxInclusive;
+      if (parsed.data.country !== undefined) store.country = parsed.data.country;
       if (parsed.data.serviceChargePercent !== undefined)
         store.serviceChargePercent = parsed.data.serviceChargePercent;
       if (parsed.data.acceptingOrders !== undefined)
@@ -146,6 +158,9 @@ export async function POST(request: Request) {
         upiName: store.upiName,
         paymentPolicy: store.paymentPolicy,
         platformFeeMode: store.platformFeeMode || 'cafe',
+        taxRate: typeof store.taxRate === 'number' ? store.taxRate : 0.0,
+        taxInclusive: store.taxInclusive || false,
+        country: store.country || 'IN',
       },
     });
   } catch (error: any) {

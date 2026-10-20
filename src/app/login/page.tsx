@@ -61,51 +61,49 @@ function LoginFormContent() {
 
     setLoading(true);
     try {
-      // 1. Authenticate with Firebase Auth
+      // 1. Authenticate with Firebase Auth (client sync if available)
       let firebaseUser = null;
       try {
         const { signInWithEmail } = await import('@/lib/firebaseAuth');
         firebaseUser = await signInWithEmail(cleanEmail, password);
       } catch (fbErr: any) {
-        console.warn('[FirebaseAuth] Direct client login note:', fbErr.message);
-        if (
-          fbErr.code === 'auth/invalid-credential' ||
-          fbErr.code === 'auth/user-not-found' ||
-          fbErr.code === 'auth/wrong-password'
-        ) {
-          throw new Error('Invalid email or password. Please verify your credentials.');
-        }
+        console.warn('[FirebaseAuth] Client login bypassed, verifying with backend API:', fbErr.message);
       }
 
-      // 2. Also authenticate with API endpoint for session support & custom claims
-      try {
-        const loginRes = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: cleanEmail, password }),
-        });
-        const loginData = await loginRes.json();
-        if (loginData?.firebaseCustomToken) {
-          try {
-            const { getFirebaseAuth } = await import('@/lib/firebaseClient');
-            const { signInWithCustomToken } = await import('firebase/auth');
-            const authInst = getFirebaseAuth();
-            if (authInst) {
-              await signInWithCustomToken(authInst, loginData.firebaseCustomToken);
-            }
-          } catch (tokenErr) {
-            console.warn('[FirebaseAuth] signInWithCustomToken note:', tokenErr);
+      // 2. Authoritative backend API login
+      const loginRes = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password }),
+      });
+
+      if (!loginRes.ok) {
+        const errData = await loginRes.json().catch(() => ({}));
+        throw new Error(errData?.error || 'Invalid email or password. Please verify your credentials.');
+      }
+
+      const loginData = await loginRes.json();
+      if (loginData?.firebaseCustomToken) {
+        try {
+          const { getFirebaseAuth } = await import('@/lib/firebaseClient');
+          const { signInWithCustomToken } = await import('firebase/auth');
+          const authInst = getFirebaseAuth();
+          if (authInst) {
+            await signInWithCustomToken(authInst, loginData.firebaseCustomToken);
           }
+        } catch (tokenErr) {
+          console.warn('[FirebaseAuth] signInWithCustomToken note:', tokenErr);
         }
-      } catch (e) {}
+      }
 
       localStorage.setItem(
         'brewpluse::active_user',
         JSON.stringify({
-          uid: firebaseUser?.uid || 'user_' + Date.now(),
+          uid: loginData?.user?.uid || firebaseUser?.uid || 'user_' + Date.now(),
           email: cleanEmail,
-          name: firebaseUser?.displayName || cleanEmail.split('@')[0],
-          storeName: 'BrewPluse Cafe',
+          name: loginData?.user?.storeName || firebaseUser?.displayName || cleanEmail.split('@')[0],
+          storeName: loginData?.user?.storeName || 'BrewPluse Cafe',
+          storeSlug: loginData?.user?.storeSlug || 'brewpluse',
           loginTime: Date.now(),
         })
       );
@@ -211,6 +209,31 @@ function LoginFormContent() {
               <span>{errorMsg}</span>
             </div>
           )}
+
+          {/* QUICK DEMO CAFE ACCOUNT AUTOFILL */}
+          <div className="mb-4 p-3.5 rounded-2xl bg-[#1c1815] border border-amber-500/30 text-xs flex items-center justify-between gap-3 shadow-lg">
+            <div>
+              <span className="font-bold text-amber-400 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                <span>⚡ Demo Cafe Setup Account</span>
+              </span>
+              <p className="text-[11px] text-[#9c938a] mt-0.5 font-mono">
+                demo@brewpluse.com &bull; BrewPluse@2026
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('demo@brewpluse.com');
+                setPassword('BrewPluse@2026');
+                toast.success('Demo Cafe Credentials Loaded!', {
+                  description: 'Click "Log in" to access your dashboard.',
+                });
+              }}
+              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-xs border border-amber-500/40 transition-colors cursor-pointer shrink-0"
+            >
+              Fill Demo
+            </button>
+          </div>
 
           <form onSubmit={handleLogin} className="space-y-4" noValidate>
             {/* 1. EMAIL ADDRESS */}
@@ -337,24 +360,6 @@ function LoginFormContent() {
             </Link>
           </div>
         </main>
-
-        {/* Footer */}
-        <footer className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#736a61] pt-4">
-          <p>&copy; {new Date().getFullYear()} BrewPluse Inc. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:text-neutral-300 transition-colors">
-              Terms
-            </Link>
-            <span className="text-[#3a332d]">&middot;</span>
-            <Link href="/privacy" className="hover:text-neutral-300 transition-colors">
-              Privacy
-            </Link>
-            <span className="text-[#3a332d]">&middot;</span>
-            <Link href="/pricing" className="hover:text-neutral-300 transition-colors">
-              Pricing
-            </Link>
-          </div>
-        </footer>
       </div>
 
       {/* ========================================================= */}

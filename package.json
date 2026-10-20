@@ -8,6 +8,7 @@
     "start": "next start -p 3000",
     "mobile:sync": "npx cap sync android",
     "mobile:build": "cd android && .\\gradlew.bat assembleDebug",
+    "seed:demo": "node scripts/seed-demo-cafe.mjs",
     "test:rules": "npx firebase emulators:exec --only firestore \"node tests/firestore-rules.test.mjs\"",
     "test:rules:direct": "node tests/firestore-rules.test.mjs"
   },

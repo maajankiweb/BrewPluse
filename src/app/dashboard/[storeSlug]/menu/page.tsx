@@ -33,6 +33,7 @@ interface MenuItem {
   color?: string;
   mod?: string;
   image?: string;
+  taxPercent?: number; // GST rate % (0%, 5%, 12%, 18% or foreign VAT)
 }
 
 interface ExtractedDish {
@@ -43,19 +44,20 @@ interface ExtractedDish {
   desc: string;
   selected: boolean;
   image?: string;
+  taxPercent?: number;
 }
 
 const DEFAULT_MENU_CATALOG: MenuItem[] = [
-  { id: 'bp-flat-white', name: 'Flat White', cat: 'coffee', price: 180, desc: 'Double shot, steamed milk', color: '#BA7E52', mod: 'Oat milk', image: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-cold-brew', name: 'Cold Brew', cat: 'coffee', price: 210, desc: '12-hour steep, over ice', color: '#442E25', mod: 'Sweet cream', image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-masala-chai', name: 'Masala Chai', cat: 'tea', price: 120, desc: 'Ginger, cardamom, milk tea', color: '#D39E3A', mod: 'Cardamom', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-butter-croissant', name: 'Butter Croissant', cat: 'bakes', price: 140, desc: 'Baked fresh each morning', color: '#E0AB75', mod: 'Warmed', image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-espresso', name: 'Espresso Single', cat: 'coffee', price: 90, desc: 'Rich crema, intense extraction', color: '#2C1810', mod: 'Single shot', image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-cappuccino', name: 'Cappuccino Foam', cat: 'coffee', price: 140, desc: 'Velvety foam, cocoa dusting', color: '#A06E4A', mod: 'Whole milk', image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-caramel-macchiato', name: 'Caramel Macchiato', cat: 'coffee', price: 190, desc: 'Vanilla syrup, caramel drizzle', color: '#C78440', mod: 'Extra caramel', image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-blueberry-muffin', name: 'Blueberry Muffin', cat: 'bakes', price: 120, desc: 'Wild blueberries, crumble crust', color: '#795548', mod: 'Warmed', image: 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-paneer-sandwich', name: 'Paneer Tikka Sandwich', cat: 'bakes', price: 180, desc: 'Grilled sourdough, spiced paneer', color: '#B35422', mod: 'Toasted', image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-green-tea', name: 'Green Tea Pot', cat: 'tea', price: 100, desc: 'Whole leaf organic blend', color: '#5B8A5A', mod: 'Honey', image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=400&q=80' }
+  { id: 'bp-flat-white', name: 'Flat White', cat: 'coffee', price: 180, desc: 'Double shot, steamed milk', color: '#BA7E52', mod: 'Oat milk', taxPercent: 0, image: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-cold-brew', name: 'Cold Brew', cat: 'coffee', price: 210, desc: '12-hour steep, over ice', color: '#442E25', mod: 'Sweet cream', taxPercent: 0, image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-masala-chai', name: 'Masala Chai', cat: 'tea', price: 120, desc: 'Ginger, cardamom, milk tea', color: '#D39E3A', mod: 'Cardamom', taxPercent: 0, image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-butter-croissant', name: 'Butter Croissant', cat: 'bakes', price: 140, desc: 'Baked fresh each morning', color: '#E0AB75', mod: 'Warmed', taxPercent: 0, image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-espresso', name: 'Espresso Single', cat: 'coffee', price: 90, desc: 'Rich crema, intense extraction', color: '#2C1810', mod: 'Single shot', taxPercent: 0, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-cappuccino', name: 'Cappuccino Foam', cat: 'coffee', price: 140, desc: 'Velvety foam, cocoa dusting', color: '#A06E4A', mod: 'Whole milk', taxPercent: 0, image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-caramel-macchiato', name: 'Caramel Macchiato', cat: 'coffee', price: 190, desc: 'Vanilla syrup, caramel drizzle', color: '#C78440', mod: 'Extra caramel', taxPercent: 0, image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-blueberry-muffin', name: 'Blueberry Muffin', cat: 'bakes', price: 120, desc: 'Wild blueberries, crumble crust', color: '#795548', mod: 'Warmed', taxPercent: 0, image: 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-paneer-sandwich', name: 'Paneer Tikka Sandwich', cat: 'bakes', price: 180, desc: 'Grilled sourdough, spiced paneer', color: '#B35422', mod: 'Toasted', taxPercent: 0, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-green-tea', name: 'Green Tea Pot', cat: 'tea', price: 100, desc: 'Whole leaf organic blend', color: '#5B8A5A', mod: 'Honey', taxPercent: 0, image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=400&q=80' }
 ];
 
 export default function MenuPage() {
@@ -75,6 +77,7 @@ export default function MenuPage() {
   const [desc, setDesc] = useState('');
   const [mod, setMod] = useState('');
   const [image, setImage] = useState('');
+  const [taxPercent, setTaxPercent] = useState<number>(0); // 0% by default (Optional GST)
   const [savedToast, setSavedToast] = useState(false);
   // AI Menu Digitizer States
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
@@ -82,6 +85,7 @@ export default function MenuPage() {
   const [isAiScanning, setIsAiScanning] = useState(false);
   const [scanStepText, setScanStepText] = useState('');
   const [extractedDishes, setExtractedDishes] = useState<ExtractedDish[]>([]);
+  const [bulkAiTax, setBulkAiTax] = useState<number>(0);
   const [hasScanned, setHasScanned] = useState(false);
 
   const startAiScan = async (photoUrl: string) => {
@@ -201,6 +205,7 @@ export default function MenuPage() {
       desc: d.desc,
       color: d.cat === 'coffee' ? '#BA7E52' : d.cat === 'tea' ? '#D39E3A' : '#E0AB75',
       image: d.image,
+      taxPercent: typeof d.taxPercent === 'number' ? d.taxPercent : bulkAiTax,
     }));
 
     saveCatalogToStorage([...newMenuItems, ...menuItems]);
@@ -251,6 +256,7 @@ export default function MenuPage() {
       setDesc(item.desc || '');
       setMod(item.mod || '');
       setImage(item.image || '');
+      setTaxPercent(typeof item.taxPercent === 'number' ? item.taxPercent : 0);
     } else {
       setEditingItem(null);
       setName('');
@@ -259,6 +265,7 @@ export default function MenuPage() {
       setDesc('');
       setMod('');
       setImage('');
+      setTaxPercent(0);
     }
     setIsModalOpen(true);
   };
@@ -286,7 +293,7 @@ export default function MenuPage() {
     if (editingItem) {
       const updated = menuItems.map(item =>
         item.id === editingItem.id
-          ? { ...item, name, cat: category, price: Number(price), desc, mod, image, color }
+          ? { ...item, name, cat: category, price: Number(price), desc, mod, image, color, taxPercent: Number(taxPercent) || 0 }
           : item
       );
       saveCatalogToStorage(updated);
@@ -299,7 +306,8 @@ export default function MenuPage() {
         desc,
         mod,
         image,
-        color
+        color,
+        taxPercent: Number(taxPercent) || 0,
       };
       saveCatalogToStorage([newItem, ...menuItems]);
     }
@@ -438,11 +446,22 @@ export default function MenuPage() {
                   <p className="text-[11px] text-[#706C66] dark:text-[#9AB2A8] line-clamp-2 mt-0.5 leading-snug">
                     {item.desc || 'Freshly prepared specialty dish.'}
                   </p>
-                  {item.mod && (
-                    <span className="inline-block mt-1 text-[10px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md">
-                      {item.mod}
-                    </span>
-                  )}
+                  <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                    {item.mod && (
+                      <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md">
+                        {item.mod}
+                      </span>
+                    )}
+                    {item.taxPercent && item.taxPercent > 0 ? (
+                      <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md border border-emerald-300/40">
+                        {item.taxPercent}% GST/VAT
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800/60 px-1.5 py-0.5 rounded">
+                        No GST (0%)
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -621,6 +640,39 @@ export default function MenuPage() {
                   />
                 </div>
 
+                {/* GST / Tax Rate Selection */}
+                <div className="p-3 rounded-xl bg-[#F8F7F4] dark:bg-[#12241C] border border-[#EAE8E4] dark:border-[#1E382E] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      GST / Tax Rate (Optional)
+                    </label>
+                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">
+                      {taxPercent === 0 ? '✓ No extra GST on bill' : `+${taxPercent}% tax on bill`}
+                    </span>
+                  </div>
+                  <select
+                    value={taxPercent}
+                    onChange={(e) => setTaxPercent(Number(e.target.value))}
+                    className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-700 text-xs font-semibold outline-none focus:border-emerald-600 bg-white dark:bg-[#0E2018]"
+                  >
+                    <optgroup label="🇮🇳 Indian Government GST Slabs">
+                      <option value={0}>0% - Exempt / No GST (₹0 Tax on bill - Default)</option>
+                      <option value={5}>5% - Standard Cafe / Restaurant Food (No ITC)</option>
+                      <option value={12}>12% - Bakery / Confectionery / Packed Foods</option>
+                      <option value={18}>18% - Luxury / Air-conditioned Lounge / Catering</option>
+                    </optgroup>
+                    <optgroup label="🌍 International Country VAT / Tax Slabs">
+                      <option value={5}>5% - UAE / Middle East VAT</option>
+                      <option value={7}>7% - Singapore GST</option>
+                      <option value={10}>10% - Australia GST / Japan Consumption Tax</option>
+                      <option value={20}>20% - United Kingdom / EU Standard VAT</option>
+                    </optgroup>
+                  </select>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                    If set to <strong>0% (Default)</strong>, no GST is added to the customer bill. Customers pay exact menu price.
+                  </p>
+                </div>
+
                 <div className="pt-2 flex items-center justify-end gap-2.5">
                   <button
                     type="button"
@@ -780,6 +832,40 @@ export default function MenuPage() {
                           </button>
                         </div>
 
+                        {/* Bulk GST / Tax selector for all AI extracted dishes */}
+                        <div className="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                          <div>
+                            <span className="text-xs font-bold text-[#191716] dark:text-white flex items-center gap-1.5">
+                              <span>🏛️ GST / Tax Rate for Imported Dishes</span>
+                            </span>
+                            <p className="text-[11px] text-[#706C66] dark:text-[#9AB2A8]">
+                              Choose government GST rate. Set to 0% if your cafe does not charge GST.
+                            </p>
+                          </div>
+                          <select
+                            value={bulkAiTax}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              setBulkAiTax(val);
+                              setExtractedDishes(extractedDishes.map((d) => ({ ...d, taxPercent: val })));
+                            }}
+                            className="text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-500/40 bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white outline-none cursor-pointer"
+                          >
+                            <optgroup label="🇮🇳 Indian Government Slabs">
+                              <option value={0}>0% - Exempt / No GST (Default)</option>
+                              <option value={5}>5% - Standard Cafe Food</option>
+                              <option value={12}>12% - Bakery / Sweets</option>
+                              <option value={18}>18% - Luxury / Lounge</option>
+                            </optgroup>
+                            <optgroup label="🌍 International Country Slabs">
+                              <option value={5}>5% - UAE VAT</option>
+                              <option value={7}>7% - Singapore GST</option>
+                              <option value={10}>10% - Australia / Japan Tax</option>
+                              <option value={20}>20% - UK / EU VAT</option>
+                            </optgroup>
+                          </select>
+                        </div>
+
                         {/* List of items */}
                         <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1">
                           {extractedDishes.map((dish, idx) => (
@@ -840,7 +926,7 @@ export default function MenuPage() {
                                 </div>
                               </div>
 
-                              <div className="flex items-center gap-2 pl-8 sm:pl-0">
+                              <div className="flex flex-wrap items-center gap-2 pl-8 sm:pl-0">
                                 <select
                                   value={dish.cat}
                                   onChange={(e) => {
@@ -874,6 +960,28 @@ export default function MenuPage() {
                                     className="w-14 text-xs font-mono font-bold text-[#191716] dark:text-white bg-transparent focus:outline-none"
                                   />
                                 </div>
+
+                                <select
+                                  value={typeof dish.taxPercent === 'number' ? dish.taxPercent : bulkAiTax}
+                                  onChange={(e) => {
+                                    const val = Number(e.target.value);
+                                    setExtractedDishes(
+                                      extractedDishes.map((d) =>
+                                        d.id === dish.id ? { ...d, taxPercent: val } : d
+                                      )
+                                    );
+                                  }}
+                                  className="text-[11px] px-1.5 py-1 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-semibold text-gray-700 dark:text-gray-300"
+                                  title="GST Rate for this item"
+                                >
+                                  <option value={0}>0% GST</option>
+                                  <option value={5}>5% GST</option>
+                                  <option value={12}>12% GST</option>
+                                  <option value={18}>18% GST</option>
+                                  <option value={7}>7% (SG)</option>
+                                  <option value={10}>10% (AU)</option>
+                                  <option value={20}>20% (UK)</option>
+                                </select>
                               </div>
                             </div>
                           ))}
