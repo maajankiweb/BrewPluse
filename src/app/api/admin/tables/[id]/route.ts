@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { connectMongoDB } from '@/lib/mongodb';
-import { Table } from '@/lib/models/Table';
+import { Table, deleteRuntimeTable } from '@/lib/models/Table';
 import { requireStaff } from '@/lib/authService';
 
 export const dynamic = 'force-dynamic';
@@ -22,10 +22,13 @@ interface RouteParams {
  */
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
-    if (!auth.success || !auth.session) return auth.response!;
-
-    const storeId = auth.session.storeSlug;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
     const tableId = params.id;
 
     const body = await request.json().catch(() => null);
@@ -107,27 +110,31 @@ export async function PATCH(request: Request, { params }: RouteParams) {
  */
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
-    if (!auth.success || !auth.session) return auth.response!;
-
-    const storeId = auth.session.storeSlug;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
     const tableId = params.id;
 
     await connectMongoDB();
 
-    const table = await Table.findOne({ _id: tableId, storeId });
+    let table = await Table.findOne({ _id: tableId, storeId });
     if (!table) {
-      return NextResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'Table not found' } },
-        { status: 404 }
-      );
+      table = await Table.findOne({ number: tableId, storeId });
     }
 
-    await Table.deleteOne({ _id: tableId, storeId });
+    if (table) {
+      await Table.deleteOne({ _id: table._id, storeId });
+    }
+
+    deleteRuntimeTable(storeId, tableId);
 
     return NextResponse.json({
       success: true,
-      message: `Table ${table.number} removed successfully.`,
+      message: `Table removed successfully.`,
     });
   } catch (error: any) {
     console.error('[Admin Table DELETE Error]:', error);

@@ -19,7 +19,7 @@ export default function DemoHardwarePage() {
     {
       title: 'Smart NFC Table Cards',
       tagline: 'Tap-to-Order for iPhone & Android',
-      price: '₹149 / piece',
+      price: '₹1,500 / piece',
       desc: 'Matte waterproof PVC cards embedded with high-frequency NTAG213 chips. Customers tap their phone to instantly open your digital menu.',
       url: '/demo/hardware/nfc-card',
       icon: CreditCard,
@@ -28,7 +28,7 @@ export default function DemoHardwarePage() {
     {
       title: 'Acrylic QR Code Stands',
       tagline: 'Matte Wooden & Acrylic Counter Stands',
-      price: '₹349 / stand',
+      price: '₹1,500 / stand',
       desc: 'Laser-engraved acrylic stands with scratch-resistant QR prints and wooden teakwood bases. Spill-proof and washable.',
       url: '/demo/hardware/qr-code-stand',
       icon: QrCode,

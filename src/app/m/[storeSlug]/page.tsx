@@ -150,6 +150,38 @@ export default function CustomerQrOrderingPage() {
   const storeSlug = (params?.storeSlug as string) || 'brewpluse';
   const tableParam = searchParams.get('table') || 'Table 1';
 
+  const [selectedTable, setSelectedTable] = useState<string>(tableParam);
+  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+  const [availableTables, setAvailableTables] = useState<string[]>([
+    'Table 1',
+    'Table 2',
+    'Table 3',
+    'Table 4',
+    'Table 5',
+    'Table 6',
+    'Table 7',
+    'Table 8',
+    'Table 9',
+    'Table 10',
+  ]);
+
+  useEffect(() => {
+    if (tableParam) {
+      setSelectedTable(tableParam);
+    }
+  }, [tableParam]);
+
+  useEffect(() => {
+    fetch(`/api/admin/tables?storeSlug=${encodeURIComponent(storeSlug)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && Array.isArray(d.tables) && d.tables.length > 0) {
+          setAvailableTables(d.tables.map((t: any) => t.number));
+        }
+      })
+      .catch(() => {});
+  }, [storeSlug]);
+
   const [menu, setMenu] = useState<MenuItem[]>(DEFAULT_MENU);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -189,7 +221,7 @@ export default function CustomerQrOrderingPage() {
       const orderPayload = {
         storeId: storeSlug,
         orderNumber: `SRV-${Math.floor(1000 + Math.random() * 9000)}`,
-        table: tableParam,
+        table: selectedTable || tableParam,
         orderType: 'service_request',
         items: [{ id: 'srv-req', name: `🛎️ Table Service: ${serviceType}`, qty: 1, price: 0 }],
         subtotal: 0,
@@ -371,7 +403,7 @@ export default function CustomerQrOrderingPage() {
 
     const orderPayload = {
       storeId: storeSlug,
-      table: tableParam,
+      table: selectedTable || tableParam,
       orderType: 'dine_in',
       customerUid: customerUid || `anon_${Date.now()}`,
       items: cart.map((i) => ({
@@ -440,7 +472,7 @@ export default function CustomerQrOrderingPage() {
               receipt: confirmedOrder.orderNumber,
               notes: {
                 storeSlug,
-                table: tableParam,
+                table: selectedTable || tableParam,
                 orderNumber: confirmedOrder.orderNumber,
               },
             }),
@@ -453,7 +485,7 @@ export default function CustomerQrOrderingPage() {
               amount: rzpData.amount,
               currency: rzpData.currency || 'INR',
               name: storeSlug.replace(/-/g, ' ').toUpperCase(),
-              description: `Order ${confirmedOrder.orderNumber} - ${tableParam}`,
+              description: `Order ${confirmedOrder.orderNumber} - ${selectedTable || tableParam}`,
               image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=128&q=80',
               order_id: rzpData.orderId.startsWith('order_mock_') ? undefined : rzpData.orderId,
               handler: async function (response: any) {
@@ -470,7 +502,7 @@ export default function CustomerQrOrderingPage() {
                       amount: finalTotal,
                       customerName: customerName || 'Dining Guest',
                       customerEmail: customerEmail || '',
-                      table: tableParam,
+                      table: selectedTable || tableParam,
                       items: cart,
                     }),
                   });
@@ -543,7 +575,7 @@ export default function CustomerQrOrderingPage() {
   // UPI payment link
   const upiPayUrl = `upi://pay?pa=brewpluse@upi&pn=${encodeURIComponent(
     storeSlug
-  )}&am=${finalTotal}&cu=INR&tn=Table_${encodeURIComponent(tableParam)}_Order`;
+  )}&am=${finalTotal}&cu=INR&tn=Table_${encodeURIComponent(selectedTable || tableParam)}_Order`;
 
   return (
     <div className="min-h-screen bg-[#F8F7F4] text-[#141210] font-sans pb-28 select-none">
@@ -562,9 +594,15 @@ export default function CustomerQrOrderingPage() {
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               </div>
               <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#65736D]">
-                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
-                  {tableParam}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsTableModalOpen(true)}
+                  className="px-2 py-0.5 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-[10px] flex items-center gap-1 cursor-pointer transition-colors"
+                  title="Change Table"
+                >
+                  <span>{selectedTable || tableParam}</span>
+                  <span className="text-[9px]">▾</span>
+                </button>
                 <span>• Live Digital Menu</span>
               </div>
             </div>
@@ -587,7 +625,16 @@ export default function CustomerQrOrderingPage() {
               <QrCode className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-xs font-bold">Ordering for {tableParam}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-bold">Ordering for {selectedTable || tableParam}</p>
+                <button
+                  type="button"
+                  onClick={() => setIsTableModalOpen(true)}
+                  className="text-[10px] text-amber-300 hover:text-amber-200 underline font-semibold cursor-pointer"
+                >
+                  Change
+                </button>
+              </div>
               <p className="text-[10.5px] text-white/70">Food will be served directly to your table</p>
             </div>
           </div>
@@ -1258,6 +1305,66 @@ export default function CustomerQrOrderingPage() {
             >
               Order More Items
             </button>
+          </div>
+        </div>
+      )}
+      {/* Table Switcher Modal */}
+      {isTableModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in">
+          <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-[#0B2B1A] text-amber-300 flex items-center justify-center font-bold">
+                  <QrCode className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm text-neutral-900">Select Your Table</h3>
+                  <p className="text-[11px] text-neutral-500">Pick the table where you are seated</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsTableModalOpen(false)}
+                className="w-7 h-7 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center text-xs font-bold cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="overflow-y-auto pr-1 grid grid-cols-2 gap-2.5 py-1 max-h-[50vh]">
+              {availableTables.map((tbl) => {
+                const isSelected = selectedTable === tbl;
+                return (
+                  <button
+                    key={tbl}
+                    type="button"
+                    onClick={() => {
+                      setSelectedTable(tbl);
+                      setIsTableModalOpen(false);
+                    }}
+                    className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-[#0B2B1A] bg-[#0B2B1A] text-white shadow-sm'
+                        : 'border-neutral-200 bg-neutral-50 hover:bg-neutral-100 text-neutral-800'
+                    }`}
+                  >
+                    <span className="text-xs font-bold">{tbl}</span>
+                    {isSelected && <span className="text-emerald-400 text-xs font-black">✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="pt-2 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-500">
+              <span>Seated at: <strong className="text-neutral-900">{selectedTable}</strong></span>
+              <button
+                type="button"
+                onClick={() => setIsTableModalOpen(false)}
+                className="px-3.5 py-1.5 rounded-lg bg-[#0B2B1A] text-white font-semibold text-xs cursor-pointer hover:bg-neutral-800"
+              >
+                Confirm Table
+              </button>
+            </div>
           </div>
         </div>
       )}

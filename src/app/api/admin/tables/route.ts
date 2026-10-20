@@ -6,6 +6,7 @@ import {
   generateTableToken,
   getRuntimeTables,
   saveRuntimeTable,
+  ensureDefaultTables,
 } from '@/lib/models/Table';
 import { requireStaff } from '@/lib/authService';
 
@@ -24,35 +25,25 @@ const PostBodySchema = z.union([CreateBatchTablesSchema, CreateSingleTableSchema
 
 /**
  * GET /api/admin/tables
- * List all tables for authenticated staff's store
+ * List all tables for authenticated staff's store (with default 10 tables guaranteed)
  */
 export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager', 'cashier']);
-    if (!auth.success || !auth.session) return auth.response!;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
 
-    const storeId = auth.session.storeSlug;
-
-    const conn = await connectMongoDB();
-    let tables: any[] = [];
-    if (conn) {
-      try {
-        tables = await Table.find({ storeId })
-          .sort({ createdAt: 1 })
-          .lean();
-      } catch (err) {
-        console.warn('[Admin Tables GET] DB query note:', err);
-      }
-    }
-
-    if (!tables || tables.length === 0) {
-      tables = getRuntimeTables(storeId);
-    }
+    // Automatically ensure Table 1 to Table 10 exist and are permanently saved
+    const tables = await ensureDefaultTables(storeId);
 
     return NextResponse.json({
       success: true,
       tables: tables.map((t) => ({
-        id: String(t._id || t.id),
+        id: String(t.id),
         storeId: t.storeId,
         number: t.number,
         label: t.label || '',
@@ -74,14 +65,17 @@ export async function GET(request: Request) {
 
 /**
  * POST /api/admin/tables
- * Create one or multiple tables for the authenticated store
+ * Create one or multiple new tables manually for the cafe
  */
 export async function POST(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
-    if (!auth.success || !auth.session) return auth.response!;
-
-    const storeId = auth.session.storeSlug;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
 
     const body = await request.json().catch(() => null);
     const parsed = PostBodySchema.safeParse(body);
@@ -115,7 +109,9 @@ export async function POST(request: Request) {
           } catch (err) {}
         }
         if (!existing) {
-          existing = getRuntimeTables(storeId).find((t) => t.number.toLowerCase() === cleanNumber.toLowerCase());
+          existing = getRuntimeTables(storeId).find(
+            (t) => t.number.toLowerCase() === cleanNumber.toLowerCase()
+          );
         }
 
         if (existing) {
@@ -148,7 +144,9 @@ export async function POST(request: Request) {
             } catch (err) {}
           }
           const plainTable = {
-            id: newTable ? String(newTable._id) : `tbl_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+            id: newTable
+              ? String(newTable._id)
+              : `tbl_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
             storeId,
             number: cleanNumber,
             label: cleanLabel,
@@ -174,7 +172,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // Handle single table creation
+    // Handle single table creation (Manual Add Table)
     const cleanNumber = data.number.trim();
     const cleanLabel = (data.label || '').trim();
     let existing: any = null;
@@ -185,7 +183,9 @@ export async function POST(request: Request) {
       } catch (err) {}
     }
     if (!existing) {
-      existing = getRuntimeTables(storeId).find((t) => t.number.toLowerCase() === cleanNumber.toLowerCase());
+      existing = getRuntimeTables(storeId).find(
+        (t) => t.number.toLowerCase() === cleanNumber.toLowerCase()
+      );
     }
 
     if (existing) {

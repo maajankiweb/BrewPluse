@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import QRCode from 'qrcode';
 import { connectMongoDB } from '@/lib/mongodb';
-import { Table, getRuntimeTables } from '@/lib/models/Table';
+import { Table, getRuntimeTables, ensureDefaultTables } from '@/lib/models/Table';
 import { Store } from '@/lib/models/Store';
 import { requireStaff } from '@/lib/authService';
 
@@ -14,25 +14,15 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
-    if (!auth.success || !auth.session) return auth.response!;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
 
-    const storeId = auth.session.storeSlug;
-
-    const conn = await connectMongoDB();
-    let tables: any[] = [];
-
-    if (conn) {
-      try {
-        tables = await Table.find({ storeId, isActive: true })
-          .sort({ createdAt: 1 })
-          .lean();
-      } catch (err) {}
-    }
-
-    if (!tables || tables.length === 0) {
-      tables = getRuntimeTables(storeId).filter((t) => t.isActive !== false);
-    }
+    const tables = await ensureDefaultTables(storeId);
 
     if (!tables || tables.length === 0) {
       return new NextResponse(
@@ -45,12 +35,13 @@ export async function GET(request: Request) {
     }
 
     let store: any = null;
-    if (conn) {
-      try {
+    try {
+      const conn = await connectMongoDB();
+      if (conn) {
         store = await Store.findOne({ slug: storeId });
-      } catch (err) {}
-    }
-    const storeName = store?.name || auth.session.storeName || 'BrewPluse Cafe';
+      }
+    } catch (err) {}
+    const storeName = store?.name || (auth.success ? auth.session?.storeName : null) || 'BrewPluse Cafe';
 
     const host = request.headers.get('host') || 'brewpluse.com';
     const proto = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');

@@ -1,7 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import DashboardShell from '@/components/dashboard/DashboardShell';
@@ -24,17 +24,30 @@ import {
   RotateCcw,
   Heart,
 } from 'lucide-react';
-
-
+import {
+  addToHardwareCart,
+  getHardwareCartCount,
+} from '@/lib/hardwareCart';
 
 export default function NfcCardDetailPage() {
   const routeParams = useParams();
+  const router = useRouter();
   const storeSlug = (routeParams?.storeSlug as string) || 'brewpluse';
   const [quantity, setQuantity] = useState(1);
   const [cartAdded, setCartAdded] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
-  const unitPrice = 350;
+  const unitPrice = 1500;
   const subtotal = quantity * unitPrice;
+
+  useEffect(() => {
+    setCartCount(getHardwareCartCount(storeSlug));
+    const handleUpdate = () => {
+      setCartCount(getHardwareCartCount(storeSlug));
+    };
+    window.addEventListener('brewpluse-hardware-cart-update', handleUpdate);
+    return () => window.removeEventListener('brewpluse-hardware-cart-update', handleUpdate);
+  }, [storeSlug]);
 
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -45,8 +58,14 @@ export default function NfcCardDetailPage() {
   };
 
   const handleAddToCart = () => {
+    addToHardwareCart({ id: 'nfc-card', quantity }, storeSlug);
     setCartAdded(true);
     setTimeout(() => setCartAdded(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    addToHardwareCart({ id: 'nfc-card', quantity }, storeSlug);
+    router.push(`/dashboard/${storeSlug}/hardware/cart`);
   };
 
   return (
@@ -81,6 +100,11 @@ export default function NfcCardDetailPage() {
           >
             <ShoppingBag className="w-4 h-4 text-amber-500" />
             <span className="text-xs">Cart</span>
+            {cartCount > 0 && (
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-[#10B981] text-[10px] font-bold text-white">
+                {cartCount}
+              </span>
+            )}
           </Link>
         </div>
 
@@ -152,7 +176,7 @@ export default function NfcCardDetailPage() {
               </h1>
               <div className="flex items-baseline gap-2 pt-1">
                 <span className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
-                  ₹350.00
+                  ₹1,500.00
                 </span>
                 <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
                   per custom card
@@ -235,6 +259,7 @@ export default function NfcCardDetailPage() {
                 </button>
                 <button
                   type="button"
+                  onClick={handleBuyNow}
                   className="h-11 px-4 rounded-xl border border-neutral-200/90 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:bg-neutral-50 dark:hover:bg-zinc-800 active:scale-[0.98] text-neutral-900 dark:text-white font-bold text-xs flex items-center justify-center shadow-2xs transition-all cursor-pointer"
                 >
                   <span>Buy Now • ₹{subtotal.toLocaleString('en-IN')}.00</span>
