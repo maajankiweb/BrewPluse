@@ -360,24 +360,6 @@ function LoginFormContent() {
             </Link>
           </div>
         </main>
-
-        {/* Footer */}
-        <footer className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#736a61] pt-4">
-          <p>&copy; {new Date().getFullYear()} BrewPluse Inc. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:text-neutral-300 transition-colors">
-              Terms
-            </Link>
-            <span className="text-[#3a332d]">&middot;</span>
-            <Link href="/privacy" className="hover:text-neutral-300 transition-colors">
-              Privacy
-            </Link>
-            <span className="text-[#3a332d]">&middot;</span>
-            <Link href="/pricing" className="hover:text-neutral-300 transition-colors">
-              Pricing
-            </Link>
-          </div>
-        </footer>
       </div>
 
       {/* ========================================================= */}
