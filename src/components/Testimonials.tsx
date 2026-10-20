@@ -3,30 +3,33 @@ import React from 'react';
 export default function Testimonials() {
   const reviews = [
     {
-      badge: 'Peak Rush',
+      badge: 'AI Menu & QR',
       quote:
-        '“Weekend rush used to cause major billing bottlenecks. Since switching to BrewPluse, table turn time improved noticeably and counter staff handles double the order volume with zero confusion.”',
-      initials: 'RM',
-      name: 'Rohan Mehta',
-      outlet: 'The Daily Roast • Mumbai',
+        '“Importing our 60+ item specialty menu with BrewPluse’s AI photo scanner took under 2 minutes. The contactless table QR ordering cut our wait times by half during Sunday morning brunch rushes.”',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80',
+      initials: 'DS',
+      name: 'Devika Sharma',
+      outlet: 'Artisan Roasters • Indiranagar, Bengaluru',
       color: 'bg-amber-100 text-amber-900 border-amber-200/80',
     },
     {
       badge: 'Offline First',
       quote:
-        '“Our biggest worry was internet drops interrupting billing during evening peak hours. BrewPluse keeps running smoothly offline and syncs automatically. Closing registers takes 5 minutes now.”',
-      initials: 'SI',
-      name: 'Sneha Iyer',
-      outlet: 'Cafe Botanica • Bangalore',
+        '“With 3 baristas and a busy counter, dropped internet used to stall our entire queue. BrewPluse works smoothly offline, auto-prints thermal tickets, and syncs back seamlessly once connected.”',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80',
+      initials: 'KV',
+      name: 'Kabir Verma',
+      outlet: 'The Daily Grind • Bandra West, Mumbai',
       color: 'bg-emerald-100 text-emerald-900 border-emerald-200/80',
     },
     {
-      badge: 'Zero Mistakes',
+      badge: 'Zero Subscriptions',
       quote:
-        '“The Kitchen Display System completely eliminated lost paper tickets between baristas and kitchen. Order errors dropped to near zero, and our customers love the clean QR menu.”',
-      initials: 'AM',
-      name: 'Arjun Malhotra',
-      outlet: 'Coffee Culture • Delhi',
+        '“Other POS platforms demanded ₹2,500/month upfront before we even sold our first sourdough loaf. BrewPluse’s zero-subscription model and digital loyalty stamp cards keep our regulars coming back every week.”',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&h=120&q=80',
+      initials: 'AS',
+      name: 'Ananya Sen',
+      outlet: 'Cinnamon & Whisk Bakery • Park Street, Kolkata',
       color: 'bg-blue-100 text-blue-900 border-blue-200/80',
     },
   ];
@@ -92,11 +95,22 @@ export default function Testimonials() {
 
                   <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#EAE8E3]">
                     <div className="flex items-center gap-2.5">
-                      <div
-                        className={`w-8 h-8 rounded-full ${r.color} font-mono font-bold text-xs flex items-center justify-center shrink-0 border`}
-                      >
-                        {r.initials}
-                      </div>
+                      {r.avatar ? (
+                        <img
+                          src={r.avatar}
+                          alt={`${r.name} - Verified Cafe Owner at ${r.outlet}`}
+                          width={32}
+                          height={32}
+                          loading="lazy"
+                          className="w-8 h-8 rounded-full object-cover shrink-0 border border-[#E7E5E0]"
+                        />
+                      ) : (
+                        <div
+                          className={`w-8 h-8 rounded-full ${r.color} font-mono font-bold text-xs flex items-center justify-center shrink-0 border`}
+                        >
+                          {r.initials}
+                        </div>
+                      )}
                       <div>
                         <div className="text-xs font-bold text-[#141210]">{r.name}</div>
                         <div className="text-[10px] text-[#7a756f]">{r.outlet}</div>

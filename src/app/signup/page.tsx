@@ -15,6 +15,7 @@ import {
   Loader2,
   AlertCircle,
   Coffee,
+  Sparkles,
   Handshake,
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
@@ -28,6 +29,8 @@ function SignupFormContent() {
   const [partnerCode, setPartnerCode] = useState('');
   const [partnerLoading, setPartnerLoading] = useState(false);
   const [partnerError, setPartnerError] = useState<string | null>(null);
+
+  // Form credentials state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -46,6 +49,12 @@ function SignupFormContent() {
   const [step2Error, setStep2Error] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(45);
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Password validation checks
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
 
   // Focus first OTP input when reaching step 2
   useEffect(() => {
@@ -106,7 +115,7 @@ function SignupFormContent() {
 
     const cleanEmail = normalizeEmail(email);
     if (!isValidEmail(cleanEmail)) {
-      setStep1Error('Please enter a valid email address (e.g., name@yourcafe.com).');
+      setStep1Error('Please enter a valid email address (e.g., owner@yourcafe.com).');
       return;
     }
 
@@ -116,12 +125,12 @@ function SignupFormContent() {
     }
 
     if (password !== confirmPassword) {
-      setStep1Error('Passwords do not match. Please verify your confirm password.');
+      setStep1Error('Passwords do not match. Please re-check your password.');
       return;
     }
 
     if (!agreeTerms) {
-      setStep1Error('Please review and check the box to accept the Terms of Service and Privacy Policy.');
+      setStep1Error('Please agree to the Terms of Service and Privacy Policy to continue.');
       return;
     }
 
@@ -138,7 +147,7 @@ function SignupFormContent() {
             'An account is already registered with this email address. Please log in instead.';
           setStep1Error(existMsg);
           toast.error('Email Already Registered', {
-            description: 'You already have an account with this email. Please click "Sign In" below.',
+            description: 'You already have an account with this email. Please click Login below.',
           });
           setStep1Loading(false);
           return;
@@ -191,6 +200,7 @@ function SignupFormContent() {
     }
   }
 
+  // Google Sign-Up
   async function handleGoogleSignUp() {
     setStep1Loading(true);
     setStep1Error(null);
@@ -280,7 +290,7 @@ function SignupFormContent() {
       );
 
       toast.success('Email verified & account created!', {
-        description: 'Just one last step...',
+        description: 'Just one final touch...',
       });
 
       setTimeout(() => {
@@ -292,6 +302,38 @@ function SignupFormContent() {
       toast.error(msg);
     } finally {
       setStep2Loading(false);
+    }
+  }
+
+  // Resend OTP
+  async function handleResendOtp() {
+    if (countdown > 0 || step2Resending) return;
+    setStep2Resending(true);
+    setStep2Error(null);
+
+    try {
+      const cleanEmail = normalizeEmail(email);
+      const res = await fetch('/api/onboarding/send-otp-simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to resend code. Please try again.');
+      }
+
+      toast.success('New code sent!', {
+        description: `Check your inbox at ${cleanEmail}`,
+      });
+      setCountdown(45);
+      setOtpDigits(['', '', '', '', '', '']);
+    } catch (err: any) {
+      const msg = err.message || 'Failed to resend OTP.';
+      setStep2Error(msg);
+      toast.error(msg);
+    } finally {
+      setStep2Resending(false);
     }
   }
 
@@ -350,430 +392,286 @@ function SignupFormContent() {
   }
 
   function handleSkipPartner() {
-    toast.info('Proceeding to setup...', {
-      description: 'You can link authorized partner codes later in Settings.',
+    toast.success('Welcome to BrewPluse!', {
+      description: 'Redirecting to cafe setup...',
     });
     router.push('/setup');
   }
 
-  function handleOtpFormSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const fullCode = otpDigits.join('');
-    if (fullCode.length !== 6) {
-      setStep2Error('Please enter the complete 6-digit verification code.');
-      return;
-    }
-    triggerOtpVerify(fullCode);
-  }
-
-  // Resend OTP
-  async function handleResendOtp() {
-    if (countdown > 0 || step2Resending) return;
-    setStep2Resending(true);
-    setStep2Error(null);
-    try {
-      const res = await fetch('/api/onboarding/send-otp-simple', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim().toLowerCase() }),
-      });
-      const contentType = res.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || 'Failed to resend code.');
-        }
-      }
-      toast.success('New code sent!', {
-        description: 'Check your email inbox for the latest verification code.',
-      });
-      setCountdown(45);
-      setOtpDigits(['', '', '', '', '', '']);
-      otpInputRefs.current[0]?.focus();
-    } catch (err: any) {
-      const msg = err.message || 'Failed to resend code.';
-      setStep2Error(msg);
-      toast.error(msg);
-    } finally {
-      setStep2Resending(false);
-    }
-  }
-
   return (
-    <div className="relative min-h-screen w-full flex flex-col lg:flex-row bg-[#171412] text-[#e5e2e1] selection:bg-[#eebd8e]/30 selection:text-[#ffdcbd] overflow-x-hidden">
-      {/* LEFT COLUMN: Luxury Ambient Showcase (Slides in from Left) */}
-      <div className="hidden lg:flex lg:w-1/2 min-h-screen relative overflow-hidden bg-[#141313] z-10 border-r border-white/[0.08] animate-slide-left">
-        <div className="relative w-full h-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#141313] select-none p-10 xl:p-14 transition-colors duration-500">
-          {/* Background image & gradient overlays */}
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#13110f] text-[#f5f2eb] antialiased selection:bg-amber-500/25 selection:text-amber-200">
+      {/* ========================================================= */}
+      {/* LEFT COLUMN: Atmospheric Dark Espresso Showcase          */}
+      {/* ========================================================= */}
+      <div className="hidden lg:flex lg:w-1/2 min-h-screen relative overflow-hidden bg-[#100e0d] z-10 border-r border-[#241f1b]">
+        <div className="relative w-full h-full min-h-screen flex flex-col justify-between overflow-hidden select-none p-10 xl:p-14">
+          {/* Background image & gradient overlays matching reference */}
           <div className="absolute inset-0 z-0">
             <div
-              className="absolute inset-0 bg-cover bg-center filter brightness-[0.78] contrast-[1.08] saturate-[1.05]"
+              className="absolute inset-0 bg-cover bg-center filter brightness-[0.72] contrast-[1.12] saturate-[1.05]"
               style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1600&q=80')`,
+                backgroundImage: `url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1600&q=85')`,
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b2b1a]/95 via-[#1a1715]/60 to-[#141313]/80 mix-blend-multiply" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1a1715] via-transparent to-[#0b2b1a]/40" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(238,189,142,0.12),transparent_60%)]" />
+            {/* Atmospheric dark coffee vignette overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#100e0d] via-[#100e0d]/40 to-[#100e0d]/75" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#100e0d]/60 via-transparent to-[#13110f]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.08),transparent_60%)]" />
           </div>
 
-          {/* Dotted texture overlay */}
-          <div
-            className="pointer-events-none absolute inset-0 z-[1] opacity-25 mix-blend-overlay"
-            style={{
-              backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}
-          />
-
-          {/* Status Badge */}
+          {/* Top-Left Status Badge */}
           <div className="relative z-10 self-start">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-[#1a1715]/80 px-4 py-2 backdrop-blur-md shadow-xl">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-black/60 px-3.5 py-1.5 backdrop-blur-md shadow-xl">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="font-mono text-[11px] font-semibold tracking-wider text-[#eebd8e] uppercase">
-                Live Floor Sync
+              <span className="font-mono text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+                LIVE FLOOR SYNC
               </span>
               <span className="text-white/20">|</span>
               <span className="text-xs text-neutral-300 font-medium">Thermal KDS Active</span>
             </div>
           </div>
 
-          {/* Luxury Quote */}
-          <div className="relative z-10 pt-6 border-t border-white/10">
-            <blockquote className="font-serif text-xl xl:text-2xl font-light text-white leading-snug tracking-tight">
-              &ldquo;Run your cafe.{' '}
-              <span className="italic text-[#eebd8e] font-normal">Not your software.</span>&rdquo;
+          {/* Bottom Luxury Quote */}
+          <div className="relative z-10 pt-6">
+            <blockquote className="font-serif text-2xl xl:text-[28px] font-normal text-white leading-snug tracking-tight">
+              &ldquo;Brew excellence.{' '}
+              <span className="italic text-amber-500 font-normal">Automate everything.</span>&rdquo;
             </blockquote>
-            <p className="mt-2 text-xs text-neutral-400 tracking-wide font-sans">
-              Engineered for modern specialty coffee, bakeries, and high-velocity dining floors.
+            <p className="mt-2 text-xs text-[#a8a29e] tracking-wide font-sans max-w-lg">
+              Intelligent operating system engineered for specialty coffee, bakeries, and high-velocity dining floors.
             </p>
           </div>
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Form Container (Slides in from Right) */}
-      <div className="flex-1 flex flex-col justify-between w-full lg:w-1/2 min-h-screen relative bg-[#171412] z-10 animate-slide-right">
-        {/* Subtle background glow */}
+      {/* ========================================================= */}
+      {/* RIGHT COLUMN: Clean Espresso Signup Form                  */}
+      {/* ========================================================= */}
+      <div className="flex-1 flex flex-col justify-between w-full lg:w-1/2 min-h-screen relative bg-[#13110f] z-10 px-6 sm:px-12 md:px-16 lg:px-12 xl:px-20 py-8 lg:py-10">
+        {/* Subtle Ambient Backlight */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#875200]/10 blur-[120px]" />
-          <div className="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-[#005c36]/10 blur-[130px]" />
+          <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-amber-600/5 blur-[120px]" />
+          <div className="absolute bottom-10 left-0 h-80 w-80 rounded-full bg-emerald-600/5 blur-[130px]" />
         </div>
 
-        {/* Top Header */}
-        <header className="flex w-full items-center justify-between py-6 px-6 sm:px-10 lg:px-12 border-b border-white/[0.06] bg-[#171412]/40 backdrop-blur-sm">
-          <Link href="/" className="group flex items-center gap-3 transition">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.08] border border-white/10 p-1.5 shadow-sm group-hover:scale-105 transition-transform duration-300 text-amber-500">
-              <Coffee className="w-5 h-5 text-[#eebd8e]" />
+        {/* Top Header Bar */}
+        <header className="relative z-10 flex w-full items-center justify-between">
+          <Link href="/" className="group flex items-center gap-2.5 transition">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1c1815] border border-[#2b2420] text-amber-500 group-hover:border-amber-500/40 transition-colors shadow-sm">
+              <Coffee className="w-4 h-4 text-amber-500" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-lg tracking-tight text-white flex items-center">
-                Brew<span className="text-[#eebd8e]">Pluse</span>
-              </span>
-              <span className="text-[10px] text-neutral-400 font-medium -mt-1 tracking-wider uppercase font-mono">
-                Operating System
-              </span>
-            </div>
+            <span className="font-semibold text-base tracking-tight text-white">
+              BrewPluse
+            </span>
           </Link>
 
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.08] hover:border-[#eebd8e]/40 transition-all duration-200"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#2c2521] bg-[#1a1715]/90 px-3.5 py-1.5 text-xs font-medium text-neutral-300 hover:text-white hover:border-amber-500/40 hover:bg-[#221e1a] transition-all"
           >
-            <ArrowLeft className="h-3.5 w-3.5 text-[#eebd8e]" />
+            <ArrowLeft className="h-3.5 w-3.5 text-neutral-400 group-hover:text-white" />
             <span>Back to Home</span>
           </Link>
         </header>
 
-        {/* Main Form Content */}
-        <main className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-12 md:px-16 lg:px-14 xl:px-20 py-10 max-w-xl mx-auto w-full">
-          {step === 'credentials' ? (
-            /* STEP 1: Account Creation Form - EXACT MATCH TO SCREENSHOT */
-            <div className="space-y-5 animate-fade-in">
-              {/* Stepper Dash & Dots */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-6 h-1 rounded-full bg-[#eebd8e]" />
-                <div className="w-1.5 h-1 rounded-full bg-white/20" />
-                <div className="w-1.5 h-1 rounded-full bg-white/20" />
+        {/* Form Center Wrapper */}
+        <main className="relative z-10 my-auto py-8 max-w-[420px] w-full mx-auto">
+          {/* STEP 1: CREDENTIALS CREATION */}
+          {step === 'credentials' && (
+            <div className="animate-fade-in">
+              {/* Stepper Dashes: 3 steps */}
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-1 bg-amber-500 rounded-full transition-all" />
+                <div className="w-3.5 h-1 bg-[#2b2521] rounded-full transition-all" />
+                <div className="w-3.5 h-1 bg-[#2b2521] rounded-full transition-all" />
               </div>
 
               {/* Title & Subtitle */}
-              <div>
-                <h1 className="font-serif text-3xl sm:text-[38px] font-bold text-white tracking-tight leading-[1.12]">
-                  Create your BrewPluse<br />
-                  account<span className="text-[#eebd8e]">.</span>
+              <div className="mb-6">
+                <h1 className="font-serif text-3xl sm:text-[36px] font-bold text-white tracking-tight leading-[1.15]">
+                  Create your BrewPluse account<span className="text-amber-500">.</span>
                 </h1>
-                <p className="text-xs sm:text-[13px] text-[#a8a29e] font-sans leading-relaxed mt-2.5">
+                <p className="text-xs sm:text-[13px] text-[#9c938a] leading-relaxed mt-2.5">
                   Set up your cafe operations, contactless ordering, and real-time counter billing.
                 </p>
               </div>
 
               {step1Error && (
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                <div className="mb-4 flex items-center gap-2.5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium animate-fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
                   <span>{step1Error}</span>
                 </div>
               )}
 
-              <form onSubmit={handleCredentialsSubmit} className="space-y-4" noValidate>
+              <form onSubmit={handleCredentialsSubmit} className="space-y-3.5" noValidate>
                 {/* 1. EMAIL ADDRESS */}
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#eebd8e] block">
-                      EMAIL ADDRESS
-                    </label>
-                    {email.length > 0 && (
-                      <span
-                        className={`text-[10px] font-medium flex items-center gap-1 ${
-                          isValidEmail(email) ? 'text-emerald-400' : 'text-amber-400'
-                        }`}
-                      >
-                        {isValidEmail(email) ? '✓ Valid email' : 'Invalid email format'}
-                      </span>
-                    )}
-                  </div>
+                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#9c938a] block">
+                    EMAIL ADDRESS
+                  </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-[#78716c] absolute left-4 top-1/2 -translate-y-1/2" />
+                    <Mail className="w-4 h-4 text-[#6e665e] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="email"
                       value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (step1Error) setStep1Error(null);
-                      }}
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="owner@yourcafe.com"
                       required
                       autoComplete="email"
-                      className={`w-full pl-11 pr-11 py-3 bg-[#221e1c] border rounded-2xl text-sm text-white placeholder-[#78716c] focus:outline-none focus:bg-[#282321] transition-all font-medium ${
-                        email.length > 0 && !isValidEmail(email)
-                          ? 'border-amber-400/60 focus:border-amber-400'
-                          : email.length > 0 && isValidEmail(email)
-                          ? 'border-emerald-500/60 focus:border-emerald-400'
-                          : 'border-white/10 focus:border-[#eebd8e]'
-                      }`}
+                      className="w-full pl-10 pr-4 py-2.5 bg-[#1b1715] border border-[#2b2521] rounded-xl text-sm text-white placeholder-[#5a524a] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium"
                     />
-                    {email.length > 0 && isValidEmail(email) && (
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400">
-                        <Check className="w-4 h-4" />
-                      </div>
-                    )}
                   </div>
                 </div>
 
                 {/* 2. PASSWORD */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#eebd8e] block">
+                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#9c938a] block">
                     PASSWORD
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-[#78716c] absolute left-4 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-[#6e665e] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        if (step1Error) setStep1Error(null);
-                      }}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="At least 8 characters"
                       required
                       autoComplete="new-password"
-                      className="w-full pl-11 pr-11 py-3 bg-[#221e1c] border border-white/10 rounded-2xl text-sm text-white placeholder-[#78716c] focus:outline-none focus:border-[#eebd8e] focus:bg-[#282321] transition-all font-medium"
+                      className="w-full pl-10 pr-10 py-2.5 bg-[#1b1715] border border-[#2b2521] rounded-xl text-sm text-white placeholder-[#5a524a] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#78716c] hover:text-neutral-300 transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6e665e] hover:text-neutral-300 transition-colors cursor-pointer"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
 
-                  {/* 4-point Checklist matching screenshot */}
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-1.5 text-[11px]">
-                    <span
-                      className={`flex items-center gap-1.5 ${
-                        password.length >= 8 ? 'text-emerald-400 font-medium' : 'text-[#8f8983]'
-                      }`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          password.length >= 8 ? 'bg-emerald-400' : 'bg-[#57534e]'
-                        }`}
-                      />
-                      8+ characters
-                    </span>
-                    <span
-                      className={`flex items-center gap-1.5 ${
-                        /[A-Z]/.test(password) ? 'text-emerald-400 font-medium' : 'text-[#8f8983]'
-                      }`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          /[A-Z]/.test(password) ? 'bg-emerald-400' : 'bg-[#57534e]'
-                        }`}
-                      />
-                      One uppercase
-                    </span>
-                    <span
-                      className={`flex items-center gap-1.5 ${
-                        /[0-9]/.test(password) ? 'text-emerald-400 font-medium' : 'text-[#8f8983]'
-                      }`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          /[0-9]/.test(password) ? 'bg-emerald-400' : 'bg-[#57534e]'
-                        }`}
-                      />
-                      One number
-                    </span>
-                    <span
-                      className={`flex items-center gap-1.5 ${
-                        /[^A-Za-z0-9]/.test(password) ? 'text-emerald-400 font-medium' : 'text-[#8f8983]'
-                      }`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          /[^A-Za-z0-9]/.test(password) ? 'bg-emerald-400' : 'bg-[#57534e]'
-                        }`}
-                      />
-                      Special symbol
-                    </span>
+                  {/* Password Requirements 2x2 Grid */}
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 pt-1 text-[11px] font-medium text-[#736a61]">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`h-1.5 w-1.5 rounded-full ${hasMinLength ? 'bg-emerald-400' : 'bg-[#3d342c]'}`} />
+                      <span className={hasMinLength ? 'text-neutral-300' : 'text-[#736a61]'}>8+ characters</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`h-1.5 w-1.5 rounded-full ${hasUppercase ? 'bg-emerald-400' : 'bg-[#3d342c]'}`} />
+                      <span className={hasUppercase ? 'text-neutral-300' : 'text-[#736a61]'}>One uppercase</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`h-1.5 w-1.5 rounded-full ${hasNumber ? 'bg-emerald-400' : 'bg-[#3d342c]'}`} />
+                      <span className={hasNumber ? 'text-neutral-300' : 'text-[#736a61]'}>One number</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`h-1.5 w-1.5 rounded-full ${hasSpecial ? 'bg-emerald-400' : 'bg-[#3d342c]'}`} />
+                      <span className={hasSpecial ? 'text-neutral-300' : 'text-[#736a61]'}>Special symbol</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 3. CONFIRM PASSWORD */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#eebd8e] block">
+                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#9c938a] block">
                     CONFIRM PASSWORD
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-[#78716c] absolute left-4 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-[#6e665e] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={confirmPassword}
-                      onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                        if (step1Error) setStep1Error(null);
-                      }}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Re-enter your password"
                       required
                       autoComplete="new-password"
-                      className={`w-full pl-11 pr-11 py-3 bg-[#221e1c] border rounded-2xl text-sm text-white placeholder-[#78716c] focus:outline-none focus:bg-[#282321] transition-all font-medium ${
-                        confirmPassword && confirmPassword !== password
-                          ? 'border-amber-400/60 focus:border-amber-400'
-                          : 'border-white/10 focus:border-[#eebd8e]'
-                      }`}
+                      className="w-full pl-10 pr-10 py-2.5 bg-[#1b1715] border border-[#2b2521] rounded-xl text-sm text-white placeholder-[#5a524a] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium"
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#78716c] hover:text-neutral-300 transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6e665e] hover:text-neutral-300 transition-colors cursor-pointer"
+                      aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                     >
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
-                  {confirmPassword.length > 0 && (
-                    <p
-                      className={`flex items-center gap-1.5 text-[11px] font-medium pt-1 ${
-                        confirmPassword === password ? 'text-[#10b981]' : 'text-amber-400'
-                      }`}
-                    >
-                      {confirmPassword === password ? (
-                        <>
-                          <Check className="h-3 w-3" />
-                          <span>Passwords match</span>
-                        </>
-                      ) : (
-                        <span>Passwords must match</span>
-                      )}
-                    </p>
-                  )}
                 </div>
 
-                {/* 4. Terms & Privacy Checkbox */}
-                <label className="flex items-start gap-2.5 pt-1 cursor-pointer select-none group">
-                  <input
-                    type="checkbox"
-                    checked={agreeTerms}
-                    onChange={(e) => {
-                      setAgreeTerms(e.target.checked);
-                      if (step1Error) setStep1Error(null);
-                    }}
-                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-[#221e1c] text-[#005c36] focus:ring-0 focus:ring-offset-0 cursor-pointer accent-[#eebd8e]"
-                  />
-                  <span className="text-xs text-[#a8a29e] leading-relaxed">
-                    I agree to the{' '}
-                    <Link
-                      href="/terms"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#eebd8e] font-semibold hover:underline underline-offset-2"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Terms of Service
-                    </Link>{' '}
-                    and{' '}
-                    <Link
-                      href="/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#eebd8e] font-semibold hover:underline underline-offset-2"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Privacy Policy
-                    </Link>
-                    .
-                  </span>
-                </label>
+                {/* Agreement Checkbox */}
+                <div className="pt-1">
+                  <label className="flex items-start gap-2.5 cursor-pointer text-xs text-[#9c938a] select-none">
+                    <input
+                      type="checkbox"
+                      checked={agreeTerms}
+                      onChange={(e) => setAgreeTerms(e.target.checked)}
+                      className="mt-0.5 rounded border-[#3a322b] bg-[#1b1715] text-emerald-600 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                    />
+                    <span className="leading-snug">
+                      I agree to the{' '}
+                      <Link href="/terms" target="_blank" className="text-amber-500 hover:underline">
+                        Terms of Service
+                      </Link>{' '}
+                      and{' '}
+                      <Link href="/privacy" target="_blank" className="text-amber-500 hover:underline">
+                        Privacy Policy
+                      </Link>
+                      .
+                    </span>
+                  </label>
+                </div>
 
-                {/* 5. Nominal Refundable Verification Card */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#221e1c]/90 p-4 space-y-1.5 shadow-inner">
-                  <div className="flex items-center gap-2 font-bold text-xs text-[#eebd8e]">
-                    <ShieldCheck className="w-4 h-4 text-[#eebd8e]" />
+                {/* Nominal Refundable Verification Card */}
+                <div className="rounded-xl border border-[#382b20] bg-[#191512] p-3 text-xs">
+                  <div className="flex items-center gap-2 text-white font-medium mb-1">
+                    <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0" />
                     <span>Nominal Refundable Verification</span>
                   </div>
-                  <p className="text-[11px] text-[#a8a29e] leading-relaxed">
-                    To prevent spam bots and ensure operational integrity, a nominal deposit (₹1.00) is verified during onboarding and is{' '}
-                    <span className="text-[#10b981] font-semibold">100% automatically refunded</span> immediately.
+                  <p className="text-[11px] text-[#9c938a] leading-relaxed">
+                    To prevent spam bots and ensure operational integrity, a nominal deposit (₹1.00) is authorized during onboarding and is{' '}
+                    <span className="text-emerald-400 font-medium">100% automatically refunded immediately</span>.
                   </p>
                 </div>
 
-                {/* 6. Primary Action Button (Deep Forest Green with Sparkle) */}
-                <button
-                  type="submit"
-                  disabled={step1Loading}
-                  className="w-full py-3.5 px-4 bg-[#0c3821] hover:bg-[#0f4429] border border-[#144d2f] text-white font-bold text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {step1Loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      <span>Creating account...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Create account</span>
-                      <span className="text-[#eebd8e] text-base">✦</span>
-                    </>
-                  )}
-                </button>
+                {/* CREATE ACCOUNT BUTTON (EMERALD) */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={step1Loading}
+                    className="w-full py-3 px-4 bg-[#0c3821] hover:bg-[#10482b] border border-[#144f2e] text-white font-medium text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99]"
+                  >
+                    {step1Loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>Creating account...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Create account</span>
+                        <Sparkles className="w-4 h-4 text-amber-400" />
+                      </>
+                    )}
+                  </button>
+                </div>
 
-                {/* OR Divider */}
-                <div className="relative flex items-center justify-center my-4">
-                  <div className="w-full border-t border-white/[0.08]" />
-                  <span className="absolute bg-[#171412] px-3 text-[10px] font-mono uppercase tracking-wider text-[#78716c]">
+                {/* OR DIVIDER */}
+                <div className="relative flex items-center justify-center my-3.5">
+                  <div className="w-full border-t border-[#26211d]" />
+                  <span className="absolute bg-[#13110f] px-3 text-[10px] font-mono uppercase tracking-wider text-[#736a61]">
                     OR
                   </span>
                 </div>
 
-                {/* Google Sign-in Button */}
+                {/* GOOGLE SIGN-UP BUTTON */}
                 <button
                   type="button"
                   onClick={handleGoogleSignUp}
-                  className="w-full py-3 px-4 bg-[#221e1c] hover:bg-[#282321] border border-white/10 text-white font-bold text-xs rounded-full flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                  disabled={step1Loading}
+                  className="w-full py-2.5 px-4 bg-[#1b1715] hover:bg-[#231e1a] border border-[#2b2521] text-neutral-200 text-xs font-medium rounded-full flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-[0.99]"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path
                       fill="#4285F4"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -795,47 +693,51 @@ function SignupFormContent() {
                 </button>
               </form>
 
-              {/* Bottom Login Link */}
-              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#a8a29e]">
+              {/* Bottom Switcher */}
+              <div className="mt-5 pt-4 border-t border-[#241f1b] flex items-center justify-between text-xs text-[#9c938a]">
                 <span>Already have an account?</span>
                 <Link
                   href="/login"
-                  className="font-bold text-white hover:text-[#eebd8e] transition-colors"
+                  className="font-medium text-white hover:text-amber-400 transition-colors flex items-center gap-1"
                 >
-                  Log in &rarr;
+                  <span>Login</span>
+                  <span>&rarr;</span>
                 </Link>
               </div>
             </div>
-          ) : step === 'otp' ? (
-            /* STEP 2: Email OTP Verification */
-            <div className="space-y-6 animate-fade-in">
-              {/* Stepper Progress */}
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
-                <div className="w-7 h-1.5 rounded-full bg-[#eebd8e]" />
-                <div className="w-5 h-1.5 rounded-full bg-white/20" />
+          )}
+
+          {/* STEP 2: 6-DIGIT EMAIL OTP VERIFICATION */}
+          {step === 'otp' && (
+            <div className="animate-fade-in">
+              {/* Stepper Dashes */}
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-4 h-1 bg-emerald-500 rounded-full" />
+                <div className="w-8 h-1 bg-amber-500 rounded-full transition-all" />
+                <div className="w-3.5 h-1 bg-[#2b2521] rounded-full transition-all" />
               </div>
 
-              <div>
-                <h1 className="font-serif text-3xl sm:text-[38px] font-bold text-white tracking-tight leading-[1.12]">
-                  Verify your email<span className="text-[#eebd8e]">.</span>
+              {/* Title & Subtitle */}
+              <div className="mb-6">
+                <h1 className="font-serif text-3xl sm:text-[36px] font-bold text-white tracking-tight leading-[1.15]">
+                  Verify your email<span className="text-amber-500">.</span>
                 </h1>
-                <p className="text-xs sm:text-[13px] text-[#a8a29e] font-sans leading-relaxed mt-2.5">
-                  Enter the 6-digit code sent to{' '}
-                  <strong className="text-white font-mono">{email}</strong>.
+                <p className="text-xs sm:text-[13px] text-[#9c938a] leading-relaxed mt-2.5">
+                  We sent a 6-digit confirmation code to{' '}
+                  <span className="text-white font-medium">{email}</span>.
                 </p>
               </div>
 
               {step2Error && (
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                <div className="mb-4 flex items-center gap-2.5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium animate-fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
                   <span>{step2Error}</span>
                 </div>
               )}
 
-              <form onSubmit={handleOtpFormSubmit} className="space-y-6" noValidate>
-                {/* 6 Segmented Digit Boxes */}
-                <div className="flex justify-center gap-2.5 sm:gap-3 py-2">
+              {/* 6 Digit Input Row */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-2">
                   {otpDigits.map((digit, idx) => (
                     <input
                       key={idx}
@@ -844,144 +746,133 @@ function SignupFormContent() {
                       }}
                       type="text"
                       inputMode="numeric"
-                      pattern="[0-9]*"
                       maxLength={1}
                       value={digit}
                       onChange={(e) => handleOtpChange(idx, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                      className={`w-11 sm:w-13 h-14 sm:h-16 text-center text-2xl font-mono font-bold rounded-2xl border transition-all focus:outline-none ${
-                        digit
-                          ? 'border-[#eebd8e] bg-white/[0.08] text-white shadow-sm'
-                          : 'border-white/10 bg-[#221e1c] text-neutral-300 focus:border-[#eebd8e] focus:bg-[#282321]'
-                      }`}
+                      className="w-12 h-14 text-center text-xl font-mono font-bold bg-[#1b1715] border border-[#2b2521] rounded-xl text-white focus:outline-none focus:border-amber-500/70 focus:ring-1 focus:ring-amber-500/30 transition-all"
                     />
                   ))}
                 </div>
 
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={otpDigits.join('').length < 6 || step2Loading}
-                    className="w-full py-3.5 px-4 bg-[#0c3821] hover:bg-[#0f4429] border border-[#144d2f] text-white font-bold text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {step2Loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                        <span>Verifying...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Verify code</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-
-              {/* Bottom Resend and Change Email Row */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/[0.06] text-xs">
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  disabled={countdown > 0 || step2Resending}
-                  className="text-neutral-300 hover:text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  {step2Resending ? (
-                    'Sending new code...'
-                  ) : countdown > 0 ? (
-                    <span>
-                      Didn&apos;t receive it?{' '}
-                      <span className="text-[#eebd8e] font-mono">Resend in {countdown}s</span>
-                    </span>
+                {/* Resend Row */}
+                <div className="flex items-center justify-between text-xs text-[#9c938a] pt-1">
+                  <span>Didn&apos;t get the code?</span>
+                  {countdown > 0 ? (
+                    <span className="text-[#736a61] font-mono">Resend in {countdown}s</span>
                   ) : (
-                    <span className="text-[#eebd8e] underline underline-offset-2">
-                      Resend code
-                    </span>
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={step2Resending}
+                      className="text-amber-500 hover:underline font-medium cursor-pointer"
+                    >
+                      {step2Resending ? 'Resending...' : 'Resend code'}
+                    </button>
                   )}
-                </button>
+                </div>
 
+                {/* Verify Button */}
                 <button
                   type="button"
-                  onClick={() => setStep('credentials')}
-                  className="text-neutral-400 hover:text-neutral-200 transition-colors cursor-pointer"
+                  onClick={() => triggerOtpVerify(otpDigits.join(''))}
+                  disabled={otpDigits.join('').length !== 6 || step2Loading}
+                  className="w-full py-3 px-4 bg-[#0c3821] hover:bg-[#10482b] border border-[#144f2e] text-white font-medium text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] mt-3"
                 >
-                  &larr; Change email
-                </button>
-              </div>
-            </div>
-          ) : (
-            /* STEP 3: Partner Referral - EXACT MATCH TO SCREENSHOT */
-            <div className="space-y-6 animate-fade-in">
-              {/* Stepper Progress: Green, Green, Amber Active */}
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
-                <div className="w-5 h-1.5 rounded-full bg-[#10b981]" />
-                <div className="w-7 h-1.5 rounded-full bg-[#eebd8e]" />
-              </div>
-
-              {/* Title & Subtitle */}
-              <div>
-                <h1 className="font-serif text-3xl sm:text-[38px] font-bold text-white tracking-tight leading-[1.12]">
-                  Partner referral<span className="text-[#eebd8e]">.</span>
-                </h1>
-                <p className="text-xs sm:text-[13px] text-[#a8a29e] font-sans leading-relaxed mt-2.5">
-                  Were you referred by an authorized BrewPluse consultant or coffee partner?
-                </p>
-              </div>
-
-              {partnerError && (
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{partnerError}</span>
-                </div>
-              )}
-
-              <form onSubmit={handlePartnerSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-[11px] font-mono uppercase tracking-wider font-bold text-[#eebd8e] mb-2.5">
-                    PARTNER REFERRAL CODE
-                  </label>
-                  <div className="relative flex items-center rounded-2xl bg-[#221e1c] border border-white/10 px-4 py-3.5 focus-within:border-[#eebd8e] focus-within:bg-[#282321] transition-all">
-                    <Handshake className="w-5 h-5 text-neutral-400 mr-3 shrink-0" />
-                    <input
-                      type="text"
-                      value={partnerCode}
-                      onChange={(e) => setPartnerCode(e.target.value.toUpperCase())}
-                      placeholder="e.g. PARTNER10"
-                      className="w-full bg-transparent text-sm sm:text-base font-mono uppercase tracking-wider text-white placeholder-neutral-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={partnerLoading}
-                  className="w-full py-3.5 px-4 bg-[#0c3821] hover:bg-[#0f4429] border border-[#144d2f] text-white font-bold text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
-                >
-                  {partnerLoading ? (
+                  {step2Loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      <span>Applying...</span>
+                      <span>Verifying...</span>
                     </>
                   ) : (
                     <>
-                      <span>Apply &amp; Continue</span>
+                      <span>Verify &amp; Continue</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
 
-                <div className="text-center pt-2">
+                {/* Back to credentials */}
+                <button
+                  type="button"
+                  onClick={() => setStep('credentials')}
+                  className="w-full text-center text-xs text-[#736a61] hover:text-white transition-colors pt-2 cursor-pointer"
+                >
+                  &larr; Change email address
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: PARTNER REFERRAL (OPTIONAL) */}
+          {step === 'referral' && (
+            <div className="animate-fade-in">
+              {/* Stepper Dashes */}
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-4 h-1 bg-emerald-500 rounded-full" />
+                <div className="w-4 h-1 bg-emerald-500 rounded-full" />
+                <div className="w-8 h-1 bg-amber-500 rounded-full transition-all" />
+              </div>
+
+              {/* Title & Subtitle */}
+              <div className="mb-6">
+                <h1 className="font-serif text-3xl sm:text-[36px] font-bold text-white tracking-tight leading-[1.15]">
+                  Partner referral code<span className="text-amber-500">.</span>
+                </h1>
+                <p className="text-xs sm:text-[13px] text-[#9c938a] leading-relaxed mt-2.5">
+                  Referred by an authorized BrewPluse cafe partner? Enter their code below for complimentary onboarding perks.
+                </p>
+              </div>
+
+              {partnerError && (
+                <div className="mb-4 flex items-center gap-2.5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium animate-fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span>{partnerError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handlePartnerSubmit} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#9c938a] block">
+                    REFERRAL CODE (OPTIONAL)
+                  </label>
+                  <div className="relative">
+                    <Handshake className="w-4 h-4 text-[#6e665e] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={partnerCode}
+                      onChange={(e) => setPartnerCode(e.target.value.toUpperCase())}
+                      placeholder="e.g. CAFE-PARTNER-2026"
+                      className="w-full pl-10 pr-4 py-2.5 bg-[#1b1715] border border-[#2b2521] rounded-xl text-sm text-white uppercase placeholder-[#5a524a] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-all font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 space-y-2.5">
+                  <button
+                    type="submit"
+                    disabled={partnerLoading}
+                    className="w-full py-3 px-4 bg-[#0c3821] hover:bg-[#10482b] border border-[#144f2e] text-white font-medium text-sm rounded-full shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 active:scale-[0.99]"
+                  >
+                    {partnerLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>Applying...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Apply &amp; Continue</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+
                   <button
                     type="button"
                     onClick={handleSkipPartner}
-                    className="text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                    className="w-full py-2.5 text-xs text-[#9c938a] hover:text-white transition-colors cursor-pointer"
                   >
-                    I don&apos;t have a partner code &mdash;{' '}
-                    <span className="text-[#eebd8e] underline underline-offset-4 hover:text-[#ffdcbd]">
-                      Skip this step
-                    </span>
+                    Skip this step &rarr;
                   </button>
                 </div>
               </form>
@@ -990,22 +881,20 @@ function SignupFormContent() {
         </main>
 
         {/* Footer */}
-        <footer className="w-full py-5 px-6 sm:px-10 lg:px-12 border-t border-white/[0.05] bg-[#171412]/30">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-400">
-            <p>&copy; {new Date().getFullYear()} BrewPluse Inc. All rights reserved.</p>
-            <div className="flex items-center gap-5 font-medium">
-              <Link href="/terms" className="hover:text-[#eebd8e] transition-colors">
-                Terms
-              </Link>
-              <span className="text-white/10">&middot;</span>
-              <Link href="/privacy" className="hover:text-[#eebd8e] transition-colors">
-                Privacy
-              </Link>
-              <span className="text-white/10">&middot;</span>
-              <Link href="/pricing" className="hover:text-[#eebd8e] transition-colors">
-                Pricing
-              </Link>
-            </div>
+        <footer className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#736a61] pt-4">
+          <p>&copy; {new Date().getFullYear()} BrewPluse Inc. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="hover:text-neutral-300 transition-colors">
+              Terms
+            </Link>
+            <span className="text-[#3a332d]">&middot;</span>
+            <Link href="/privacy" className="hover:text-neutral-300 transition-colors">
+              Privacy
+            </Link>
+            <span className="text-[#3a332d]">&middot;</span>
+            <Link href="/pricing" className="hover:text-neutral-300 transition-colors">
+              Pricing
+            </Link>
           </div>
         </footer>
       </div>
@@ -1017,8 +906,8 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#171412] flex items-center justify-center text-white">
-          <Loader2 className="w-8 h-8 animate-spin text-[#eebd8e]" />
+        <div className="min-h-screen bg-[#13110f] flex items-center justify-center text-white">
+          <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
         </div>
       }
     >

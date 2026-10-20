@@ -196,3 +196,25 @@ export async function verifyOtpFromFirestore(email: string, providedOtp: string)
     return false;
   }
 }
+
+/**
+ * Create Firebase Auth Custom Token for Staff with storeSlug & role claims
+ */
+export async function createStaffFirebaseCustomToken(
+  uid: string,
+  claims: { storeSlug: string; role: 'owner' | 'manager' | 'staff' }
+): Promise<string | null> {
+  const authInstance = getAdminAuth();
+  if (!authInstance) return null;
+  try {
+    const customToken = await authInstance.createCustomToken(uid, {
+      storeSlug: claims.storeSlug,
+      role: claims.role,
+    });
+    return customToken;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] createStaffFirebaseCustomToken note:', err?.message);
+    return null;
+  }
+}
+

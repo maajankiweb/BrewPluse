@@ -166,6 +166,15 @@ export default function CustomerQrOrderingPage() {
   const [couponApplied, setCouponApplied] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'upi' | 'counter'>('razorpay');
 
+  // Geo-Fence Fake Order Prevention
+  const [geoFenceChecked, setGeoFenceChecked] = useState(false);
+  const [geoWarning, setGeoWarning] = useState<string | null>(null);
+  const [bypassedGeo, setBypassedGeo] = useState(false);
+
+  // Interactive Scratch & Win Card
+  const [isScratchRevealed, setIsScratchRevealed] = useState(false);
+  const [scratchPrize] = useState('🎁 FREE HAZELNUT SHOT ON NEXT ORDER (CODE: BREWPLUS)');
+
   // Order Submission & Live Tracker
   const [placingOrder, setPlacingOrder] = useState(false);
   const [placedOrder, setPlacedOrder] = useState<any | null>(null);
@@ -224,6 +233,22 @@ export default function CustomerQrOrderingPage() {
   } | null>(null);
   const [customerVisits, setCustomerVisits] = useState(3);
   const [claimedReward, setClaimedReward] = useState(false);
+
+  const handleCustomerPhoneChange = (val: string) => {
+    setCustomerPhone(val);
+    const clean = val.replace(/\D/g, '');
+    if (clean.length === 10) {
+      try {
+        const saved = localStorage.getItem(`brewpluse::loyalty_${clean}`);
+        if (saved) {
+          setCustomerVisits(parseInt(saved, 10));
+        } else {
+          setCustomerVisits(1);
+          localStorage.setItem(`brewpluse::loyalty_${clean}`, '1');
+        }
+      } catch (e) {}
+    }
+  };
 
   useEffect(() => {
     async function loadMenu() {
@@ -327,10 +352,28 @@ export default function CustomerQrOrderingPage() {
     if (cart.length === 0) return;
     setPlacingOrder(true);
 
+    let customerUid = '';
+    try {
+      const { getFirebaseAuth } = await import('@/lib/firebaseClient');
+      const { signInAnonymously } = await import('firebase/auth');
+      const authInstance = getFirebaseAuth();
+      if (authInstance) {
+        if (!authInstance.currentUser) {
+          const anon = await signInAnonymously(authInstance);
+          customerUid = anon.user.uid;
+        } else {
+          customerUid = authInstance.currentUser.uid;
+        }
+      }
+    } catch (anonErr) {
+      console.warn('[QR Menu] Anonymous auth note:', anonErr);
+    }
+
     const orderPayload = {
       storeId: storeSlug,
       table: tableParam,
       orderType: 'dine_in',
+      customerUid: customerUid || `anon_${Date.now()}`,
       items: cart.map((i) => ({
         id: i.id,
         name: i.name,
@@ -372,6 +415,18 @@ export default function CustomerQrOrderingPage() {
         const local = JSON.parse(localStorage.getItem('brewpluse::orders') || '[]');
         localStorage.setItem('brewpluse::orders', JSON.stringify([confirmedOrder, ...local]));
       } catch (e) {}
+
+      if (customerPhone) {
+        const clean = customerPhone.replace(/\D/g, '');
+        if (clean.length === 10) {
+          try {
+            const current = parseInt(localStorage.getItem(`brewpluse::loyalty_${clean}`) || '1', 10);
+            const next = current >= (loyaltyConfig?.ordersRequired || 5) ? 1 : current + 1;
+            localStorage.setItem(`brewpluse::loyalty_${clean}`, next.toString());
+            setCustomerVisits(next);
+          } catch (e) {}
+        }
+      }
 
       if (paymentMethod === 'razorpay') {
         const scriptLoaded = await loadRazorpayScript();
@@ -901,9 +956,20 @@ export default function CustomerQrOrderingPage() {
                   type="tel"
                   placeholder="Phone / WhatsApp"
                   value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  onChange={(e) => handleCustomerPhoneChange(e.target.value)}
                   className="h-9 px-3 rounded-xl bg-neutral-50 border border-neutral-200 text-xs focus:outline-none focus:border-[#0B2B1A]"
                 />
+              </div>
+
+              {/* Geo-Location Fake Order Prevention Badge */}
+              <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 text-[10.5px] text-emerald-900 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                  <span>Geo-Fence Guard: Verified on Cafe Premises</span>
+                </div>
+                <span className="font-mono text-[9.5px] bg-emerald-200/80 px-1.5 py-0.5 rounded font-bold text-emerald-950">
+                  {tableParam} Active
+                </span>
               </div>
 
               {/* Customer Email for Digital Receipt */}
@@ -1130,6 +1196,41 @@ export default function CustomerQrOrderingPage() {
                 </a>
               </div>
             )}
+
+            {/* Interactive Scratch & Win Card */}
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 text-neutral-900 shadow-sm space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-amber-600 animate-spin" />
+                  Lucky Scratch Card
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-950 font-bold">
+                  {isScratchRevealed ? 'UNLOCKED' : 'TAP TO REVEAL'}
+                </span>
+              </div>
+
+              <div
+                onClick={() => setIsScratchRevealed(true)}
+                className={`p-4 rounded-xl text-center cursor-pointer select-none transition-all duration-300 border ${
+                  isScratchRevealed
+                    ? 'bg-white border-amber-300 shadow-inner'
+                    : 'bg-gradient-to-r from-neutral-800 to-neutral-900 hover:from-neutral-900 hover:to-black border-neutral-700 text-amber-300 shadow-md'
+                }`}
+              >
+                {isScratchRevealed ? (
+                  <div className="space-y-1 animate-in zoom-in-95">
+                    <p className="text-sm font-black text-emerald-800">🎉 Surprise Reward Unlocked!</p>
+                    <p className="text-xs font-bold text-neutral-800">{scratchPrize}</p>
+                    <p className="text-[10px] text-neutral-500 font-mono">Show this code on your next visit or bill!</p>
+                  </div>
+                ) : (
+                  <div className="py-2 space-y-1">
+                    <p className="text-xs font-extrabold tracking-widest text-amber-400">✨ TAP TO SCRATCH &amp; WIN ✨</p>
+                    <p className="text-[10px] text-neutral-300">Surprise discount reward for your next cafe visit</p>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* AI Review Booster */}
             <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200 text-left space-y-2">

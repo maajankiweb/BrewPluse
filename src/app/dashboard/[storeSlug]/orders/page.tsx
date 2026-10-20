@@ -247,6 +247,75 @@ export default function OrdersPage() {
     return `https://api.whatsapp.com/send?phone=${phoneWithCountry}&text=${encodeURIComponent(message)}`;
   };
 
+  const handleExportGstCsv = () => {
+    if (orders.length === 0) return;
+    const headers = [
+      'Invoice Number',
+      'Date',
+      'Time',
+      'Table/Type',
+      'Customer Name',
+      'Customer Phone',
+      'Items Summary',
+      'Subtotal (INR)',
+      'Discount (INR)',
+      'Taxable Amount (INR)',
+      'CGST 2.5% (INR)',
+      'SGST 2.5% (INR)',
+      'Total GST 5% (INR)',
+      'Grand Total (INR)',
+      'Payment Mode',
+      'Payment Status',
+      'Fulfillment Status',
+    ];
+
+    const rows = orders.map((o) => {
+      const d = new Date(o.createdAt);
+      const dateStr = d.toLocaleDateString('en-IN');
+      const timeStr = d.toLocaleTimeString('en-IN');
+      const itemsSummary = (o.items || [])
+        .map((i) => `${i.qty}x ${i.name.replace(/"/g, '""')}`)
+        .join('; ');
+
+      const subtotal = Number(o.subtotal) || Number(o.total) || 0;
+      const discount = Number(o.discount) || 0;
+      const taxable = Math.max(0, subtotal - discount);
+      const tax = Number(o.tax) || (taxable * 0.05);
+      const cgst = (tax / 2).toFixed(2);
+      const sgst = (tax / 2).toFixed(2);
+      const grandTotal = Number(o.total) || (taxable + tax);
+
+      return [
+        `"${o.orderNumber}"`,
+        `"${dateStr}"`,
+        `"${timeStr}"`,
+        `"${o.table || o.orderType || 'Dine-In'}"`,
+        `"${(o.customerName || 'Walk-in Customer').replace(/"/g, '""')}"`,
+        `"${o.customerPhone || ''}"`,
+        `"${itemsSummary}"`,
+        subtotal.toFixed(2),
+        discount.toFixed(2),
+        taxable.toFixed(2),
+        cgst,
+        sgst,
+        (Number(cgst) + Number(sgst)).toFixed(2),
+        grandTotal.toFixed(2),
+        `"${o.paymentMode || 'Cash'}"`,
+        `"${o.paymentStatus || 'paid'}"`,
+        `"${o.status}"`,
+      ].join(',');
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `BrewPluse_GST_Bills_Ledger_${storeSlug}_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <DashboardShell storeSlug={storeSlug}>
       <div className="space-y-4">
@@ -267,6 +336,14 @@ export default function OrdersPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExportGstCsv}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 transition-colors cursor-pointer shadow-2xs"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Export GST CSV</span>
+            </button>
             <button
               type="button"
               onClick={() => fetchOrders(true)}

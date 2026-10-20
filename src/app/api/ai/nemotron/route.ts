@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { rateLimit, getClientIp } from '@/lib/rateLimit';
+import { getSessionFromRequest } from '@/lib/authService';
 
 export const runtime = 'nodejs';
 
@@ -44,12 +46,42 @@ const SAMPLE_DISHE_FALLBACK = [
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    const session = getSessionFromRequest(req);
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Strict access control: in production, require valid cafe staff/owner session
+    if (isProduction && !session) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized. Please sign in to your cafe account to use Brewie AI.' },
+        { status: 401 }
+      );
+    }
+
+    // Rate limiting: 20 calls/min for logged-in cafe staff, 3 calls/10min for guest/dev
+    const limitMax = session ? 20 : 3;
+    const windowMs = session ? 60 * 1000 : 10 * 60 * 1000;
+    const rateCheck = rateLimit(`ai:${session?.uid || ip}`, limitMax, windowMs);
+
+    if (!rateCheck.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `AI operations rate limit exceeded. Please try again in ${rateCheck.resetSeconds} seconds.`,
+        },
+        {
+          status: 429,
+          headers: { 'Retry-After': rateCheck.resetSeconds.toString() },
+        }
+      );
+    }
+
     const body = await req.json();
     const {
       type = 'chat',
       prompt = '',
       history = [],
-      cafeName = 'BrewPluse Cafe',
+      cafeName = session?.storeName || 'BrewPluse Cafe',
       image = null,
     } = body;
 

@@ -11,6 +11,14 @@ export interface IStore extends Document {
   upiVpa?: string;
   currency: string;
   taxRate: number;
+  // Spec Section 3: Extended Table QR & Payment policy settings
+  paymentPolicy: 'pay_first' | 'pay_later' | 'customer_choice';
+  upiId?: string;
+  upiName?: string;
+  taxInclusive: boolean;
+  serviceChargePercent: number;
+  platformFeeMode: 'customer' | 'cafe';
+  acceptingOrders: boolean;
   printSettings: {
     paperSize: '58mm' | '80mm';
     autoCut: boolean;
@@ -40,6 +48,21 @@ const StoreSchema = new Schema<IStore>(
     upiVpa: { type: String },
     currency: { type: String, default: 'INR' },
     taxRate: { type: Number, default: 5.0 }, // 5% GST
+    paymentPolicy: {
+      type: String,
+      enum: ['pay_first', 'pay_later', 'customer_choice'],
+      default: 'customer_choice',
+    },
+    upiId: { type: String, trim: true },
+    upiName: { type: String, trim: true },
+    taxInclusive: { type: Boolean, default: false },
+    serviceChargePercent: { type: Number, default: 0, min: 0, max: 30 },
+    platformFeeMode: {
+      type: String,
+      enum: ['customer', 'cafe'],
+      default: 'cafe',
+    },
+    acceptingOrders: { type: Boolean, default: true },
     printSettings: {
       paperSize: { type: String, enum: ['58mm', '80mm'], default: '80mm' },
       autoCut: { type: Boolean, default: true },

@@ -1,17 +1,38 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { syncInvoiceToFirestore } from '@/lib/firebaseAdmin';
+import { rateLimit, getClientIp } from '@/lib/rateLimit';
+import { getSessionFromRequest } from '@/lib/authService';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const session = getSessionFromRequest(request);
+
+    // Rate limiting: 20 per 10 mins for authenticated cafe users, 3 per 10 mins for unauthenticated/demo
+    const maxRequests = session ? 20 : 3;
+    const limiter = rateLimit(`send-bill:${session?.uid || ip}`, maxRequests, 10 * 60 * 1000);
+    if (!limiter.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Email sending rate limit exceeded. Please wait ${limiter.resetSeconds} seconds.`,
+        },
+        {
+          status: 429,
+          headers: { 'Retry-After': limiter.resetSeconds.toString() },
+        }
+      );
+    }
+
     const body = await request.json();
     const {
       customerEmail,
       customerName = 'Valued Customer',
       orderNumber = 'BP-1001',
-      storeName = 'BrewPluse Cafe',
+      storeName = session?.storeName || 'BrewPluse Cafe',
       table = 'Table 1',
       items = [],
       subtotal = 0,
@@ -28,12 +49,14 @@ export async function POST(request: Request) {
       }),
     } = body;
 
-    if (!customerEmail || !customerEmail.includes('@')) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!customerEmail || !emailRegex.test(customerEmail) || customerEmail.length > 100) {
       return NextResponse.json(
         { success: false, error: 'Valid customer email address is required.' },
         { status: 400 }
       );
     }
+
 
     // Build items HTML table rows
     const itemsHtml = Array.isArray(items)

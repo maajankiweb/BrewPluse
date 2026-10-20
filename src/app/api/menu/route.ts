@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { syncMenuToFirestore } from '@/lib/firebaseAdmin';
+import { getSessionFromRequest } from '@/lib/authService';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,15 +17,19 @@ const DEFAULT_CATALOG = [
   { id: 'bp-green-tea', name: 'Green Tea Pot', cat: 'tea', price: 100, desc: 'Whole leaf organic blend', color: '#5B8A5A', mod: 'Honey', image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=400&q=80' }
 ];
 
-// In-memory runtime cache for serverless instance
-let serverMenuCache: any[] = [...DEFAULT_CATALOG];
+// Per-store in-memory menu caches
+const storeMenuCaches: Record<string, any[]> = {};
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const storeSlug = searchParams.get('storeSlug') || searchParams.get('storeId') || 'default';
+
+    const items = storeMenuCaches[storeSlug] || DEFAULT_CATALOG;
     return NextResponse.json({
       success: true,
-      items: serverMenuCache,
-      count: serverMenuCache.length
+      items,
+      count: items.length
     });
   } catch (error: any) {
     return NextResponse.json(
@@ -36,30 +41,43 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = getSessionFromRequest(request);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized. Sign in required to update cafe menu.' },
+        { status: 401 }
+      );
+    }
+
+    const storeSlug = session.storeSlug;
+    if (!storeMenuCaches[storeSlug]) {
+      storeMenuCaches[storeSlug] = [...DEFAULT_CATALOG];
+    }
+
     const body = await request.json();
     if (Array.isArray(body.items)) {
-      serverMenuCache = body.items;
-      syncMenuToFirestore('main_catalog', serverMenuCache).catch(() => {});
-      return NextResponse.json({ success: true, count: serverMenuCache.length, items: serverMenuCache });
+      storeMenuCaches[storeSlug] = body.items;
+      syncMenuToFirestore(storeSlug, storeMenuCaches[storeSlug]).catch(() => {});
+      return NextResponse.json({ success: true, count: storeMenuCaches[storeSlug].length, items: storeMenuCaches[storeSlug] });
     } else if (body.item && body.item.name) {
       const newItem = {
         id: body.item.id || 'bp-' + Date.now(),
-        name: body.item.name,
+        name: String(body.item.name).slice(0, 100),
         cat: body.item.cat || 'coffee',
         price: Number(body.item.price) || 100,
-        desc: body.item.desc || '',
+        desc: String(body.item.desc || '').slice(0, 300),
         color: body.item.color || '#BA7E52',
-        mod: body.item.mod || 'Fresh',
-        image: body.item.image || ''
+        mod: String(body.item.mod || 'Fresh').slice(0, 50),
+        image: String(body.item.image || '').slice(0, 500)
       };
-      const existingIdx = serverMenuCache.findIndex(i => i.id === newItem.id);
+      const existingIdx = storeMenuCaches[storeSlug].findIndex(i => i.id === newItem.id);
       if (existingIdx !== -1) {
-        serverMenuCache[existingIdx] = newItem;
+        storeMenuCaches[storeSlug][existingIdx] = newItem;
       } else {
-        serverMenuCache.unshift(newItem);
+        storeMenuCaches[storeSlug].unshift(newItem);
       }
-      syncMenuToFirestore('main_catalog', serverMenuCache).catch(() => {});
-      return NextResponse.json({ success: true, item: newItem, items: serverMenuCache });
+      syncMenuToFirestore(storeSlug, storeMenuCaches[storeSlug]).catch(() => {});
+      return NextResponse.json({ success: true, item: newItem, items: storeMenuCaches[storeSlug] });
     }
 
     return NextResponse.json({ success: false, error: 'Invalid payload' }, { status: 400 });

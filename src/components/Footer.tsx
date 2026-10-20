@@ -11,7 +11,7 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-14 text-left">
-          
+
           {/* Brand Info & Legal box */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-2 focus:outline-none group">
@@ -228,7 +228,16 @@ export default function Footer() {
         {/* Bottom copyright & operational status */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-400">
           <div>
-            © 2026 BrewPluse. Operated by Ashish Kumar. All rights reserved.
+            © 2026 BrewPluse. Operated by{' '}
+            <a
+              href="https://maajankiwebtech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-emerald-400 text-white font-medium transition-colors"
+            >
+              Maajanki Web Tech
+            </a>
+            . All rights reserved.
           </div>
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">

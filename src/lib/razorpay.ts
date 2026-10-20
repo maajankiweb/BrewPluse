@@ -26,22 +26,48 @@ export function getRazorpay(): Razorpay | null {
 
 /**
  * Verify Razorpay HMAC-SHA256 Signature
+ * Strictly disallows mock mode in production and uses timing-safe buffer comparison.
  */
 export function verifyRazorpaySignature(
   orderId: string,
   paymentId: string,
   signature: string
 ): boolean {
-  const secret = process.env.RAZORPAY_KEY_SECRET;
-  if (!secret) {
-    // If no secret is configured in dev, accept simulated payment signatures
-    return signature.startsWith('mock_') || signature.length > 10;
+  if (!orderId || !paymentId || !signature) {
+    return false;
   }
 
-  const generatedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(`${orderId}|${paymentId}`)
-    .digest('hex');
+  const isProduction = process.env.NODE_ENV === 'production';
+  const secret = process.env.RAZORPAY_KEY_SECRET;
 
-  return generatedSignature === signature;
+  if (!secret) {
+    if (isProduction) {
+      console.error(
+        '[Razorpay Security Alert] RAZORPAY_KEY_SECRET is not configured in production. Rejecting verification.'
+      );
+      return false;
+    }
+    // In local non-production development ONLY, allow explicit mock signatures
+    return signature.startsWith('mock_');
+  }
+
+  try {
+    const generatedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(`${orderId}|${paymentId}`)
+      .digest('hex');
+
+    const genBuf = Buffer.from(generatedSignature, 'utf8');
+    const sigBuf = Buffer.from(signature, 'utf8');
+
+    if (genBuf.length !== sigBuf.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(genBuf, sigBuf);
+  } catch (err) {
+    console.error('[Razorpay Signature Error]:', err);
+    return false;
+  }
 }
+

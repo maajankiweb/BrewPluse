@@ -27,12 +27,12 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-[#141210] leading-[1.1] mb-5">
-              Run your cafe.<br />
-              <span className="text-[#005c36]">Not your software.</span>
+              Brew Excellence.<br />
+              <span className="text-[#005c36]">Automate Everything.</span>
             </h1>
 
             <p className="text-base sm:text-lg text-[#5a554f] leading-relaxed mb-8 max-w-md">
-              Menus, QR ordering, payments, loyalty, delivery and your digital storefront — all connected in one simple system.
+              AI-powered menus, contactless QR ordering, live KDS, recipe inventory, and thermal billing — unified in one intelligent system with ₹0/month software fees.
             </p>
 
             {/* Hero CTAs */}

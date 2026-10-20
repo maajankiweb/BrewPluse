@@ -1,12 +1,21 @@
 import crypto from 'crypto';
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'brewpluse_enterprise_secret_key_2026_super_secure';
+function getAuthSecret(): string {
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) {
+    throw new Error(
+      'FATAL: AUTH_SECRET environment variable is missing. Authentication cannot function without a secure secret configured.'
+    );
+  }
+  return secret;
+}
 
 export interface UserSession {
   uid: string;
   email: string;
   role: 'owner' | 'manager' | 'cashier' | 'barista';
   storeName: string;
+  storeSlug: string;
   iat: number;
   exp: number;
 }
@@ -47,19 +56,36 @@ export function verifyPassword(password: string, storedHash: string, storedSalt:
 /**
  * Create a tamper-proof HMAC-SHA256 signed session token
  */
-export function createSessionToken(user: { uid: string; email: string; role?: string; storeName?: string }): string {
+export function createSessionToken(user: {
+  uid: string;
+  email: string;
+  role?: string;
+  storeName?: string;
+  storeSlug?: string;
+}): string {
+  const secret = getAuthSecret();
+  const storeName = user.storeName || 'BrewPluse Cafe';
+  const storeSlug =
+    user.storeSlug ||
+    storeName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') ||
+    'my-cafe';
+
   const payload: UserSession = {
     uid: user.uid,
     email: user.email,
     role: (user.role as any) || 'owner',
-    storeName: user.storeName || 'BrewPluse Artisan Coffee',
+    storeName,
+    storeSlug,
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
   };
 
   const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const signature = crypto
-    .createHmac('sha256', AUTH_SECRET)
+    .createHmac('sha256', secret)
     .update(payloadB64)
     .digest('base64url');
 
@@ -72,10 +98,12 @@ export function createSessionToken(user: { uid: string; email: string; role?: st
 export function verifySessionToken(token: string): UserSession | null {
   try {
     if (!token || !token.includes('.')) return null;
+    const secret = getAuthSecret();
     const [payloadB64, signature] = token.split('.');
+    if (!payloadB64 || !signature) return null;
 
     const expectedSignature = crypto
-      .createHmac('sha256', AUTH_SECRET)
+      .createHmac('sha256', secret)
       .update(payloadB64)
       .digest('base64url');
 
@@ -95,4 +123,77 @@ export function verifySessionToken(token: string): UserSession | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Extract and verify session from Request cookies or Authorization Bearer header
+ */
+export function getSessionFromRequest(req: Request): UserSession | null {
+  try {
+    // 1. Try Authorization header
+    const authHeader = req.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7).trim();
+      const session = verifySessionToken(token);
+      if (session) return session;
+    }
+
+    // 2. Try Cookie header
+    const cookieHeader = req.headers.get('cookie');
+    if (cookieHeader) {
+      const cookies = cookieHeader.split(';').map((c) => c.trim());
+      const sessionCookie = cookies.find((c) => c.startsWith('brewpluse_session='));
+      if (sessionCookie) {
+        const token = sessionCookie.split('=')[1]?.trim();
+        if (token) {
+          const session = verifySessionToken(token);
+          if (session) return session;
+        }
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+import { NextResponse } from 'next/server';
+
+export interface StaffAuthResult {
+  success: boolean;
+  session?: UserSession;
+  response?: NextResponse;
+}
+
+/**
+ * Standardized staff authorization guard.
+ * Extracts session from request, checks role authorization, and ensures storeSlug is strictly bound.
+ */
+export function requireStaff(
+  req: Request,
+  allowedRoles?: Array<'owner' | 'manager' | 'cashier' | 'barista'>
+): StaffAuthResult {
+  const session = getSessionFromRequest(req);
+  if (!session) {
+    return {
+      success: false,
+      response: NextResponse.json(
+        { error: { code: 'UNAUTHORIZED', message: 'Authentication required. Please sign in.' } },
+        { status: 401 }
+      ),
+    };
+  }
+
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(session.role)) {
+    return {
+      success: false,
+      response: NextResponse.json(
+        { error: { code: 'FORBIDDEN', message: 'You do not have permission to access this resource.' } },
+        { status: 403 }
+      ),
+    };
+  }
+
+  return { success: true, session };
 }
