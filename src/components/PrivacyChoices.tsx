@@ -6,6 +6,7 @@ import Link from 'next/link';
 export default function PrivacyChoices() {
   const [mounted, setMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(false);
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -18,12 +19,19 @@ export default function PrivacyChoices() {
         const parsed = JSON.parse(stored);
         setAnalytics(!!parsed.analytics);
         setMarketing(!!parsed.marketing);
+        setBannerVisible(false);
+      } else {
+        // Show cookie consent banner on first visit
+        setBannerVisible(true);
       }
     } catch (e) {
-      // ignore
+      setBannerVisible(true);
     }
 
-    const handleOpenModal = () => setModalOpen(true);
+    const handleOpenModal = () => {
+      setBannerVisible(false);
+      setModalOpen(true);
+    };
     window.addEventListener('open-privacy-modal', handleOpenModal);
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,6 +76,7 @@ export default function PrivacyChoices() {
       console.warn('Failed to save consent preference:', e);
     } finally {
       setSaving(false);
+      setBannerVisible(false);
       setModalOpen(false);
     }
   }
@@ -76,52 +85,118 @@ export default function PrivacyChoices() {
 
   return (
     <>
-      {/* 1. Floating Bottom-Left "Privacy Choices" Button (Always visible on bottom-left corner) */}
-      <button
-        type="button"
-        onClick={() => setModalOpen(true)}
-        aria-label="Open Privacy Choices"
-        className="fixed bottom-5 left-5 z-40 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1c1e1d] hover:bg-[#252b27] border border-[#2e3731] hover:border-emerald-500/50 shadow-xl shadow-black/50 text-[#e2e8f0] hover:text-white transition-all duration-200 cursor-pointer group active:scale-95"
-      >
-        {/* Quartered Shield Icon matching exact reference */}
-        <svg
-          className="w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-105"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+      {/* ==================================================================== */}
+      {/* 1. Mobile & Desktop Cookie Consent Banner (Shown on first visit)     */}
+      {/* Positioned above the mobile bottom navigation bar (bottom-[74px])    */}
+      {/* ==================================================================== */}
+      {bannerVisible && (
+        <aside
+          aria-label="Privacy & Cookie Preferences"
+          className="fixed bottom-[74px] lg:bottom-5 left-3 right-3 sm:left-5 sm:right-auto sm:max-w-md z-40 bg-[#121815]/95 backdrop-blur-md border border-[#25382b] text-white p-4 rounded-2xl shadow-2xl animate-fade-in"
         >
-          {/* Shield outline */}
-          <path
-            d="M12 2L4 5.5V11.5C4 16.5 7.4 21.1 12 22.3C16.6 21.1 20 16.5 20 11.5V5.5L12 2Z"
-            fill="#121815"
-            stroke="#10b981"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          {/* Top-Right Quadrant (Emerald) */}
-          <path
-            d="M12 3.8V11.5H18.2C18.1 8.8 16.5 6.4 14.2 5.2L12 3.8Z"
-            fill="#10b981"
-          />
-          {/* Bottom-Left Quadrant (Emerald) */}
-          <path
-            d="M12 11.5H5.8C6.1 15.2 8.5 18.4 12 19.8V11.5Z"
-            fill="#10b981"
-          />
-        </svg>
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-700/40 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 text-base">
+              🍪
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-xs sm:text-sm font-bold text-white tracking-tight">
+                  Privacy &amp; Cookie Choices
+                </h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800/60 uppercase">
+                  DPDP 2023
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-xs text-gray-300 leading-relaxed mb-3">
+                BrewPluse uses strictly necessary cookies for secure session auth &amp; POS billing. Optional cookies help analytics &amp; performance.
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSave(true, true, 'BANNER_ACCEPT_ALL')}
+                  disabled={saving}
+                  className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                >
+                  Accept All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSave(false, false, 'BANNER_REJECT_OPTIONAL')}
+                  disabled={saving}
+                  className="px-3 py-1.5 rounded-lg bg-[#1f2822] hover:bg-[#2b3830] text-gray-300 text-[11px] font-semibold border border-gray-700/60 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  Reject Optional
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBannerVisible(false);
+                    setModalOpen(true);
+                  }}
+                  className="px-2 py-1.5 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors cursor-pointer"
+                >
+                  Customize
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      )}
 
-        {/* Text */}
-        <span className="text-[13px] sm:text-sm font-medium tracking-tight font-sans">
-          Privacy Choices
-        </span>
-      </button>
+      {/* ==================================================================== */}
+      {/* 2. Floating Bottom-Left "Privacy Choices" Shield Badge               */}
+      {/* On mobile: floats at bottom-[74px] above the mobile bottom nav bar   */}
+      {/* On desktop: floats at bottom-5                                       */}
+      {/* ==================================================================== */}
+      {!bannerVisible && (
+        <button
+          type="button"
+          onClick={() => setModalOpen(true)}
+          aria-label="Open Privacy Choices"
+          className="fixed bottom-[74px] lg:bottom-5 left-3 sm:left-5 z-40 inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#1c1e1d]/95 hover:bg-[#252b27] border border-[#2e3731] hover:border-emerald-500/50 shadow-xl shadow-black/50 text-[#e2e8f0] hover:text-white transition-all duration-200 cursor-pointer group active:scale-95"
+        >
+          {/* Quartered Shield Icon matching exact reference */}
+          <svg
+            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-200 group-hover:scale-105"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            {/* Shield outline */}
+            <path
+              d="M12 2L4 5.5V11.5C4 16.5 7.4 21.1 12 22.3C16.6 21.1 20 16.5 20 11.5V5.5L12 2Z"
+              fill="#121815"
+              stroke="#10b981"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            {/* Top-Right Quadrant (Emerald) */}
+            <path
+              d="M12 3.8V11.5H18.2C18.1 8.8 16.5 6.4 14.2 5.2L12 3.8Z"
+              fill="#10b981"
+            />
+            {/* Bottom-Left Quadrant (Emerald) */}
+            <path
+              d="M12 11.5H5.8C6.1 15.2 8.5 18.4 12 19.8V11.5Z"
+              fill="#10b981"
+            />
+          </svg>
 
-      {/* 2. Privacy Preferences Modal */}
+          {/* Text */}
+          <span className="text-[11px] sm:text-[13px] font-medium tracking-tight font-sans">
+            Privacy Choices
+          </span>
+        </button>
+      )}
+
+      {/* ==================================================================== */}
+      {/* 3. Privacy Preferences Modal Dialog (DPDP Section)                   */}
+      {/* ==================================================================== */}
       {modalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
           onClick={(e) => {
             if (e.target === e.currentTarget) setModalOpen(false);
           }}
@@ -183,7 +258,7 @@ export default function PrivacyChoices() {
 
             {/* Intro Description */}
             <p className="text-xs text-gray-400 leading-relaxed mt-2 mb-4">
-              Under India's Digital Personal Data Protection Act, 2023 (DPDP), you have the right to choose which optional data processing activities you consent to. You may change or withdraw these choices at any time.
+              Under India&apos;s Digital Personal Data Protection Act, 2023 (DPDP), you have the right to choose which optional data processing activities you consent to. You may change or withdraw these choices at any time.
             </p>
 
             {/* Category Cards Stack */}

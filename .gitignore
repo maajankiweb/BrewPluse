@@ -27,10 +27,6 @@ brag-output/
 
 # Local Tools & Build SDKs
 /.tools/
-.tools/
-/OpenMontage/
-OpenMontage/
-
 # Android Build artifacts & local properties
 /android/.gradle/
 /android/build/
