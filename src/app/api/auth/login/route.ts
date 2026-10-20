@@ -47,35 +47,46 @@ export async function POST(req: Request) {
     let userRole = 'owner';
     let storeName = 'BrewPluse Cafe';
 
-    // Verify against MongoDB
-    try {
-      const mongo = await connectMongoDB();
-      if (mongo) {
-        const userDoc = await User.findOne({ email: cleanEmail });
-        if (userDoc) {
-          const isValid = verifyPassword(password, userDoc.passwordHash, userDoc.passwordSalt);
-          if (!isValid) {
-            return NextResponse.json(
-              { error: 'Invalid email or password.' },
-              { status: 401 }
-            );
-          }
+    // Demo Cafe Account setup
+    const isDemoAccount =
+      cleanEmail === 'demo@brewpluse.com' &&
+      (password === 'BrewPluse@2026' || password === 'demo1234' || password === 'admin123');
 
-          userId = userDoc._id.toString();
-          userRole = userDoc.role;
-          storeName = userDoc.storeName;
-        } else {
-          // If user doesn't exist in MongoDB yet
-          if (process.env.NODE_ENV === 'production') {
-            return NextResponse.json(
-              { error: 'Account not found. Please sign up to create your cafe account.' },
-              { status: 404 }
-            );
+    if (isDemoAccount) {
+      userId = 'usr_demo_brewpluse_owner';
+      userRole = 'owner';
+      storeName = 'BrewPluse Specialty Cafe';
+    } else {
+      // Verify against MongoDB
+      try {
+        const mongo = await connectMongoDB();
+        if (mongo) {
+          const userDoc = await User.findOne({ email: cleanEmail });
+          if (userDoc) {
+            const isValid = verifyPassword(password, userDoc.passwordHash, userDoc.passwordSalt);
+            if (!isValid) {
+              return NextResponse.json(
+                { error: 'Invalid email or password.' },
+                { status: 401 }
+              );
+            }
+
+            userId = userDoc._id.toString();
+            userRole = userDoc.role;
+            storeName = userDoc.storeName;
+          } else {
+            // If user doesn't exist in MongoDB yet
+            if (process.env.NODE_ENV === 'production') {
+              return NextResponse.json(
+                { error: 'Account not found. Please sign up to create your cafe account.' },
+                { status: 404 }
+              );
+            }
           }
         }
+      } catch (dbErr: any) {
+        console.warn('[login] MongoDB lookup bypassed:', dbErr.message);
       }
-    } catch (dbErr: any) {
-      console.warn('[login] MongoDB lookup bypassed:', dbErr.message);
     }
 
     const storeSlug =
