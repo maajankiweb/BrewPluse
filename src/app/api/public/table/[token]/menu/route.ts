@@ -68,7 +68,7 @@ export async function GET(request: Request, { params }: RouteParams) {
           name: store?.name || storeSlug.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
           currency: store?.currency || 'INR',
           taxInclusive: store?.taxInclusive || false,
-          taxRate: store?.taxRate || 5.0,
+          taxRate: typeof store?.taxRate === 'number' ? store.taxRate : 0.0,
           serviceChargePercent: store?.serviceChargePercent || 0,
           platformFeeMode: store?.platformFeeMode || 'cafe',
           paymentPolicy: store?.paymentPolicy || 'customer_choice',

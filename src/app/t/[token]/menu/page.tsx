@@ -193,10 +193,13 @@ export default function CustomerMenuPage() {
   // Cart Totals
   const cartTotals = useMemo(() => {
     const subtotal = cart.reduce((sum, item) => sum + item.lineTotal, 0);
-    const taxRate = store?.taxRate || 5;
-    const tax = store?.taxInclusive
-      ? Math.round(subtotal - subtotal / (1 + taxRate / 100))
-      : Math.round(subtotal * (taxRate / 100));
+    const taxRate = typeof store?.taxRate === 'number' ? store.taxRate : 0;
+    const tax =
+      taxRate > 0
+        ? store?.taxInclusive
+          ? Math.round(subtotal - subtotal / (1 + taxRate / 100))
+          : Math.round(subtotal * (taxRate / 100))
+        : 0;
     const serviceCharge = Math.round(subtotal * ((store?.serviceChargePercent || 0) / 100));
     const isCustomerFee = store?.platformFeeMode === 'customer' && cart.length > 0;
     const platformFee = isCustomerFee ? 1 : 0;
@@ -851,10 +854,12 @@ export default function CustomerMenuPage() {
                   <span>Subtotal</span>
                   <span>₹{cartTotals.subtotal}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>GST ({store?.taxRate || 5}%)</span>
-                  <span>₹{cartTotals.tax}</span>
-                </div>
+                {cartTotals.tax > 0 && (
+                  <div className="flex justify-between text-gray-600">
+                    <span>GST ({store?.taxRate}%)</span>
+                    <span>₹{cartTotals.tax}</span>
+                  </div>
+                )}
                 {cartTotals.serviceCharge > 0 && (
                   <div className="flex justify-between text-gray-600">
                     <span>Service Charge ({store?.serviceChargePercent}%)</span>

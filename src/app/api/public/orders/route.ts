@@ -139,7 +139,7 @@ export async function POST(request: Request) {
         paymentPolicy: 'customer_choice',
         platformFeeMode: 'cafe',
         taxInclusive: false,
-        taxRate: 5.0,
+        taxRate: 0.0,
         serviceChargePercent: 0,
       };
     }
@@ -282,7 +282,7 @@ export async function POST(request: Request) {
         addons: selectedAddons,
         notes: reqItem.note || '',
         note: reqItem.note || '',
-        taxPercent: catalogItem.taxPercent || 5,
+        taxPercent: catalogItem.taxPercent || 0,
         lineTotal: lineTotalPaise,
         status: 'queued',
       });
@@ -316,12 +316,25 @@ export async function POST(request: Request) {
     }
 
     // 6. Tax, Service Charge & Platform Fee (in paise)
-    const taxRate = store.taxRate || 5.0;
+    // Optional GST: calculate item-level tax if configured, else store.taxRate (defaults to 0%)
     let taxPaise = 0;
-    if (store.taxInclusive) {
-      taxPaise = Math.round(subtotalPaise - subtotalPaise / (1 + taxRate / 100));
+    const hasItemTax = processedItems.some((i) => (Number(i.taxPercent) || 0) > 0);
+    if (hasItemTax) {
+      for (const item of processedItems) {
+        const itemTax = Number(item.taxPercent) || 0;
+        if (itemTax > 0) {
+          taxPaise += Math.round(item.lineTotal * (itemTax / 100));
+        }
+      }
     } else {
-      taxPaise = Math.round(subtotalPaise * (taxRate / 100));
+      const storeTaxRate = typeof store.taxRate === 'number' ? store.taxRate : 0;
+      if (storeTaxRate > 0) {
+        if (store.taxInclusive) {
+          taxPaise = Math.round(subtotalPaise - subtotalPaise / (1 + storeTaxRate / 100));
+        } else {
+          taxPaise = Math.round(subtotalPaise * (storeTaxRate / 100));
+        }
+      }
     }
 
     const serviceChargePaise = Math.round(

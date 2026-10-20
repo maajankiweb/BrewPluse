@@ -81,7 +81,7 @@ export async function GET(request: Request, { params }: RouteParams) {
         paymentPolicy: 'customer_choice',
         platformFeeMode: 'cafe',
         taxInclusive: false,
-        taxRate: 5.0,
+        taxRate: 0.0,
       };
     }
 
@@ -115,7 +115,7 @@ export async function GET(request: Request, { params }: RouteParams) {
         paymentPolicy: store.paymentPolicy || 'customer_choice',
         platformFeeMode: store.platformFeeMode || 'cafe',
         taxInclusive: store.taxInclusive || false,
-        taxRate: store.taxRate || 5.0,
+        taxRate: typeof store.taxRate === 'number' ? store.taxRate : 0.0,
       },
       table: {
         id: tableId,

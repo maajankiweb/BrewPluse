@@ -16,15 +16,16 @@ import {
   LogOut,
   Search,
   Lock,
+  Globe2,
 } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
-
-
+import GlobalSetupModal from '@/components/GlobalSetupModal';
 
 export default function SettingsHubPage() {
   const routeParams = useParams();
   const storeSlug = (routeParams?.storeSlug as string) || 'brewpluse';
   const [search, setSearch] = useState('');
+  const [isGlobalModalOpen, setIsGlobalModalOpen] = useState(false);
   const router = useRouter();
 
   const handleLogout = () => {
@@ -135,6 +136,37 @@ export default function SettingsHubPage() {
           />
         </div>
 
+        {/* Global / International Market Launch Gate Card */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white dark:from-blue-950/20 dark:via-indigo-950/10 dark:to-[#0E2018] border border-blue-200/80 dark:border-blue-800/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+              <Globe2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
+                  Global &amp; International Market Onboarding
+                </h3>
+                <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 text-[10px] font-bold">
+                  Assisted Setup
+                </span>
+              </div>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 max-w-xl leading-relaxed">
+                BrewPluse is launched for the <strong>Indian Market</strong> (INR ₹, Direct UPI QR). Operating a cafe in the <strong>USA, UAE, UK, Singapore, Australia, or Europe</strong>? Contact our team for custom multi-currency POS, country-specific VAT, and international payment gateway integration.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsGlobalModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0 transition-transform active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>Request Global Setup</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+
         {/* Categorized Settings List */}
         <div className="space-y-6">
           {settingsItems.map((group) => {
@@ -183,6 +215,12 @@ export default function SettingsHubPage() {
             );
           })}
         </div>
+
+        {/* Global Setup Modal */}
+        <GlobalSetupModal
+          isOpen={isGlobalModalOpen}
+          onClose={() => setIsGlobalModalOpen(false)}
+        />
       </div>
     </DashboardShell>
   );

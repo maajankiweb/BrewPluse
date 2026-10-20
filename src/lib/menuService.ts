@@ -23,7 +23,7 @@ export interface MenuItemDetailed {
   isVeg: boolean;
   isPopular?: boolean;
   isAvailable: boolean;
-  taxPercent: number; // default 5%
+  taxPercent: number; // default 0% (Optional GST)
   variants?: ItemVariant[];
   addons?: ItemAddon[];
 }
@@ -40,7 +40,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     isVeg: true,
     isPopular: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     variants: [
       { id: 'var-regular', name: 'Whole Milk (Regular)', price: 180, priceInPaise: 18000 },
       { id: 'var-oat', name: 'Oat Milk (+₹40)', price: 220, priceInPaise: 22000 },
@@ -62,7 +62,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     isVeg: true,
     isPopular: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     addons: [
       { id: 'add-sweet-cream', name: 'Sweet Vanilla Cream Float', price: 35, priceInPaise: 3500 },
     ],
@@ -77,7 +77,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=400&q=80',
     isVeg: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     variants: [
       { id: 'var-single', name: 'Regular Cup', price: 140, priceInPaise: 14000 },
       { id: 'var-large', name: 'Large Mug (+₹40)', price: 180, priceInPaise: 18000 },
@@ -97,7 +97,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     isVeg: true,
     isPopular: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     addons: [
       { id: 'add-lemongrass', name: 'Fresh Lemongrass Infusion', price: 20, priceInPaise: 2000 },
     ],
@@ -112,7 +112,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80',
     isVeg: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     addons: [
       { id: 'add-berry-jam', name: 'Warm Berry Compote', price: 30, priceInPaise: 3000 },
     ],
@@ -128,7 +128,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     isVeg: true,
     isPopular: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
     addons: [
       { id: 'add-extra-cheese', name: 'Extra Cheddar Cheese Slice', price: 30, priceInPaise: 3000 },
       { id: 'add-crisps', name: 'Side Salted Crisps', price: 25, priceInPaise: 2500 },
@@ -144,7 +144,7 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
     image: 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=400&q=80',
     isVeg: true,
     isAvailable: true,
-    taxPercent: 5,
+    taxPercent: 0,
   },
 ];
 

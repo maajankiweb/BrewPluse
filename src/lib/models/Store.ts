@@ -19,6 +19,7 @@ export interface IStore extends Document {
   gstin?: string;
   fssaiLicense?: string;
   upiVpa?: string;
+  country?: string;
   currency: string;
   taxRate: number;
   // Spec Section 3: Extended Table QR & Payment policy settings
@@ -57,8 +58,9 @@ const StoreSchema = new Schema<IStore>(
     gstin: { type: String },
     fssaiLicense: { type: String },
     upiVpa: { type: String },
+    country: { type: String, default: 'IN' },
     currency: { type: String, default: 'INR' },
-    taxRate: { type: Number, default: 5.0 }, // 5% GST
+    taxRate: { type: Number, default: 0.0 }, // Optional GST (0% by default)
     paymentPolicy: {
       type: String,
       enum: ['pay_first', 'pay_later', 'customer_choice'],

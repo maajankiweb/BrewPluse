@@ -12,8 +12,12 @@ import {
   QrCode,
   ShieldCheck,
   AlertCircle,
+  Globe2,
+  Receipt,
+  ChevronRight,
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
+import GlobalSetupModal from '@/components/GlobalSetupModal';
 
 export default function UpiSettingsPage() {
   const routeParams = useParams();
@@ -23,6 +27,8 @@ export default function UpiSettingsPage() {
   const [upiId, setUpiId] = useState('');
   const [upiName, setUpiName] = useState('');
   const [gstin, setGstin] = useState('');
+  const [taxRate, setTaxRate] = useState<number>(0);
+  const [isGlobalModalOpen, setIsGlobalModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const toast = useToast();
@@ -39,6 +45,7 @@ export default function UpiSettingsPage() {
             setGstin(data.store.gstin || '');
             setWorkflow(data.store.paymentPolicy || 'customer_choice');
             setFeeMode(data.store.platformFeeMode || 'cafe');
+            setTaxRate(typeof data.store.taxRate === 'number' ? data.store.taxRate : 0);
           }
         }
       } catch (err) {
@@ -63,6 +70,7 @@ export default function UpiSettingsPage() {
           gstin: gstin.trim(),
           paymentPolicy: workflow,
           platformFeeMode: feeMode,
+          taxRate: Number(taxRate) || 0,
         }),
       });
 
@@ -193,6 +201,39 @@ export default function UpiSettingsPage() {
               onChange={(e) => setGstin(e.target.value)}
             />
           </div>
+
+          {/* Default Cafe GST / Tax Rate */}
+          <div className="pt-2 border-t border-neutral-100 dark:border-[#1E342B] space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider block">
+                Default Cafe GST / Tax Rate (Optional)
+              </label>
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+                {taxRate === 0 ? '✓ 0% GST (No tax added on customer bill)' : `+${taxRate}% tax added to bill`}
+              </span>
+            </div>
+            <select
+              value={taxRate}
+              onChange={(e) => setTaxRate(Number(e.target.value))}
+              className="w-full bg-neutral-50/70 dark:bg-[#11241C] border border-neutral-200 dark:border-[#1E342B] text-xs rounded-xl h-10 px-3 text-neutral-900 dark:text-white focus:outline-none focus:border-[#10B981] font-semibold"
+            >
+              <optgroup label="🇮🇳 Indian Government GST Slabs">
+                <option value={0}>0% - Exempt / No GST (₹0 Tax on bill - Default)</option>
+                <option value={5}>5% - Standard Cafe / Restaurant Food (No ITC)</option>
+                <option value={12}>12% - Bakery / Confectionery / Packed Foods</option>
+                <option value={18}>18% - Luxury / Air-conditioned Lounge / Catering</option>
+              </optgroup>
+              <optgroup label="🌍 International Country VAT / Tax Slabs">
+                <option value={5}>5% - UAE / Middle East VAT</option>
+                <option value={7}>7% - Singapore GST</option>
+                <option value={10}>10% - Australia GST / Japan Consumption Tax</option>
+                <option value={20}>20% - United Kingdom / EU Standard VAT</option>
+              </optgroup>
+            </select>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">
+              Per-item GST rates set in Menu Management take priority over this store default. When set to <strong>0%</strong>, customers pay exact menu prices with no extra ₹6 GST line.
+            </p>
+          </div>
         </div>
 
         {/* PLATFORM USAGE FEE BEARER (₹1 / ORDER) */}
@@ -320,6 +361,44 @@ export default function UpiSettingsPage() {
             </span>
           </div>
         )}
+
+        {/* GLOBAL / INTERNATIONAL MARKET LAUNCH GATE */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white dark:from-blue-950/20 dark:via-indigo-950/10 dark:to-[#0E2018] border border-blue-200/80 dark:border-blue-800/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+              <Globe2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
+                  Operating a Cafe Outside India? (Global Market Setup)
+                </h3>
+                <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 text-[10px] font-bold">
+                  Assisted Onboarding
+                </span>
+              </div>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 max-w-xl leading-relaxed">
+                Direct UPI QR codes are designed for Indian bank accounts (INR ₹). If you run a cafe in the <strong>USA, UAE, UK, Singapore, Australia, or Europe</strong>, contact our global engineering team for custom assisted setup with local currencies ($, €, £, AED) and international payment rails.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsGlobalModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0 transition-transform active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>Request Global Setup</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Global Setup Modal */}
+        <GlobalSetupModal
+          isOpen={isGlobalModalOpen}
+          onClose={() => setIsGlobalModalOpen(false)}
+          defaultStoreName={upiName}
+        />
       </form>
     </DashboardShell>
   );
