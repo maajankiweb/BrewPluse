@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "BrewPluse – Free POS, QR Table Ordering &amp; Cafe Software",
-  description: "Run your cafe with BrewPluse. Cloud POS billing, QR table ordering, live kitchen display, and recipe inventory management with ₹0/month software subscription.",
+  title: "Data Rights Portal | BrewPluse – Brew Excellence. Automate Everything.",
+  description: "Exercise your DPDP Act personal data rights with BrewPluse. Access, export, correct, or erase your cafe and account information securely.",
 };
 
 export default function PrivacyDataRightsPage() {

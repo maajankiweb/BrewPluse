@@ -1,73 +1,143 @@
 rules_version = '2';
 
 // ===============================================================
-// Assumed Data Model
-// ===============================================================
-//
-// /users/{userId}
-//   - email: string
-//   - displayName: string
-//   - role: string ("owner" | "manager" | "staff")
-//   - storeSlug: string
-//
-// /stores/{storeSlug}
-//   - name: string
-//   - ownerUid: string
-//
-// /orders/{orderId}
-//   - storeId: string
-//   - orderNumber: string
-//   - table: string
-//   - items: list
-//   - total: number
-//   - status: string
-//   - paymentMode: string
-//   - paymentStatus: string
-//
-// /menus/{menuId}
-//   - storeSlug: string
-//   - items: list
-//
+// BrewPluse Firestore Rules (v2.1) - multi-tenant, least privilege
+// ---------------------------------------------------------------
+// Needs (set on the server with firebase-admin):
+//  1. Staff get custom claims: { storeSlug: "<slug>", role: "owner|manager|staff" }
+//     -> admin.auth().createCustomToken(uid, { storeSlug, role })
+//  2. Customers on the public QR page sign in ANONYMOUSLY
+//     (enable Anonymous provider, call signInAnonymously() before ordering)
+//  3. Online "paid" status is written ONLY by your server (Admin SDK bypasses
+//     rules) after Razorpay signature verification.
+//  4. Recompute prices/totals on the server; rules cannot verify them.
+// Documents assumed: menus/{id}.storeSlug, orders/{id}.storeId, stores/{slug}
 // ===============================================================
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
-    function isAuthenticated() {
+    // ---------- Helpers ----------
+    function signedIn() {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
+    function claim(key) {
+      return (signedIn() && (key in request.auth.token)) ? request.auth.token[key] : null;
     }
 
-    // Users collection
+    function staffOf(slug) {
+      return claim('storeSlug') == slug && claim('role') in ['owner', 'manager', 'staff'];
+    }
+
+    function managerOf(slug) {
+      return claim('storeSlug') == slug && claim('role') in ['owner', 'manager'];
+    }
+
+    function ownerOf(slug) {
+      return claim('storeSlug') == slug && claim('role') == 'owner';
+    }
+
+    function validStatus(s) {
+      return s in ['pending', 'received', 'preparing', 'ready', 'served', 'completed', 'cancelled'];
+    }
+
+    function validPayment(s) {
+      return s in ['pending', 'paid', 'failed'];
+    }
+
+    function validOrderShape(d) {
+      return d.storeId is string && d.storeId.size() > 0 && d.storeId.size() <= 64
+        && d.items is list && d.items.size() > 0 && d.items.size() <= 50
+        && d.total is number && d.total >= 0 && d.total <= 100000
+        && validStatus(d.status)
+        && validPayment(d.paymentStatus)
+        && (!('notes' in d) || (d.notes is string && d.notes.size() <= 300))
+        && (!('customerName' in d) || (d.customerName is string && d.customerName.size() <= 80))
+        && (!('customerPhone' in d) || (d.customerPhone is string && d.customerPhone.size() <= 20));
+    }
+
+    // ---------- Users (server-managed) ----------
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow create, delete: if false;
+      // Display name only - never role or storeSlug.
+      allow update: if signedIn() && request.auth.uid == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName']);
     }
 
-    // Store Profiles
+    // ---------- Stores (doc id = store slug) ----------
+    // Public profile for the QR menu. Secrets/settings go in stores/{slug}/private/*.
     match /stores/{storeSlug} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow create, delete: if false;          // onboarding runs on the server
+      allow update: if ownerOf(storeSlug);
+
+      match /private/{docId} {
+        allow read: if staffOf(storeSlug);
+        allow write: if ownerOf(storeSlug);
+      }
     }
 
-    // Orders Collection
-    match /orders/{orderId} {
-      // Allow customers to create table orders and check status
-      allow create: if true;
-      allow read: if true;
-      // Allow store staff or authenticated user to update order status
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
-    }
-
-    // Menus Collection
+    // ---------- Menus ----------
     match /menus/{menuId} {
-      // Public read so QR menus load instantly without login
-      allow read: if true;
-      allow write: if isAuthenticated();
+      allow read: if true;                     // QR menu loads without login
+      allow create: if managerOf(request.resource.data.storeSlug);
+      allow update: if managerOf(resource.data.storeSlug)
+        && request.resource.data.storeSlug == resource.data.storeSlug;
+      allow delete: if managerOf(resource.data.storeSlug);
+    }
+
+    // ---------- Orders ----------
+    match /orders/{orderId} {
+
+      // Staff: their store's orders only. Customer: their own orders only.
+      allow read: if staffOf(resource.data.storeId)
+        || (signedIn() && resource.data.customerUid == request.auth.uid);
+
+      allow create: if request.resource.data.keys().hasOnly([
+            'storeId', 'orderNumber', 'table', 'orderType', 'items', 'subtotal',
+            'discount', 'tax', 'total', 'status', 'paymentMode', 'paymentStatus',
+            'customerName', 'customerPhone', 'customerUid', 'notes',
+            'createdAt', 'updatedAt'
+          ])
+        && request.resource.data.keys().hasAll(['storeId', 'items', 'total', 'status', 'paymentStatus'])
+        && validOrderShape(request.resource.data)
+        && (
+          staffOf(request.resource.data.storeId)
+          || (signedIn()
+              && request.resource.data.customerUid == request.auth.uid
+              && request.resource.data.status == 'pending'
+              && request.resource.data.paymentStatus == 'pending')
+        );
+
+      // Staff move orders through the kitchen flow / record counter payment.
+      // Store, items, totals and customer cannot change.
+      allow update: if staffOf(resource.data.storeId)
+        && request.resource.data.storeId == resource.data.storeId
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'paymentStatus', 'paymentMode', 'notes', 'updatedAt'])
+        && validStatus(request.resource.data.status)
+        && validPayment(request.resource.data.paymentStatus);
+
+      allow delete: if managerOf(resource.data.storeId);
+    }
+
+    // ---------- Live Orders & Live Tables (KDS / Admin Realtime Mirrors) ----------
+    // Writes are server-only via Admin SDK. Staff can read their own store documents.
+    match /liveOrders/{orderId} {
+      allow read: if staffOf(resource.data.storeId);
+      allow write: if false;
+    }
+
+    match /liveTables/{tableId} {
+      allow read: if staffOf(resource.data.storeId);
+      allow write: if false;
+    }
+
+    // Everything else is denied.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

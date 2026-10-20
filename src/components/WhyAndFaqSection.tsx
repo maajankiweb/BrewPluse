@@ -20,7 +20,7 @@ export default function WhyAndFaqSection() {
   const faqs = [
     {
       q: 'What is Customer-Faced pricing?',
-      a: 'Under Customer-Faced pricing, your cafe pays ₹0/month software subscription. A micro-convenience fee of ₹1 is added to the guest’s digital bill. Your cafe software cost is 100% free.',
+      a: 'Under Customer-Faced pricing, your cafe pays ₹0 monthly software fee + ₹1 per order micro-convenience fee added to the guest’s digital bill.',
     },
     {
       q: 'What is Cafe-Faced pricing?',

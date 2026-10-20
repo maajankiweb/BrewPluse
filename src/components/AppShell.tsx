@@ -10,6 +10,8 @@ import { ToastProvider } from '@/components/Toast';
 import ScrollToTop, { ScrollProgressBar } from '@/components/ScrollToTop';
 import PrivacyChoices from '@/components/PrivacyChoices';
 
+import MobileBottomNav from '@/components/MobileBottomNav';
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
@@ -35,11 +37,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const isStandalone =
     pathname?.startsWith('/demo') ||
     pathname?.startsWith('/dashboard') ||
+    pathname?.startsWith('/kitchen') ||
     pathname?.startsWith('/setup') ||
-    pathname?.startsWith('/login') ||
-    pathname?.startsWith('/signup') ||
-    pathname?.startsWith('/forgot-password') ||
-    pathname?.startsWith('/m/');
+    pathname?.startsWith('/m/') ||
+    pathname?.startsWith('/t/');
 
   return (
     <ToastProvider>
@@ -50,10 +51,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <ScrollProgressBar />
           <Preloader />
           <Navbar />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow pb-16 lg:pb-0">{children}</main>
           <Footer />
           <ScrollToTop />
           <PrivacyChoices />
+          <MobileBottomNav />
         </>
       )}
     </ToastProvider>

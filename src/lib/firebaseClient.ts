@@ -4,13 +4,13 @@ import { getAuth, Auth, GoogleAuthProvider } from 'firebase/auth';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBi5o5h5Lrb_BHiTVSbOwRg0mnWnUsHWOc',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'brewpluse.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'brewpluse',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'brewpluse.firebasestorage.app',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '248612615090',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:248612615090:web:c7f9292d30f4af24adaaab',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-9CBBZ9B2TP',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '',
 };
 
 let app: FirebaseApp | null = null;
@@ -18,8 +18,11 @@ let db: Firestore | null = null;
 let auth: Auth | null = null;
 let analytics: Analytics | null = null;
 
-function getFirebaseApp(): FirebaseApp {
+function getFirebaseApp(): FirebaseApp | null {
   if (app) return app;
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+    return null;
+  }
   const existingApps = getApps();
   if (existingApps.length > 0 && existingApps[0]) {
     app = existingApps[0];
@@ -33,6 +36,7 @@ export function getFirebaseAuth(): Auth | null {
   if (auth) return auth;
   try {
     const activeApp = getFirebaseApp();
+    if (!activeApp) return null;
     auth = getAuth(activeApp);
     return auth;
   } catch (error) {
@@ -45,6 +49,7 @@ export function getFirebaseDb(): Firestore | null {
   if (db) return db;
   try {
     const activeApp = getFirebaseApp();
+    if (!activeApp) return null;
     db = getFirestore(activeApp);
     return db;
   } catch (error) {
@@ -58,8 +63,9 @@ export async function getFirebaseAnalytics(): Promise<Analytics | null> {
   if (analytics) return analytics;
   try {
     const supported = await isSupported();
-    if (supported) {
-      analytics = getAnalytics(getFirebaseApp());
+    const activeApp = getFirebaseApp();
+    if (supported && activeApp) {
+      analytics = getAnalytics(activeApp);
       return analytics;
     }
   } catch (error) {
@@ -68,13 +74,15 @@ export async function getFirebaseAnalytics(): Promise<Analytics | null> {
   return null;
 }
 
-// Initialize on load if possible
+// Initialize on load if config is present
 try {
   app = getFirebaseApp();
-  db = getFirestore(app);
-  auth = getAuth(app);
-  if (typeof window !== 'undefined') {
-    getFirebaseAnalytics().catch(() => {});
+  if (app) {
+    db = getFirestore(app);
+    auth = getAuth(app);
+    if (typeof window !== 'undefined') {
+      getFirebaseAnalytics().catch(() => {});
+    }
   }
 } catch (error) {
   console.warn('[FirebaseClient] Eager initialization note:', error);

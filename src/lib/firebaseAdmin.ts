@@ -38,13 +38,17 @@ export function getAdminApp(): App | null {
     }
   }
 
-  try {
-    adminApp = initializeApp({ projectId });
-    return adminApp;
-  } catch (e: any) {
-    console.warn('[FirebaseAdmin] Init note:', e?.message);
-    return null;
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    try {
+      adminApp = initializeApp({ projectId });
+      return adminApp;
+    } catch (e: any) {
+      console.warn('[FirebaseAdmin] Init note:', e?.message);
+      return null;
+    }
   }
+
+  return null;
 }
 
 export function getAdminFirestore(): Firestore | null {
@@ -94,6 +98,70 @@ export async function syncOrderToFirestore(orderData: Record<string, any>): Prom
     return true;
   } catch (err: any) {
     console.warn('[FirebaseAdmin] Order sync note:', err.message);
+    return false;
+  }
+}
+
+/**
+ * Spec Section 5.4: Sync minimal live order mirror to 'liveOrders/{orderId}'
+ * Used for instant Firestore onSnapshot listeners on Kitchen & Admin displays.
+ */
+export async function syncLiveOrderToFirestore(
+  orderId: string,
+  data: {
+    storeId: string;
+    status: string;
+    tableNumber: string;
+    itemsSummary?: string;
+    total?: number;
+    paymentStatus?: string;
+  }
+): Promise<boolean> {
+  const db = getAdminFirestore();
+  if (!db) return false;
+
+  try {
+    await db.collection('liveOrders').doc(String(orderId)).set(
+      {
+        ...data,
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] liveOrders sync note:', err.message);
+    return false;
+  }
+}
+
+/**
+ * Spec Section 5.4: Sync live table status mirror to 'liveTables/{tableId}'
+ */
+export async function syncLiveTableToFirestore(
+  tableId: string,
+  data: {
+    storeId?: string;
+    tableNumber: string;
+    status: 'open' | 'bill_requested' | 'paid' | 'closed';
+    dueAmount?: number;
+    billRequested?: boolean;
+  }
+): Promise<boolean> {
+  const db = getAdminFirestore();
+  if (!db) return false;
+
+  try {
+    await db.collection('liveTables').doc(String(tableId)).set(
+      {
+        ...data,
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] liveTables sync note:', err.message);
     return false;
   }
 }
@@ -196,3 +264,25 @@ export async function verifyOtpFromFirestore(email: string, providedOtp: string)
     return false;
   }
 }
+
+/**
+ * Create Firebase Auth Custom Token for Staff with storeSlug & role claims
+ */
+export async function createStaffFirebaseCustomToken(
+  uid: string,
+  claims: { storeSlug: string; role: 'owner' | 'manager' | 'staff' }
+): Promise<string | null> {
+  const authInstance = getAdminAuth();
+  if (!authInstance) return null;
+  try {
+    const customToken = await authInstance.createCustomToken(uid, {
+      storeSlug: claims.storeSlug,
+      role: claims.role,
+    });
+    return customToken;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] createStaffFirebaseCustomToken note:', err?.message);
+    return null;
+  }
+}
+

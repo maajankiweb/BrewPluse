@@ -13,11 +13,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://brewpluse.com'),
   title: {
-    default: 'BrewPluse – Run your cafe. Not your software. | Cloud POS & Cafe Operating System',
-    template: '%s | BrewPluse Cafe Management',
+    default: 'BrewPluse – Free AI Cafe POS & Management System',
+    template: '%s | BrewPluse Cafe OS',
   },
   description:
-    'Menus, QR table ordering, billing, inventory, kitchen display system (KDS), loyalty, delivery and your digital storefront — all connected in one simple system with ₹0/month software subscription.',
+    'Free AI-powered cafe POS, QR table ordering, live kitchen display, billing, and recipe inventory with zero monthly subscription fees for modern cafes.',
   keywords: [
     'cafe management software',
     'free cafe software',

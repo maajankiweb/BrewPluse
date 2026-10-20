@@ -3,17 +3,30 @@
 /.pnp
 .pnp.js
 
+# TypeScript & Build info
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
 # Next.js build output
 /.next/
-/out/*
-!/out/index.html
+/out/
+out/
+
+# Binary & Media Files (host via releases/CDN)
+*.apk
+*.mp4
+*.mp3
+*.ogg
+*.wav
+
+# Local generation outputs & agent skills
+/brag-output/
+brag-output/
+.agents/skills/
+/.agents/skills/
 
 # Local Tools & Build SDKs
 /.tools/
-.tools/
-/OpenMontage/
-OpenMontage/
-
 # Android Build artifacts & local properties
 /android/.gradle/
 /android/build/

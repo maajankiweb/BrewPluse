@@ -1,8 +1,8 @@
 # ☕ BrewPluse — The Complete Cafe & Restaurant Operating System
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Capacitor](https://img.shields.io/badge/Capacitor-Android-119EFF?style=for-the-badge&logo=capacitor)](https://capacitorjs.com/)
+[![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?style=for-the-badge&logo=capacitor)](https://capacitorjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-Admin%20%26%20Firestore-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![Razorpay](https://img.shields.io/badge/Razorpay-Payment%20Gateway-02042B?style=for-the-badge&logo=razorpay)](https://razorpay.com/)
@@ -16,7 +16,7 @@
 ### 1. ⚡ Smart POS Counter Billing (`/dashboard/[storeSlug]/pos`)
 - **Fast Keyboard & Touch Workflow**: Instant item search, category filters, and quick add.
 - **Dine-in, Takeaway & Delivery Modes**: Table assignment or customer contact tagging.
-- **Split Bills & Flexible Payments**: Supports Cash, Card, UPI, and Split Tender.
+- **Flexible Payments**: Supports Cash, Card, UPI, and Counter Tender.
 - **Kitchen Order Ticket (KOT)**: Generates and prints KOT tickets directly to thermal kitchen printers.
 - **58mm / 80mm ESC/POS Thermal Printing**: Instant thermal receipts with custom cafe branding.
 
@@ -162,6 +162,22 @@ npx cap sync android
 # Open Android project in Android Studio
 npx cap open android
 ```
+
+### 6. Table QR Ordering & Pay-Now / Pay-Later Demo Walkthrough
+
+1. **Create Tables & Export QR Stickers:**
+   - Navigate to `http://localhost:3000/dashboard/brewpluse/tables`.
+   - Click "Add Table" (or bulk generate 10 tables) and click "Print All QRs (A4 Sheet)" to export printable QR stickers with custom cafe branding.
+2. **Scan & Order (Customer Mobile Viewport):**
+   - Open `/t/<token>/menu` on phone or browser with responsive mobile view.
+   - Select items, customize variants/add-ons, and choose **Pay Online (Razorpay)** or **Add to Tab (Pay Later)**.
+   - Server recomputes all line totals in paise and establishes an active table session.
+3. **Live Kitchen Ticket Dispatch (KDS):**
+   - Live orders instantly appear at `http://localhost:3000/kitchen` with oldest tickets first, audible audio chimes, and privacy-stripped item preparation specs.
+   - Chef moves ticket: `Placed` -> `Accepted` -> `Preparing` -> `Ready` -> `Served`.
+4. **Settlement (Online & Cashier Counter):**
+   - Guest can view live tab, scan dynamic UPI QR, or request bill.
+   - Cashier at `http://localhost:3000/dashboard/brewpluse/live-orders` opens Table Settlement drawer to record Cash, UPI, or Card POS payment, or vacate the table.
 
 ---
 

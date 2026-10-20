@@ -27,6 +27,10 @@ import {
   User,
   ExternalLink,
   Menu,
+  KeyRound,
+  Users,
+  Shield,
+  Check,
 } from 'lucide-react';
 import {
   ALL_DASHBOARD_TOOLS,
@@ -55,6 +59,23 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
   const [searchQuery, setSearchQuery] = useState('');
   const [pinnedIds, setPinnedIds] = useState<string[]>(DEFAULT_PINNED_IDS);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+  // Staff Quick PIN Switcher
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
+  const [pinCode, setPinCode] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [activeOperator, setActiveOperator] = useState({
+    id: 'owner',
+    name: 'Cafe Owner',
+    role: 'Owner',
+    pin: '0000',
+  });
+  const [staffRoster, setStaffRoster] = useState([
+    { id: 'owner', name: 'Cafe Owner', role: 'Owner', pin: '0000' },
+    { id: 'staff-1', name: 'Rahul Sharma', role: 'Cashier', pin: '1024' },
+    { id: 'staff-2', name: 'Priya Patel', role: 'Barista', pin: '2048' },
+    { id: 'staff-3', name: 'Amit Verma', role: 'Waiter', pin: '3096' },
+  ]);
 
   useEffect(() => {
     try {
@@ -100,6 +121,26 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
         document.documentElement.classList.add('dark');
       }
       setPinnedIds(getStoredPinnedIds());
+
+      const savedStaff = localStorage.getItem(`brewpluse::staff_${storeSlug}`);
+      if (savedStaff) {
+        try {
+          const parsed = JSON.parse(savedStaff);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setStaffRoster([
+              { id: 'owner', name: 'Cafe Owner', role: 'Owner', pin: '0000' },
+              ...parsed,
+            ]);
+          }
+        } catch (e) {}
+      }
+
+      const savedOp = localStorage.getItem(`brewpluse::active_operator_${storeSlug}`);
+      if (savedOp) {
+        try {
+          setActiveOperator(JSON.parse(savedOp));
+        } catch (e) {}
+      }
     } catch (e) {}
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -303,7 +344,7 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
                     </h1>
                     <p className="text-[9.5px] text-[#9AB2A8] leading-tight truncate mt-0.5 font-medium">
-                      Run your cafe. Not your software.
+                      Brew Excellence. Automate Everything.
                     </p>
                   </div>
                 )}
@@ -525,6 +566,26 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Staff 4-Digit Quick PIN Switcher Pill */}
+          <button
+            type="button"
+            onClick={() => {
+              setPinCode('');
+              setPinError('');
+              setIsPinModalOpen(true);
+            }}
+            title="Switch Active Staff via 4-Digit PIN"
+            className="flex items-center gap-1.5 h-9 pl-2 pr-2.5 rounded-full border border-emerald-500/30 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100/70 transition-all cursor-pointer shadow-2xs text-xs font-semibold"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="truncate max-w-[95px] sm:max-w-none text-[11px]">
+              {activeOperator.name}
+            </span>
+            <span className="text-[9.5px] font-mono uppercase bg-emerald-200/90 dark:bg-emerald-800 px-1.5 py-0.2 rounded font-black text-emerald-950 dark:text-white">
+              {activeOperator.role}
+            </span>
+          </button>
+
           {/* Usage Pill */}
           <Link
             href={`${basePath}/usage`}
@@ -888,6 +949,18 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
                 </span>
               </Link>
               <Link
+                href={`${basePath}/live-orders`}
+                onClick={() => setIsSearchModalOpen(false)}
+                className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F2FAF6] dark:hover:bg-[#142A21] cursor-pointer"
+              >
+                <span className="font-semibold text-[#12201B] dark:text-[#E8F6EF]">
+                  Live Orders & Tables Board
+                </span>
+                <span className="text-[10px] text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded font-bold">
+                  Realtime
+                </span>
+              </Link>
+              <Link
                 href={`${basePath}/orders`}
                 onClick={() => setIsSearchModalOpen(false)}
                 className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F2FAF6] dark:hover:bg-[#142A21] cursor-pointer"
@@ -923,6 +996,151 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
                   KDS
                 </span>
               </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Staff 4-Digit PIN Quick Switch Modal */}
+      {isPinModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="bg-white dark:bg-[#10221B] border border-neutral-200 dark:border-neutral-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
+                  <KeyRound className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-sm font-black text-neutral-900 dark:text-white">Quick Switch Operator</h3>
+                  <p className="text-[10.5px] text-neutral-500 font-mono">Current: {activeOperator.name} ({activeOperator.role})</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPinModalOpen(false)}
+                className="w-7 h-7 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Quick Operator Selector Pills */}
+            <div className="flex flex-wrap gap-1.5 justify-center">
+              {staffRoster.map((staff) => (
+                <button
+                  key={staff.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveOperator(staff);
+                    localStorage.setItem(`brewpluse::active_operator_${storeSlug}`, JSON.stringify(staff));
+                    setIsPinModalOpen(false);
+                    setPinCode('');
+                    setPinError('');
+                  }}
+                  className={`px-3 py-1 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border ${
+                    activeOperator.id === staff.id
+                      ? 'bg-emerald-700 text-white border-emerald-800 shadow-xs'
+                      : 'bg-neutral-50 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100'
+                  }`}
+                >
+                  <span>{staff.name}</span>
+                  <span className="text-[9.5px] opacity-75 font-mono">({staff.role})</span>
+                </button>
+              ))}
+            </div>
+
+            {/* 4-digit PIN dots */}
+            <div className="py-2">
+              <p className="text-xs text-neutral-500 mb-2 font-medium">Or enter 4-digit PIN to authenticate:</p>
+              <div className="flex items-center justify-center gap-3">
+                {[0, 1, 2, 3].map((idx) => (
+                  <div
+                    key={idx}
+                    className={`w-4 h-4 rounded-full border transition-all ${
+                      pinCode.length > idx
+                        ? 'bg-emerald-600 border-emerald-600 scale-110'
+                        : 'border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800'
+                    }`}
+                  />
+                ))}
+              </div>
+              {pinError && (
+                <p className="text-[11px] text-red-500 font-medium mt-2">{pinError}</p>
+              )}
+            </div>
+
+            {/* Numpad */}
+            <div className="grid grid-cols-3 gap-2 max-w-[240px] mx-auto">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => {
+                    const next = pinCode + n.toString();
+                    if (next.length <= 4) {
+                      setPinCode(next);
+                      if (next.length === 4) {
+                        const matched = staffRoster.find((s) => s.pin === next);
+                        if (matched) {
+                          setActiveOperator(matched);
+                          localStorage.setItem(`brewpluse::active_operator_${storeSlug}`, JSON.stringify(matched));
+                          setIsPinModalOpen(false);
+                          setPinCode('');
+                          setPinError('');
+                        } else {
+                          setPinError('Incorrect PIN. Try 1024, 2048, or 0000');
+                          setPinCode('');
+                        }
+                      }
+                    }
+                  }}
+                  className="h-11 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-sm font-bold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer transition-colors shadow-2xs"
+                >
+                  {n}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setPinCode('');
+                  setPinError('');
+                }}
+                className="h-11 rounded-xl bg-neutral-100 dark:bg-neutral-800/60 text-xs font-bold text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer"
+              >
+                C
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = pinCode + '0';
+                  if (next.length <= 4) {
+                    setPinCode(next);
+                    if (next.length === 4) {
+                      const matched = staffRoster.find((s) => s.pin === next);
+                      if (matched) {
+                        setActiveOperator(matched);
+                        localStorage.setItem(`brewpluse::active_operator_${storeSlug}`, JSON.stringify(matched));
+                        setIsPinModalOpen(false);
+                        setPinCode('');
+                        setPinError('');
+                      } else {
+                        setPinError('Incorrect PIN. Try 1024, 2048, or 0000');
+                        setPinCode('');
+                      }
+                    }
+                  }
+                }}
+                className="h-11 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-sm font-bold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer transition-colors shadow-2xs"
+              >
+                0
+              </button>
+              <button
+                type="button"
+                onClick={() => setPinCode((prev) => prev.slice(0, -1))}
+                className="h-11 rounded-xl bg-neutral-100 dark:bg-neutral-800/60 text-xs font-bold text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer"
+              >
+                ⌫
+              </button>
             </div>
           </div>
         </div>

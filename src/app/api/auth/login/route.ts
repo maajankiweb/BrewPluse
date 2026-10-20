@@ -3,6 +3,7 @@ import { rateLimit, getClientIp } from '@/lib/rateLimit';
 import { createSessionToken, verifyPassword } from '@/lib/authService';
 import { connectMongoDB } from '@/lib/mongodb';
 import { User } from '@/lib/models/User';
+import { createStaffFirebaseCustomToken } from '@/lib/firebaseAdmin';
 
 export async function POST(req: Request) {
   try {
@@ -77,21 +78,40 @@ export async function POST(req: Request) {
       console.warn('[login] MongoDB lookup bypassed:', dbErr.message);
     }
 
+    const storeSlug =
+      storeName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || 'brewpluse';
+
     // Authenticated user payload
     const user = {
       uid: userId,
       email: cleanEmail,
       role: userRole,
       storeName,
+      storeSlug,
     };
 
     // Generate tamper-proof session token
     const token = createSessionToken(user);
 
+    // Generate Firebase custom token for live Firestore listener authorization
+    let firebaseCustomToken: string | null = null;
+    try {
+      firebaseCustomToken = await createStaffFirebaseCustomToken(userId, {
+        storeSlug,
+        role: (userRole as any) || 'owner',
+      });
+    } catch (e) {
+      console.warn('[login] Firebase custom token note:', e);
+    }
+
     const response = NextResponse.json({
       success: true,
       message: 'Login successful.',
       user,
+      firebaseCustomToken,
     });
 
     // Set secure HttpOnly session cookie
