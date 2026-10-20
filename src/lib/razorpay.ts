@@ -25,8 +25,9 @@ export function getRazorpay(): Razorpay | null {
 }
 
 /**
- * Verify Razorpay HMAC-SHA256 Signature
- * Strictly disallows mock mode in production and uses timing-safe buffer comparison.
+ * Verify Razorpay Client HMAC-SHA256 Signature (orderId|paymentId).
+ * Fails closed if secret is missing outside explicit NODE_ENV === 'test'.
+ * Uses timing-safe buffer comparison.
  */
 export function verifyRazorpaySignature(
   orderId: string,
@@ -37,18 +38,17 @@ export function verifyRazorpaySignature(
     return false;
   }
 
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isTest = process.env.NODE_ENV === 'test';
   const secret = process.env.RAZORPAY_KEY_SECRET;
 
   if (!secret) {
-    if (isProduction) {
-      console.error(
-        '[Razorpay Security Alert] RAZORPAY_KEY_SECRET is not configured in production. Rejecting verification.'
-      );
-      return false;
+    if (isTest) {
+      return signature === 'test_valid_mock_signature';
     }
-    // In local non-production development ONLY, allow explicit mock signatures
-    return signature.startsWith('mock_');
+    console.error(
+      '[Razorpay Security Alert] RAZORPAY_KEY_SECRET is missing. Failing closed.'
+    );
+    return false;
   }
 
   try {
@@ -71,3 +71,49 @@ export function verifyRazorpaySignature(
   }
 }
 
+/**
+ * Verify Razorpay Webhook Signature (raw payload against X-Razorpay-Signature).
+ * Fails closed if secret is missing outside explicit NODE_ENV === 'test'.
+ * Uses timing-safe buffer comparison.
+ */
+export function verifyRazorpayWebhookSignature(
+  rawBody: string | Buffer,
+  signature: string
+): boolean {
+  if (!rawBody || !signature) {
+    return false;
+  }
+
+  const isTest = process.env.NODE_ENV === 'test';
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+  if (!webhookSecret) {
+    if (isTest) {
+      return signature === 'test_valid_webhook_signature';
+    }
+    console.error(
+      '[Razorpay Webhook Alert] RAZORPAY_WEBHOOK_SECRET is missing. Rejecting webhook.'
+    );
+    return false;
+  }
+
+  try {
+    const bodyStr = typeof rawBody === 'string' ? rawBody : rawBody.toString('utf8');
+    const generatedSignature = crypto
+      .createHmac('sha256', webhookSecret)
+      .update(bodyStr)
+      .digest('hex');
+
+    const genBuf = Buffer.from(generatedSignature, 'utf8');
+    const sigBuf = Buffer.from(signature, 'utf8');
+
+    if (genBuf.length !== sigBuf.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(genBuf, sigBuf);
+  } catch (err) {
+    console.error('[Razorpay Webhook Error]:', err);
+    return false;
+  }
+}

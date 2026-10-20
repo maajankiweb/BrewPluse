@@ -99,6 +99,70 @@ export async function syncOrderToFirestore(orderData: Record<string, any>): Prom
 }
 
 /**
+ * Spec Section 5.4: Sync minimal live order mirror to 'liveOrders/{orderId}'
+ * Used for instant Firestore onSnapshot listeners on Kitchen & Admin displays.
+ */
+export async function syncLiveOrderToFirestore(
+  orderId: string,
+  data: {
+    storeId: string;
+    status: string;
+    tableNumber: string;
+    itemsSummary?: string;
+    total?: number;
+    paymentStatus?: string;
+  }
+): Promise<boolean> {
+  const db = getAdminFirestore();
+  if (!db) return false;
+
+  try {
+    await db.collection('liveOrders').doc(String(orderId)).set(
+      {
+        ...data,
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] liveOrders sync note:', err.message);
+    return false;
+  }
+}
+
+/**
+ * Spec Section 5.4: Sync live table status mirror to 'liveTables/{tableId}'
+ */
+export async function syncLiveTableToFirestore(
+  tableId: string,
+  data: {
+    storeId: string;
+    tableNumber: string;
+    status: 'open' | 'bill_requested' | 'paid' | 'closed';
+    dueAmount?: number;
+    billRequested?: boolean;
+  }
+): Promise<boolean> {
+  const db = getAdminFirestore();
+  if (!db) return false;
+
+  try {
+    await db.collection('liveTables').doc(String(tableId)).set(
+      {
+        ...data,
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (err: any) {
+    console.warn('[FirebaseAdmin] liveTables sync note:', err.message);
+    return false;
+  }
+}
+
+/**
  * Sync invoice to Firestore collection 'invoices'
  */
 export async function syncInvoiceToFirestore(invoiceData: Record<string, any>): Promise<boolean> {

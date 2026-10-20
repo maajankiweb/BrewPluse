@@ -123,6 +123,18 @@ service cloud.firestore {
       allow delete: if managerOf(resource.data.storeId);
     }
 
+    // ---------- Live Orders & Live Tables (KDS / Admin Realtime Mirrors) ----------
+    // Writes are server-only via Admin SDK. Staff can read their own store documents.
+    match /liveOrders/{orderId} {
+      allow read: if staffOf(resource.data.storeId);
+      allow write: if false;
+    }
+
+    match /liveTables/{tableId} {
+      allow read: if staffOf(resource.data.storeId);
+      allow write: if false;
+    }
+
     // Everything else is denied.
     match /{document=**} {
       allow read, write: if false;
