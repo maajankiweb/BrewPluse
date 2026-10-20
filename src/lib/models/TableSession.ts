@@ -77,6 +77,15 @@ export function findRuntimeActiveSession(storeId: string, tableId: string): Tabl
   return list.find((s) => s.tableId === tableId && (s.status === 'open' || s.status === 'bill_requested')) || null;
 }
 
+export function findRuntimeSessionById(id: string): TableSessionPlain | null {
+  if (!global.runtimeTableSessions) return null;
+  for (const storeId of Object.keys(global.runtimeTableSessions)) {
+    const found = global.runtimeTableSessions[storeId].find((s) => s.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
 const SessionTotalsSchema = new Schema<ISessionTotals>(
   {
     subtotal: { type: Number, required: true, default: 0 },

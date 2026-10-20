@@ -64,6 +64,15 @@ export function findRuntimeTableByToken(token: string): TablePlain | null {
   return null;
 }
 
+export function findRuntimeTableById(id: string): TablePlain | null {
+  if (!global.runtimeTables) return null;
+  for (const storeId of Object.keys(global.runtimeTables)) {
+    const found = global.runtimeTables[storeId].find((t) => t.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
 /**
  * Generate a random, unguessable URL-safe token (12+ chars)
  * Default 9 bytes base64url => 12 characters.

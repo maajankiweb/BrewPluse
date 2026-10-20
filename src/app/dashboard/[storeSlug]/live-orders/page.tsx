@@ -23,6 +23,7 @@ import {
   ChevronRight,
   ArrowRight,
   Sparkles,
+  X,
 } from 'lucide-react';
 
 interface OrderItem {
@@ -76,7 +77,79 @@ export default function LiveOrdersBoardPage() {
   const [audioActive, setAudioActive] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<LiveOrder | null>(null);
 
+  // Settlement Drawer state
+  const [settlementTable, setSettlementTable] = useState<TableSummary | null>(null);
+  const [sessionDetail, setSessionDetail] = useState<any | null>(null);
+  const [loadingSession, setLoadingSession] = useState(false);
+  const [settlingAction, setSettlingAction] = useState(false);
   const prevOrdersCountRef = useRef<number>(0);
+
+  const openSettlement = async (table: TableSummary) => {
+    if (!table.activeSessionId) return;
+    setSettlementTable(table);
+    setLoadingSession(true);
+    try {
+      const res = await fetch(`/api/admin/table-sessions/${table.activeSessionId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSessionDetail(data.session);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingSession(false);
+    }
+  };
+
+  const handleSettle = async (method: 'cash' | 'upi_manual' | 'card_pos') => {
+    if (!settlementTable?.activeSessionId) return;
+    setSettlingAction(true);
+    try {
+      const res = await fetch(`/api/admin/table-sessions/${settlementTable.activeSessionId}/payments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method }),
+      });
+      if (res.ok) {
+        await fetchLiveState();
+        const refRes = await fetch(`/api/admin/table-sessions/${settlementTable.activeSessionId}`);
+        if (refRes.ok) {
+          const data = await refRes.json();
+          setSessionDetail(data.session);
+        }
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Failed to record payment');
+      }
+    } catch (e) {
+      alert('Error recording payment');
+    } finally {
+      setSettlingAction(false);
+    }
+  };
+
+  const handleClearTable = async () => {
+    if (!settlementTable?.activeSessionId) return;
+    if (!confirm(`Are you sure you want to clear Table ${settlementTable.number}?`)) return;
+    setSettlingAction(true);
+    try {
+      const res = await fetch(`/api/admin/table-sessions/${settlementTable.activeSessionId}/clear`, {
+        method: 'POST',
+      });
+      if (res.ok) {
+        setSettlementTable(null);
+        setSessionDetail(null);
+        await fetchLiveState();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Failed to clear table');
+      }
+    } catch (e) {
+      alert('Error clearing table');
+    } finally {
+      setSettlingAction(false);
+    }
+  };
 
   // Play audio chime on new placed order or bill request
   const playAlertChime = () => {
@@ -489,16 +562,154 @@ export default function LiveOrdersBoardPage() {
                     )}
                   </div>
 
-                  <Link
-                    href={`/dashboard/${storeSlug}/tables`}
-                    className="text-[11px] font-bold text-amber-400 hover:text-amber-300 flex items-center justify-between pt-2 border-t border-white/10"
-                  >
-                    <span>Manage Table</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10 gap-2">
+                    {t.status !== 'vacant' ? (
+                      <button
+                        onClick={() => openSettlement(t)}
+                        className="text-[11px] font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer"
+                      >
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span>Settle / Bill</span>
+                      </button>
+                    ) : (
+                      <span className="text-[11px] text-neutral-500">Vacant</span>
+                    )}
+
+                    <Link
+                      href={`/dashboard/${storeSlug}/tables`}
+                      className="text-[11px] font-bold text-neutral-400 hover:text-white flex items-center"
+                    >
+                      <span>QR</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Settlement Modal */}
+        {settlementTable && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-[#12141c] border border-white/20 rounded-2xl w-full max-w-lg p-6 space-y-6 shadow-2xl relative">
+              <button
+                onClick={() => {
+                  setSettlementTable(null);
+                  setSessionDetail(null);
+                }}
+                className="absolute top-4 right-4 text-neutral-400 hover:text-white p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <h3 className="text-xl font-black text-white">Table {settlementTable.number} Bill</h3>
+                  <p className="text-xs text-neutral-400">Session ID: {settlementTable.activeSessionId?.slice(0, 10)}...</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs text-neutral-400 block font-medium">Balance Due</span>
+                  <span className="text-2xl font-black text-amber-400">
+                    ₹{sessionDetail ? (sessionDetail.totals?.due / 100).toFixed(2) : settlementTable.dueAmount.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {loadingSession ? (
+                <div className="py-12 text-center text-sm text-neutral-400">
+                  <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-amber-400" />
+                  Loading session breakdown...
+                </div>
+              ) : sessionDetail ? (
+                <div className="space-y-4">
+                  {/* Order list */}
+                  <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                    {(sessionDetail.orders || []).map((o: any, idx: number) => (
+                      <div key={idx} className="bg-white/5 rounded-xl p-3 text-xs flex justify-between items-center">
+                        <div>
+                          <span className="font-bold text-white mr-2">{o.orderNumber}</span>
+                          <span className="text-neutral-400 text-[11px]">
+                            {o.items?.map((it: any) => `${it.qty || it.quantity || 1}x ${it.name}`).join(', ')}
+                          </span>
+                        </div>
+                        <span className="font-bold text-neutral-200">₹{(o.total || 0).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Totals */}
+                  <div className="bg-black/30 rounded-xl p-3 space-y-1.5 text-xs">
+                    <div className="flex justify-between text-neutral-400">
+                      <span>Subtotal</span>
+                      <span>₹{(sessionDetail.totals?.subtotal / 100).toFixed(2)}</span>
+                    </div>
+                    {sessionDetail.totals?.tax > 0 && (
+                      <div className="flex justify-between text-neutral-400">
+                        <span>GST / Taxes</span>
+                        <span>₹{(sessionDetail.totals?.tax / 100).toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-neutral-400">
+                      <span>Already Paid</span>
+                      <span className="text-emerald-400 font-bold">₹{(sessionDetail.totals?.paid / 100).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-white font-black text-sm pt-2 border-t border-white/10">
+                      <span>Total Due</span>
+                      <span className="text-amber-400">₹{(sessionDetail.totals?.due / 100).toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  {/* Settle Buttons */}
+                  {sessionDetail.totals?.due > 0 ? (
+                    <div className="space-y-2">
+                      <p className="text-xs font-bold text-neutral-300 uppercase tracking-wider">Record Offline Payment</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          disabled={settlingAction}
+                          onClick={() => handleSettle('cash')}
+                          className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <Banknote className="w-4 h-4" />
+                          <span>Cash</span>
+                        </button>
+                        <button
+                          disabled={settlingAction}
+                          onClick={() => handleSettle('upi_manual')}
+                          className="h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <QrCode className="w-4 h-4" />
+                          <span>UPI</span>
+                        </button>
+                        <button
+                          disabled={settlingAction}
+                          onClick={() => handleSettle('card_pos')}
+                          className="h-10 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <CreditCard className="w-4 h-4" />
+                          <span>Card POS</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
+                      <p className="text-xs font-bold text-emerald-400">Table Bill Fully Settled!</p>
+                    </div>
+                  )}
+
+                  {/* Clear / Vacate Table button */}
+                  <button
+                    disabled={settlingAction}
+                    onClick={handleClearTable}
+                    className="w-full h-11 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <span>Clear & Vacate Table</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="py-6 text-center text-xs text-neutral-500">Failed to load session details</div>
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -223,3 +223,12 @@ export function findRuntimeOrdersBySessionId(storeId: string, sessionId: string)
   const list = global.runtimeOrders?.[storeId] || [];
   return list.filter((o) => o.sessionId === sessionId);
 }
+
+export function findRuntimeOrderById(id: string): any | null {
+  if (!global.runtimeOrders) return null;
+  for (const storeId of Object.keys(global.runtimeOrders)) {
+    const found = global.runtimeOrders[storeId].find((o) => String(o._id || o.id) === String(id));
+    if (found) return found;
+  }
+  return null;
+}

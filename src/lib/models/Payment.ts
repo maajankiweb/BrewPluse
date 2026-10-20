@@ -71,6 +71,24 @@ export function saveRuntimePayment(payment: PaymentPlain): void {
   }
 }
 
+export function findRuntimePaymentByRazorpayId(paymentId: string): PaymentPlain | null {
+  if (!global.runtimePayments) return null;
+  for (const sessId of Object.keys(global.runtimePayments)) {
+    const found = global.runtimePayments[sessId].find((p) => p.razorpay?.paymentId === paymentId);
+    if (found) return found;
+  }
+  return null;
+}
+
+export function findRuntimePaymentById(id: string): PaymentPlain | null {
+  if (!global.runtimePayments) return null;
+  for (const sessId of Object.keys(global.runtimePayments)) {
+    const found = global.runtimePayments[sessId].find((p) => p.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
 const PaymentSchema = new Schema<IPayment>(
   {
     storeId: { type: String, required: true, index: true },
@@ -91,7 +109,7 @@ const PaymentSchema = new Schema<IPayment>(
     },
     razorpay: {
       orderId: { type: String },
-      paymentId: { type: String, sparse: true },
+      paymentId: { type: String },
       signature: { type: String },
     },
     receivedBy: { type: String },

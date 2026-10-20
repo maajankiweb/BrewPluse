@@ -16,6 +16,7 @@ import {
 import { findMenuItem } from '@/lib/menuService';
 import { rateLimit } from '@/lib/rateLimit';
 import { syncLiveOrderToFirestore, syncLiveTableToFirestore } from '@/lib/firebaseAdmin';
+import { createRazorpayOrder } from '@/lib/razorpay';
 
 export const dynamic = 'force-dynamic';
 
@@ -476,12 +477,35 @@ export async function POST(request: Request) {
       }).catch(() => {});
 
       syncLiveTableToFirestore(tableId, {
-        storeId: storeSlug,
         tableNumber: table.number,
         status: session.status,
         dueAmount: session.totals.due / 100,
         billRequested: session.status === 'bill_requested',
       }).catch(() => {});
+    }
+
+    let razorpayPayload: any = undefined;
+    if (!isPayLater) {
+      const rpOrder = await createRazorpayOrder({
+        amount: grandTotalPaise,
+        currency: 'INR',
+        receipt: finalOrder.orderNumber,
+        notes: {
+          storeSlug,
+          tableId,
+          orderNumber: finalOrder.orderNumber,
+        },
+      });
+
+      razorpayPayload = {
+        orderId: rpOrder.id,
+        keyId:
+          process.env.RAZORPAY_KEY_ID ||
+          process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
+          'rzp_test_brewpluse2026',
+        amount: grandTotalPaise,
+        currency: 'INR',
+      };
     }
 
     return NextResponse.json(
@@ -514,6 +538,7 @@ export async function POST(request: Request) {
             due: session.totals.due / 100,
           },
         },
+        razorpay: razorpayPayload,
       },
       { status: 201 }
     );

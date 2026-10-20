@@ -141,7 +141,7 @@ export async function syncLiveOrderToFirestore(
 export async function syncLiveTableToFirestore(
   tableId: string,
   data: {
-    storeId: string;
+    storeId?: string;
     tableNumber: string;
     status: 'open' | 'bill_requested' | 'paid' | 'closed';
     dueAmount?: number;

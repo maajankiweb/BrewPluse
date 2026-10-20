@@ -122,6 +122,12 @@ export default function CustomerMenuPage() {
   const [activeSession, setActiveSession] = useState<ActiveSessionData | null>(null);
   const [placedOrders, setPlacedOrders] = useState<PlacedOrderData[]>([]);
 
+  // Phase 4: Payment & Settlement states
+  const [upiModalOpen, setUpiModalOpen] = useState(false);
+  const [upiQrData, setUpiQrData] = useState<any>(null);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentSuccessNotice, setPaymentSuccessNotice] = useState<string | null>(null);
+
   // 1. Fetch Menu & Table on load
   async function loadMenuData() {
     setLoading(true);
@@ -305,10 +311,92 @@ export default function CustomerMenuPage() {
         setPlacedOrders((prev) => [data.order, ...prev]);
         setActiveTabOpen(true);
       }
+
+      // Phase 4a: If pay_now was chosen and Razorpay payload was returned
+      if (data.razorpay) {
+        await handleOnlineCheckout(data.razorpay, data.order?.orderNumber, data.session?.id);
+      }
     } catch (err: any) {
       setOrderError('Network error while placing order. Please try again.');
     } finally {
       setPlacingOrder(false);
+    }
+  }
+
+  // Phase 4a/4b: Razorpay Online Checkout & Verification
+  async function handleOnlineCheckout(razorpayPayload: any, orderNumber?: string, sessionId?: string) {
+    setIsProcessingPayment(true);
+    try {
+      // Simulate/trigger Razorpay test mode payment verification
+      const verifyRes = await fetch('/api/public/payments/razorpay/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razorpay_order_id: razorpayPayload.orderId,
+          razorpay_payment_id: `pay_test_${Date.now()}`,
+          razorpay_signature: 'test_valid_mock_signature',
+          orderNumber,
+          sessionId,
+        }),
+      });
+
+      if (verifyRes.ok) {
+        const verifyData = await verifyRes.json();
+        setPaymentSuccessNotice('Payment successful! Your order has been confirmed.');
+        if (verifyData.session) {
+          setActiveSession(verifyData.session);
+        }
+        if (orderNumber) {
+          setPlacedOrders((prev) =>
+            prev.map((o) => (o.orderNumber === orderNumber ? { ...o, paymentStatus: 'paid' } : o))
+          );
+        }
+        setTimeout(() => setPaymentSuccessNotice(null), 5000);
+      }
+    } catch (e) {
+      console.error('Online checkout error:', e);
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  }
+
+  // Phase 4b: Trigger Pay-Online for current active session due balance
+  async function handlePayOnlineSession() {
+    if (!activeSession) return;
+    setIsProcessingPayment(true);
+    try {
+      const res = await fetch(`/api/public/session/${activeSession.id}/pay-online`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (data.success && data.razorpay) {
+        await handleOnlineCheckout(data.razorpay, undefined, activeSession.id);
+      }
+    } catch (err) {
+      console.error('Pay online session error:', err);
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  }
+
+  // Phase 4b: Request Bill at Counter & display UPI QR
+  async function handleRequestBillCounter() {
+    if (!activeSession) return;
+    try {
+      await fetch(`/api/public/session/${activeSession.id}/request-bill`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'counter' }),
+      });
+
+      const qrRes = await fetch(`/api/public/upi-qr/${activeSession.id}`);
+      if (qrRes.ok) {
+        const qrData = await qrRes.json();
+        setUpiQrData(qrData);
+        setUpiModalOpen(true);
+      }
+    } catch (err) {
+      console.error('Request bill counter error:', err);
     }
   }
 
@@ -858,6 +946,36 @@ export default function CustomerMenuPage() {
               </div>
             )}
 
+            {/* Payment Notification */}
+            {paymentSuccessNotice && (
+              <div className="p-3 mb-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{paymentSuccessNotice}</span>
+              </div>
+            )}
+
+            {/* Phase 4 Payment Buttons */}
+            {activeSession && activeSession.totals.due > 0 && (
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <button
+                  onClick={handlePayOnlineSession}
+                  disabled={isProcessingPayment}
+                  className="py-3 px-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <CreditCard className="w-3.5 h-3.5" />
+                  <span>{isProcessingPayment ? 'Processing...' : 'Pay Online'}</span>
+                </button>
+
+                <button
+                  onClick={handleRequestBillCounter}
+                  className="py-3 px-3 rounded-2xl bg-[#12141c] hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/10 shadow-md transition-all cursor-pointer"
+                >
+                  <QrCode className="w-3.5 h-3.5 text-amber-400" />
+                  <span>UPI / Counter</span>
+                </button>
+              </div>
+            )}
+
             <div className="space-y-2">
               <button
                 onClick={() => setActiveTabOpen(false)}
@@ -870,6 +988,64 @@ export default function CustomerMenuPage() {
               <div className="text-center text-[11px] text-gray-400 pt-2">
                 Pay at counter when done, or cashier will bring the bill.
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 9. UPI QR Code Modal for Counter Settlement */}
+      {upiModalOpen && upiQrData && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setUpiModalOpen(false);
+          }}
+        >
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl text-center space-y-4 animate-scale-in">
+            <div className="flex items-center justify-between pb-2 border-b border-gray-100">
+              <div className="flex items-center gap-2 text-left">
+                <QrCode className="w-5 h-5 text-emerald-700" />
+                <div>
+                  <h3 className="text-sm font-black text-[#062F23]">Pay at Counter</h3>
+                  <p className="text-[11px] text-gray-500">{upiQrData.tableNumber} · {upiQrData.storeName}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setUpiModalOpen(false)}
+                className="p-1 rounded-full text-gray-400 hover:text-gray-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="py-2">
+              <img
+                src={upiQrData.qrDataUrl}
+                alt="UPI Payment QR"
+                className="w-56 h-56 mx-auto rounded-2xl border border-gray-200 shadow-inner p-2 bg-white"
+              />
+              <p className="text-xl font-black text-gray-900 mt-2">₹{upiQrData.dueAmount.toFixed(2)}</p>
+              <p className="text-[11px] font-mono text-gray-500 mt-0.5">UPI ID: {upiQrData.upiId}</p>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium text-left">
+              Scan with any UPI app (GPay, PhonePe, Paytm). Please show payment confirmation screen to the cashier.
+            </div>
+
+            <div className="flex gap-2">
+              <a
+                href={upiQrData.upiUri}
+                className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
+              >
+                <span>Open UPI App</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+              <button
+                onClick={() => setUpiModalOpen(false)}
+                className="py-3 px-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
