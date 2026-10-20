@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect, useMemo } from 'react';
 import DashboardShell from '@/components/dashboard/DashboardShell';
+import PlatformBillingSettlementCard from '@/components/dashboard/PlatformBillingSettlementCard';
 import {
   Receipt,
   Download,
@@ -217,6 +218,9 @@ export default function BillingPage() {
   return (
     <DashboardShell storeSlug={storeSlug}>
       <div className="space-y-4">
+        {/* Platform Usage & Settlement Banner */}
+        <PlatformBillingSettlementCard storeSlug={storeSlug} />
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>

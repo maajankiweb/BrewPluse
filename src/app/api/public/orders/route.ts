@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { connectMongoDB } from '@/lib/mongodb';
 import { Table, findRuntimeTableByToken } from '@/lib/models/Table';
-import { Store } from '@/lib/models/Store';
+import QRCode from 'qrcode';
+import {
+  Store,
+  checkStoreOrderLockout,
+  accumulateOrderPlatformFee,
+} from '@/lib/models/Store';
 import {
   TableSession,
   saveRuntimeSession,
@@ -135,15 +140,20 @@ export async function POST(request: Request) {
       };
     }
 
-    if (!store.acceptingOrders) {
+    // Check store lockout (Store closed, ₹200 threshold exceeded, or 2-min cooldown active)
+    const lockout = await checkStoreOrderLockout(storeSlug);
+    if (lockout.locked) {
+      const statusCode = lockout.reason === 'STORE_CLOSED' ? 422 : 403;
       return NextResponse.json(
         {
           error: {
-            code: 'STORE_CLOSED',
-            message: 'This cafe is currently not accepting new orders. Please check with staff.',
+            code: lockout.reason || 'ORDERING_LOCKED',
+            message: lockout.message || 'Orders cannot be placed at this time.',
+            cooldownRemainingSeconds: lockout.cooldownRemainingSeconds,
+            accumulatedDuePaise: lockout.accumulatedDuePaise,
           },
         },
-        { status: 422 }
+        { status: statusCode }
       );
     }
 
@@ -484,28 +494,51 @@ export async function POST(request: Request) {
       }).catch(() => {});
     }
 
+    // 11. Generate Direct NPCI UPI Payment Payload for Cafe
+    const cafeUpiId = store?.upiId || store?.upiVpa || process.env.DEFAULT_UPI_ID || 'billing@brewpluse';
+    const cafeUpiName = store?.upiName || store?.name || 'BrewPluse Cafe';
+    const upiAmountStr = (grandTotalPaise / 100).toFixed(2);
+    const upiTransactionNote = `Table ${table.number} - ${finalOrder.orderNumber}`;
+    const upiDeepLink = `upi://pay?pa=${encodeURIComponent(cafeUpiId)}&pn=${encodeURIComponent(cafeUpiName)}&am=${upiAmountStr}&cu=INR&tn=${encodeURIComponent(upiTransactionNote)}`;
+
+    let upiQrDataUrl = '';
+    try {
+      upiQrDataUrl = await QRCode.toDataURL(upiDeepLink, {
+        errorCorrectionLevel: 'M',
+        margin: 2,
+        scale: 8,
+        color: { dark: '#062F23', light: '#FFFFFF' },
+      });
+    } catch (err) {}
+
+    // 12. Accumulate ₹1.00 (100 paise) platform usage fee for BrewPluse Owner
+    const platformBillingResult = await accumulateOrderPlatformFee(storeSlug);
+
+    // Optional test-mode Razorpay payload for backward compatibility
     let razorpayPayload: any = undefined;
     if (!isPayLater) {
-      const rpOrder = await createRazorpayOrder({
-        amount: grandTotalPaise,
-        currency: 'INR',
-        receipt: finalOrder.orderNumber,
-        notes: {
-          storeSlug,
-          tableId,
-          orderNumber: finalOrder.orderNumber,
-        },
-      });
+      try {
+        const rpOrder = await createRazorpayOrder({
+          amount: grandTotalPaise,
+          currency: 'INR',
+          receipt: finalOrder.orderNumber,
+          notes: {
+            storeSlug,
+            tableId,
+            orderNumber: finalOrder.orderNumber,
+          },
+        });
 
-      razorpayPayload = {
-        orderId: rpOrder.id,
-        keyId:
-          process.env.RAZORPAY_KEY_ID ||
-          process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
-          'rzp_test_brewpluse2026',
-        amount: grandTotalPaise,
-        currency: 'INR',
-      };
+        razorpayPayload = {
+          orderId: rpOrder.id,
+          keyId:
+            process.env.RAZORPAY_KEY_ID ||
+            process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
+            'rzp_test_brewpluse2026',
+          amount: grandTotalPaise,
+          currency: 'INR',
+        };
+      } catch (err) {}
     }
 
     return NextResponse.json(
@@ -538,6 +571,14 @@ export async function POST(request: Request) {
             due: session.totals.due / 100,
           },
         },
+        directUpi: {
+          upiId: cafeUpiId,
+          upiName: cafeUpiName,
+          amount: grandTotalPaise / 100,
+          upiDeepLink,
+          qrDataUrl: upiQrDataUrl,
+        },
+        platformFeeAccumulatedPaise: platformBillingResult.accumulatedDuePaise,
         razorpay: razorpayPayload,
       },
       { status: 201 }

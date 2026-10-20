@@ -312,8 +312,19 @@ export default function CustomerMenuPage() {
         setActiveTabOpen(true);
       }
 
-      // Phase 4a: If pay_now was chosen and Razorpay payload was returned
-      if (data.razorpay) {
+      // Direct Cafe UPI Payment Modal if customer chose to pay now
+      if (data.directUpi && paymentChoice === 'pay_now') {
+        setUpiQrData({
+          qrDataUrl: data.directUpi.qrDataUrl,
+          upiUri: data.directUpi.upiDeepLink,
+          dueAmount: data.directUpi.amount,
+          upiId: data.directUpi.upiId,
+          tableNumber: `Table ${table?.number || ''}`,
+          storeName: data.directUpi.upiName || store?.name || 'Cafe',
+        });
+        setUpiModalOpen(true);
+      } else if (data.razorpay) {
+        // Fallback test mode
         await handleOnlineCheckout(data.razorpay, data.order?.orderNumber, data.session?.id);
       }
     } catch (err: any) {
@@ -814,8 +825,8 @@ export default function CustomerMenuPage() {
                         : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                     } ${store?.paymentPolicy === 'pay_later' ? 'opacity-40 cursor-not-allowed' : ''}`}
                   >
-                    <div className="font-extrabold text-xs">Pay Now</div>
-                    <div className="text-[10px] text-gray-500 mt-0.5">Online UPI / Card</div>
+                    <div className="font-extrabold text-xs">Pay Direct UPI</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">Direct to Cafe (GPay / PhonePe)</div>
                   </button>
                 </div>
               </div>
@@ -958,20 +969,19 @@ export default function CustomerMenuPage() {
             {activeSession && activeSession.totals.due > 0 && (
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <button
-                  onClick={handlePayOnlineSession}
-                  disabled={isProcessingPayment}
-                  className="py-3 px-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                  onClick={handleRequestBillCounter}
+                  className="py-3 px-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
                 >
-                  <CreditCard className="w-3.5 h-3.5" />
-                  <span>{isProcessingPayment ? 'Processing...' : 'Pay Online'}</span>
+                  <QrCode className="w-3.5 h-3.5 text-white" />
+                  <span>Pay Direct UPI</span>
                 </button>
 
                 <button
                   onClick={handleRequestBillCounter}
                   className="py-3 px-3 rounded-2xl bg-[#12141c] hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/10 shadow-md transition-all cursor-pointer"
                 >
-                  <QrCode className="w-3.5 h-3.5 text-amber-400" />
-                  <span>UPI / Counter</span>
+                  <Receipt className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Pay at Counter</span>
                 </button>
               </div>
             )}

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import DashboardShell from '@/components/dashboard/DashboardShell';
+import PlatformBillingSettlementCard from '@/components/dashboard/PlatformBillingSettlementCard';
 import {
   ShoppingBag,
   Clock,
@@ -334,6 +335,9 @@ export default function LiveOrdersBoardPage() {
   return (
     <DashboardShell storeSlug={storeSlug}>
       <div className="space-y-6 animate-in fade-in duration-300 select-none pb-12">
+        {/* Platform Billing & Settlement Status Banner */}
+        <PlatformBillingSettlementCard storeSlug={storeSlug} />
+
         {/* Top Controls Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12141c] p-4 rounded-2xl border border-white/10 shadow-lg">
           <div className="flex items-center gap-3">
