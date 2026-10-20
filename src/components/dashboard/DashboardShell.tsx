@@ -949,6 +949,18 @@ export default function DashboardShell({ children, storeSlug = 'brewpluse' }: Da
                 </span>
               </Link>
               <Link
+                href={`${basePath}/live-orders`}
+                onClick={() => setIsSearchModalOpen(false)}
+                className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F2FAF6] dark:hover:bg-[#142A21] cursor-pointer"
+              >
+                <span className="font-semibold text-[#12201B] dark:text-[#E8F6EF]">
+                  Live Orders & Tables Board
+                </span>
+                <span className="text-[10px] text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded font-bold">
+                  Realtime
+                </span>
+              </Link>
+              <Link
                 href={`${basePath}/orders`}
                 onClick={() => setIsSearchModalOpen(false)}
                 className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F2FAF6] dark:hover:bg-[#142A21] cursor-pointer"

@@ -161,8 +161,11 @@ export function getSessionFromRequest(req: Request): UserSession | null {
 import { NextResponse } from 'next/server';
 
 export interface StaffAuthResult {
+  authorized: boolean;
   success: boolean;
   session?: UserSession;
+  user?: UserSession;
+  storeSlug?: string;
   response?: NextResponse;
 }
 
@@ -172,11 +175,12 @@ export interface StaffAuthResult {
  */
 export function requireStaff(
   req: Request,
-  allowedRoles?: Array<'owner' | 'manager' | 'cashier' | 'barista'>
+  allowedRoles?: Array<'owner' | 'manager' | 'cashier' | 'barista' | 'chef' | string>
 ): StaffAuthResult {
   const session = getSessionFromRequest(req);
   if (!session) {
     return {
+      authorized: false,
       success: false,
       response: NextResponse.json(
         { error: { code: 'UNAUTHORIZED', message: 'Authentication required. Please sign in.' } },
@@ -187,6 +191,7 @@ export function requireStaff(
 
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(session.role)) {
     return {
+      authorized: false,
       success: false,
       response: NextResponse.json(
         { error: { code: 'FORBIDDEN', message: 'You do not have permission to access this resource.' } },
@@ -195,5 +200,11 @@ export function requireStaff(
     };
   }
 
-  return { success: true, session };
+  return {
+    authorized: true,
+    success: true,
+    session,
+    user: session,
+    storeSlug: session.storeSlug,
+  };
 }

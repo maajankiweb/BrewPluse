@@ -38,13 +38,17 @@ export function getAdminApp(): App | null {
     }
   }
 
-  try {
-    adminApp = initializeApp({ projectId });
-    return adminApp;
-  } catch (e: any) {
-    console.warn('[FirebaseAdmin] Init note:', e?.message);
-    return null;
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    try {
+      adminApp = initializeApp({ projectId });
+      return adminApp;
+    } catch (e: any) {
+      console.warn('[FirebaseAdmin] Init note:', e?.message);
+      return null;
+    }
   }
+
+  return null;
 }
 
 export function getAdminFirestore(): Firestore | null {
