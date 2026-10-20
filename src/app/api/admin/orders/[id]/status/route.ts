@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { connectMongoDB } from '@/lib/mongodb';
 import { Order, saveRuntimeOrder } from '@/lib/models/Order';
+import { TableSession, saveRuntimeSession } from '@/lib/models/TableSession';
 import { requireStaff } from '@/lib/authService';
 import { isValidOrderTransition } from '@/lib/orderStateMachine';
 import { syncLiveOrderToFirestore } from '@/lib/firebaseAdmin';
+import { logPaymentAudit } from '@/lib/auditLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -123,6 +125,64 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     order.timestamps = timestamps;
     if (parsed.data.notes) {
       order.notes = order.notes ? `${order.notes} | ${parsed.data.notes}` : parsed.data.notes;
+    }
+
+    // Handle paid order cancellation -> refund_pending & session recalculation (Spec §9.11, §10 Case 13)
+    let refundPendingFlag = false;
+    if (targetStatus === 'cancelled') {
+      if (order.paymentStatus === 'paid') {
+        order.paymentStatus = 'refund_pending';
+        refundPendingFlag = true;
+
+        logPaymentAudit({
+          storeId,
+          sessionId: order.sessionId || 'default',
+          orderId: String(order._id || order.id),
+          amountPaise: Math.round((order.total || 0) * 100),
+          method: order.paymentMode || 'online',
+          receivedBy: {
+            staffId: auth.user?.uid,
+            email: auth.user?.email,
+            role: auth.user?.role,
+          },
+          action: 'refund_flagged',
+          notes: `Order ${order.orderNumber} cancelled by staff after payment. Flagged for refund review.`,
+        });
+      }
+
+      // Recalculate session totals if order belonged to an active session
+      if (order.sessionId) {
+        let session: any = null;
+        if (conn) {
+          try {
+            session = await TableSession.findById(order.sessionId);
+          } catch (e) {}
+        }
+        if (!session) {
+          const allRuntime = Object.values(global.runtimeTableSessions || {}).flat();
+          session = allRuntime.find((s) => s.id === order.sessionId);
+        }
+
+        if (session && session.totals) {
+          const orderTotalPaise = Math.round((order.total || 0) * 100);
+          const orderSubtotalPaise = Math.round((order.subtotal || 0) * 100);
+          session.totals.grandTotal = Math.max(0, (session.totals.grandTotal || 0) - orderTotalPaise);
+          session.totals.subtotal = Math.max(0, (session.totals.subtotal || 0) - orderSubtotalPaise);
+          session.totals.due = Math.max(0, (session.totals.grandTotal || 0) - (session.totals.paid || 0));
+
+          if (conn && typeof session.save === 'function') {
+            try {
+              await session.save();
+            } catch (e) {}
+          }
+          saveRuntimeSession({
+            ...((session.toObject && session.toObject()) || session),
+            id: String(session._id || session.id),
+            totals: session.totals,
+            updatedAt: now,
+          });
+        }
+      }
     }
 
     if (conn && typeof order.save === 'function') {

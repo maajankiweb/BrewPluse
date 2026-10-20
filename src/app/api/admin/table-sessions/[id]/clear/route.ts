@@ -4,6 +4,7 @@ import { TableSession, saveRuntimeSession } from '@/lib/models/TableSession';
 import { Table, findRuntimeTableById } from '@/lib/models/Table';
 import { requireStaff } from '@/lib/authService';
 import { syncLiveTableToFirestore } from '@/lib/firebaseAdmin';
+import { logPaymentAudit } from '@/lib/auditLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,6 +70,20 @@ export async function POST(request: Request, { params }: RouteParams) {
       status: 'closed',
       closedAt: now,
       updatedAt: now,
+    });
+
+    logPaymentAudit({
+      storeId,
+      sessionId,
+      amountPaise: 0,
+      method: 'counter_clear',
+      receivedBy: {
+        staffId: auth.user?.uid,
+        email: auth.user?.email,
+        role: auth.user?.role,
+      },
+      action: 'table_cleared',
+      notes: `Table ${session.tableId} vacated and session closed`,
     });
 
     // Resolve table

@@ -7,6 +7,7 @@ import { Order, saveRuntimeOrder, findRuntimeOrdersBySessionId } from '@/lib/mod
 import { Table, findRuntimeTableById } from '@/lib/models/Table';
 import { requireStaff } from '@/lib/authService';
 import { syncLiveTableToFirestore, syncLiveOrderToFirestore } from '@/lib/firebaseAdmin';
+import { logPaymentAudit } from '@/lib/auditLog';
 
 export const dynamic = 'force-dynamic';
 
@@ -144,6 +145,20 @@ export async function POST(request: Request, { params }: RouteParams) {
     saveRuntimePayment({
       id: String(finalPayment._id || finalPayment.id),
       ...paymentData,
+    });
+
+    logPaymentAudit({
+      storeId,
+      sessionId,
+      amountPaise: paymentAmountPaise,
+      method: paymentMode,
+      receivedBy: {
+        staffId: auth.user?.uid,
+        email: auth.user?.email,
+        role: auth.user?.role,
+      },
+      action: 'payment_received',
+      notes: reference,
     });
 
     // 2. Update TableSession Totals & Status

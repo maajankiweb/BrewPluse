@@ -63,6 +63,8 @@ interface TableSummary {
   status: 'vacant' | 'occupied' | 'bill_requested' | 'paid';
   dueAmount: number;
   activeSessionId?: string;
+  isStale?: boolean;
+  durationMinutes?: number;
 }
 
 export default function LiveOrdersBoardPage() {
@@ -210,6 +212,8 @@ export default function LiveOrdersBoardPage() {
         const incomingTables = (dataTables.tables || []).map((t: any) => {
           let status: 'vacant' | 'occupied' | 'bill_requested' | 'paid' = 'vacant';
           let dueAmount = 0;
+          let isStale = false;
+          let durationMinutes = 0;
 
           if (t.activeSession) {
             if (t.activeSession.status === 'bill_requested') {
@@ -220,6 +224,16 @@ export default function LiveOrdersBoardPage() {
               status = 'occupied';
             }
             dueAmount = (t.activeSession.totals?.due || 0) / 100;
+
+            if (t.activeSession.createdAt) {
+              const createdMs = new Date(t.activeSession.createdAt).getTime();
+              if (createdMs > 0) {
+                durationMinutes = Math.floor((Date.now() - createdMs) / 60000);
+                if (durationMinutes >= 180 && status !== 'vacant') {
+                  isStale = true;
+                }
+              }
+            }
           }
 
           return {
@@ -228,6 +242,8 @@ export default function LiveOrdersBoardPage() {
             status,
             dueAmount,
             activeSessionId: t.activeSession?.id,
+            isStale,
+            durationMinutes,
           };
         });
         setTables(incomingTables);
@@ -544,11 +560,18 @@ export default function LiveOrdersBoardPage() {
                   key={t.id}
                   className={`rounded-2xl border p-4 flex flex-col justify-between h-44 transition-all ${styleClass}`}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-1">
                     <span className="text-xl font-black text-white">{t.number}</span>
-                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${badgeColor}`}>
-                      {badgeText}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      {t.isStale && (
+                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
+                          Stale ({Math.floor((t.durationMinutes || 180) / 60)}h+)
+                        </span>
+                      )}
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${badgeColor}`}>
+                        {badgeText}
+                      </span>
+                    </div>
                   </div>
 
                   <div>

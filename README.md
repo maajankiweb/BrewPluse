@@ -163,6 +163,22 @@ npx cap sync android
 npx cap open android
 ```
 
+### 6. Table QR Ordering & Pay-Now / Pay-Later Demo Walkthrough
+
+1. **Create Tables & Export QR Stickers:**
+   - Navigate to `http://localhost:3000/dashboard/brewpluse/tables`.
+   - Click "Add Table" (or bulk generate 10 tables) and click "Print All QRs (A4 Sheet)" to export printable QR stickers with custom cafe branding.
+2. **Scan & Order (Customer Mobile Viewport):**
+   - Open `/t/<token>/menu` on phone or browser with responsive mobile view.
+   - Select items, customize variants/add-ons, and choose **Pay Online (Razorpay)** or **Add to Tab (Pay Later)**.
+   - Server recomputes all line totals in paise and establishes an active table session.
+3. **Live Kitchen Ticket Dispatch (KDS):**
+   - Live orders instantly appear at `http://localhost:3000/kitchen` with oldest tickets first, audible audio chimes, and privacy-stripped item preparation specs.
+   - Chef moves ticket: `Placed` -> `Accepted` -> `Preparing` -> `Ready` -> `Served`.
+4. **Settlement (Online & Cashier Counter):**
+   - Guest can view live tab, scan dynamic UPI QR, or request bill.
+   - Cashier at `http://localhost:3000/dashboard/brewpluse/live-orders` opens Table Settlement drawer to record Cash, UPI, or Card POS payment, or vacate the table.
+
 ---
 
 ## 🛡️ License & Credits
