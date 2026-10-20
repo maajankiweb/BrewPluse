@@ -187,3 +187,39 @@ OrderSchema.index({ storeId: 1, idempotencyKey: 1 });
 
 export const Order: Model<IOrder> =
   mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
+
+// Global runtime order cache for offline resilience and fast idempotency
+declare global {
+  // eslint-disable-next-line no-var
+  var runtimeOrders: Record<string, any[]> | undefined;
+}
+
+if (!global.runtimeOrders) {
+  global.runtimeOrders = {};
+}
+
+export function saveRuntimeOrder(order: any): void {
+  if (!global.runtimeOrders) global.runtimeOrders = {};
+  const storeId = order.storeId || 'default';
+  if (!global.runtimeOrders[storeId]) {
+    global.runtimeOrders[storeId] = [];
+  }
+  const list = global.runtimeOrders[storeId];
+  const orderId = String(order._id || order.id);
+  const idx = list.findIndex((o) => String(o._id || o.id) === orderId);
+  if (idx >= 0) {
+    list[idx] = { ...list[idx], ...order, updatedAt: new Date() };
+  } else {
+    list.push({ ...order, createdAt: new Date(), updatedAt: new Date() });
+  }
+}
+
+export function findRuntimeOrderByIdempotencyKey(storeId: string, idempotencyKey: string): any | null {
+  const list = global.runtimeOrders?.[storeId] || [];
+  return list.find((o) => o.idempotencyKey === idempotencyKey) || null;
+}
+
+export function findRuntimeOrdersBySessionId(storeId: string, sessionId: string): any[] {
+  const list = global.runtimeOrders?.[storeId] || [];
+  return list.filter((o) => o.sessionId === sessionId);
+}
