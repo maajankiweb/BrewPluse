@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CreditCard, AlertTriangle, Clock, CheckCircle2, RefreshCw, Zap } from 'lucide-react';
+import Link from 'next/link';
+import { CreditCard, AlertTriangle, Clock, CheckCircle2, RefreshCw, Zap, Landmark } from 'lucide-react';
 
 interface BillingStatus {
   accumulatedDuePaise: number;
@@ -15,6 +16,7 @@ interface BillingStatus {
   cooldownRemainingSeconds: number;
   cooldownEndsAt?: string | null;
   lastSettledAt?: string | null;
+  platformFeeMode?: 'customer' | 'cafe';
 }
 
 export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug: string }) {
@@ -186,13 +188,19 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
               ₹1
             </div>
             <div>
-              <div className="text-xs font-extrabold text-[#12201B] dark:text-white flex items-center gap-2">
+              <div className="text-xs font-extrabold text-[#12201B] dark:text-white flex items-center gap-2 flex-wrap">
                 <span>BrewPluse Platform Ledger</span>
                 <span className="text-[10px] text-gray-500 font-normal">
-                  (₹1 per billed order • Zero monthly fees)
+                  (₹1 per billed order • 100% direct UPI to your bank)
                 </span>
+                <Link
+                  href={`/dashboard/${storeSlug}/settings/upi`}
+                  className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 hover:bg-emerald-200 transition-colors"
+                >
+                  Fee: {status.platformFeeMode === 'customer' ? 'Customer Pays (+₹1)' : 'Cafe Absorbs'}
+                </Link>
               </div>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <div className="w-36 h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   <div
                     className="h-full bg-emerald-500 rounded-full transition-all duration-500"
@@ -203,21 +211,23 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
                   ₹{dueRupees} / ₹200
                 </span>
                 <span className="text-[11px] text-gray-500">
-                  ({status.ordersUntilThreshold} orders left before settlement)
+                  ({status.ordersUntilThreshold} orders left before ₹200 settlement)
                 </span>
               </div>
             </div>
           </div>
 
-          {dueRupees > 0 && (
-            <button
-              onClick={handleSettlePayment}
-              disabled={settling}
-              className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[11px] font-semibold transition-colors cursor-pointer self-start sm:self-center"
-            >
-              {settling ? 'Processing...' : 'Settle Early'}
-            </button>
-          )}
+          <div className="flex items-center gap-2 self-start sm:self-center">
+            {dueRupees > 0 && (
+              <button
+                onClick={handleSettlePayment}
+                disabled={settling}
+                className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[11px] font-semibold transition-colors cursor-pointer"
+              >
+                {settling ? 'Processing...' : 'Settle Early'}
+              </button>
+            )}
+          </div>
         </div>
       )}
 

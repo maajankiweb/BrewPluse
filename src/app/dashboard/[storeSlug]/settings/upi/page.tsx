@@ -19,6 +19,7 @@ export default function UpiSettingsPage() {
   const routeParams = useParams();
   const storeSlug = (routeParams?.storeSlug as string) || 'brewpluse';
   const [workflow, setWorkflow] = useState<'pay_first' | 'pay_later' | 'customer_choice'>('customer_choice');
+  const [feeMode, setFeeMode] = useState<'customer' | 'cafe'>('cafe');
   const [upiId, setUpiId] = useState('');
   const [upiName, setUpiName] = useState('');
   const [gstin, setGstin] = useState('');
@@ -37,6 +38,7 @@ export default function UpiSettingsPage() {
             setUpiName(data.store.upiName || '');
             setGstin(data.store.gstin || '');
             setWorkflow(data.store.paymentPolicy || 'customer_choice');
+            setFeeMode(data.store.platformFeeMode || 'cafe');
           }
         }
       } catch (err) {
@@ -60,6 +62,7 @@ export default function UpiSettingsPage() {
           upiName: upiName.trim(),
           gstin: gstin.trim(),
           paymentPolicy: workflow,
+          platformFeeMode: feeMode,
         }),
       });
 
@@ -189,6 +192,114 @@ export default function UpiSettingsPage() {
               value={gstin}
               onChange={(e) => setGstin(e.target.value)}
             />
+          </div>
+        </div>
+
+        {/* PLATFORM USAGE FEE BEARER (₹1 / ORDER) */}
+        <div className="rounded-xl border border-[#E7ECE9] dark:border-[#1E342B] bg-white dark:bg-[#0E2018] p-4 sm:p-5 shadow-[0_2px_12px_rgba(20,50,40,0.03)] space-y-4">
+          <div>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold text-neutral-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <Landmark className="h-4.5 w-4.5 text-emerald-600" />
+                <span>Who Pays ₹1 BrewPluse Platform Fee?</span>
+              </p>
+              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200">
+                Applied Per Order
+              </span>
+            </div>
+            <p className="text-xs text-[#65736D] dark:text-[#9AB2A8] mt-1">
+              Decide whether to pass the ₹1 platform fee to your customers or pay it from your cafe profits.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+            {/* Option 1: Customer Pays */}
+            <div
+              onClick={() => setFeeMode('customer')}
+              className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                feeMode === 'customer'
+                  ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/20 shadow-xs'
+                  : 'border-neutral-200 dark:border-[#1E342B] hover:border-neutral-300'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-extrabold text-[#062F23] dark:text-white flex items-center gap-1.5">
+                    <span className="w-4 h-4 rounded-full border border-emerald-600 flex items-center justify-center">
+                      {feeMode === 'customer' && <span className="w-2 h-2 rounded-full bg-emerald-600" />}
+                    </span>
+                    Customer Pays (+₹1 Fee)
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full">
+                    Zero Cafe Cost
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#65736D] dark:text-[#9AB2A8] leading-relaxed">
+                  When customers scan your table QR, menu items show <span className="font-semibold text-emerald-700">+₹1 platform charge</span>. An explicit ₹1.00 fee is added to the checkout bill and sent directly into your cafe UPI. Your food profit margins remain 100% untouched.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-emerald-200/50 dark:border-emerald-800/30 text-[10.5px] font-medium text-emerald-800 dark:text-emerald-300">
+                ✓ 100% food revenue retained
+              </div>
+            </div>
+
+            {/* Option 2: Cafe Owner Pays */}
+            <div
+              onClick={() => setFeeMode('cafe')}
+              className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                feeMode === 'cafe'
+                  ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/20 shadow-xs'
+                  : 'border-neutral-200 dark:border-[#1E342B] hover:border-neutral-300'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-extrabold text-[#062F23] dark:text-white flex items-center gap-1.5">
+                    <span className="w-4 h-4 rounded-full border border-emerald-600 flex items-center justify-center">
+                      {feeMode === 'cafe' && <span className="w-2 h-2 rounded-full bg-emerald-600" />}
+                    </span>
+                    Cafe Owner Pays (Absorb ₹1)
+                  </span>
+                  <span className="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                    Free for Customer
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#65736D] dark:text-[#9AB2A8] leading-relaxed">
+                  Customers only see standard menu prices with zero extra charges. The ₹1/order platform fee is absorbed from your cafe sales and settled to BrewPluse every 200 orders (₹200).
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-neutral-200/50 dark:border-[#1E342B] text-[10.5px] font-medium text-gray-600 dark:text-gray-400">
+                ✓ Best friction-free customer experience
+              </div>
+            </div>
+          </div>
+
+          {/* Dynamic Customer Menu Preview */}
+          <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#11241C] border border-neutral-200 dark:border-[#1E342B] space-y-2">
+            <div className="text-[11px] font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+              Customer Table QR Live Preview
+            </div>
+            <div className="p-3 rounded-xl bg-white dark:bg-[#0E2018] border border-neutral-200 dark:border-[#1E342B] flex items-center justify-between">
+              <div>
+                <div className="text-xs font-bold text-neutral-900 dark:text-white">Cold Coffee with Vanilla Cream</div>
+                <div className="text-[11px] text-gray-500 mt-0.5">Classic brewed espresso over chilled milk</div>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="text-xs font-black text-gray-900 dark:text-white">₹120</span>
+                  {feeMode === 'customer' ? (
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-300">
+                      +₹1 platform charge
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-gray-500 italic">No extra fee</span>
+                  )}
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">
+                  {feeMode === 'customer' ? 'Total: ₹121' : 'Total: ₹120'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 

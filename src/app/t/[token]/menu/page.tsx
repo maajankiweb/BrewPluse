@@ -198,8 +198,10 @@ export default function CustomerMenuPage() {
       ? Math.round(subtotal - subtotal / (1 + taxRate / 100))
       : Math.round(subtotal * (taxRate / 100));
     const serviceCharge = Math.round(subtotal * ((store?.serviceChargePercent || 0) / 100));
-    const grandTotal = (store?.taxInclusive ? subtotal : subtotal + tax) + serviceCharge;
-    return { subtotal, tax, serviceCharge, grandTotal };
+    const isCustomerFee = store?.platformFeeMode === 'customer' && cart.length > 0;
+    const platformFee = isCustomerFee ? 1 : 0;
+    const grandTotal = (store?.taxInclusive ? subtotal : subtotal + tax) + serviceCharge + platformFee;
+    return { subtotal, tax, serviceCharge, platformFee, grandTotal };
   }, [cart, store]);
 
   // Open customize modal for item
@@ -521,7 +523,14 @@ export default function CustomerMenuPage() {
 
                   <h3 className="text-sm font-extrabold text-[#062F23] leading-snug">{item.name}</h3>
                   <p className="text-[11px] text-gray-500 leading-relaxed mt-1 line-clamp-2">{item.desc}</p>
-                  <div className="text-sm font-black text-gray-900 mt-2">₹{item.price}</div>
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <span className="text-sm font-black text-gray-900">₹{item.price}</span>
+                    {store?.platformFeeMode === 'customer' && (
+                      <span className="text-[10px] font-extrabold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded-md border border-emerald-300/80 dark:border-emerald-700/60 tracking-tight">
+                        +₹1 platform charge
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Right side: Image + Add Button */}
@@ -565,6 +574,11 @@ export default function CustomerMenuPage() {
               <div>
                 <h3 className="text-lg font-black text-[#062F23]">{selectedItem.name}</h3>
                 <p className="text-xs text-gray-500 mt-0.5">{selectedItem.desc}</p>
+                {store?.platformFeeMode === 'customer' && (
+                  <span className="inline-block mt-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">
+                    +₹1 platform charge applied to order
+                  </span>
+                )}
               </div>
               <button
                 onClick={() => setSelectedItem(null)}
@@ -845,6 +859,12 @@ export default function CustomerMenuPage() {
                   <div className="flex justify-between text-gray-600">
                     <span>Service Charge ({store?.serviceChargePercent}%)</span>
                     <span>₹{cartTotals.serviceCharge}</span>
+                  </div>
+                )}
+                {store?.platformFeeMode === 'customer' && (
+                  <div className="flex justify-between text-emerald-800 font-semibold bg-emerald-100/60 -mx-1 px-1.5 py-0.5 rounded-lg border border-emerald-200/60">
+                    <span>Platform / Convenience Fee</span>
+                    <span>₹1.00</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm font-black text-[#062F23] pt-1.5 border-t border-emerald-200">
