@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '@/lib/mongodb';
 import { Table, findRuntimeTableByToken } from '@/lib/models/Table';
-import { Store } from '@/lib/models/Store';
+import { Store, getRuntimeStore } from '@/lib/models/Store';
 import { getStoreMenu } from '@/lib/menuService';
 
 export const dynamic = 'force-dynamic';
@@ -50,6 +50,9 @@ export async function GET(request: Request, { params }: RouteParams) {
       try {
         store = await Store.findOne({ slug: storeSlug }).lean();
       } catch (err) {}
+    }
+    if (!store) {
+      store = getRuntimeStore(storeSlug);
     }
 
     const items = await getStoreMenu(storeSlug);

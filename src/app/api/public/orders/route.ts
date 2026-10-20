@@ -5,6 +5,7 @@ import { Table, findRuntimeTableByToken } from '@/lib/models/Table';
 import QRCode from 'qrcode';
 import {
   Store,
+  getRuntimeStore,
   checkStoreOrderLockout,
   accumulateOrderPlatformFee,
 } from '@/lib/models/Store';
@@ -126,6 +127,9 @@ export async function POST(request: Request) {
       try {
         store = await Store.findOne({ slug: storeSlug });
       } catch (err) {}
+    }
+    if (!store) {
+      store = getRuntimeStore(storeSlug);
     }
     if (!store) {
       store = {
@@ -324,8 +328,7 @@ export async function POST(request: Request) {
       subtotalPaise * ((store.serviceChargePercent || 0) / 100)
     );
 
-    const platformFeePaise =
-      store.platformFeeMode === 'customer' && paymentIntent === 'pay_now' ? 100 : 0;
+    const platformFeePaise = store.platformFeeMode === 'customer' ? 100 : 0;
 
     const grandTotalPaise =
       (store.taxInclusive ? subtotalPaise : subtotalPaise + taxPaise) +
@@ -438,6 +441,8 @@ export async function POST(request: Request) {
       subtotal: subtotalPaise / 100, // in ₹ for legacy views
       discount: 0,
       tax: taxPaise / 100,
+      platformFee: platformFeePaise / 100,
+      platformFeePaidBy: store.platformFeeMode || 'cafe',
       total: grandTotalPaise / 100,
       status: isPayLater ? 'placed' : 'pending_payment',
       paymentIntent,

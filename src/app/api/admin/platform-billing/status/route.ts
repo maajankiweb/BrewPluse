@@ -70,6 +70,7 @@ export async function GET(request: Request) {
         cooldownRemainingSeconds,
         cooldownEndsAt: billing.cooldownEndsAt || null,
         lastSettledAt: billing.lastSettledAt || null,
+        platformFeeMode: store.platformFeeMode || 'cafe',
       },
     });
   } catch (error: any) {

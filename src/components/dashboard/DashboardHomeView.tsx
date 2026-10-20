@@ -20,7 +20,10 @@ import {
   ArrowRight,
   Coffee,
   Check,
+  ShieldCheck,
+  Landmark,
 } from 'lucide-react';
+import PlatformBillingSettlementCard from '@/components/dashboard/PlatformBillingSettlementCard';
 
 interface DashboardHomeViewProps {
   storeSlug?: string;
@@ -51,6 +54,8 @@ export default function DashboardHomeView({
     ordersCount: 0,
     todayRevenue: 0,
     totalRevenue: 0,
+    platformFeeDue: 0,
+    platformFeeMode: 'cafe',
   });
 
   useEffect(() => {
@@ -89,11 +94,13 @@ export default function DashboardHomeView({
           localOrders.forEach((o: any) => {
             sum += Number(o.total) || 0;
           });
-          setRealStats({
+          setRealStats((prev) => ({
+            ...prev,
             ordersCount: localOrders.length,
             todayRevenue: sum,
             totalRevenue: sum,
-          });
+            platformFeeDue: localOrders.length,
+          }));
         }
       } catch (e) {
         setUserName(cafeDisplayName);
@@ -108,12 +115,27 @@ export default function DashboardHomeView({
             data.orders.forEach((o: any) => {
               rev += Number(o.total) || 0;
             });
-            setRealStats({
+            setRealStats((prev) => ({
+              ...prev,
               ordersCount: data.orders.length,
               todayRevenue: rev,
               totalRevenue: rev,
-            });
+            }));
             setChecklist((prev) => ({ ...prev, order: true }));
+          }
+        })
+        .catch(() => {});
+
+      // Fetch platform billing status for accurate ledger due & fee mode
+      fetch('/api/admin/platform-billing/status')
+        .then((r) => r.json())
+        .then((data) => {
+          if (data?.billing) {
+            setRealStats((prev) => ({
+              ...prev,
+              platformFeeDue: data.billing.accumulatedDueRupees ?? 0,
+              platformFeeMode: data.billing.platformFeeMode || 'cafe',
+            }));
           }
         })
         .catch(() => {});
@@ -187,6 +209,9 @@ export default function DashboardHomeView({
           </div>
         </div>
       </div>
+
+      {/* PLATFORM BILLING & ₹200 SETTLEMENT MONITOR */}
+      {!isDemo && <PlatformBillingSettlementCard storeSlug={storeSlug} />}
 
       {/* 2. SETUP CHECKLIST */}
       <div className="bg-white dark:bg-[#0E2018] border border-[#E5ECE8] dark:border-[#1E382E] rounded-xl p-3.5 shadow-[0_2px_12px_rgba(6,47,35,0.02)] space-y-2.5">
@@ -408,32 +433,108 @@ export default function DashboardHomeView({
           </div>
         </Link>
 
-        {/* Card 4: Active Tables */}
+        {/* Card 4: BrewPluse Fee Due / Active Ledger */}
         <Link
-          href={`${basePath}/tables`}
+          href={`${basePath}/billing`}
           className="group bg-white dark:bg-[#0E2018] border border-[#E5ECE8] dark:border-[#1E382E] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_12px_rgba(6,47,35,0.03)] hover:-translate-y-0.5 hover:border-[#10B981]/40 hover:shadow-[0_6px_20px_rgba(6,47,35,0.05)] transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#E8F6EF] dark:bg-[#142E25] flex items-center justify-center text-[#0B5C45] dark:text-[#10B981] transition-transform group-hover:scale-105">
-                <Table2 className="w-3.5 h-3.5" />
+              <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 font-bold text-xs transition-transform group-hover:scale-105">
+                ₹1
               </div>
               <span className="text-xs font-medium text-[#65736D] dark:text-[#9AB2A8]">
-                Active Tables
+                BrewPluse Fee Due
               </span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 text-[#8D9792] group-hover:text-[#0B5C45] dark:group-hover:text-[#10B981] group-hover:translate-x-0.5 transition-all" />
           </div>
           <div className="mt-2.5">
-            <p className="text-2xl sm:text-[26px] font-bold text-[#12201B] dark:text-white tracking-tight leading-none">
-              {isDemo ? '8' : '0'}
+            <p className="text-2xl sm:text-[26px] font-bold text-amber-600 dark:text-amber-400 tracking-tight leading-none">
+              {isDemo ? '₹42' : `₹${realStats.platformFeeDue}`}
             </p>
             <p className="text-xs font-medium text-[#65736D] dark:text-[#9AB2A8] mt-1 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-              {isDemo ? 'Currently Occupied' : '0 currently occupied'}
+              <span>₹1 / order • Limit ₹200</span>
             </p>
           </div>
         </Link>
+      </div>
+
+      {/* DIRECT BANK EARNING & BREWPLUSE FEE TRANSPARENCY BREAKDOWN */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0E2018] border border-[#E5ECE8] dark:border-[#1E382E] shadow-[0_2px_12px_rgba(6,47,35,0.03)] space-y-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-[#E5ECE8] dark:border-[#1E382E]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-[#E8F6EF] dark:bg-[#142E25] text-[#0B5C45] dark:text-[#10B981] flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4.5 h-4.5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-[#12201B] dark:text-white">
+                  Direct Cafe Bank Earnings &amp; BrewPluse Fee Breakdown
+                </h3>
+                <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/70 dark:bg-emerald-950/60 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-300/60">
+                  0% Gateway Fee
+                </span>
+              </div>
+              <p className="text-xs text-[#65736D] dark:text-[#9AB2A8] mt-0.5">
+                100% of customer payments go directly into your Cafe UPI bank account. Zero payment gateway commission!
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href={`${basePath}/settings/upi`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#062F23] hover:bg-[#0B5C45] text-white text-xs font-bold transition-all shadow-xs shrink-0 self-start sm:self-auto cursor-pointer"
+          >
+            <span>Change Fee Bearer</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        {/* 4-Column Financial Transparency Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#11241C] border border-neutral-200/80 dark:border-[#1E342B]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Gross Cafe Sales</p>
+            <p className="text-lg font-black text-[#0B8F68] mt-1">
+              {isDemo ? '₹18,450' : `₹${realStats.totalRevenue.toLocaleString()}`}
+            </p>
+            <p className="text-[10.5px] text-gray-500 mt-0.5">Direct to your bank UPI</p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#11241C] border border-neutral-200/80 dark:border-[#1E342B]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Orders Processed</p>
+            <p className="text-lg font-black text-gray-900 dark:text-white mt-1">
+              {isDemo ? '42' : realStats.ordersCount}
+            </p>
+            <p className="text-[10.5px] text-gray-500 mt-0.5">Tracked table &amp; POS orders</p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#11241C] border border-neutral-200/80 dark:border-[#1E342B]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              Send to BrewPluse (@ ₹1/order)
+            </p>
+            <p className="text-lg font-black text-amber-600 dark:text-amber-400 mt-1">
+              {isDemo ? '₹42' : `₹${realStats.platformFeeDue}`}
+            </p>
+            <p className="text-[10.5px] text-gray-500 mt-0.5">
+              Payable when limit reaches ₹200
+            </p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+              Fee Paid By
+            </p>
+            <p className="text-sm font-black text-[#062F23] dark:text-white mt-1 capitalize">
+              {realStats.platformFeeMode === 'customer' ? 'Customer (+₹1 on bill)' : 'Cafe Absorbs (from profit)'}
+            </p>
+            <p className="text-[10.5px] text-emerald-700 dark:text-emerald-400 mt-0.5">
+              {realStats.platformFeeMode === 'customer'
+                ? '100% cafe margin retained'
+                : 'Free customer experience'}
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* 4. MAIN TWO-COLUMN DASHBOARD GRID */}

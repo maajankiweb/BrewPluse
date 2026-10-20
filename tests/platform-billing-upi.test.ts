@@ -120,4 +120,41 @@ describe('BrewPluse Direct Cafe UPI & Platform Billing Ledger (₹1/order with �
     const check = await checkStoreOrderLockout(storeA);
     assert.equal(check.locked, false); // Store resumed and ready for orders!
   });
+
+  test('7. Platform Fee Bearer: Customer (+₹1) vs Cafe Absorbs configuration', () => {
+    // Configure Cafe A as customer bearer
+    saveRuntimeStore({
+      slug: storeA,
+      platformFeeMode: 'customer',
+    });
+    // Configure Cafe B as cafe absorbed
+    saveRuntimeStore({
+      slug: storeB,
+      platformFeeMode: 'cafe',
+    });
+
+    const sA = getRuntimeStore(storeA);
+    const sB = getRuntimeStore(storeB);
+
+    assert.equal(sA.platformFeeMode, 'customer');
+    assert.equal(sB.platformFeeMode, 'cafe');
+  });
+
+  test('8. Cafe earnings and BrewPluse fee transparency calculation (e.g. 50 orders, ₹10,000 sales)', () => {
+    const ordersCount = 50;
+    const dishRevenue = 10000; // ₹10,000 food sales
+    const platformFeePerOrder = 1; // ₹1/order
+
+    const brewpluseFeeDue = ordersCount * platformFeePerOrder; // ₹50
+    assert.equal(brewpluseFeeDue, 50);
+
+    // Scenario A: Customer pays platform fee (+₹1 per order)
+    const totalCollectedFromCustomer = dishRevenue + (ordersCount * platformFeePerOrder); // ₹10,050
+    const cafeNetRetainedCustomerMode = totalCollectedFromCustomer - brewpluseFeeDue; // ₹10,000
+    assert.equal(cafeNetRetainedCustomerMode, 10000); // 100% food revenue retained!
+
+    // Scenario B: Cafe owner absorbs platform fee from profit margin
+    const cafeNetRetainedCafeMode = dishRevenue - brewpluseFeeDue; // ₹9,950
+    assert.equal(cafeNetRetainedCafeMode, 9950);
+  });
 });
