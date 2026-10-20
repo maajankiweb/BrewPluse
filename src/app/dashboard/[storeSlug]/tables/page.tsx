@@ -56,7 +56,7 @@ export default function TablesPage() {
   async function fetchTables() {
     try {
       setLoading(true);
-      const res = await fetch('/api/admin/tables');
+      const res = await fetch(`/api/admin/tables?storeSlug=${encodeURIComponent(storeSlug)}`);
       const data = await res.json();
       if (data.success && Array.isArray(data.tables)) {
         setTables(data.tables);
@@ -78,7 +78,7 @@ export default function TablesPage() {
 
     setCreating(true);
     try {
-      const res = await fetch('/api/admin/tables', {
+      const res = await fetch(`/api/admin/tables?storeSlug=${encodeURIComponent(storeSlug)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ export default function TablesPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast(`Table "${data.table.number}" created!`);
+        showToast(`Table "${data.table.number}" created and saved!`);
         setNewTableNumber('');
         setNewTableLabel('');
         fetchTables();
@@ -110,14 +110,14 @@ export default function TablesPage() {
         number: `Table ${startNum + i}`,
       }));
 
-      const res = await fetch('/api/admin/tables', {
+      const res = await fetch(`/api/admin/tables?storeSlug=${encodeURIComponent(storeSlug)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tables: batch }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast(`Created 10 tables in bulk!`);
+        showToast(`Created 10 extra tables in bulk!`);
         fetchTables();
       } else {
         showToast(data?.error?.message || 'Failed to create tables');
@@ -134,7 +134,7 @@ export default function TablesPage() {
     setQrModalOpen(true);
     setLoadingQr(true);
     try {
-      const res = await fetch(`/api/admin/tables/${table.id}/qr`);
+      const res = await fetch(`/api/admin/tables/${table.id}/qr?storeSlug=${encodeURIComponent(storeSlug)}`);
       const data = await res.json();
       if (data.success) {
         setQrData({ qrDataUrl: data.qrDataUrl, targetUrl: data.targetUrl });
@@ -152,7 +152,7 @@ export default function TablesPage() {
     }
 
     try {
-      const res = await fetch(`/api/admin/tables/${table.id}/regenerate-token`, {
+      const res = await fetch(`/api/admin/tables/${table.id}/regenerate-token?storeSlug=${encodeURIComponent(storeSlug)}`, {
         method: 'POST',
       });
       const data = await res.json();
@@ -174,7 +174,7 @@ export default function TablesPage() {
     if (!confirm(`Delete ${table.number}? This action cannot be undone.`)) return;
 
     try {
-      const res = await fetch(`/api/admin/tables/${table.id}`, {
+      const res = await fetch(`/api/admin/tables/${table.id}?storeSlug=${encodeURIComponent(storeSlug)}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -190,8 +190,8 @@ export default function TablesPage() {
   }
 
   return (
-    <DashboardShell>
-      <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <DashboardShell storeSlug={storeSlug}>
+      <div className="space-y-6 max-w-7xl mx-auto pb-12 font-sans animate-in fade-in duration-300">
         {/* Toast Alert */}
         {toastMessage && (
           <div className="fixed top-6 right-6 z-50 px-5 py-3 rounded-2xl bg-[#062F23] text-white shadow-2xl border border-emerald-500/30 text-xs font-bold animate-fade-in flex items-center gap-2">
@@ -201,16 +201,16 @@ export default function TablesPage() {
         )}
 
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 dark:border-zinc-800 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-2xl font-black text-[#062F23] tracking-tight">Tables &amp; QR Codes</h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200">
-                Phase 1 Active
+              <h1 className="text-2xl font-black text-[#062F23] dark:text-white tracking-tight">Tables &amp; QR Codes</h1>
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 text-[11px] font-bold border border-emerald-200 dark:border-emerald-800">
+                {tables.length} Tables Active
               </span>
             </div>
-            <p className="text-xs text-gray-500">
-              Manage physical dining tables, generate unguessable security tokens, and download printable A4 QR sheets.
+            <p className="text-xs text-gray-500 dark:text-neutral-400">
+              10 tables are automatically initialized and saved for your cafe. You can manually add extra tables (e.g. Table 11, Rooftop, Patio) anytime.
             </p>
           </div>
 
@@ -218,14 +218,14 @@ export default function TablesPage() {
             <button
               onClick={handleBatchCreate10}
               disabled={creating}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-neutral-200 text-xs font-bold transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              <Layers className="w-4 h-4 text-emerald-600" />
+              <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>+10 Tables Bulk</span>
             </button>
 
             <a
-              href="/api/admin/tables/qr-sheet"
+              href={`/api/admin/tables/qr-sheet?storeSlug=${encodeURIComponent(storeSlug)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-xl bg-[#062F23] hover:bg-[#0B5C45] text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/20 flex items-center gap-2 cursor-pointer"

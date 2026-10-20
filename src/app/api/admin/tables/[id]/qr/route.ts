@@ -18,12 +18,14 @@ interface RouteParams {
  */
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    const auth = requireStaff(request, ['owner', 'manager', 'cashier']);
-    if (!auth.success || !auth.session) return auth.response!;
-
-    const storeId = auth.session.storeSlug;
-    const tableId = params.id;
     const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
+    const auth = requireStaff(request, ['owner', 'manager', 'cashier']);
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
+    const tableId = params.id;
     const format = searchParams.get('format') || 'json';
 
     const conn = await connectMongoDB();

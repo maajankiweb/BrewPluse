@@ -1,23 +1,42 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import DashboardShell from '@/components/dashboard/DashboardShell';
-import { ShoppingBag, ChevronRight } from 'lucide-react';
-
-
+import { ShoppingBag, ChevronRight, Check } from 'lucide-react';
+import {
+  addToHardwareCart,
+  getHardwareCartCount,
+} from '@/lib/hardwareCart';
+import HardwareOrdersModal from '@/components/hardware/HardwareOrdersModal';
 
 export default function HardwarePage() {
   const routeParams = useParams();
   const storeSlug = (routeParams?.storeSlug as string) || 'brewpluse';
   const [filter, setFilter] = useState<'all' | 'nfc' | 'qr'>('all');
   const [cartCount, setCartCount] = useState(0);
+  const [addedItem, setAddedItem] = useState<string | null>(null);
+  const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  useEffect(() => {
+    setCartCount(getHardwareCartCount(storeSlug));
+    const handleUpdate = () => {
+      setCartCount(getHardwareCartCount(storeSlug));
+    };
+    window.addEventListener('brewpluse-hardware-cart-update', handleUpdate);
+    return () => window.removeEventListener('brewpluse-hardware-cart-update', handleUpdate);
+  }, [storeSlug]);
+
+  const handleAddToCart = (e: React.MouseEvent, productId: 'nfc-card' | 'qr-code-stand') => {
+    e.preventDefault();
     e.stopPropagation();
-    setCartCount((c) => c + 1);
+    addToHardwareCart({ id: productId, quantity: 1 }, storeSlug);
+    setAddedItem(productId);
+    setTimeout(() => {
+      setAddedItem(null);
+    }, 2000);
   };
 
   return (
@@ -40,6 +59,7 @@ export default function HardwarePage() {
             <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 type="button"
+                onClick={() => setIsOrdersModalOpen(true)}
                 className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#E7ECE9] dark:border-[#1E382E] bg-white dark:bg-[#0E2018] hover:bg-[#F8FAF8] dark:hover:bg-[#142E25] text-[#12201B] dark:text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
               >
                 <ShoppingBag className="w-3.5 h-3.5 text-[#0B5C45] dark:text-[#10B981]" />
@@ -52,7 +72,7 @@ export default function HardwarePage() {
                 <ShoppingBag className="w-3.5 h-3.5 text-[#10B981]" />
                 <span>Cart</span>
                 {cartCount > 0 && (
-                  <span className="ml-1 px-1.5 py-0.2 rounded-full bg-[#10B981] text-[10px] font-bold text-white">
+                  <span className="ml-1 px-1.5 py-0.2 rounded-full bg-[#10B981] text-[10px] font-bold text-white animate-in zoom-in duration-200">
                     {cartCount}
                   </span>
                 )}
@@ -135,17 +155,30 @@ export default function HardwarePage() {
                 <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-zinc-800">
                   <div className="text-left sm:text-right">
                     <span className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white tracking-tight">
-                      ₹350.00
+                      ₹1,500.00
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={handleAddToCart}
-                      className="h-9 px-4 rounded-xl bg-[#F6C358] hover:bg-[#EAA827] active:scale-[0.98] text-neutral-950 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                      onClick={(e) => handleAddToCart(e, 'nfc-card')}
+                      className={`h-9 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
+                        addedItem === 'nfc-card'
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-[#F6C358] hover:bg-[#EAA827] active:scale-[0.98] text-neutral-950'
+                      }`}
                     >
-                      <ShoppingBag className="w-3.5 h-3.5 text-neutral-900" />
-                      <span>Add to Cart</span>
+                      {addedItem === 'nfc-card' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-white" />
+                          <span>Added ✓</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag className="w-3.5 h-3.5 text-neutral-900" />
+                          <span>Add to Cart</span>
+                        </>
+                      )}
                     </button>
                     <div className="text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-200 group-hover:translate-x-0.5 transition-all">
                       <ChevronRight className="w-5 h-5" />
@@ -192,17 +225,30 @@ export default function HardwarePage() {
                 <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-zinc-800">
                   <div className="text-left sm:text-right">
                     <span className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white tracking-tight">
-                      ₹300.00
+                      ₹1,500.00
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={handleAddToCart}
-                      className="h-9 px-4 rounded-xl bg-[#F6C358] hover:bg-[#EAA827] active:scale-[0.98] text-neutral-950 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                      onClick={(e) => handleAddToCart(e, 'qr-code-stand')}
+                      className={`h-9 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
+                        addedItem === 'qr-code-stand'
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-[#F6C358] hover:bg-[#EAA827] active:scale-[0.98] text-neutral-950'
+                      }`}
                     >
-                      <ShoppingBag className="w-3.5 h-3.5 text-neutral-900" />
-                      <span>Add to Cart</span>
+                      {addedItem === 'qr-code-stand' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-white" />
+                          <span>Added ✓</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag className="w-3.5 h-3.5 text-neutral-900" />
+                          <span>Add to Cart</span>
+                        </>
+                      )}
                     </button>
                     <div className="text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-200 group-hover:translate-x-0.5 transition-all">
                       <ChevronRight className="w-5 h-5" />
@@ -214,6 +260,13 @@ export default function HardwarePage() {
           </div>
         </div>
       </div>
+
+      {/* Hardware Orders Modal */}
+      <HardwareOrdersModal
+        isOpen={isOrdersModalOpen}
+        onClose={() => setIsOrdersModalOpen(false)}
+        storeSlug={storeSlug}
+      />
     </DashboardShell>
   );
 }
