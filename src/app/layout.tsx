@@ -17,19 +17,29 @@ export const metadata: Metadata = {
     template: '%s | BrewPluse Cafe OS',
   },
   description:
-    'Free AI-powered cafe POS, QR table ordering, live kitchen display, billing, and recipe inventory with zero monthly subscription fees for modern cafes.',
+    'Free AI-powered Cafe POS (CafePOS) & Restaurant POS system. Contactless QR table ordering, live kitchen display (KDS), thermal billing, and recipe inventory with zero monthly subscription fees for modern cafes and restaurants.',
   keywords: [
+    'cafe POS',
+    'CafePOS',
+    'restaurant POS',
+    'Resturant POS',
+    'cafe',
     'cafe management software',
     'free cafe software',
     'coffee shop POS',
     'restaurant POS software',
+    'free restaurant POS',
     'QR table ordering system',
     'kitchen display system KDS',
     'cafe billing software free',
+    'restaurant billing software',
     'cafe inventory management',
     'cloud cafe point of sale',
     'BrewPluse',
     'BrewPluse POS',
+    'pos for cafes',
+    'best cafe pos',
+    'best restaurant pos',
   ],
   authors: [{ name: 'Ashish Kumar', url: 'https://brewpluse.com' }],
   creator: 'BrewPluse Technologies',
@@ -249,6 +259,27 @@ export default function RootLayout({
     ],
   };
 
+  // Site Navigation Structured Data (Internal Links Hierarchy)
+  const siteNavigationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: [
+      { '@type': 'SiteNavigationElement', position: 1, name: 'Cafe POS (CafePOS)', url: 'https://brewpluse.com/cafe-pos' },
+      { '@type': 'SiteNavigationElement', position: 2, name: 'Restaurant POS System', url: 'https://brewpluse.com/restaurant-pos' },
+      { '@type': 'SiteNavigationElement', position: 3, name: 'Cafe Management Software', url: 'https://brewpluse.com/cafe-management-software' },
+      { '@type': 'SiteNavigationElement', position: 4, name: 'Restaurant Management Software', url: 'https://brewpluse.com/restaurant-management-software' },
+      { '@type': 'SiteNavigationElement', position: 5, name: 'Free Cafe POS Software', url: 'https://brewpluse.com/free-cafe-management-software' },
+      { '@type': 'SiteNavigationElement', position: 6, name: 'Free Restaurant POS', url: 'https://brewpluse.com/free-restaurant-pos' },
+      { '@type': 'SiteNavigationElement', position: 7, name: 'Kitchen Display System (KDS)', url: 'https://brewpluse.com/kitchen-display-system' },
+      { '@type': 'SiteNavigationElement', position: 8, name: 'QR Ordering System', url: 'https://brewpluse.com/qr-ordering-system' },
+      { '@type': 'SiteNavigationElement', position: 9, name: 'Digital QR Menu', url: 'https://brewpluse.com/digital-menu' },
+      { '@type': 'SiteNavigationElement', position: 10, name: 'Staff Waiter Ordering System', url: 'https://brewpluse.com/staff-ordering-system' },
+      { '@type': 'SiteNavigationElement', position: 11, name: 'Features', url: 'https://brewpluse.com/features' },
+      { '@type': 'SiteNavigationElement', position: 12, name: 'Pricing', url: 'https://brewpluse.com/pricing' },
+      { '@type': 'SiteNavigationElement', position: 13, name: 'Knowledge Base & Blog', url: 'https://brewpluse.com/blog' },
+    ],
+  };
+
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -287,6 +318,11 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqSchema) }}
+        />
+        {/* Structured Data: Site Navigation (Internal Linking SEO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
         />
         {/* Automated Cache Invalidation & Stale Service Worker Cleanup */}
         <script

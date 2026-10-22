@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function WhyAndFaqSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -17,30 +18,78 @@ export default function WhyAndFaqSection() {
     { name: 'Real-time Analytics & Sync', brew: '✔', trad: 'Basic Reports', multi: 'Scattered Data' },
   ];
 
-  const faqs = [
+  const faqs: { q: string; a: React.ReactNode }[] = [
     {
       q: 'What is Customer-Faced pricing?',
-      a: 'Under Customer-Faced pricing, your cafe pays ₹0 monthly software fee + ₹1 per order micro-convenience fee added to the guest’s digital bill.',
+      a: (
+        <span>
+          Under Customer-Faced pricing, your cafe pays ₹0 monthly software fee + a transparent ₹1 per order convenience fee added to the guest’s digital bill. Explore our full{' '}
+          <Link href="/pricing" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            ₹0/mo pricing structure
+          </Link>.
+        </span>
+      ),
     },
     {
       q: 'What is Cafe-Faced pricing?',
-      a: 'In Cafe-Faced pricing, your cafe absorbs the ₹1 per order fee. There are still zero monthly subscription fees, zero upfront hardware charges, and no annual locked-in contracts.',
+      a: (
+        <span>
+          In Cafe-Faced pricing, your cafe absorbs the ₹1 per order fee. There are still zero monthly subscription fees, zero upfront hardware charges, and no annual lock-in contracts. See how our{' '}
+          <Link href="/free-cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Free Cafe POS Software
+          </Link>{' '}
+          and{' '}
+          <Link href="/free-restaurant-pos" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Free Restaurant POS
+          </Link>{' '}
+          eliminate recurring software bills.
+        </span>
+      ),
     },
     {
       q: 'Can I choose who pays the BrewPluse fee?',
-      a: 'Yes, absolutely. You can toggle between Customer-Faced and Cafe-Faced modes at any time with a single switch in your cafe settings.',
+      a: 'Yes, absolutely. You can toggle between Customer-Faced and Cafe-Faced modes at any time with a single switch in your cafe dashboard settings.',
     },
     {
-      q: 'What happens after the customer-paid order limit?',
-      a: 'There are no artificial order cutoffs. You can process unlimited dine-in, takeaway, and delivery orders. You only pay for successful orders with zero monthly commitments.',
+      q: 'Does BrewPluse require special POS hardware or proprietary terminals?',
+      a: (
+        <span>
+          No. BrewPluse operates in any web browser and on any Android tablet, iPad, MacBook, or Windows PC. It connects effortlessly to standard 58mm and 80mm thermal receipt printers over USB, LAN, or Bluetooth. Learn more on our{' '}
+          <Link href="/cafe-pos" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Cafe POS Software page
+          </Link>.
+        </span>
+      ),
     },
     {
-      q: 'Will customers see the BrewPluse fee?',
-      a: 'If you enable Customer-Faced mode, a transparent ₹1 line item appears on the checkout summary as a digital service fee. In Cafe-Faced mode, the customer sees ₹0 extra fee.',
+      q: 'Can I manage multiple cafe or restaurant locations from a single dashboard?',
+      a: (
+        <span>
+          Yes. You can switch between outlets, compare sales trajectories, sync master menus, and manage staff permissions across all locations from one unified account with our{' '}
+          <Link href="/cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Cafe Management Software
+          </Link>{' '}
+          and{' '}
+          <Link href="/restaurant-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Restaurant Operations Platform
+          </Link>.
+        </span>
+      ),
     },
     {
-      q: 'Can I manage multiple cafe locations from a single dashboard?',
-      a: 'Yes. You can switch between outlets, compare sales trajectories, sync master menus, and manage staff permissions across all locations from one unified account.',
+      q: 'How does contactless QR table ordering connect to the Kitchen Display?',
+      a: (
+        <span>
+          When a customer places an order via table QR code, the ticket immediately routes to the{' '}
+          <Link href="/kitchen-display-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            Kitchen Display System (KDS)
+          </Link>{' '}
+          with audio alerts and color-coded timers. Cashiers can also see the running tab on their{' '}
+          <Link href="/qr-ordering-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
+            QR Ordering System
+          </Link>.
+        </span>
+      ),
     },
   ];
 

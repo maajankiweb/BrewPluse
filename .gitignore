@@ -36,6 +36,7 @@ brag-output/
 
 # Environment files
 .env*.local
+.env
 
 # Logs
 npm-debug.log*
