@@ -161,3 +161,5 @@ export function useToast() {
   }
   return ctx;
 }
+
+export default useToast;
