@@ -13,7 +13,7 @@ const UpdateTableSchema = z.object({
 });
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -22,6 +22,7 @@ interface RouteParams {
  */
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
+    const { id: tableId } = await params;
     const { searchParams } = new URL(request.url);
     const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
@@ -29,7 +30,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       auth.success && auth.session?.storeSlug
         ? auth.session.storeSlug
         : (storeParam || 'brewpluse');
-    const tableId = params.id;
 
     const body = await request.json().catch(() => null);
     const parsed = UpdateTableSchema.safeParse(body);
@@ -110,6 +110,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
  */
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
+    const { id: tableId } = await params;
     const { searchParams } = new URL(request.url);
     const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
@@ -117,7 +118,6 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       auth.success && auth.session?.storeSlug
         ? auth.session.storeSlug
         : (storeParam || 'brewpluse');
-    const tableId = params.id;
 
     await connectMongoDB();
 

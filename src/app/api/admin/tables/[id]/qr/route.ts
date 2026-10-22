@@ -8,7 +8,7 @@ import { requireStaff } from '@/lib/authService';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -18,6 +18,7 @@ interface RouteParams {
  */
 export async function GET(request: Request, { params }: RouteParams) {
   try {
+    const { id: tableId } = await params;
     const { searchParams } = new URL(request.url);
     const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager', 'cashier']);
@@ -25,7 +26,6 @@ export async function GET(request: Request, { params }: RouteParams) {
       auth.success && auth.session?.storeSlug
         ? auth.session.storeSlug
         : (storeParam || 'brewpluse');
-    const tableId = params.id;
     const format = searchParams.get('format') || 'json';
 
     const conn = await connectMongoDB();

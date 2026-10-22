@@ -9,7 +9,7 @@ import { syncLiveTableToFirestore } from '@/lib/firebaseAdmin';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const RequestBillSchema = z.object({
@@ -24,7 +24,7 @@ const RequestBillSchema = z.object({
  */
 export async function POST(request: Request, { params }: RouteParams) {
   try {
-    const sessionId = params.id;
+    const { id: sessionId } = await params;
     if (!sessionId) {
       return NextResponse.json(
         { error: { code: 'INVALID_ID', message: 'Session ID is required.' } },

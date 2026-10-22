@@ -11,7 +11,7 @@ import { requireStaff } from '@/lib/authService';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -20,11 +20,11 @@ interface RouteParams {
  */
 export async function POST(request: Request, { params }: RouteParams) {
   try {
+    const { id: tableId } = await params;
     const auth = requireStaff(request, ['owner', 'manager']);
     if (!auth.success || !auth.session) return auth.response!;
 
     const storeId = auth.session.storeSlug;
-    const tableId = params.id;
 
     const conn = await connectMongoDB();
     let table: any = null;

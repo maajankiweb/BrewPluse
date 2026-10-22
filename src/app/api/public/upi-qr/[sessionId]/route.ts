@@ -8,7 +8,7 @@ import { Store } from '@/lib/models/Store';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { sessionId: string };
+  params: Promise<{ sessionId: string }>;
 }
 
 /**
@@ -18,7 +18,7 @@ interface RouteParams {
  */
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    const sessionId = params.sessionId;
+    const { sessionId } = await params;
     if (!sessionId) {
       return NextResponse.json(
         { error: { code: 'INVALID_ID', message: 'Session ID is required.' } },

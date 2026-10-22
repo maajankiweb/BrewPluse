@@ -7,7 +7,7 @@ import { getStoreMenu } from '@/lib/menuService';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }
 
 /**
@@ -16,7 +16,7 @@ interface RouteParams {
  */
 export async function GET(request: Request, { params }: RouteParams) {
   try {
-    const { token } = params;
+    const { token } = await params;
     if (!token || typeof token !== 'string' || token.trim().length < 8) {
       return NextResponse.json(
         { error: { code: 'INVALID_TOKEN', message: 'Valid table QR token is required.' } },

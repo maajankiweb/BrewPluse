@@ -12,7 +12,7 @@ import { logPaymentAudit } from '@/lib/auditLog';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const RecordPaymentSchema = z.object({
@@ -35,7 +35,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       return auth.response;
     }
 
-    const sessionId = params.id;
+    const { id: sessionId } = await params;
     if (!sessionId) {
       return NextResponse.json(
         { error: { code: 'INVALID_ID', message: 'Session ID is required' } },

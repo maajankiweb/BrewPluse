@@ -12,7 +12,7 @@ import { syncLiveOrderToFirestore, syncLiveTableToFirestore } from '@/lib/fireba
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -23,7 +23,7 @@ interface RouteParams {
  */
 export async function POST(request: Request, { params }: RouteParams) {
   try {
-    const orderId = params.id;
+    const { id: orderId } = await params;
     if (!orderId) {
       return NextResponse.json(
         { error: { code: 'INVALID_ID', message: 'Order ID is required' } },

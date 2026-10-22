@@ -8,7 +8,7 @@ import { syncLiveOrderToFirestore } from '@/lib/firebaseAdmin';
 export const dynamic = 'force-dynamic';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const CancelOrderSchema = z.object({
@@ -27,7 +27,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       return auth.response;
     }
 
-    const orderIdOrNum = params.id;
+    const { id: orderIdOrNum } = await params;
     if (!orderIdOrNum) {
       return NextResponse.json(
         { error: { code: 'INVALID_ID', message: 'Order ID is required' } },
