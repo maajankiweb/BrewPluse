@@ -55,7 +55,7 @@ export default function Navbar() {
             </button>
 
             {modulesOpen && (
-              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[540px] z-50 animate-fade-in">
+              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[580px] z-50 animate-fade-in">
                 <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5">
                   <div className="grid grid-cols-2 gap-2">
                     <Link
@@ -67,10 +67,27 @@ export default function Navbar() {
                       </div>
                       <div>
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
-                          Point of Sale (POS)
+                          Cafe POS (CafePOS)
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Fast counter billing &amp; print
+                          Rapid 2-tap counter billing &amp; KOT
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/restaurant-pos"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                        <span className="material-symbols-outlined text-[20px]">table_bar</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                          Restaurant POS System
+                        </div>
+                        <div className="text-xs text-gray-500 leading-snug">
+                          Dining floor layout &amp; split checks
                         </div>
                       </div>
                     </Link>
@@ -87,7 +104,7 @@ export default function Navbar() {
                           QR Table Ordering
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Contactless dine-in ordering
+                          Contactless self-ordering &amp; UPI
                         </div>
                       </div>
                     </Link>
@@ -96,15 +113,15 @@ export default function Navbar() {
                       href="/kitchen-display-system"
                       className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">skillet</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
                           Kitchen Display (KDS)
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Paperless kitchen &amp; barista
+                          Paperless kitchen &amp; barista screen
                         </div>
                       </div>
                     </Link>
@@ -121,7 +138,7 @@ export default function Navbar() {
                           Digital QR Menu
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Visual photos &amp; live 86 toggle
+                          Visual food photos &amp; live 86 toggle
                         </div>
                       </div>
                     </Link>
@@ -135,27 +152,10 @@ export default function Navbar() {
                       </div>
                       <div>
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
-                          Waiter Staff Ordering
+                          Staff Waiter Ordering
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Handheld table order taking
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/features#loyalty-stamps"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
-                        <span className="material-symbols-outlined text-[20px]">military_tech</span>
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
-                          Digital Loyalty Stamps
-                        </div>
-                        <div className="text-xs text-gray-500 leading-snug">
-                          Gamified repeat rewards
+                          Handheld mobile order taking
                         </div>
                       </div>
                     </Link>
@@ -166,7 +166,7 @@ export default function Navbar() {
                       className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 transition-colors"
                       href="/features"
                     >
-                      <span>Explore All 18+ Features in Detail</span>
+                      <span>Explore All 18+ Features &amp; POS Modules</span>
                       <span>→</span>
                     </Link>
                   </div>
@@ -192,7 +192,7 @@ export default function Navbar() {
             </button>
 
             {solutionsOpen && (
-              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[460px] z-50 animate-fade-in">
+              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[500px] z-50 animate-fade-in">
                 <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1.5">
                   <Link
                     href="/cafe-management-software"
@@ -206,7 +206,7 @@ export default function Navbar() {
                         Cafe Management Software
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        Designed for coffee shops &amp; bakeries
+                        Built for coffee shops, bakeries &amp; tea cafes
                       </div>
                     </div>
                   </Link>
@@ -223,7 +223,7 @@ export default function Navbar() {
                         Restaurant Management Software
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        Dining room tables, split checks &amp; KDS
+                        Full-service dining rooms, multi-station KOTs &amp; bar
                       </div>
                     </div>
                   </Link>
@@ -237,10 +237,27 @@ export default function Navbar() {
                     </div>
                     <div>
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
-                        Free Cafe Software
+                        Free Cafe POS &amp; Software
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        ₹0/month subscription model
+                        ₹0/month subscription model for modern cafes
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/free-restaurant-pos"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">savings</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                        Free Restaurant POS System
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Table floor plans, split checks &amp; KDS at ₹0/month
                       </div>
                     </div>
                   </Link>

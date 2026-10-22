@@ -225,6 +225,65 @@ export default function Footer() {
 
         </div>
 
+        {/* SEO Keyword Clusters & Internal Linking Directory */}
+        <div className="pt-10 pb-8 border-t border-white/10 text-left">
+          <div className="mb-4">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">
+              POPULAR CAFE &amp; RESTAURANT POS KEYWORDS &amp; SOLUTIONS
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2 text-[11px] text-gray-400">
+            <Link href="/cafe-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Cafe POS Software
+            </Link>
+            <Link href="/cafe-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              CafePOS
+            </Link>
+            <Link href="/restaurant-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Restaurant POS System
+            </Link>
+            <Link href="/restaurant-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Resturant POS
+            </Link>
+            <Link href="/free-cafe-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Free Cafe POS Software
+            </Link>
+            <Link href="/free-restaurant-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Free Restaurant POS
+            </Link>
+            <Link href="/cafe-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Cafe Management Software
+            </Link>
+            <Link href="/restaurant-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Restaurant Management Software
+            </Link>
+            <Link href="/qr-ordering-system" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              QR Ordering System for Cafes
+            </Link>
+            <Link href="/kitchen-display-system" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Kitchen Display System (KDS)
+            </Link>
+            <Link href="/digital-menu" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Digital QR Menu for Cafes
+            </Link>
+            <Link href="/staff-ordering-system" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Staff Waiter Handheld POS
+            </Link>
+            <Link href="/pricing" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              ₹0/Mo POS Pricing
+            </Link>
+            <Link href="/blog/free-pos-systems-for-coffee-shops" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Coffee Shop POS Comparison
+            </Link>
+            <Link href="/blog/cafe-pos-software-india-guide" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Cafe POS Software India
+            </Link>
+            <Link href="/blog/best-cafe-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Best Cafe Software 2026
+            </Link>
+          </div>
+        </div>
+
         {/* Bottom copyright & operational status */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-400">
           <div>

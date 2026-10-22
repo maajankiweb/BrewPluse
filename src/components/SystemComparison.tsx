@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function SystemComparison() {
   return (
@@ -30,7 +31,7 @@ export default function SystemComparison() {
               5 apps, 0 communication.
             </h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
-              A messy legacy POS misses an order. A PDF menu on Google Drive isn&apos;t updating. You manual Excel sheet. It all adds up to chaos.
+              A messy legacy POS misses an order. A static PDF menu isn&apos;t updating. Manual Excel spreadsheets drift. It all adds up to counter chaos.
             </p>
 
             <ul className="space-y-3.5 text-xs text-gray-700 font-medium">
@@ -43,13 +44,13 @@ export default function SystemComparison() {
               <li className="flex items-start gap-2.5">
                 <span className="text-red-500 font-bold shrink-0 text-sm">✕</span>
                 <div>
-                  <strong className="text-red-900 font-bold">Delay &amp; Manual Re-Entry:</strong> Bills, KDS, and stock extra time.
+                  <strong className="text-red-900 font-bold">Delay &amp; Manual Re-Entry:</strong> Bills, KDS, and stock take extra time.
                 </div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="text-red-500 font-bold shrink-0 text-sm">✕</span>
                 <div>
-                  <strong className="text-red-900 font-bold">No Real-time Updates:</strong> Team members operate in isolation with no inventory sync.
+                  <strong className="text-red-900 font-bold">No Real-time Updates:</strong> Baristas, waiters, and cashiers operate in silos without live sync.
                 </div>
               </li>
             </ul>
@@ -73,26 +74,26 @@ export default function SystemComparison() {
               One synchronized heartbeat.
             </h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
-              When an order is placed on Table 7, it arrives on the kitchen screen. Stock is updated. Loyalty is earned. Your team stays on the same page, instantly. One system. One flow. Zero manual re-entry.
+              When an order is placed on Table 7 via <Link href="/qr-ordering-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">QR Table Ordering</Link>, it instantly arrives on the <Link href="/kitchen-display-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">Kitchen Display (KDS)</Link>. Recipe stock auto-deducts in the <Link href="/cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">inventory system</Link>. One flow, zero manual re-entry.
             </p>
 
             <ul className="space-y-3.5 text-xs text-gray-700 font-medium">
               <li className="flex items-start gap-2.5">
                 <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
                 <div>
-                  <strong className="text-emerald-950 font-bold">Instant Sync:</strong> Orders, KDS, payments &amp; inventory in real-time.
+                  <strong className="text-emerald-950 font-bold">Instant Sync:</strong> <Link href="/cafe-pos" className="text-emerald-800 underline font-semibold">Cafe POS</Link> billing, <Link href="/restaurant-pos" className="text-emerald-800 underline font-semibold">Restaurant POS</Link> floor map, KDS, payments &amp; inventory update together in real-time.
                 </div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
                 <div>
-                  <strong className="text-emerald-950 font-bold">Regulars Made Happy:</strong> 1-tap checkout and loyalty builds lasting relationships.
+                  <strong className="text-emerald-950 font-bold">Regulars Made Happy:</strong> 1-tap checkout, digital loyalty stamps, and automated Google reviews build lasting relationships.
                 </div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
                 <div>
-                  <strong className="text-emerald-950 font-bold">Zero Disruptions:</strong> Everything connected in one system saves time, fuel, and happy POS.
+                  <strong className="text-emerald-950 font-bold">Zero Recurring Retainers:</strong> Enjoy full access to our <Link href="/free-cafe-management-software" className="text-emerald-800 underline font-semibold">Free Cafe Software</Link> with ₹0/month software fees.
                 </div>
               </li>
             </ul>
