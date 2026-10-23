@@ -368,6 +368,22 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Google Analytics 4 tag (gtag.js) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-3C318HRRDN"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-3C318HRRDN');
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased text-[#1a1715] bg-[#FBFBFA] min-h-screen flex flex-col selection:bg-emerald-200 selection:text-emerald-950">
         <AppShell>{children}</AppShell>
