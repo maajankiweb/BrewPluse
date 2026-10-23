@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'table-side ordering',
     'cloud restaurant pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/staff-ordering-system',
+  },
 };
 
 export default function StaffOrderingSystemPage() {

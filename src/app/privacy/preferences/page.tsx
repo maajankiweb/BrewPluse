@@ -4,6 +4,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: "Privacy Preferences | BrewPluse – Brew Excellence. Automate Everything.",
   description: "Manage your personal data processing choices and cookie preferences under India's DPDP Act with BrewPluse.",
+  alternates: {
+    canonical: 'https://brewpluse.com/privacy/preferences',
+  },
 };
 
 export default function PrivacyPreferencesPage() {

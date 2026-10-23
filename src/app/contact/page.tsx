@@ -4,6 +4,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: "Contact Customer Support & Partner Onboarding | BrewPluse",
   description: "Get in touch with BrewPluse support for 5-minute cafe onboarding, thermal printer hardware compatibility assistance, billing inquiries, and partnership help.",
+  alternates: {
+    canonical: 'https://brewpluse.com/contact',
+  },
 };
 
 export default function ContactPage() {

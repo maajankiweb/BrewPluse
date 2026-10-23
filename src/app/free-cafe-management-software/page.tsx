@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'free restaurant pos',
     'zero monthly pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/free-cafe-management-software',
+  },
 };
 
 export default function FreeCafeManagementSoftwarePage() {

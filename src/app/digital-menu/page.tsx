@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'touchless menu',
     'cloud cafe pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/digital-menu',
+  },
 };
 
 export default function DigitalMenuPage() {

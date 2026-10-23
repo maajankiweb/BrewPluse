@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'restaurant pos kds',
     'kitchen order display',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/kitchen-display-system',
+  },
 };
 
 export default function KitchenDisplaySystemPage() {

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'restaurant billing system',
     'kitchen display system',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/restaurant-management-software',
+  },
 };
 
 export default function RestaurantManagementSoftwarePage() {

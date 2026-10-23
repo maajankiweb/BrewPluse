@@ -4,6 +4,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: "Download Android APK & Desktop POS Software | BrewPluse",
   description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
+  alternates: {
+    canonical: 'https://brewpluse.com/download',
+  },
 };
 
 export default function DownloadPage() {

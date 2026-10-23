@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Shipping &amp; Digital Cloud Delivery Policy | BrewPluse",
-  description: "Read the official service delivery and cloud fulfillment policy for BrewPluse&#x27;s instant software account activation, POS app downloads, and support services.",
+  title: "Shipping & Digital Cloud Delivery Policy | BrewPluse",
+  description: "Read the official service delivery and cloud fulfillment policy for BrewPluse's instant software account activation, POS app downloads, and support services.",
+  alternates: {
+    canonical: 'https://brewpluse.com/shipping',
+  },
 };
 
 export default function ShippingPage() {

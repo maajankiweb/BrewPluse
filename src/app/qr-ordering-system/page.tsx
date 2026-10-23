@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'upi table payments',
     'cloud cafe pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/qr-ordering-system',
+  },
 };
 
 export default function QrOrderingSystemPage() {

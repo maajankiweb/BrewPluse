@@ -41,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
     })),
     { url: '/status', priority: 0.5, changeFrequency: 'hourly' as const },
+    { url: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/contact', priority: 0.5, changeFrequency: 'monthly' as const },
     { url: '/login', priority: 0.5, changeFrequency: 'monthly' as const },
     { url: '/signup', priority: 0.6, changeFrequency: 'monthly' as const },

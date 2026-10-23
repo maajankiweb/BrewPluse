@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Refund &amp; Cancellation Policy Guidelines | BrewPluse",
-  description: "Review BrewPluse&#x27;s refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
+  title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+  description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
+  alternates: {
+    canonical: 'https://brewpluse.com/refund',
+  },
 };
 
 export default function RefundPage() {

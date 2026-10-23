@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     'cafe billing software price',
     'cafepos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/pricing',
+  },
 };
 
 export default function PricingPage() {

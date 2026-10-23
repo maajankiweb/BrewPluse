@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'cafe inventory management',
     'restaurant management software',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/cafe-management-software',
+  },
 };
 
 export default function CafeManagementSoftwarePage() {

@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     'cloud restaurant pos',
     'kot routing',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/restaurant-pos',
+  },
 };
 
 export default function RestaurantPosPage() {

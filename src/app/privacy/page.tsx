@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Privacy Notice &amp; Data Protection Policy (India DPDP 2023 Aligned) | BrewPluse",
-  description: "BrewPluse&#x27;s Privacy Notice details our itemized personal data collection, processing purposes, Cloudflare D1 retention periods, and your rights under the Digital Personal Data Protection Act, 2023.",
+  title: "Privacy Notice & Data Protection Policy (India DPDP 2023 Aligned) | BrewPluse",
+  description: "BrewPluse's Privacy Notice details our itemized personal data collection, processing purposes, retention periods, and your rights under the Digital Personal Data Protection Act, 2023.",
+  alternates: {
+    canonical: 'https://brewpluse.com/privacy',
+  },
 };
 
 export default function PrivacyPage() {

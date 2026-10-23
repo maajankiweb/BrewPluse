@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'restaurant pos',
     'kot printing pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/cafe-pos',
+  },
 };
 
 export default function CafePosPage() {

@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     'cloud restaurant billing',
     'zero monthly pos',
   ],
+  alternates: {
+    canonical: 'https://brewpluse.com/free-restaurant-pos',
+  },
 };
 
 export default function FreeRestaurantPosPage() {
