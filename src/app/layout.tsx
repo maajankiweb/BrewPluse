@@ -289,6 +289,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <meta name="msvalidate.01" content="69B3649ED10EF133B495627267F3A40C" />
+        <meta name="google-site-verification" content="NSZIbu38965wNjaAYP44xNc6rW1MmbZNNDAl4snYHrQ" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
