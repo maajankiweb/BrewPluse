@@ -2,9 +2,17 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  const host = (request.headers.get('host') || '').toLowerCase();
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get('brewpluse_session')?.value;
   const authHeader = request.headers.get('authorization');
+
+  // Subdomain routing for status.brewpluse.com
+  if (host.startsWith('status.') || host.includes('status.brewpluse.com')) {
+    if (pathname === '/' || pathname === '') {
+      return NextResponse.rewrite(new URL('/status', request.url));
+    }
+  }
 
   // Protect dashboard routes: require active session cookie
   if (pathname.startsWith('/dashboard')) {
@@ -38,6 +46,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
+    '/status',
     '/dashboard/:path*',
     '/api/setup',
     '/api/extension/:path*',
