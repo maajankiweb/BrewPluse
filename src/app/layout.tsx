@@ -94,6 +94,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: 'NSZIbu38965wNjaAYP44xNc6rW1MmbZNNDAl4snYHrQ',
+    other: {
+      'msvalidate.01': '69B3649ED10EF133B495627267F3A40C',
+    },
+  },
 };
 
 export default function RootLayout({
