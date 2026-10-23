@@ -43,18 +43,18 @@ export default function Testimonials() {
             {/* Left Header Column */}
             <div className="lg:w-1/4 shrink-0 text-left">
               <span className="text-xs font-mono font-bold tracking-wider text-[#8a857f] uppercase mb-2 block">
-                LOVE FROM CAFES
+                VERIFIED OPERATOR REVIEWS
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight leading-snug mb-3">
-                Cafes love<br />
-                working with<br />
-                <span className="text-emerald-700 inline-flex items-center gap-1.5">
-                  BrewPluse{' '}
-                  <span className="material-symbols-outlined text-amber-500 text-[24px]">
-                    favorite
-                  </span>
+                The standard<br />
+                for modern<br />
+                <span className="text-emerald-700">
+                  Coffee Bars.
                 </span>
               </h2>
+              <p className="text-xs text-gray-500 mb-3">
+                How independent roasters &amp; multi-outlet cafes accelerate service with BrewPluse.
+              </p>
 
               <div className="flex items-center gap-1.5 text-xs text-[#524d47] mt-4">
                 <div className="flex text-amber-500">

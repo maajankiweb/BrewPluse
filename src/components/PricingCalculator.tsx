@@ -119,32 +119,32 @@ export default function PricingCalculator() {
               {/* Order summary preview */}
               <div className="rounded-2xl p-4 bg-black/40 border border-white/5 space-y-2 text-xs font-mono mb-6">
                 <div className="flex justify-between text-gray-400 text-xs pb-2 border-b border-white/10">
-                  <span>BREWPLUSE ORDER SUMMARY</span>
-                  <span>Order #BP1024 • Table 4</span>
+                  <span>BREWPLUSE TICKET</span>
+                  <span>Order #BP-8421 • Table 6 (Dine-in)</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                  <span>Cappuccino</span>
-                  <span>₹120</span>
+                  <span>Single Origin Cortado (Oat Milk)</span>
+                  <span>₹180</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                  <span>Cheese Sandwich</span>
-                  <span>₹99</span>
+                  <span>Wild Mushroom Sourdough Toast</span>
+                  <span>₹260</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                  <span>Brownie</span>
-                  <span>₹120</span>
+                  <span>Belgian Dark Chocolate Cookie</span>
+                  <span>₹140</span>
                 </div>
                 <div className="flex justify-between text-gray-400 pt-1 border-t border-white/10">
-                  <span>Food &amp; beverage total</span>
-                  <span>₹339</span>
+                  <span>Subtotal</span>
+                  <span>₹580</span>
                 </div>
                 <div className="flex justify-between text-emerald-400 font-bold">
-                  <span>BrewPluse order fee</span>
+                  <span>Cloud Sync &amp; Platform Fee</span>
                   <span>₹1</span>
                 </div>
                 <div className="flex justify-between text-white font-extrabold text-sm pt-1 border-t border-white/10">
-                  <span>Order total</span>
-                  <span className="text-emerald-300">₹339 + ₹1</span>
+                  <span>Total Amount</span>
+                  <span className="text-emerald-300">₹580 + ₹1</span>
                 </div>
               </div>
 
@@ -165,90 +165,47 @@ export default function PricingCalculator() {
         <div className="rounded-3xl p-6 sm:p-10 bg-[#121914] border border-emerald-900/40 shadow-xl mb-16 text-left">
           <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold mb-2">
             <span className="material-symbols-outlined text-[20px]">help</span>
-            <span>Who pays the ₹1?</span>
+            <span>Who pays the ₹1 platform fee?</span>
           </div>
           <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
-            The ₹1 BrewPluse fee is handled as part of the eligible order&apos;s payment flow. BrewPluse provides complete flexibility depending on your cafe&apos;s preferred setup:
+            BrewPluse gives complete billing freedom to cafe owners. You choose the settlement model that fits your brand:
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-white/10">
             <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs sm:text-sm">
                 <span className="material-symbols-outlined text-[18px]">person</span>
-                <span>Customer-Faced Model</span>
+                <span>Guest Convenience Model</span>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed">
-                On eligible orders, the ₹1 BrewPluse fee is added to the customer&apos;s order total and shown clearly before payment.
+                The nominal ₹1 convenience fee is added to the digital checkout slip transparently for the guest.
               </p>
               <div className="text-xs text-gray-300 font-mono space-y-1 pt-1">
-                <div>• Cafe keeps 100% of food revenue</div>
-                <div>• Cafe pays <strong>₹0 software fee &amp; ₹0 order fee</strong></div>
+                <div>• Cafe retains 100% of dish revenue</div>
+                <div>• Cafe pays <strong>₹0 monthly fees &amp; ₹0 per order</strong></div>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
               <div className="flex items-center gap-2 text-amber-400 font-bold text-xs sm:text-sm">
                 <span className="material-symbols-outlined text-[18px]">store</span>
-                <span>Cafe-Faced Model</span>
+                <span>Merchant Absorbed Model</span>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed">
-                The ₹1 BrewPluse fee is covered by the cafe according to applicable order terms, keeping the customer&apos;s bill completely fee-free.
+                Your cafe settles the nominal platform fee in the backend. Customers experience completely clean bills with no added fees.
               </p>
               <div className="text-xs text-gray-300 font-mono space-y-1 pt-1">
-                <div>• Frictionless customer checkout</div>
+                <div>• Frictionless guest ordering experience</div>
                 <div>• Software subscription remains <strong>₹0 /month</strong></div>
               </div>
             </div>
           </div>
 
           <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-gray-400">
-            <span>You can switch between fee models anytime in your BrewPluse dashboard.</span>
+            <span>Toggle between modes anytime in your BrewPluse business settings.</span>
             <span className="text-emerald-400 font-bold">Both options = ₹0 monthly software bill</span>
           </div>
         </div>
-
-        {/* Video Walkthrough Section (Temporarily hidden until custom BrewPluse video is published) */}
-        {/*
-        <div className="rounded-3xl p-6 sm:p-10 bg-[#121914] border border-emerald-900/40 shadow-xl mb-16 text-left">
-          <div className="max-w-3xl mb-6">
-            <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 mb-2">
-              VIDEO WALKTHROUGH • HOW TO USE BREWPLUSE
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
-              See How to Run Your Cafe on BrewPluse
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-              Watch our complete step-by-step video guide on configuring your menu, table QR ordering, cashier billing, and thermal receipt printing.
-            </p>
-          </div>
-
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10 shadow-2xl">
-            <iframe
-              src="https://www.youtube.com/embed/pt-x6OqOvIA?si=brewpluse"
-              title="BrewPluse Cafe POS &amp; Operations Setup Guide"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-
-          <div className="mt-4 flex items-center justify-between flex-wrap gap-3 text-xs font-mono text-gray-400 px-2">
-            <a
-              href="https://youtu.be/pt-x6OqOvIA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-bold"
-            >
-              <span className="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
-              <span>Watch directly on YouTube (https://youtu.be/pt-x6OqOvIA)</span>
-              <span className="material-symbols-outlined text-[14px]">open_in_new</span>
-            </a>
-            <a href="/#faq" className="text-gray-300 hover:text-white underline">
-              Read step-by-step setup documentation →
-            </a>
-          </div>
-        </div>
-        */}
 
         {/* Bottom Banner of Section 5 */}
         <div className="max-w-2xl mx-auto text-center">

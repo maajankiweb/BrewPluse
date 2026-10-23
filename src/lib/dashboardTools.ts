@@ -191,20 +191,7 @@ export const ALL_DASHBOARD_TOOLS: DashboardTool[] = [
     path: '/support',
     iconClasses: 'bg-[#DDF5EA] text-[#075C45] border-[#0B8F69]/20 group-hover:bg-[#C8EEDD] dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40',
   },
-  /* Video Guide temporarily hidden until custom BrewPluse video is ready
-  {
-    id: 'video-guide',
-    title: 'Video Setup Guide',
-    shortLabel: 'Video Setup Guide',
-    desc: 'Step-by-step setup walkthrough video',
-    category: 'support',
-    icon: PlayCircle,
-    path: 'https://youtu.be/pt-x6OqOvIA',
-    badge: 'External',
-    isExternal: true,
-    iconClasses: 'bg-[#EBF3FA] text-[#3975C6] border-[#3975C6]/20 group-hover:bg-[#DCEDFC] dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/40',
-  },
-  */
+
   {
     id: 'status',
     title: 'System Status',

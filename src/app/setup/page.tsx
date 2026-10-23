@@ -541,7 +541,7 @@ export default function SetupPage() {
       </div>
 
       <div className="relative z-10 flex flex-col lg:flex-row min-h-screen w-full">
-        {/* LEFT SIDEBAR: Matches CafeFlow & User Screenshot Exactly */}
+        {/* LEFT SIDEBAR: Setup Progress & Workspace Overview */}
         <div className="lg:w-[35%] xl:w-[30%] bg-[#1a1715] border-r border-white/5 p-8 lg:p-12 flex flex-col justify-between relative z-20 min-h-[30vh] lg:min-h-screen">
           <div>
             {/* Logo and Wordmark */}
@@ -1194,7 +1194,7 @@ export default function SetupPage() {
             </div>
           )}
 
-          {/* STEP 5: REVIEW SUMMARY (Exact match with CafeFlow) */}
+          {/* STEP 5: REVIEW SUMMARY */}
           {currentState === 'REVIEW' && (
             <div className="flex flex-col w-full h-full justify-center max-w-lg animate-fade-in space-y-6">
               <div className="space-y-1">
@@ -1289,7 +1289,7 @@ export default function SetupPage() {
         </div>
       </div>
 
-      {/* Floating Bottom-Right Sign Out Button (Exact match with CafeFlow) */}
+      {/* Floating Bottom-Right Sign Out Button */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           type="button"

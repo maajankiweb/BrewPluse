@@ -7,23 +7,22 @@ export default function WhyAndFaqSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const comparisonRows = [
-    { name: 'Free to Start', brew: '✔', trad: '✕', multi: '✕' },
-    { name: 'Customer-Faced Pricing', brew: '✔ (Choose payer)', trad: '✕', multi: '✕' },
-    { name: 'Cafe-Faced Option', brew: '✔ (Absorb if desired)', trad: '✕', multi: '✕' },
-    { name: 'Per-Order Usage Model', brew: '✔ (Pay as you grow)', trad: 'Heavy Upfront', multi: 'Recurring SaaS' },
-    { name: 'Transparent Checkout Fee', brew: '✔ (Clear breakdown)', trad: '✕', multi: '✕' },
-    { name: 'No Forced Subscription', brew: '✔', trad: 'Annual Contracts', multi: 'Fixed Monthly Bills' },
-    { name: 'Configurable Order Threshold', brew: '✔ (Auto-transition)', trad: '✕', multi: '✕' },
-    { name: 'Works on Any Device', brew: '✔', trad: '✕', multi: 'Differs' },
-    { name: 'Real-time Analytics & Sync', brew: '✔', trad: 'Basic Reports', multi: 'Scattered Data' },
+    { name: 'Zero Monthly SaaS Retainers', brew: '✔ (₹0/month)', trad: '₹3,000 - ₹8,000/mo', multi: 'Multiple SaaS Bills' },
+    { name: 'Flexible Fee Settlement (Guest or Merchant)', brew: '✔ (Full Control)', trad: '✕', multi: '✕' },
+    { name: 'Offline Write-Ahead Resilience', brew: '✔ (Zero Drop)', trad: '✕ (Freezes)', multi: 'Differs' },
+    { name: 'Instant UPI Soundbox Audio Dispatch', brew: '✔ (Built-in)', trad: 'Separate Device', multi: '✕' },
+    { name: 'Interactive Table QR & Self-Checkout', brew: '✔ (Dynamic)', trad: '✕ or Expensive Addon', multi: 'Separate QR App' },
+    { name: 'Runs on Any Phone, Tablet, or PC', brew: '✔', trad: 'Proprietary Terminal Required', multi: 'Differs' },
+    { name: 'Real-time Barista KDS Synchronization', brew: '✔ (Sub-second)', trad: 'Manual Printing Only', multi: 'Scattered Tickets' },
+    { name: 'Recipe Batch & Ingredient Depletion', brew: '✔ (Automated)', trad: 'Manual Excel', multi: 'Disconnected ERP' },
   ];
 
   const faqs: { q: string; a: React.ReactNode }[] = [
     {
-      q: 'What is Customer-Faced pricing?',
+      q: 'How does the ₹0 monthly software fee work?',
       a: (
         <span>
-          Under Customer-Faced pricing, your cafe pays ₹0 monthly software fee + a transparent ₹1 per order convenience fee added to the guest’s digital bill. Explore our full{' '}
+          BrewPluse doesn&apos;t charge fixed monthly software subscriptions or expensive upfront software licenses. You get full access to all POS, KDS, inventory, and table QR features with transparent, usage-based per-order economics. Explore our full{' '}
           <Link href="/pricing" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
             ₹0/mo pricing structure
           </Link>.
@@ -31,10 +30,10 @@ export default function WhyAndFaqSection() {
       ),
     },
     {
-      q: 'What is Cafe-Faced pricing?',
+      q: 'What is the difference between Guest Convenience and Merchant Absorbed billing?',
       a: (
         <span>
-          In Cafe-Faced pricing, your cafe absorbs the ₹1 per order fee. There are still zero monthly subscription fees, zero upfront hardware charges, and no annual lock-in contracts. See how our{' '}
+          In the <strong>Guest Convenience Model</strong>, a transparent ₹1 convenience fee is added to the guest’s digital checkout slip. In the <strong>Merchant Absorbed Model</strong>, your cafe absorbs the nominal fee so the guest pays exactly the menu price. See how our{' '}
           <Link href="/free-cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
             Free Cafe POS Software
           </Link>{' '}
@@ -42,13 +41,13 @@ export default function WhyAndFaqSection() {
           <Link href="/free-restaurant-pos" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
             Free Restaurant POS
           </Link>{' '}
-          eliminate recurring software bills.
+          eliminate heavy recurring software overhead.
         </span>
       ),
     },
     {
-      q: 'Can I choose who pays the BrewPluse fee?',
-      a: 'Yes, absolutely. You can toggle between Customer-Faced and Cafe-Faced modes at any time with a single switch in your cafe dashboard settings.',
+      q: 'Can I switch between fee models at any time?',
+      a: 'Yes, absolutely. You can toggle between Guest Convenience and Merchant Absorbed modes at any time with a single click in your cafe dashboard settings.',
     },
     {
       q: 'Does BrewPluse require special POS hardware or proprietary terminals?',

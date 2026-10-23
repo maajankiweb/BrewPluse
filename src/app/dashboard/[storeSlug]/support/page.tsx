@@ -109,53 +109,7 @@ export default function SupportPage() {
         </Link>
       </div>
 
-      {/* Tutorial Video Card (Temporarily hidden until custom BrewPluse video is published) */}
-      {/*
-      <div className="p-4 border border-stone-200 bg-white rounded-xl space-y-3 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="space-y-0.5">
-            <h3 className="font-bold text-sm text-stone-900 flex items-center gap-2">
-              <span className="text-amber-500">🎥</span> BrewPluse Setup &amp; Tutorial Guide
-            </h3>
-            <p className="text-xs text-stone-500">
-              Watch our step-by-step tutorial on how to configure menus, tables, and start taking QR orders.
-            </p>
-          </div>
-          <a
-            href="https://youtu.be/pt-x6OqOvIA"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-red-600/10 hover:bg-red-600/20 text-red-600 border border-red-500/20 transition-all shrink-0 self-start sm:self-auto"
-          >
-            <span>Watch on YouTube</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        </div>
 
-        <div className="aspect-video w-full rounded-xl overflow-hidden border border-stone-200 bg-black shadow-xs">
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/pt-x6OqOvIA"
-            title="BrewPluse Setup Video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-stone-400 pt-1 border-t border-stone-100">
-          <span>Tutorial link to share:</span>
-          <a
-            href="https://youtu.be/pt-x6OqOvIA"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-emerald-600 font-mono font-medium hover:underline"
-          >
-            https://youtu.be/pt-x6OqOvIA
-          </a>
-        </div>
-      </div>
-      */}
 
       {/* Direct WhatsApp Box */}
       <div className="p-4 border border-stone-200 bg-white rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">

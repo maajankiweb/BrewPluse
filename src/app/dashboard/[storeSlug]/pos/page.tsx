@@ -1178,7 +1178,7 @@ export default function PosPage() {
         </div>
       )}
 
-      {/* Payment Workflow Setup Modal (Exact match with CafeFlow screenshot) */}
+      {/* Payment Workflow Setup Modal */}
       {isWorkflowModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
           <div className="relative w-full max-w-[480px] rounded-[32px] bg-white p-7 sm:p-10 shadow-2xl border border-neutral-100 text-left space-y-6">

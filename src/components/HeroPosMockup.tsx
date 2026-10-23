@@ -6,10 +6,10 @@ export default function HeroPosMockup() {
   const [activeTab, setActiveTab] = useState<'all' | 'dine-in' | 'takeaway'>('all');
 
   const orders = [
-    { id: '#BP1289', name: 'Emma Watson', type: 'Dine-in', amount: '₹1,250', status: 'Paid', statusColor: 'bg-emerald-100 text-emerald-800', time: '2 min ago' },
-    { id: '#BP1287', name: 'James Smith', type: 'Takeaway', amount: '₹450', status: 'Paid', statusColor: 'bg-emerald-100 text-emerald-800', time: '5 min ago' },
-    { id: '#BP1284', name: 'Olivia Brown', type: 'Delivery', amount: '₹1,480', status: 'Preparing', statusColor: 'bg-amber-100 text-amber-800', time: '7 min ago' },
-    { id: '#BP1278', name: 'William Jones', type: 'Dine-in', amount: '₹750', status: 'Paid', statusColor: 'bg-emerald-100 text-emerald-800', time: '10 min ago' },
+    { id: '#BP-8941', table: 'T-04', customer: 'Rohan Sharma', items: 'Cortado & Almond Croissant', type: 'Dine-in', amount: '₹480', status: 'Settled', statusColor: 'bg-emerald-100 text-emerald-800 border-emerald-200', time: 'Just now' },
+    { id: '#BP-8940', table: 'T-02', customer: 'Priya Nair', items: 'Nitro Cold Brew & Sourdough Toast', type: 'Dine-in', amount: '₹620', status: 'KDS Prep', statusColor: 'bg-amber-100 text-amber-800 border-amber-200', time: '3 min ago' },
+    { id: '#BP-8939', table: 'Counter', customer: 'Aarav Patel', items: 'Single Origin Flat White (Oat)', type: 'Takeaway', amount: '₹290', status: 'Ready', statusColor: 'bg-blue-100 text-blue-800 border-blue-200', time: '6 min ago' },
+    { id: '#BP-8938', table: 'Delivery', customer: 'Neha Kapoor', items: 'Pour Over Guji & Walnut Cake', type: 'Takeaway', amount: '₹540', status: 'Settled', statusColor: 'bg-emerald-100 text-emerald-800 border-emerald-200', time: '11 min ago' },
   ];
 
   const filteredOrders = activeTab === 'all'
@@ -17,120 +17,123 @@ export default function HeroPosMockup() {
     : orders.filter((o) => o.type.toLowerCase() === activeTab.toLowerCase());
 
   return (
-    <div className="relative w-full rounded-2xl md:rounded-3xl p-3 sm:p-4 bg-white/80 border border-[#E7E5E0] shadow-xl backdrop-blur-md overflow-hidden">
-      {/* Tablet Screen */}
-      <div className="w-full rounded-xl border border-[#EBE8E3] bg-[#FCFCFA] overflow-hidden flex flex-col md:flex-row">
+    <div className="relative w-full rounded-2xl md:rounded-3xl p-3 sm:p-5 bg-gradient-to-b from-[#181d1a] to-[#0f1311] border border-[#2b3530] shadow-2xl overflow-hidden text-left">
+      {/* Top subtle lighting highlight */}
+      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+
+      {/* Main Terminal Shell */}
+      <div className="w-full rounded-xl md:rounded-2xl border border-[#26312a] bg-[#121614] overflow-hidden flex flex-col md:flex-row shadow-inner">
         
-        {/* Left Dark Sidebar */}
-        <aside className="w-40 bg-[#161a18] text-white p-3 hidden md:flex flex-col justify-between shrink-0 text-left">
+        {/* Left Dark Sidebar Navigation */}
+        <aside className="w-44 bg-[#0c0f0d] text-gray-300 p-3.5 hidden md:flex flex-col justify-between shrink-0 border-r border-[#1e2722]">
           <div>
-            <div className="flex items-center gap-2 px-1 py-1.5 mb-3">
-              <span className="w-5 h-5 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <span className="material-symbols-outlined text-[14px]">local_cafe</span>
+            <div className="flex items-center gap-2 px-1 py-1 mb-4">
+              <span className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                BP
               </span>
-              <span className="font-extrabold text-xs tracking-tight text-white">
+              <span className="font-extrabold text-sm tracking-tight text-white">
                 Brew<span className="text-emerald-400">Pluse</span>
+                <span className="text-[9px] font-mono ml-1 px-1 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-normal">v3.2</span>
               </span>
             </div>
 
-            <nav className="space-y-0.5 text-xs font-medium text-gray-300">
-              <div className="flex items-center gap-2 px-2 py-1 rounded bg-emerald-600/20 text-emerald-400 font-semibold cursor-default">
-                <span className="material-symbols-outlined text-[14px]">dashboard</span> Dashboard
+            <nav className="space-y-1 text-xs font-medium">
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 font-semibold border border-emerald-500/20">
+                <span className="material-symbols-outlined text-[15px]">point_of_sale</span> Live Counter
               </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">receipt_long</span> Orders
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-default">
+                <span className="material-symbols-outlined text-[15px]">table_bar</span> Floor &amp; Tables
               </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">restaurant_menu</span> Menu
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-default">
+                <span className="material-symbols-outlined text-[15px]">soup_kitchen</span> KDS Queue
               </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">qr_code_2</span> QR Menu
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-default">
+                <span className="material-symbols-outlined text-[15px]">qr_code_scanner</span> Dynamic QR
               </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">group</span> Customers
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-default">
+                <span className="material-symbols-outlined text-[15px]">receipt_long</span> Orders Ledger
               </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">bar_chart</span> Analytics
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">military_tech</span> Loyalty
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">receipt_long</span> Billing &amp; Usage
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">two_wheeler</span> Delivery
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1 rounded hover:text-white cursor-default">
-                <span className="material-symbols-outlined text-[14px]">settings</span> Settings
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-white/5 transition-colors cursor-default">
+                <span className="material-symbols-outlined text-[15px]">query_stats</span> Sales &amp; Cohorts
               </div>
             </nav>
           </div>
+
+          <div className="pt-3 border-t border-[#1e2722] text-[10px] text-gray-500 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Soundbox Online
+            </span>
+            <span className="font-mono text-gray-600">8ms</span>
+          </div>
         </aside>
 
-        {/* Right Dashboard Main Area */}
-        <div className="flex-1 p-3.5 sm:p-4 bg-[#FBFBFA] flex flex-col justify-between overflow-hidden">
+        {/* Right Dashboard Workspace */}
+        <div className="flex-1 p-3.5 sm:p-5 bg-[#141816] flex flex-col justify-between overflow-hidden">
           
-          {/* Top greeting bar */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-[#EBE8E3]">
-            <div className="text-left">
-              <div className="text-xs font-bold text-[#1a1715] flex items-center gap-1">
-                Good morning, Alex
+          {/* Top terminal bar */}
+          <div className="flex items-center justify-between pb-3 border-b border-[#222a25]">
+            <div>
+              <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                <span>The Roast Room • Indiranagar</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  POS #01 Active
+                </span>
               </div>
-              <div className="text-[10px] text-gray-500">
-                Here&apos;s what&apos;s happening in your cafe today
+              <div className="text-[11px] text-gray-400 mt-0.5">
+                Real-time synchronized floor • Offline-ready terminal
               </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="px-2 py-0.5 rounded-md bg-white border border-[#EBE8E3] text-[10px] font-mono font-medium text-gray-700">
-                Cafe Coffee Day ▼
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-md bg-[#1a211d] border border-[#2b3530] text-[11px] font-mono text-gray-300">
+                Shift: Morning Rush ▼
               </span>
-              <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[9px] font-bold">
-                A
-              </div>
             </div>
           </div>
 
           {/* 4 Metric cards */}
-          <div className="grid grid-cols-4 gap-2 my-2.5 text-left">
-            <div className="p-2 rounded-lg bg-white border border-[#EBE8E3]">
-              <div className="text-[9px] font-mono text-gray-500">Total Orders</div>
-              <div className="text-sm font-bold text-[#1a1715]">128</div>
-              <div className="text-[8px] font-mono text-emerald-600 font-semibold">▲ 16% vs yesterday</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-3">
+            <div className="p-2.5 rounded-xl bg-[#18201b] border border-[#26312a]">
+              <div className="text-[10px] font-mono text-gray-400">Today's Revenue</div>
+              <div className="text-base font-bold text-white mt-0.5">₹38,420</div>
+              <div className="text-[9px] font-mono text-emerald-400 font-semibold mt-0.5">▲ +18.4% vs avg</div>
             </div>
 
-            <div className="p-2 rounded-lg bg-white border border-[#EBE8E3]">
-              <div className="text-[9px] font-mono text-gray-500">Revenue</div>
-              <div className="text-sm font-bold text-[#1a1715]">₹24,860</div>
-              <div className="text-[8px] font-mono text-emerald-600 font-semibold">▲ 21% vs yesterday</div>
+            <div className="p-2.5 rounded-xl bg-[#18201b] border border-[#26312a]">
+              <div className="text-[10px] font-mono text-gray-400">Table Turn Time</div>
+              <div className="text-base font-bold text-white mt-0.5">28 min</div>
+              <div className="text-[9px] font-mono text-emerald-400 font-semibold mt-0.5">▼ 6m faster with QR</div>
             </div>
 
-            <div className="p-2 rounded-lg bg-white border border-[#EBE8E3]">
-              <div className="text-[9px] font-mono text-gray-500">New Customers</div>
-              <div className="text-sm font-bold text-[#1a1715]">36</div>
-              <div className="text-[8px] font-mono text-emerald-600 font-semibold">▲ 12% vs yesterday</div>
+            <div className="p-2.5 rounded-xl bg-[#18201b] border border-[#26312a]">
+              <div className="text-[10px] font-mono text-gray-400">Active Tables</div>
+              <div className="text-base font-bold text-white mt-0.5">14 / 18</div>
+              <div className="text-[9px] font-mono text-gray-400 mt-0.5">78% floor capacity</div>
             </div>
 
-            <div className="p-2 rounded-lg bg-white border border-[#EBE8E3]">
-              <div className="text-[9px] font-mono text-gray-500">Pending Orders</div>
-              <div className="text-sm font-bold text-[#1a1715]">8</div>
-              <div className="text-[8px] font-mono text-amber-600 font-semibold">15m avg ⏳</div>
+            <div className="p-2.5 rounded-xl bg-[#18201b] border border-[#26312a]">
+              <div className="text-[10px] font-mono text-gray-400">UPI Soundbox</div>
+              <div className="text-base font-bold text-emerald-400 mt-0.5">100% Instant</div>
+              <div className="text-[9px] font-mono text-emerald-400 mt-0.5">Zero missed alerts</div>
             </div>
           </div>
 
-          {/* Live Orders + Sales Overview chart */}
-          <div className="grid grid-cols-12 gap-2.5 mt-1 text-left">
+          {/* Live Orders + Kitchen Activity */}
+          <div className="grid grid-cols-12 gap-3 mt-1">
             
-            {/* Live orders widget */}
-            <div className="col-span-12 md:col-span-7 p-2.5 rounded-xl bg-white border border-[#EBE8E3]">
-              <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-gray-100">
-                <span className="text-xs font-bold text-[#141210]">Live Orders</span>
-                <div className="flex gap-1 text-[9px]">
+            {/* Live orders table */}
+            <div className="col-span-12 md:col-span-7 p-3 rounded-xl bg-[#18201b] border border-[#26312a]">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#242e28]">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-white">Live Orders Feed</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                </div>
+                <div className="flex gap-1 text-[10px]">
                   <button
                     type="button"
                     onClick={() => setActiveTab('all')}
-                    className={`px-1.5 py-0.2 rounded font-semibold cursor-pointer ${
-                      activeTab === 'all' ? 'bg-black text-white' : 'text-gray-500'
+                    className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
+                      activeTab === 'all' ? 'bg-emerald-500 text-white font-bold' : 'text-gray-400 hover:text-white'
                     }`}
                   >
                     All
@@ -138,8 +141,8 @@ export default function HeroPosMockup() {
                   <button
                     type="button"
                     onClick={() => setActiveTab('dine-in')}
-                    className={`px-1.5 py-0.2 rounded font-semibold cursor-pointer ${
-                      activeTab === 'dine-in' ? 'bg-black text-white' : 'text-gray-500'
+                    className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
+                      activeTab === 'dine-in' ? 'bg-emerald-500 text-white font-bold' : 'text-gray-400 hover:text-white'
                     }`}
                   >
                     Dine-in
@@ -147,8 +150,8 @@ export default function HeroPosMockup() {
                   <button
                     type="button"
                     onClick={() => setActiveTab('takeaway')}
-                    className={`px-1.5 py-0.2 rounded font-semibold cursor-pointer ${
-                      activeTab === 'takeaway' ? 'bg-black text-white' : 'text-gray-500'
+                    className={`px-2 py-0.5 rounded font-medium cursor-pointer transition-colors ${
+                      activeTab === 'takeaway' ? 'bg-emerald-500 text-white font-bold' : 'text-gray-400 hover:text-white'
                     }`}
                   >
                     Takeaway
@@ -156,57 +159,60 @@ export default function HeroPosMockup() {
                 </div>
               </div>
 
-              <div className="space-y-1 text-[10px]">
+              <div className="space-y-1.5 text-[11px]">
                 {filteredOrders.map((order) => (
                   <div
                     key={order.id}
-                    className="flex items-center justify-between p-1 rounded hover:bg-[#F8F7F4] transition-colors"
+                    className="flex items-center justify-between p-1.5 rounded-lg bg-[#131715] hover:bg-[#1f2923] border border-[#202923] transition-colors"
                   >
-                    <span className="font-mono font-bold text-gray-800">{order.id}</span>
-                    <span className="font-medium text-gray-700">{order.name}</span>
-                    <span className="text-gray-500 text-[9px]">{order.type}</span>
-                    <span className="font-bold">{order.amount}</span>
-                    <span className={`px-1 py-0.2 rounded font-mono text-[8px] font-bold ${order.statusColor}`}>
-                      {order.status}
-                    </span>
-                    <span className="text-gray-400 text-[8px]">{order.time}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[10px] text-emerald-400 font-bold">{order.table}</span>
+                      <span className="font-mono text-[10px] text-gray-500">{order.id}</span>
+                      <span className="font-medium text-gray-200 hidden sm:inline">{order.customer}</span>
+                    </div>
+                    <div className="text-[10px] text-gray-400 truncate max-w-[140px] hidden lg:inline">
+                      {order.items}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold font-mono text-white">{order.amount}</span>
+                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${order.statusColor}`}>
+                        {order.status}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Sales Overview chart */}
-            <div className="col-span-12 md:col-span-5 p-2.5 rounded-xl bg-white border border-[#EBE8E3] flex flex-col justify-between">
-              <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-bold text-[#141210]">Sales Overview</span>
-                <span className="text-[9px] font-mono text-gray-500">This Week ▼</span>
-              </div>
+            {/* Live Kitchen & Floor status */}
+            <div className="col-span-12 md:col-span-5 p-3 rounded-xl bg-[#18201b] border border-[#26312a] flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-2 border-b border-[#242e28]">
+                  <span className="text-xs font-bold text-white">Barista KDS Pipeline</span>
+                  <span className="text-[10px] font-mono text-emerald-400">Peak Throttle</span>
+                </div>
 
-              <div className="relative w-full h-24 my-1 flex items-end">
-                <svg className="w-full h-full overflow-visible" viewBox="0 0 160 60" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="heroChartFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#059669" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#059669" stopOpacity="0.0" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,45 Q25,40 45,30 T90,25 T130,18 T160,8 L160,60 L0,60 Z" fill="url(#heroChartFill)" />
-                  <path d="M0,45 Q25,40 45,30 T90,25 T130,18 T160,8" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" />
-                  <circle cx="160" cy="8" r="3.5" fill="#059669" stroke="#ffffff" strokeWidth="1.5" />
-                </svg>
-                <div className="absolute top-0 right-0 bg-emerald-700 text-white font-mono text-[8px] font-bold px-1.5 py-0.5 rounded shadow-xs">
-                  ₹24,860
+                <div className="space-y-2 mt-2.5">
+                  <div className="p-2 rounded-lg bg-[#131715] border border-[#222c25]">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="text-amber-400 font-bold">Ticket #904 • Barista Station</span>
+                      <span className="font-mono text-gray-400">2m prep</span>
+                    </div>
+                    <div className="text-xs font-semibold text-gray-200 mt-1">2x Oat Cortado (Double Ristretto)</div>
+                  </div>
+                  <div className="p-2 rounded-lg bg-[#131715] border border-[#222c25]">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="text-emerald-400 font-bold">Ticket #902 • Hot Kitchen</span>
+                      <span className="font-mono text-gray-400">Ready</span>
+                    </div>
+                    <div className="text-xs font-semibold text-gray-200 mt-1">Avocado Truffle Brioche Toast</div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex justify-between font-mono text-[8px] text-gray-400 pt-1 border-t border-gray-100">
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
-                <span className="text-emerald-700 font-bold">Sun</span>
+              <div className="pt-2.5 mt-2 border-t border-[#242e28] flex items-center justify-between text-[10px] font-mono text-gray-400">
+                <span>Avg Ticket Speed: <strong className="text-white">4.2 min</strong></span>
+                <span className="text-emerald-400 font-semibold">99.8% Accuracy</span>
               </div>
             </div>
 
@@ -214,76 +220,39 @@ export default function HeroPosMockup() {
         </div>
       </div>
 
-      {/* Floating Smartphone Mockup (Bottom Left) */}
-      <div className="hidden sm:block absolute bottom-2.5 left-4 z-20 w-48 bg-white rounded-[24px] p-2 border-4 border-[#161a18] shadow-2xl text-left">
-        <div className="w-12 h-2.5 bg-black rounded-full mx-auto mb-1.5" />
-        <div className="rounded-xl bg-[#F8F7F4] p-2 border border-gray-200">
-          <div className="rounded-lg bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-2 mb-2 text-center shadow-2xs">
-            <div className="text-[9px] font-bold">Good coffee.</div>
-            <div className="text-[8px] opacity-90">Great mood.</div>
-            <span className="mt-1 inline-block px-1.5 py-0.2 rounded bg-white/20 text-[7px] font-bold uppercase">
-              Order Now
-            </span>
+      {/* Floating Smart Badges showcasing BrewPluse Unique Tech */}
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        {/* Badge 1: Audio Soundbox */}
+        <div className="bg-[#151c17] px-3 py-2 rounded-xl border border-emerald-500/20 shadow-md flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <span className="material-symbols-outlined text-[18px]">volume_up</span>
           </div>
-          <div className="flex gap-1 font-mono text-[8px] mb-1.5">
-            <span className="px-1.5 py-0.2 rounded bg-emerald-700 text-white font-bold">All</span>
-            <span className="px-1.5 py-0.2 rounded bg-white text-gray-600">Coffee</span>
-            <span className="px-1.5 py-0.2 rounded bg-white text-gray-600">Food</span>
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center justify-between p-1 bg-white rounded border border-gray-100">
-              <span className="text-[8px] font-bold text-gray-800">Cappuccino</span>
-              <span className="text-[8px] font-bold text-emerald-800">+ Add</span>
-            </div>
-            <div className="flex items-center justify-between p-1 bg-white rounded border border-gray-100">
-              <span className="text-[8px] font-bold text-gray-800">Croissant</span>
-              <span className="text-[8px] font-bold text-emerald-800">+ Add</span>
-            </div>
+          <div>
+            <div className="text-[11px] font-bold text-white">Instant UPI Soundbox Sync</div>
+            <div className="text-[10px] text-gray-400">Audible confirmation on every QR payment</div>
           </div>
         </div>
-      </div>
 
-      {/* Floating Badge 1: Cafe-Faced Mode */}
-      <div className="hidden lg:flex absolute bottom-3 left-56 z-20 bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-emerald-200 shadow-lg items-center gap-2.5 text-left">
-        <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
-          <span className="material-symbols-outlined text-[16px]">store</span>
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[9px] font-bold text-gray-800">Cafe-Faced Mode</span>
-            <span className="px-1 py-0.2 rounded bg-gray-100 text-gray-700 text-[7px] font-bold border border-gray-200">
-              READY
-            </span>
+        {/* Badge 2: Dual QR */}
+        <div className="bg-[#151c17] px-3 py-2 rounded-xl border border-emerald-500/20 shadow-md flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
           </div>
-          <div className="text-xs font-bold text-emerald-800">Fee Covered by Cafe</div>
-          <div className="text-[8px] text-gray-400">₹0 fee for customer</div>
-        </div>
-      </div>
-
-      {/* Floating Badge 2: Order Delivered */}
-      <div className="hidden md:flex absolute bottom-3 left-1/2 translate-x-4 z-20 bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-gray-200 shadow-lg items-center gap-2 text-left">
-        <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
-          <span className="material-symbols-outlined text-[16px]">check_circle</span>
-        </div>
-        <div>
-          <div className="text-[9px] font-bold text-[#1a1715]">Order Delivered</div>
-          <div className="text-[8px] font-mono text-emerald-700 font-semibold">#CF1266</div>
-          <div className="text-[8px] text-gray-500">Delivered in 24 min</div>
-        </div>
-      </div>
-
-      {/* Floating Badge 3: Customer Facing */}
-      <div className="hidden lg:flex absolute bottom-3 right-4 z-20 bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-gray-200 shadow-lg items-center gap-2.5 text-left">
-        <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-          <span className="material-symbols-outlined text-[16px]">person</span>
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[9px] font-bold text-gray-800">Customer Facing: ON</span>
-            <span className="px-1 py-0.2 rounded bg-emerald-600 text-white text-[7px] font-bold">ON</span>
+          <div>
+            <div className="text-[11px] font-bold text-white">Dynamic Table Split &amp; Tip</div>
+            <div className="text-[10px] text-gray-400">Guests order &amp; pay per table in seconds</div>
           </div>
-          <div className="text-[9px] font-bold text-emerald-800">+₹1 per order</div>
-          <div className="text-[8px] text-gray-400">Paid by customer</div>
+        </div>
+
+        {/* Badge 3: Zero Outage */}
+        <div className="bg-[#151c17] px-3 py-2 rounded-xl border border-emerald-500/20 shadow-md flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <span className="material-symbols-outlined text-[18px]">wifi_off</span>
+          </div>
+          <div>
+            <div className="text-[11px] font-bold text-white">Offline Write-Ahead Logging</div>
+            <div className="text-[10px] text-gray-400">Keeps printing tickets even when Wi-Fi drops</div>
+          </div>
         </div>
       </div>
 
