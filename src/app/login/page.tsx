@@ -151,9 +151,16 @@ function LoginFormContent() {
       }, 500);
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);
-      const msg = err.message || 'Google Sign-in could not be completed.';
+      let msg = err.message || 'Google Sign-in could not be completed.';
+      if (err.code === 'auth/unauthorized-domain' || String(err).includes('unauthorized-domain')) {
+        msg = 'Domain (brewpluse.com) is not authorized in Firebase Console. Please add brewpluse.com to Firebase Console > Authentication > Settings > Authorized domains.';
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        msg = 'Sign-in popup was closed before completing.';
+      } else if (err.code === 'auth/popup-blocked') {
+        msg = 'Sign-in popup was blocked by your browser. Please allow popups for this site.';
+      }
       setErrorMsg(msg);
-      toast.error(msg);
+      toast.error('Google Sign-in Note', { description: msg });
     } finally {
       setLoading(false);
     }
