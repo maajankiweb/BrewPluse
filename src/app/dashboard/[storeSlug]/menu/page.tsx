@@ -286,6 +286,19 @@ export default function MenuPage() {
       .then((r) => r.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          if (data.isDefaultFallback && loadedFromLocal) {
+            try {
+              const current = JSON.parse(localStorage.getItem(scopedKey) || '[]');
+              if (current.length > 0) {
+                fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ storeSlug, items: current }),
+                }).catch(() => {});
+              }
+            } catch (e) {}
+            return;
+          }
           setMenuItems(data.items);
           localStorage.setItem(scopedKey, JSON.stringify(data.items));
         } else if (!loadedFromLocal) {

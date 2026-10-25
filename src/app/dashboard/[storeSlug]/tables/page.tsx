@@ -20,8 +20,10 @@ import {
   Eye,
   Layers,
   Copy,
+  Coffee,
 } from 'lucide-react';
 import Link from 'next/link';
+import QRCode from 'qrcode';
 
 interface TableRecord {
   id: string;
@@ -133,14 +135,31 @@ export default function TablesPage() {
     setSelectedTable(table);
     setQrModalOpen(true);
     setLoadingQr(true);
+
+    // Instant client-side QR generation (0ms delay, works 100% offline & instantly scannable by phone camera)
+    const host = typeof window !== 'undefined' ? window.location.host : 'brewpluse.com';
+    const proto = typeof window !== 'undefined' ? window.location.protocol : 'https:';
+    const clientTargetUrl = `${proto}//${host}/m/${encodeURIComponent(storeSlug)}?table=${encodeURIComponent(table.number)}`;
+
+    try {
+      const immediateQr = await QRCode.toDataURL(clientTargetUrl, {
+        width: 500,
+        margin: 2,
+        color: { dark: '#062F23', light: '#FFFFFF' },
+      });
+      setQrData({ qrDataUrl: immediateQr, targetUrl: clientTargetUrl });
+      setLoadingQr(false);
+    } catch (e) {}
+
+    // Concurrently fetch high-res server QR
     try {
       const res = await fetch(`/api/admin/tables/${table.id}/qr?storeSlug=${encodeURIComponent(storeSlug)}`);
       const data = await res.json();
-      if (data.success) {
+      if (data.success && data.qrDataUrl) {
         setQrData({ qrDataUrl: data.qrDataUrl, targetUrl: data.targetUrl });
       }
     } catch (err) {
-      console.error('Failed to load QR:', err);
+      console.warn('Server QR fetch note:', err);
     } finally {
       setLoadingQr(false);
     }
@@ -370,40 +389,59 @@ export default function TablesPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="p-4 bg-[#F8FAF8] rounded-2xl border border-gray-100 inline-block shadow-inner">
-                    <img
-                      src={qrData.qrDataUrl}
-                      alt={`QR for ${selectedTable.number}`}
-                      className="w-56 h-56 mx-auto rounded-xl object-contain bg-white p-2"
-                    />
-                  </div>
+                  {/* Stand Graphic Mockup */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-b from-neutral-50 to-neutral-100 border border-gray-200 shadow-inner space-y-3">
+                    <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#062F23]">
+                      <Coffee className="w-4 h-4 text-emerald-600" />
+                      <span className="capitalize">{storeSlug.replace(/-/g, ' ')}</span>
+                    </div>
 
-                  <div className="text-left text-xs bg-gray-50 p-3 rounded-xl border border-gray-100">
-                    <div className="text-[10px] text-gray-400 uppercase font-mono font-bold mb-1">Target URL</div>
-                    <div className="truncate text-gray-700 font-mono text-[11px] select-all">
-                      {qrData.targetUrl}
+                    <div className="w-48 h-48 bg-white p-2 rounded-2xl shadow-md mx-auto flex flex-col items-center justify-center border border-gray-200">
+                      <img
+                        src={qrData.qrDataUrl}
+                        alt={`QR for ${selectedTable.number}`}
+                        className="w-40 h-40 object-contain rounded-lg"
+                      />
+                      <span className="text-[10px] font-mono font-bold text-gray-700 uppercase mt-1">
+                        {selectedTable.number}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <p className="text-xs font-extrabold text-[#062F23]">
+                        Scan with any Mobile Camera to Order
+                      </p>
+                      <p className="text-[10px] text-gray-500 font-mono">
+                        Direct customer menu &bull; Table auto-assigned
+                      </p>
+                      <a
+                        href={qrData.targetUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-700 hover:underline pt-1"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Test Scan (Open Customer Menu)</span>
+                      </a>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => window.print()}
+                      className="py-2.5 rounded-xl border border-gray-300 font-bold text-xs hover:bg-gray-100 flex items-center justify-center gap-1.5 cursor-pointer text-gray-700"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      <span>Print Stand</span>
+                    </button>
                     <a
-                      href={`/api/admin/tables/${selectedTable.id}/qr?format=png`}
+                      href={`/api/admin/tables/${selectedTable.id}/qr?format=png&storeSlug=${encodeURIComponent(storeSlug)}`}
                       download={`qr-${selectedTable.number}.png`}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#062F23] hover:bg-[#0B5C45] text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5"
+                      className="py-2.5 rounded-xl bg-[#062F23] hover:bg-[#0B5C45] text-white font-bold text-xs shadow-md flex items-center justify-center gap-1.5"
                     >
                       <Download className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Download PNG</span>
-                    </a>
-
-                    <a
-                      href={qrData.targetUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="py-2.5 px-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
-                      title="Open Customer Link"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Test Scan</span>
                     </a>
                   </div>
                 </div>

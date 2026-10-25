@@ -69,6 +69,7 @@ export async function GET(request: Request) {
       success: true,
       items,
       count: items.length,
+      isDefaultFallback: true,
     });
   } catch (error: any) {
     return NextResponse.json(

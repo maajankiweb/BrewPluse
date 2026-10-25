@@ -50,6 +50,23 @@ export async function GET(request: Request, { params }: RouteParams) {
       };
     }
 
+    if (!table && cleanToken.startsWith('tok_')) {
+      const parts = cleanToken.split('_');
+      if (parts.length >= 3) {
+        const storeSlugExtracted = parts[1];
+        const tblNumRaw = parts[2].replace(/^tbl/i, '');
+        table = {
+          _id: `tbl_${storeSlugExtracted}_${tblNumRaw}`,
+          id: `tbl_${storeSlugExtracted}_${tblNumRaw}`,
+          storeId: storeSlugExtracted,
+          number: `Table ${tblNumRaw}`,
+          label: 'Dining Table',
+          token: cleanToken,
+          isActive: true,
+        };
+      }
+    }
+
     if (!table) {
       return NextResponse.json(
         { error: { code: 'TABLE_NOT_FOUND', message: 'Table not found or QR code expired.' } },

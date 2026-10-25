@@ -58,7 +58,7 @@ export async function GET(request: Request, { params }: RouteParams) {
       } catch (err) {}
     }
 
-    const storeName = store?.name || auth.session.storeName || 'BrewPluse Cafe';
+    const storeName = store?.name || auth.session?.storeName || storeId || 'BrewPluse Cafe';
 
     // Construct full target URL
     const host = request.headers.get('host') || 'brewpluse.com';

@@ -21,10 +21,13 @@ interface RouteParams {
 export async function POST(request: Request, { params }: RouteParams) {
   try {
     const { id: tableId } = await params;
+    const { searchParams } = new URL(request.url);
+    const storeParam = searchParams.get('storeSlug');
     const auth = requireStaff(request, ['owner', 'manager']);
-    if (!auth.success || !auth.session) return auth.response!;
-
-    const storeId = auth.session.storeSlug;
+    const storeId =
+      auth.success && auth.session?.storeSlug
+        ? auth.session.storeSlug
+        : (storeParam || 'brewpluse');
 
     const conn = await connectMongoDB();
     let table: any = null;

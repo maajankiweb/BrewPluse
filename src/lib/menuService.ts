@@ -151,10 +151,15 @@ export const BASE_MENU_CATALOG: MenuItemDetailed[] = [
 declare global {
   // eslint-disable-next-line no-var
   var storeMenuRegistry: Record<string, MenuItemDetailed[]> | undefined;
+  // eslint-disable-next-line no-var
+  var storeMenuCaches: Record<string, any[]> | undefined;
 }
 
 if (!global.storeMenuRegistry) {
   global.storeMenuRegistry = {};
+}
+if (!global.storeMenuCaches) {
+  global.storeMenuCaches = {};
 }
 
 import { connectMongoDB } from '@/lib/mongodb';
@@ -193,6 +198,23 @@ export async function getStoreMenu(storeSlug: string): Promise<MenuItemDetailed[
     }
   } catch (err) {
     console.warn('[menuService getStoreMenu DB error]:', err);
+  }
+
+  // 3. Check memory storeMenuCaches if populated by /api/menu
+  if (global.storeMenuCaches && global.storeMenuCaches[normalized] && global.storeMenuCaches[normalized].length > 0) {
+    return global.storeMenuCaches[normalized].map((it: any) => ({
+      id: it.id,
+      name: it.name,
+      category: it.category || it.cat || 'coffee',
+      price: it.price,
+      priceInPaise: (it.price || 0) * 100,
+      desc: it.desc || '',
+      image: it.image || '',
+      isVeg: it.isVeg !== false,
+      isPopular: Boolean(it.isPopular),
+      isAvailable: it.isAvailable !== false,
+      taxPercent: it.taxPercent || 0,
+    }));
   }
 
   return BASE_MENU_CATALOG;

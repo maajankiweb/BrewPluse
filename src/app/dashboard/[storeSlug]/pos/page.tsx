@@ -70,7 +70,20 @@ export default function PosPage() {
   const routeParams = useParams();
   const storeSlug = (routeParams?.storeSlug as string) || 'brewpluse';
 
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(DEFAULT_MENU_CATALOG);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const scoped =
+          localStorage.getItem(`brewpluse::menu_items_${storeSlug}`) ||
+          localStorage.getItem('brewpluse::menu_items');
+        if (scoped) {
+          const parsed = JSON.parse(scoped);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+    }
+    return DEFAULT_MENU_CATALOG;
+  });
   const [selectedCat, setSelectedCat] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [channel, setChannel] = useState('Dine-in (Table 1)');
@@ -182,6 +195,19 @@ export default function PosPage() {
         .then((res) => res.json())
         .then((data) => {
           if (data.items && data.items.length > 0) {
+            // If API returned default fallback, do NOT overwrite user's saved dishes!
+            const localRaw =
+              localStorage.getItem(`brewpluse::menu_items_${storeSlug}`) ||
+              localStorage.getItem('brewpluse::menu_items');
+            if (data.isDefaultFallback && localRaw) {
+              try {
+                const parsed = JSON.parse(localRaw);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  setMenuItems(parsed);
+                  return;
+                }
+              } catch (e) {}
+            }
             setMenuItems(data.items);
             try {
               localStorage.setItem(`brewpluse::menu_items_${storeSlug}`, JSON.stringify(data.items));
