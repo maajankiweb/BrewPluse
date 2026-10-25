@@ -217,30 +217,6 @@ function LoginFormContent() {
             </div>
           )}
 
-          {/* QUICK DEMO CAFE ACCOUNT AUTOFILL */}
-          <div className="mb-4 p-3.5 rounded-2xl bg-[#1c1815] border border-amber-500/30 text-xs flex items-center justify-between gap-3 shadow-lg">
-            <div>
-              <span className="font-bold text-amber-400 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-                <span>⚡ Demo Cafe Setup Account</span>
-              </span>
-              <p className="text-[11px] text-[#9c938a] mt-0.5 font-mono">
-                demo@brewpluse.com &bull; BrewPluse@2026
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail('demo@brewpluse.com');
-                setPassword('BrewPluse@2026');
-                toast.success('Demo Cafe Credentials Loaded!', {
-                  description: 'Click "Log in" to access your dashboard.',
-                });
-              }}
-              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-xs border border-amber-500/40 transition-colors cursor-pointer shrink-0"
-            >
-              Fill Demo
-            </button>
-          </div>
 
           <form onSubmit={handleLogin} className="space-y-4" noValidate>
             {/* 1. EMAIL ADDRESS */}
