@@ -37,6 +37,19 @@ export async function GET(request: Request, { params }: RouteParams) {
       table = findRuntimeTableByToken(cleanToken);
     }
 
+    if (!table && cleanToken.toLowerCase().startsWith('demo')) {
+      const demoNum = cleanToken.replace(/[^0-9]/g, '') || '1';
+      table = {
+        _id: `tbl_demo_${demoNum}`,
+        id: `tbl_demo_${demoNum}`,
+        storeId: 'demo',
+        number: `Table ${demoNum}`,
+        label: 'Demo Dining Area',
+        token: cleanToken,
+        isActive: true,
+      };
+    }
+
     if (!table) {
       return NextResponse.json(
         { error: { code: 'TABLE_NOT_FOUND', message: 'Table not found or QR code expired.' } },

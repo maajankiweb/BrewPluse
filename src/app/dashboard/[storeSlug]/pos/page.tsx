@@ -154,8 +154,10 @@ export default function PosPage() {
         }
       }
 
-      // Load menu
-      const savedMenu = localStorage.getItem('brewpluse::menu_items');
+      // Load menu for this store
+      const savedMenu =
+        localStorage.getItem(`brewpluse::menu_items_${storeSlug}`) ||
+        localStorage.getItem('brewpluse::menu_items');
       if (savedMenu) {
         const parsed = JSON.parse(savedMenu);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -174,15 +176,40 @@ export default function PosPage() {
       }
     } catch (e) {}
 
-    // Fallback fetch API menu
-    fetch('/api/menu')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.items && data.items.length > 0) {
-          setMenuItems(data.items);
+    // Fetch live menu for this specific store from database
+    const syncMenu = () => {
+      fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.items && data.items.length > 0) {
+            setMenuItems(data.items);
+            try {
+              localStorage.setItem(`brewpluse::menu_items_${storeSlug}`, JSON.stringify(data.items));
+            } catch (e) {}
+          }
+        })
+        .catch(() => {});
+    };
+
+    syncMenu();
+
+    const handleSync = () => {
+      syncMenu();
+      try {
+        const saved = localStorage.getItem(`brewpluse::menu_items_${storeSlug}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) setMenuItems(parsed);
         }
-      })
-      .catch(() => {});
+      } catch (e) {}
+    };
+
+    window.addEventListener('menu_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('menu_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, [storeSlug]);
 
   // Unique categories

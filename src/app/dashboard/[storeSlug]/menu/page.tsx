@@ -27,7 +27,7 @@ import {
 interface MenuItem {
   id: string;
   name: string;
-  cat: 'coffee' | 'tea' | 'bakes';
+  cat: 'coffee' | 'tea' | 'bakes' | 'food' | 'snacks' | 'beverages' | 'desserts' | string;
   price: number;
   desc?: string;
   color?: string;
@@ -39,12 +39,46 @@ interface MenuItem {
 interface ExtractedDish {
   id: string;
   name: string;
-  cat: 'coffee' | 'tea' | 'bakes';
+  cat: 'coffee' | 'tea' | 'bakes' | 'food' | 'snacks' | 'beverages' | 'desserts' | string;
   price: number;
   desc: string;
   selected: boolean;
   image?: string;
   taxPercent?: number;
+}
+
+// Client-side image compressor: downsizes high-res phone camera photos (5-15MB) to web-optimized JPEG (<350KB)
+function compressImageForVision(file: File, maxDim = 1200, quality = 0.8): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(dataUrl);
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 const DEFAULT_MENU_CATALOG: MenuItem[] = [
@@ -56,7 +90,7 @@ const DEFAULT_MENU_CATALOG: MenuItem[] = [
   { id: 'bp-cappuccino', name: 'Cappuccino Foam', cat: 'coffee', price: 140, desc: 'Velvety foam, cocoa dusting', color: '#A06E4A', mod: 'Whole milk', taxPercent: 0, image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=400&q=80' },
   { id: 'bp-caramel-macchiato', name: 'Caramel Macchiato', cat: 'coffee', price: 190, desc: 'Vanilla syrup, caramel drizzle', color: '#C78440', mod: 'Extra caramel', taxPercent: 0, image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=400&q=80' },
   { id: 'bp-blueberry-muffin', name: 'Blueberry Muffin', cat: 'bakes', price: 120, desc: 'Wild blueberries, crumble crust', color: '#795548', mod: 'Warmed', taxPercent: 0, image: 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=400&q=80' },
-  { id: 'bp-paneer-sandwich', name: 'Paneer Tikka Sandwich', cat: 'bakes', price: 180, desc: 'Grilled sourdough, spiced paneer', color: '#B35422', mod: 'Toasted', taxPercent: 0, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80' },
+  { id: 'bp-paneer-sandwich', name: 'Paneer Tikka Sandwich', cat: 'food', price: 180, desc: 'Grilled sourdough, spiced paneer', color: '#B35422', mod: 'Toasted', taxPercent: 0, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80' },
   { id: 'bp-green-tea', name: 'Green Tea Pot', cat: 'tea', price: 100, desc: 'Whole leaf organic blend', color: '#5B8A5A', mod: 'Honey', taxPercent: 0, image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=400&q=80' }
 ];
 
@@ -72,7 +106,7 @@ export default function MenuPage() {
 
   // Form states
   const [name, setName] = useState('');
-  const [category, setCategory] = useState<'coffee' | 'tea' | 'bakes'>('coffee');
+  const [category, setCategory] = useState<'coffee' | 'tea' | 'bakes' | 'food' | 'snacks' | 'beverages' | 'desserts'>('coffee');
   const [price, setPrice] = useState<number | ''>('');
   const [desc, setDesc] = useState('');
   const [mod, setMod] = useState('');
@@ -87,16 +121,17 @@ export default function MenuPage() {
   const [extractedDishes, setExtractedDishes] = useState<ExtractedDish[]>([]);
   const [bulkAiTax, setBulkAiTax] = useState<number>(0);
   const [hasScanned, setHasScanned] = useState(false);
+  const [manualMenuText, setManualMenuText] = useState('');
 
-  const startAiScan = async (photoUrl: string) => {
-    setAiMenuPhoto(photoUrl);
+  const startAiScan = async (photoUrl: string, rawText?: string) => {
+    setAiMenuPhoto(photoUrl || null);
     setIsAiScanning(true);
     setHasScanned(false);
 
-    setScanStepText('Analyzing physical menu with NVIDIA Vision OCR...');
+    setScanStepText('Analyzing physical menu card with Vision OCR...');
     setTimeout(() => {
-      setScanStepText('Extracting categories & prices into structured JSON...');
-    }, 1100);
+      setScanStepText('Extracting dishes, prices & categories into structured catalog...');
+    }, 900);
 
     try {
       const res = await fetch('/api/ai/nemotron', {
@@ -104,7 +139,9 @@ export default function MenuPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'digitize_menu',
-          image: photoUrl,
+          image: photoUrl || null,
+          menuText: rawText || manualMenuText || '',
+          storeSlug,
         }),
       });
 
@@ -116,19 +153,20 @@ export default function MenuPage() {
           setExtractedDishes(
             data.dishes.map((d: any, idx: number) => ({
               id: 'ai-' + Date.now() + '-' + idx,
-              name: d.name || 'Untitled Dish',
-              cat: d.cat === 'coffee' || d.cat === 'tea' || d.cat === 'bakes' ? d.cat : 'coffee',
-              price: Number(d.price) || 180,
-              desc: d.desc || '',
+              name: d.name || 'Specialty Dish',
+              cat: d.cat || 'food',
+              price: Number(d.price) || 150,
+              desc: d.desc || 'Freshly prepared specialty dish',
               selected: true,
               image: d.image || 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=400&q=80',
+              taxPercent: typeof d.taxPercent === 'number' ? d.taxPercent : bulkAiTax,
             }))
           );
           return;
         }
       }
     } catch (e) {
-      console.warn('NVIDIA Vision call fallback:', e);
+      console.warn('Vision extraction fallback:', e);
     }
 
     setTimeout(() => {
@@ -164,6 +202,15 @@ export default function MenuPage() {
         },
         {
           id: 'ai-' + Date.now() + '-4',
+          name: 'Paneer Tikka Grilled Wrap',
+          cat: 'food',
+          price: 190,
+          desc: 'Smoky grilled paneer cubes with bell peppers and house mint chutney',
+          selected: true,
+          image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80',
+        },
+        {
+          id: 'ai-' + Date.now() + '-5',
           name: 'Chamomile Citrus Infusion',
           cat: 'tea',
           price: 150,
@@ -172,25 +219,16 @@ export default function MenuPage() {
           image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80',
         },
         {
-          id: 'ai-' + Date.now() + '-5',
-          name: 'Cinnamon Swirl Brioche',
-          cat: 'bakes',
-          price: 180,
-          desc: 'Freshly baked buttery brioche rolled with Ceylon cinnamon & vanilla glaze',
-          selected: true,
-          image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80',
-        },
-        {
           id: 'ai-' + Date.now() + '-6',
-          name: 'Matcha Blossom Latte',
-          cat: 'tea',
-          price: 230,
-          desc: 'Ceremonial grade Uji matcha whisked with oat milk & organic lavender syrup',
+          name: 'Belgian Chocolate Brownie Shake',
+          cat: 'beverages',
+          price: 210,
+          desc: 'Decadent chocolate fudge blend topped with brownie chunks',
           selected: true,
-          image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=400&q=80',
+          image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=400&q=80',
         },
       ]);
-    }, 2000);
+    }, 1200);
   };
 
   const handleImportExtracted = () => {
@@ -203,7 +241,18 @@ export default function MenuPage() {
       cat: d.cat,
       price: d.price,
       desc: d.desc,
-      color: d.cat === 'coffee' ? '#BA7E52' : d.cat === 'tea' ? '#D39E3A' : '#E0AB75',
+      color:
+        d.cat === 'coffee'
+          ? '#BA7E52'
+          : d.cat === 'tea'
+          ? '#D39E3A'
+          : d.cat === 'food'
+          ? '#C0392B'
+          : d.cat === 'snacks'
+          ? '#E67E22'
+          : d.cat === 'beverages'
+          ? '#2980B9'
+          : '#E0AB75',
       image: d.image,
       taxPercent: typeof d.taxPercent === 'number' ? d.taxPercent : bulkAiTax,
     }));
@@ -214,33 +263,59 @@ export default function MenuPage() {
     setAiMenuPhoto(null);
   };
 
-  // Load menu items
+  // Load menu items scoped by storeSlug
   useEffect(() => {
+    let loadedFromLocal = false;
+    const scopedKey = `brewpluse::menu_items_${storeSlug}`;
+
     try {
-      const stored = localStorage.getItem('brewpluse::menu_items');
+      const stored = localStorage.getItem(scopedKey) || localStorage.getItem('brewpluse::menu_items');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setMenuItems(parsed);
-          return;
+          loadedFromLocal = true;
+          // Ensure scoped key is synced
+          localStorage.setItem(scopedKey, stored);
         }
       }
     } catch (e) {}
 
-    // Default catalog
-    setMenuItems(DEFAULT_MENU_CATALOG);
-    localStorage.setItem('brewpluse::menu_items', JSON.stringify(DEFAULT_MENU_CATALOG));
-  }, []);
+    // Fetch from backend MongoDB API
+    fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setMenuItems(data.items);
+          localStorage.setItem(scopedKey, JSON.stringify(data.items));
+        } else if (!loadedFromLocal) {
+          setMenuItems(DEFAULT_MENU_CATALOG);
+          localStorage.setItem(scopedKey, JSON.stringify(DEFAULT_MENU_CATALOG));
+        }
+      })
+      .catch(() => {
+        if (!loadedFromLocal) {
+          setMenuItems(DEFAULT_MENU_CATALOG);
+        }
+      });
+  }, [storeSlug]);
 
   const saveCatalogToStorage = (updated: MenuItem[]) => {
     setMenuItems(updated);
+    const scopedKey = `brewpluse::menu_items_${storeSlug}`;
     try {
+      localStorage.setItem(scopedKey, JSON.stringify(updated));
       localStorage.setItem('brewpluse::menu_items', JSON.stringify(updated));
-      fetch('/api/menu', {
+
+      fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: updated })
+        body: JSON.stringify({ storeSlug, items: updated }),
       }).catch(() => {});
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('menu_updated'));
+      }
     } catch (e) {}
 
     setSavedToast(true);
@@ -251,7 +326,7 @@ export default function MenuPage() {
     if (item) {
       setEditingItem(item);
       setName(item.name);
-      setCategory(item.cat);
+      setCategory((item.cat as any) || 'coffee');
       setPrice(item.price);
       setDesc(item.desc || '');
       setMod(item.mod || '');
@@ -379,7 +454,7 @@ export default function MenuPage() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-[#0E2018] p-3 sm:p-4 rounded-2xl border border-[#EAE8E4] dark:border-[#1E382E]">
           {/* Category Chips */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-            {['all', 'coffee', 'tea', 'bakes'].map(cat => (
+            {['all', 'coffee', 'tea', 'bakes', 'food', 'snacks', 'beverages', 'desserts'].map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -591,8 +666,12 @@ export default function MenuPage() {
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE8E4] dark:border-[#1E382E] text-xs font-semibold outline-none focus:border-[#153326] bg-white dark:bg-[#0E2018]"
                     >
                       <option value="coffee">Coffee</option>
-                      <option value="tea">Tea</option>
-                      <option value="bakes">Bakes</option>
+                      <option value="tea">Tea & Chai</option>
+                      <option value="bakes">Bakery & Breads</option>
+                      <option value="food">Food & Meals</option>
+                      <option value="snacks">Snacks & Bites</option>
+                      <option value="beverages">Beverages & Shakes</option>
+                      <option value="desserts">Desserts & Sweets</option>
                     </select>
                   </div>
 
@@ -746,21 +825,26 @@ export default function MenuPage() {
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                       <label className="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#153326] hover:bg-[#0E2219] text-white text-xs font-bold shadow-md cursor-pointer inline-flex items-center justify-center gap-2 transition-all">
                         <Upload className="w-4 h-4 text-emerald-400" />
-                        <span>Choose Photo from Device</span>
+                        <span>Choose Photo from Device (Auto Compressed)</span>
                         <input
                           type="file"
                           accept="image/*"
                           className="hidden"
-                          onChange={(e) => {
+                          onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              const r = new FileReader();
-                              r.onload = (ev) => {
-                                if (ev.target?.result) {
-                                  startAiScan(ev.target.result as string);
-                                }
-                              };
-                              r.readAsDataURL(file);
+                              try {
+                                const compressedDataUrl = await compressImageForVision(file);
+                                startAiScan(compressedDataUrl);
+                              } catch (err) {
+                                const r = new FileReader();
+                                r.onload = (ev) => {
+                                  if (ev.target?.result) {
+                                    startAiScan(ev.target.result as string);
+                                  }
+                                };
+                                r.readAsDataURL(file);
+                              }
                             }
                           }}
                         />
@@ -776,6 +860,39 @@ export default function MenuPage() {
                         <Sparkles className="w-4 h-4 text-amber-500" />
                         <span>Use Sample Cafe Paper Menu Photo</span>
                       </button>
+                    </div>
+
+                    {/* Or Paste Raw Menu Text Option */}
+                    <div className="pt-4 border-t border-amber-500/20 text-left max-w-xl mx-auto space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                          Or Paste Menu Text Directly
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          Format: Item Name - Price (e.g. Cold Coffee 180)
+                        </span>
+                      </div>
+                      <textarea
+                        rows={3}
+                        value={manualMenuText}
+                        onChange={(e) => setManualMenuText(e.target.value)}
+                        placeholder="Paste menu items here...
+Espresso - 120
+Paneer Tikka Sandwich - 180
+Masala Chai - 90
+Chocolate Brownie - 150"
+                        className="w-full p-2.5 rounded-xl border border-amber-500/30 bg-white dark:bg-[#0E2018] text-xs font-mono outline-none focus:border-emerald-600"
+                      />
+                      {manualMenuText.trim().length > 5 && (
+                        <button
+                          type="button"
+                          onClick={() => startAiScan('', manualMenuText)}
+                          className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+                          <span>Parse &amp; Extract Dishes from Text</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -942,6 +1059,10 @@ export default function MenuPage() {
                                   <option value="coffee">Coffee</option>
                                   <option value="tea">Tea</option>
                                   <option value="bakes">Bakes</option>
+                                  <option value="food">Food</option>
+                                  <option value="snacks">Snacks</option>
+                                  <option value="beverages">Beverages</option>
+                                  <option value="desserts">Desserts</option>
                                 </select>
 
                                 <div className="flex items-center gap-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg px-2 py-1">

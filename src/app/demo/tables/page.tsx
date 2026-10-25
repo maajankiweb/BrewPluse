@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
 import {
   QrCode,
   Users,
@@ -11,6 +12,7 @@ import {
   Clock,
   Sparkles,
   Coffee,
+  ExternalLink,
 } from 'lucide-react';
 import { useDemo, TableInfo } from '../demoContext';
 
@@ -18,6 +20,31 @@ export default function DemoTablesPage() {
   const { tables, updateTableStatus } = useDemo();
   const [selectedQrTable, setSelectedQrTable] = useState<TableInfo | null>(null);
   const [zoneFilter, setZoneFilter] = useState('All');
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
+  const [targetUrl, setTargetUrl] = useState<string>('');
+
+  useEffect(() => {
+    if (!selectedQrTable) {
+      setQrDataUrl('');
+      setTargetUrl('');
+      return;
+    }
+
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://brewpluse.com';
+    const url = `${origin}/m/demo?table=${encodeURIComponent(selectedQrTable.name)}`;
+    setTargetUrl(url);
+
+    QRCode.toDataURL(url, {
+      width: 400,
+      margin: 2,
+      color: {
+        dark: '#062F23',
+        light: '#FFFFFF',
+      },
+    })
+      .then((data) => setQrDataUrl(data))
+      .catch((err) => console.error('Failed to generate table QR:', err));
+  }, [selectedQrTable]);
 
   const filtered = tables.filter((t) => {
     if (zoneFilter === 'Outdoor') return t.name.startsWith('Outdoor');
@@ -162,34 +189,55 @@ export default function DemoTablesPage() {
               </div>
 
               {/* QR Emblem */}
-              <div className="w-40 h-40 bg-white p-3 rounded-2xl shadow-md mx-auto flex flex-col items-center justify-center border border-zinc-200">
-                <QrCode className="w-28 h-28 text-[#0b2b1a]" />
-                <span className="text-[10px] font-mono font-bold text-zinc-600 uppercase mt-1">
+              <div className="w-44 h-44 bg-white p-2 rounded-2xl shadow-md mx-auto flex flex-col items-center justify-center border border-zinc-200">
+                {qrDataUrl ? (
+                  <img
+                    src={qrDataUrl}
+                    alt={`Scannable QR for ${selectedQrTable.name}`}
+                    className="w-36 h-36 object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="w-36 h-36 flex items-center justify-center text-xs text-zinc-400">
+                    Generating QR...
+                  </div>
+                )}
+                <span className="text-[10px] font-mono font-bold text-zinc-700 uppercase mt-1">
                   {selectedQrTable.name}
                 </span>
               </div>
 
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 <p className="text-xs font-extrabold text-[#141210] dark:text-white">
-                  Scan to View Menu &amp; Order
+                  Scan with any Mobile Camera to Order
                 </p>
                 <p className="text-[10px] text-zinc-500 font-mono">
-                  No app download needed
+                  Direct customer menu &bull; Table auto-assigned
                 </p>
+                {targetUrl && (
+                  <a
+                    href={targetUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 hover:underline pt-1"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>Test Scan (Open Customer Menu)</span>
+                  </a>
+                )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2 pt-1">
               <button
                 onClick={() => window.print()}
-                className="py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 font-bold text-xs hover:bg-neutral-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-1.5"
+                className="py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 font-bold text-xs hover:bg-neutral-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Stand</span>
               </button>
               <button
                 onClick={() => setSelectedQrTable(null)}
-                className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"
+                className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md cursor-pointer"
               >
                 Done
               </button>

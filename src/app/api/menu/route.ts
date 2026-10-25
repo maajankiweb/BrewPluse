@@ -17,19 +17,58 @@ const DEFAULT_CATALOG = [
   { id: 'bp-green-tea', name: 'Green Tea Pot', cat: 'tea', price: 100, desc: 'Whole leaf organic blend', color: '#5B8A5A', mod: 'Honey', image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=400&q=80' }
 ];
 
+import { connectMongoDB } from '@/lib/mongodb';
+
 // Per-store in-memory menu caches
-const storeMenuCaches: Record<string, any[]> = {};
+declare global {
+  // eslint-disable-next-line no-var
+  var storeMenuCaches: Record<string, any[]> | undefined;
+}
+
+if (!global.storeMenuCaches) {
+  global.storeMenuCaches = {};
+}
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const storeSlug = searchParams.get('storeSlug') || searchParams.get('storeId') || 'default';
+    const storeSlug = (searchParams.get('storeSlug') || searchParams.get('storeId') || 'brewpluse').toLowerCase().trim();
 
-    const items = storeMenuCaches[storeSlug] || DEFAULT_CATALOG;
+    // 1. Check in-memory cache first for max speed
+    if (global.storeMenuCaches?.[storeSlug] && global.storeMenuCaches[storeSlug].length > 0) {
+      return NextResponse.json({
+        success: true,
+        items: global.storeMenuCaches[storeSlug],
+        count: global.storeMenuCaches[storeSlug].length,
+      });
+    }
+
+    // 2. Check MongoDB for persistent store menu
+    try {
+      const conn = await connectMongoDB();
+      if (conn) {
+        const db = conn.connection.db;
+        const menuDoc = await db.collection('store_menus').findOne({ storeSlug });
+        if (menuDoc && Array.isArray(menuDoc.items) && menuDoc.items.length > 0) {
+          global.storeMenuCaches[storeSlug] = menuDoc.items;
+          return NextResponse.json({
+            success: true,
+            items: menuDoc.items,
+            count: menuDoc.items.length,
+          });
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[Menu API GET DB error]:', dbErr);
+    }
+
+    // 3. Fallback to default catalog
+    const items = DEFAULT_CATALOG.map((i) => ({ ...i, category: i.cat }));
+    global.storeMenuCaches[storeSlug] = items;
     return NextResponse.json({
       success: true,
       items,
-      count: items.length
+      count: items.length,
     });
   } catch (error: any) {
     return NextResponse.json(
@@ -41,46 +80,121 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
     const session = getSessionFromRequest(request);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized. Sign in required to update cafe menu.' },
-        { status: 401 }
-      );
+    const body = await request.json().catch(() => ({}));
+
+    const storeSlug = (
+      session?.storeSlug ||
+      body.storeSlug ||
+      searchParams.get('storeSlug') ||
+      'brewpluse'
+    ).toLowerCase().trim();
+
+    if (!global.storeMenuCaches) {
+      global.storeMenuCaches = {};
     }
 
-    const storeSlug = session.storeSlug;
-    if (!storeMenuCaches[storeSlug]) {
-      storeMenuCaches[storeSlug] = [...DEFAULT_CATALOG];
+    if (!global.storeMenuCaches[storeSlug]) {
+      global.storeMenuCaches[storeSlug] = [...DEFAULT_CATALOG];
     }
 
-    const body = await request.json();
+    let updatedItems: any[] = [];
+
     if (Array.isArray(body.items)) {
-      storeMenuCaches[storeSlug] = body.items;
-      syncMenuToFirestore(storeSlug, storeMenuCaches[storeSlug]).catch(() => {});
-      return NextResponse.json({ success: true, count: storeMenuCaches[storeSlug].length, items: storeMenuCaches[storeSlug] });
+      updatedItems = body.items.map((item: any) => ({
+        id: item.id || 'bp-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+        name: String(item.name || 'Untitled Dish').trim(),
+        cat: item.cat || item.category || 'coffee',
+        category: item.category || item.cat || 'coffee',
+        price: Number(item.price) || 100,
+        desc: String(item.desc || '').trim(),
+        color: item.color || '#BA7E52',
+        mod: String(item.mod || '').trim(),
+        image: String(item.image || '').trim(),
+        isVeg: item.isVeg !== false,
+        isPopular: Boolean(item.isPopular),
+        available: item.available !== false,
+        isAvailable: item.isAvailable !== false,
+        taxPercent: typeof item.taxPercent === 'number' ? item.taxPercent : 0,
+      }));
     } else if (body.item && body.item.name) {
       const newItem = {
         id: body.item.id || 'bp-' + Date.now(),
         name: String(body.item.name).slice(0, 100),
-        cat: body.item.cat || 'coffee',
+        cat: body.item.cat || body.item.category || 'coffee',
+        category: body.item.category || body.item.cat || 'coffee',
         price: Number(body.item.price) || 100,
         desc: String(body.item.desc || '').slice(0, 300),
         color: body.item.color || '#BA7E52',
         mod: String(body.item.mod || 'Fresh').slice(0, 50),
-        image: String(body.item.image || '').slice(0, 500)
+        image: String(body.item.image || '').slice(0, 500),
+        isVeg: body.item.isVeg !== false,
+        isPopular: Boolean(body.item.isPopular),
+        available: body.item.available !== false,
+        isAvailable: body.item.isAvailable !== false,
+        taxPercent: typeof body.item.taxPercent === 'number' ? body.item.taxPercent : 0,
       };
-      const existingIdx = storeMenuCaches[storeSlug].findIndex(i => i.id === newItem.id);
+
+      const existingIdx = global.storeMenuCaches[storeSlug].findIndex((i) => i.id === newItem.id);
       if (existingIdx !== -1) {
-        storeMenuCaches[storeSlug][existingIdx] = newItem;
+        global.storeMenuCaches[storeSlug][existingIdx] = newItem;
       } else {
-        storeMenuCaches[storeSlug].unshift(newItem);
+        global.storeMenuCaches[storeSlug].unshift(newItem);
       }
-      syncMenuToFirestore(storeSlug, storeMenuCaches[storeSlug]).catch(() => {});
-      return NextResponse.json({ success: true, item: newItem, items: storeMenuCaches[storeSlug] });
+      updatedItems = global.storeMenuCaches[storeSlug];
+    } else {
+      return NextResponse.json({ success: false, error: 'Invalid payload' }, { status: 400 });
     }
 
-    return NextResponse.json({ success: false, error: 'Invalid payload' }, { status: 400 });
+    // 1. Update in-memory global caches
+    global.storeMenuCaches[storeSlug] = updatedItems;
+    if (global.storeMenuRegistry) {
+      global.storeMenuRegistry[storeSlug] = updatedItems.map((it: any) => ({
+        id: it.id,
+        name: it.name,
+        category: it.category || it.cat,
+        price: it.price,
+        priceInPaise: (it.price || 0) * 100,
+        desc: it.desc || '',
+        image: it.image || '',
+        isVeg: it.isVeg !== false,
+        isPopular: it.isPopular,
+        isAvailable: it.isAvailable !== false,
+        taxPercent: it.taxPercent || 0,
+      }));
+    }
+
+    // 2. Persist to MongoDB
+    try {
+      const conn = await connectMongoDB();
+      if (conn) {
+        const db = conn.connection.db;
+        await db.collection('store_menus').updateOne(
+          { storeSlug },
+          {
+            $set: {
+              storeSlug,
+              items: updatedItems,
+              updatedAt: new Date(),
+            },
+          },
+          { upsert: true }
+        );
+      }
+    } catch (dbErr) {
+      console.warn('[Menu API POST DB error]:', dbErr);
+    }
+
+    // 3. Sync to Firestore (non-blocking)
+    syncMenuToFirestore(storeSlug, updatedItems).catch(() => {});
+
+    return NextResponse.json({
+      success: true,
+      count: updatedItems.length,
+      items: updatedItems,
+      storeSlug,
+    });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },

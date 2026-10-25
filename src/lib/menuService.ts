@@ -157,13 +157,44 @@ if (!global.storeMenuRegistry) {
   global.storeMenuRegistry = {};
 }
 
+import { connectMongoDB } from '@/lib/mongodb';
+
 /**
  * Get full store menu with live items and out-of-stock statuses
  */
 export async function getStoreMenu(storeSlug: string): Promise<MenuItemDetailed[]> {
-  if (global.storeMenuRegistry && global.storeMenuRegistry[storeSlug]) {
-    return global.storeMenuRegistry[storeSlug];
+  const normalized = (storeSlug || 'brewpluse').toLowerCase().trim();
+  if (global.storeMenuRegistry && global.storeMenuRegistry[normalized] && global.storeMenuRegistry[normalized].length > 0) {
+    return global.storeMenuRegistry[normalized];
   }
+
+  try {
+    const conn = await connectMongoDB();
+    if (conn) {
+      const db = conn.connection.db;
+      const doc = await db.collection('store_menus').findOne({ storeSlug: normalized });
+      if (doc && Array.isArray(doc.items) && doc.items.length > 0) {
+        if (!global.storeMenuRegistry) global.storeMenuRegistry = {};
+        global.storeMenuRegistry[normalized] = doc.items.map((it: any) => ({
+          id: it.id,
+          name: it.name,
+          category: it.category || it.cat || 'coffee',
+          price: it.price,
+          priceInPaise: (it.price || 0) * 100,
+          desc: it.desc || '',
+          image: it.image || '',
+          isVeg: it.isVeg !== false,
+          isPopular: Boolean(it.isPopular),
+          isAvailable: it.isAvailable !== false,
+          taxPercent: it.taxPercent || 0,
+        }));
+        return global.storeMenuRegistry[normalized];
+      }
+    }
+  } catch (err) {
+    console.warn('[menuService getStoreMenu DB error]:', err);
+  }
+
   return BASE_MENU_CATALOG;
 }
 

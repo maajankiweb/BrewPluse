@@ -284,22 +284,63 @@ export default function CustomerQrOrderingPage() {
 
   useEffect(() => {
     async function loadMenu() {
-      try {
-        const res = await fetch('/api/menu');
-        const data = await res.json();
-        if (data && data.success && Array.isArray(data.items) && data.items.length > 0) {
-          setMenu(data.items);
-          return;
-        }
-      } catch (e) {}
+      const normalizeItem = (it: any): MenuItem => {
+        const catRaw = it.category || it.cat || 'General';
+        const categoryFormatted =
+          catRaw === 'coffee'
+            ? 'Coffee'
+            : catRaw === 'tea'
+            ? 'Tea'
+            : catRaw === 'bakes'
+            ? 'Bakery'
+            : catRaw === 'food'
+            ? 'Food'
+            : catRaw === 'snacks'
+            ? 'Snacks'
+            : catRaw === 'beverages'
+            ? 'Beverages'
+            : catRaw === 'desserts'
+            ? 'Desserts'
+            : typeof catRaw === 'string'
+            ? catRaw.charAt(0).toUpperCase() + catRaw.slice(1)
+            : 'General';
 
+        return {
+          id: it.id || `dish-${Math.random().toString(36).slice(2, 7)}`,
+          name: it.name || 'Specialty Dish',
+          category: categoryFormatted,
+          price: Number(it.price) || 0,
+          description: it.description || it.desc || 'Freshly prepared specialty dish.',
+          image: it.image || 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80',
+          isVeg: it.isVeg !== false,
+          isPopular: Boolean(it.isPopular),
+          available: it.available !== false && it.isAvailable !== false,
+        };
+      };
+
+      const scopedKey = `brewpluse::menu_items_${storeSlug}`;
+
+      // 1. Try local storage first for instant render
       try {
-        const local = localStorage.getItem('brewpluse::menu_items');
+        const local = localStorage.getItem(scopedKey) || localStorage.getItem('brewpluse::menu_items');
         if (local) {
           const parsed = JSON.parse(local);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            setMenu(parsed);
+            setMenu(parsed.map(normalizeItem));
           }
+        }
+      } catch (e) {}
+
+      // 2. Fetch live store catalog from MongoDB backend
+      try {
+        const res = await fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`);
+        const data = await res.json();
+        if (data && data.success && Array.isArray(data.items) && data.items.length > 0) {
+          const normalized = data.items.map(normalizeItem);
+          setMenu(normalized);
+          try {
+            localStorage.setItem(scopedKey, JSON.stringify(normalized));
+          } catch (e) {}
         }
       } catch (e) {}
     }
