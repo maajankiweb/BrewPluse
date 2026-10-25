@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { verifyRazorpaySignature } from '@/lib/razorpay';
 import { connectMongoDB } from '@/lib/mongodb';
 import {
   HardwareOrder,
   updateRuntimeHardwareOrderPayment,
   runtimeHardwareOrders,
 } from '@/lib/models/HardwareOrder';
+import { isValidUtr } from '@/lib/platformUpi';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,29 +13,24 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
+      utr,
       hardwareOrderNumber,
+      razorpay_payment_id,
+      razorpay_order_id,
     } = body;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !hardwareOrderNumber) {
+    const paymentRef = String(utr || razorpay_payment_id || '').trim();
+
+    if (!hardwareOrderNumber || !paymentRef) {
       return NextResponse.json(
-        { success: false, error: 'Missing Razorpay verification tokens.' },
+        { success: false, error: 'Hardware Order Number and UPI Reference (UTR) are required.' },
         { status: 400 }
       );
     }
 
-    // Verify cryptographic signature
-    const isValid = verifyRazorpaySignature(
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature || ''
-    );
-
-    if (!isValid) {
+    if (!isValidUtr(paymentRef)) {
       return NextResponse.json(
-        { success: false, error: 'Cryptographic payment verification failed.' },
+        { success: false, error: 'Please enter a valid 12-digit UPI Reference Number (UTR).' },
         { status: 400 }
       );
     }
@@ -43,8 +38,9 @@ export async function POST(req: Request) {
     // Update in runtime memory
     const updatedRuntime = updateRuntimeHardwareOrderPayment(
       hardwareOrderNumber,
-      razorpay_payment_id,
-      razorpay_order_id
+      paymentRef,
+      razorpay_order_id,
+      'Direct UPI'
     );
 
     // Update in MongoDB
@@ -56,8 +52,9 @@ export async function POST(req: Request) {
           {
             $set: {
               paymentStatus: 'paid',
-              razorpayPaymentId: razorpay_payment_id,
-              razorpayOrderId: razorpay_order_id,
+              paymentMode: 'Direct UPI',
+              upiReference: paymentRef,
+              razorpayPaymentId: paymentRef,
               status: 'confirmed',
             },
           }
@@ -72,9 +69,10 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       verified: true,
-      paymentId: razorpay_payment_id,
+      paymentId: paymentRef,
+      paymentMode: 'Direct UPI',
       order,
-      message: 'Hardware payment verified and order confirmed successfully.',
+      message: 'Hardware payment verified via Direct UPI and order confirmed successfully.',
     });
   } catch (error: any) {
     console.error('[Hardware verify error]:', error);

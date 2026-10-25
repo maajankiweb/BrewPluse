@@ -29,20 +29,7 @@ import {
   getHardwareCartTotals,
 } from '@/lib/hardwareCart';
 import HardwareOrdersModal from '@/components/hardware/HardwareOrdersModal';
-
-// Load Razorpay checkout script dynamically
-const loadRazorpayScript = (): Promise<boolean> => {
-  return new Promise((resolve) => {
-    if (typeof window === 'undefined') return resolve(false);
-    if ((window as any).Razorpay) return resolve(true);
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
+import DirectUpiModal from '@/components/payment/DirectUpiModal';
 
 export default function HardwareCartPage() {
   const routeParams = useParams();
@@ -109,7 +96,10 @@ export default function HardwareCartPage() {
     refreshCart();
   };
 
-  const handleCheckoutWithRazorpay = async (e: React.FormEvent) => {
+  const [isUpiModalOpen, setIsUpiModalOpen] = useState(false);
+  const [pendingHardwareOrderNumber, setPendingHardwareOrderNumber] = useState('');
+
+  const handleCheckoutWithDirectUpi = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
@@ -158,107 +148,49 @@ export default function HardwareCartPage() {
 
       const orderData = await res.json();
       if (!res.ok || !orderData.success) {
-        throw new Error(orderData.error || 'Failed to initialize payment.');
+        throw new Error(orderData.error || 'Failed to initialize hardware order.');
       }
 
-      // 2. Load Razorpay SDK
-      const isLoaded = await loadRazorpayScript();
-      if (!isLoaded && orderData.isLive) {
-        throw new Error('Razorpay SDK failed to load. Please check your internet connection.');
-      }
-
-      // If Razorpay SDK is available and live mode or mock testing
-      if ((window as any).Razorpay && orderData.orderId && !orderData.orderId.startsWith('order_hw_mock_skip')) {
-        const rzpOptions = {
-          key: orderData.keyId,
-          amount: orderData.amount,
-          currency: orderData.currency || 'INR',
-          name: 'BrewPluse Hardware Store',
-          description: `Payment for Hardware Order ${orderData.hardwareOrderNumber}`,
-          image: '/apple-icon.png',
-          order_id: orderData.orderId,
-          handler: async function (response: any) {
-            // 3. Verify Payment
-            try {
-              const verifyRes = await fetch('/api/hardware/verify-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  hardwareOrderNumber: orderData.hardwareOrderNumber,
-                }),
-              });
-
-              const verifyData = await verifyRes.json();
-              if (verifyData.success) {
-                clearHardwareCart(storeSlug);
-                setConfirmedOrder(verifyData.order || {
-                  orderNumber: orderData.hardwareOrderNumber,
-                  total: totals.total,
-                  items: cartItems,
-                  paymentStatus: 'paid',
-                  razorpayPaymentId: response.razorpay_payment_id,
-                  estimatedDelivery: '3-5 Business Days',
-                });
-              } else {
-                setErrorMessage(verifyData.error || 'Payment verification failed.');
-              }
-            } catch (vErr: any) {
-              setErrorMessage('Verification failed: ' + vErr.message);
-            } finally {
-              setIsProcessing(false);
-            }
-          },
-          prefill: {
-            name: contactPerson,
-            email: email,
-            contact: phone,
-          },
-          theme: {
-            color: '#0B5C45',
-          },
-          modal: {
-            ondismiss: function () {
-              setIsProcessing(false);
-            },
-          },
-        };
-
-        const rzp = new (window as any).Razorpay(rzpOptions);
-        rzp.open();
-        return;
-      }
-
-      // 4. Fallback test simulation if in dev test mode
-      const mockPaymentId = `pay_mock_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-      const verifyRes = await fetch('/api/hardware/verify-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          razorpay_order_id: orderData.orderId,
-          razorpay_payment_id: mockPaymentId,
-          razorpay_signature: 'test_valid_mock_signature',
-          hardwareOrderNumber: orderData.hardwareOrderNumber,
-        }),
-      });
-
-      const verifyData = await verifyRes.json();
-      clearHardwareCart(storeSlug);
-      setConfirmedOrder(verifyData.order || {
-        orderNumber: orderData.hardwareOrderNumber,
-        total: totals.total,
-        items: cartItems,
-        paymentStatus: 'paid',
-        razorpayPaymentId: mockPaymentId,
-        estimatedDelivery: '3-5 Business Days',
-      });
+      setPendingHardwareOrderNumber(orderData.hardwareOrderNumber);
+      setIsUpiModalOpen(true);
     } catch (err: any) {
       console.error('Checkout error:', err);
       setErrorMessage(err.message || 'Something went wrong during checkout.');
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleVerifyHardwarePayment = async (utr: string) => {
+    try {
+      const verifyRes = await fetch('/api/hardware/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          utr,
+          hardwareOrderNumber: pendingHardwareOrderNumber,
+        }),
+      });
+
+      const verifyData = await verifyRes.json();
+      if (!verifyRes.ok || !verifyData.success) {
+        return { success: false, message: verifyData.error || 'Payment verification failed.' };
+      }
+
+      clearHardwareCart(storeSlug);
+      setConfirmedOrder(verifyData.order || {
+        orderNumber: pendingHardwareOrderNumber,
+        total: totals.total,
+        items: cartItems,
+        paymentStatus: 'paid',
+        paymentMode: 'Direct UPI',
+        upiReference: utr,
+        estimatedDelivery: '3-5 Business Days',
+      });
+      setIsUpiModalOpen(false);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, message: err?.message || 'Verification error' };
     }
   };
 
@@ -697,28 +629,28 @@ export default function HardwareCartPage() {
                   </div>
                 )}
 
-                {/* Razorpay Pay Button */}
+                {/* Direct UPI Pay Button */}
                 <button
                   type="button"
                   disabled={isProcessing}
-                  onClick={handleCheckoutWithRazorpay}
+                  onClick={handleCheckoutWithDirectUpi}
                   className="w-full h-12 rounded-xl bg-[#062F23] hover:bg-[#0B5C45] active:scale-[0.98] text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-md transition-all cursor-pointer disabled:opacity-70 disabled:pointer-events-none"
                 >
                   {isProcessing ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Opening Razorpay Gateway...</span>
+                      <span>Creating Order...</span>
                     </>
                   ) : (
                     <>
                       <Lock className="w-4 h-4 text-emerald-400" />
-                      <span>Pay ₹{totals.total.toLocaleString('en-IN')}.00 with Razorpay</span>
+                      <span>Pay ₹{totals.total.toLocaleString('en-IN')}.00 via Direct UPI</span>
                     </>
                   )}
                 </button>
 
                 <p className="text-[11px] text-center text-neutral-500 dark:text-neutral-400">
-                  Instant UPI, Credit/Debit Cards, Netbanking &amp; Wallets supported.
+                  Instant 0% fee payment via GPay, PhonePe, Paytm, BHIM &amp; Cred.
                 </p>
 
                 {/* Trust Badges */}
@@ -758,6 +690,18 @@ export default function HardwareCartPage() {
         isOpen={isOrdersModalOpen}
         onClose={() => setIsOrdersModalOpen(false)}
         storeSlug={storeSlug}
+      />
+
+      {/* Direct UPI Payment Modal */}
+      <DirectUpiModal
+        isOpen={isUpiModalOpen}
+        onClose={() => setIsUpiModalOpen(false)}
+        title="Hardware Order Checkout"
+        subtitle={`Order: ${pendingHardwareOrderNumber}`}
+        amount={totals.total}
+        transactionNote={`Hardware Order ${pendingHardwareOrderNumber}`}
+        referenceId={pendingHardwareOrderNumber}
+        onVerified={handleVerifyHardwarePayment}
       />
     </DashboardShell>
   );

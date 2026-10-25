@@ -4,19 +4,21 @@ import { requireStaff } from '@/lib/authService';
 import { verifyRazorpaySignature } from '@/lib/razorpay';
 import { settleStorePlatformFee } from '@/lib/models/Store';
 import { logPaymentAudit } from '@/lib/auditLog';
+import { isValidUtr } from '@/lib/platformUpi';
 
 export const dynamic = 'force-dynamic';
 
 const VerifySettlementSchema = z.object({
-  razorpay_order_id: z.string().min(1, 'Order ID is required'),
-  razorpay_payment_id: z.string().min(1, 'Payment ID is required'),
-  razorpay_signature: z.string().min(1, 'Signature is required'),
+  utr: z.string().optional(),
+  razorpay_order_id: z.string().optional(),
+  razorpay_payment_id: z.string().optional(),
+  razorpay_signature: z.string().optional(),
 });
 
 /**
  * POST /api/admin/platform-billing/verify-settlement
  * Roles: owner, manager
- * Cryptographically verifies Razorpay settlement of ₹200 to BrewPluse owner.
+ * Verifies Direct UPI (12-digit UTR) or legacy Razorpay settlement of ₹200 to BrewPluse platform.
  * Deducts balance and sets a 2-minute cooldown timer before unlocking orders.
  */
 export async function POST(request: Request) {
@@ -41,22 +43,54 @@ export async function POST(request: Request) {
       );
     }
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = parsed.data;
+    const { utr, razorpay_order_id, razorpay_payment_id, razorpay_signature } = parsed.data;
     const storeSlug = auth.storeSlug;
 
-    // Verify HMAC-SHA256 signature
-    const isValid = verifyRazorpaySignature(
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature
-    );
+    let paymentReference = '';
+    let method = 'direct_upi';
 
-    if (!isValid) {
+    if (utr) {
+      const cleanUtr = utr.trim();
+      if (!isValidUtr(cleanUtr)) {
+        return NextResponse.json(
+          {
+            error: {
+              code: 'INVALID_UTR',
+              message: 'Please provide a valid 12-digit UPI Reference Number (UTR).',
+            },
+          },
+          { status: 400 }
+        );
+      }
+      paymentReference = `UPI-${cleanUtr}`;
+      method = 'direct_upi';
+    } else if (razorpay_order_id && razorpay_payment_id && razorpay_signature) {
+      // Verify HMAC-SHA256 signature
+      const isValid = verifyRazorpaySignature(
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature
+      );
+
+      if (!isValid) {
+        return NextResponse.json(
+          {
+            error: {
+              code: 'INVALID_SIGNATURE',
+              message: 'Cryptographic settlement verification failed. Signature mismatch.',
+            },
+          },
+          { status: 400 }
+        );
+      }
+      paymentReference = razorpay_payment_id;
+      method = 'razorpay';
+    } else {
       return NextResponse.json(
         {
           error: {
-            code: 'INVALID_SIGNATURE',
-            message: 'Cryptographic settlement verification failed. Signature mismatch.',
+            code: 'MISSING_DATA',
+            message: 'Please provide either a 12-digit UPI Reference Number (UTR) or payment credentials.',
           },
         },
         { status: 400 }
@@ -64,21 +98,21 @@ export async function POST(request: Request) {
     }
 
     // Apply settlement and start 2-minute cooldown
-    const settlement = await settleStorePlatformFee(storeSlug, razorpay_payment_id);
+    const settlement = await settleStorePlatformFee(storeSlug, paymentReference);
 
     // Audit log
     await logPaymentAudit({
       sessionId: `platform_settle_${Date.now()}`,
       storeId: storeSlug,
       amountPaise: 20000,
-      method: 'razorpay',
+      method,
       receivedBy: {
         staffId: auth.user?.uid || 'platform_admin',
         email: auth.user?.email || 'admin@brewpluse.com',
         role: auth.user?.role || 'owner',
       },
       action: 'payment_received',
-      notes: `Platform fee settlement of ₹200. Razorpay ID: ${razorpay_payment_id}`,
+      notes: `Platform fee settlement of ₹200. Reference: ${paymentReference} (${method})`,
     });
 
     return NextResponse.json({

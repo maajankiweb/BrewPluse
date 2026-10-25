@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { CreditCard, AlertTriangle, Clock, CheckCircle2, RefreshCw, Zap, Landmark } from 'lucide-react';
+import { CreditCard, QrCode, AlertTriangle, Clock, CheckCircle2, RefreshCw, Zap, Landmark } from 'lucide-react';
+import DirectUpiModal from '@/components/payment/DirectUpiModal';
 
 interface BillingStatus {
   accumulatedDuePaise: number;
@@ -23,6 +24,7 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
   const [status, setStatus] = useState<BillingStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [settling, setSettling] = useState(false);
+  const [isUpiModalOpen, setIsUpiModalOpen] = useState(false);
   const [cooldownCountdown, setCooldownCountdown] = useState<number>(0);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -67,49 +69,10 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
     return () => clearInterval(timer);
   }, [cooldownCountdown]);
 
-  // Handle ₹200 Razorpay settlement
-  async function handleSettlePayment() {
-    setSettling(true);
+  // Open Direct UPI settlement modal
+  function handleSettlePayment() {
     setNotice(null);
-    try {
-      // 1. Create settlement Razorpay order
-      const res = await fetch('/api/admin/platform-billing/create-settlement', {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        setNotice(data?.error?.message || 'Failed to initialize settlement payment.');
-        setSettling(false);
-        return;
-      }
-
-      const { order } = data;
-
-      // 2. Mock / Real Razorpay Checkout flow
-      const mockPaymentId = `pay_settle_${Date.now()}`;
-      const verifyRes = await fetch('/api/admin/platform-billing/verify-settlement', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          razorpay_order_id: order.id,
-          razorpay_payment_id: mockPaymentId,
-          razorpay_signature: 'test_valid_mock_signature',
-        }),
-      });
-
-      const verifyData = await verifyRes.json();
-      if (verifyRes.ok && verifyData.success) {
-        setNotice('₹200 Settlement Verified! Ordering will resume in 2 minutes.');
-        setCooldownCountdown(120);
-        await loadStatus();
-      } else {
-        setNotice(verifyData?.error?.message || 'Settlement verification failed.');
-      }
-    } catch (err: any) {
-      setNotice('Network error while processing settlement.');
-    } finally {
-      setSettling(false);
-    }
+    setIsUpiModalOpen(true);
   }
 
   if (loading || !status) return null;
@@ -164,7 +127,7 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
                 </span>
               </div>
               <p className="text-xs text-rose-800 dark:text-rose-300 mt-1 leading-relaxed max-w-xl">
-                You have billed 200 orders on BrewPluse (₹1/order = ₹200.00). Settle this ₹200 to BrewPluse via Razorpay to resume accepting new table orders. Orders will re-open 2 minutes after settlement.
+                You have billed 200 orders on BrewPluse (₹1/order = ₹200.00). Settle this ₹200 to BrewPluse via Direct UPI to resume accepting new table orders. Orders will re-open 2 minutes after settlement.
               </p>
             </div>
           </div>
@@ -172,11 +135,10 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
           <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
             <button
               onClick={handleSettlePayment}
-              disabled={settling}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
             >
-              <CreditCard className="w-4 h-4" />
-              <span>{settling ? 'Processing...' : 'Settle ₹200 via Razorpay'}</span>
+              <QrCode className="w-4 h-4" />
+              <span>Settle ₹200 via Direct UPI</span>
             </button>
           </div>
         </div>
@@ -221,10 +183,10 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
             {dueRupees > 0 && (
               <button
                 onClick={handleSettlePayment}
-                disabled={settling}
-                className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[11px] font-semibold transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
               >
-                {settling ? 'Processing...' : 'Settle Early'}
+                <QrCode className="w-3 h-3" />
+                <span>Settle Early via UPI</span>
               </button>
             )}
           </div>
@@ -236,6 +198,31 @@ export default function PlatformBillingSettlementCard({ storeSlug }: { storeSlug
           {notice}
         </div>
       )}
+
+      {/* Direct UPI Settlement Modal */}
+      <DirectUpiModal
+        isOpen={isUpiModalOpen}
+        onClose={() => setIsUpiModalOpen(false)}
+        amount={dueRupees > 0 ? dueRupees : 200}
+        title="Platform Fee Settlement"
+        description={`Settle accumulated platform fee of ₹${dueRupees > 0 ? dueRupees : 200}.00 directly via UPI to BrewPluse.`}
+        note={`BP-SETTLE-${storeSlug.toUpperCase()}`}
+        onConfirmUtr={async (utr) => {
+          const res = await fetch('/api/admin/platform-billing/verify-settlement', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ utr }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.success) {
+            throw new Error(data?.error?.message || 'Settlement verification failed.');
+          }
+          setNotice('₹200 Settlement Verified via Direct UPI! Ordering will resume in 2 minutes.');
+          setCooldownCountdown(120);
+          setIsUpiModalOpen(false);
+          await loadStatus();
+        }}
+      />
     </div>
   );
 }

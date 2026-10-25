@@ -32,7 +32,8 @@ export interface IHardwareOrder extends Document {
   tax: number;
   total: number;
   paymentStatus: 'pending' | 'paid' | 'failed';
-  paymentMode: 'Razorpay' | string;
+  paymentMode: 'Direct UPI' | 'Razorpay' | string;
+  upiReference?: string;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   status: 'confirmed' | 'processing' | 'shipped' | 'delivered';
@@ -85,7 +86,8 @@ const HardwareOrderSchema = new Schema<IHardwareOrder>(
       enum: ['pending', 'paid', 'failed'],
       default: 'pending',
     },
-    paymentMode: { type: String, default: 'Razorpay' },
+    paymentMode: { type: String, default: 'Direct UPI' },
+    upiReference: { type: String, index: true },
     razorpayOrderId: { type: String, index: true },
     razorpayPaymentId: { type: String },
     status: {
@@ -143,8 +145,9 @@ export function createRuntimeHardwareOrder(data: any) {
 
 export function updateRuntimeHardwareOrderPayment(
   orderNumber: string,
-  razorpayPaymentId: string,
-  razorpayOrderId?: string
+  paymentRef: string,
+  razorpayOrderId?: string,
+  paymentMode: string = 'Direct UPI'
 ) {
   const existing = runtimeHardwareOrders.get(orderNumber);
   if (!existing) return null;
@@ -152,7 +155,9 @@ export function updateRuntimeHardwareOrderPayment(
   const updated = {
     ...existing,
     paymentStatus: 'paid',
-    razorpayPaymentId,
+    paymentMode,
+    upiReference: paymentRef,
+    razorpayPaymentId: paymentRef,
     razorpayOrderId: razorpayOrderId || existing.razorpayOrderId,
     updatedAt: new Date().toISOString(),
   };

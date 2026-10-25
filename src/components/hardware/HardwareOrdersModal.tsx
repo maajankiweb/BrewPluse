@@ -104,7 +104,7 @@ export default function HardwareOrdersModal({
                       </span>
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400 flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />
-                        {order.paymentStatus === 'paid' ? 'Paid via Razorpay' : 'Pending'}
+                        {order.paymentStatus === 'paid' ? `Paid (${order.paymentMode || 'Direct UPI'})` : 'Pending'}
                       </span>
                     </div>
                     <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">

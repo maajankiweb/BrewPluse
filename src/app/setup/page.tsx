@@ -7,6 +7,7 @@ import {
   Coffee,
   ShieldCheck,
   CreditCard,
+  QrCode,
   MapPin,
   Navigation,
   Upload,
@@ -25,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { onAuthChange, logoutUser } from '@/lib/firebaseAuth';
+import DirectUpiModal from '@/components/payment/DirectUpiModal';
 
 type SetupStepId = 'payment' | 'business' | 'location' | 'preferences';
 type InternalState =
@@ -50,25 +52,6 @@ const STEPS: StepDef[] = [
   { id: 'preferences', label: 'Preferences', states: ['GEOFENCING'] },
 ];
 
-function loadRazorpayCheckoutScript(): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (typeof window === 'undefined') return resolve(false);
-    if ((window as any).Razorpay) return resolve(true);
-    const existing = document.getElementById('razorpay-checkout-js');
-    if (existing) {
-      existing.addEventListener('load', () => resolve(true));
-      return;
-    }
-    const script = document.createElement('script');
-    script.id = 'razorpay-checkout-js';
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-}
-
 export default function SetupPage() {
   const router = useRouter();
   const toast = useToast();
@@ -79,6 +62,7 @@ export default function SetupPage() {
 
   // Payment states
   const [paymentVerified, setPaymentVerified] = useState(false);
+  const [isUpiModalOpen, setIsUpiModalOpen] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
@@ -147,7 +131,7 @@ export default function SetupPage() {
     // Strictly verify against backend - never trust unverified localStorage alone
     if (email || uid) {
       fetch(
-        `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
+        `/api/payments/upi/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -179,9 +163,6 @@ export default function SetupPage() {
       }
     });
 
-    // Preload Razorpay Checkout SDK
-    loadRazorpayCheckoutScript();
-
     return () => unsubscribe();
   }, []);
 
@@ -197,135 +178,10 @@ export default function SetupPage() {
   const activeStepIdx = currentStepIndex >= 0 ? currentStepIndex : 0;
   const isReviewOrCompleted = currentState === 'REVIEW' || currentState === 'COMPLETED';
 
-  // Handle ₹1 Verification Payment via real Razorpay
-  async function handleVerifyPayment() {
-    setPaymentProcessing(true);
+  // Handle ₹1 Verification Payment via Direct UPI
+  function handleVerifyPayment() {
     setVerificationError(null);
-
-    const scriptLoaded = await loadRazorpayCheckoutScript();
-    if (!scriptLoaded) {
-      setPaymentProcessing(false);
-      setVerificationError('Razorpay Checkout failed to load. Check your internet connection.');
-      toast.error('Razorpay SDK Error', {
-        description: 'Failed to load Razorpay checkout script.',
-      });
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/payments/razorpay/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: 1,
-          currency: 'INR',
-          receipt: `bp_setup_${Date.now()}`,
-          notes: { email: userEmail, purpose: 'Mobile Account Verification' },
-        }),
-      });
-
-      const orderData = await res.json();
-      if (!res.ok || !orderData.orderId) {
-        setPaymentProcessing(false);
-        const errMsg = orderData.error || 'Failed to create Razorpay verification order.';
-        setVerificationError(errMsg);
-        toast.error('Order Error', { description: errMsg });
-        return;
-      }
-
-      // Check if real keys are configured
-      if (orderData.keyId === 'rzp_test_placeholder' || !orderData.keyId) {
-        setPaymentProcessing(false);
-        const keyMsg =
-          'Razorpay API key (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET) is not configured in .env.local. Please add your Razorpay keys to process live ₹1.00 verification.';
-        setVerificationError(keyMsg);
-        toast.error('Razorpay Gateway Not Configured', {
-          description: 'Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env.local to enable real payments.',
-        });
-        return;
-      }
-
-      if (typeof window === 'undefined' || !(window as any).Razorpay) {
-        setPaymentProcessing(false);
-        setVerificationError('Razorpay runtime not ready. Please try again.');
-        return;
-      }
-
-      const rzp = new (window as any).Razorpay({
-        key: orderData.keyId,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'BrewPluse Account Verification',
-        description: 'Account verification (₹1.00)',
-        image: '/icon.png',
-        order_id: orderData.orderId,
-        prefill: {
-          email: userEmail || '',
-          contact: '',
-        },
-        theme: { color: '#875200' },
-        handler: async function (response: any) {
-          try {
-            // Verify payment signature on the server
-            const verifyRes = await fetch('/api/payments/razorpay/verify-setup', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                email: userEmail,
-                uid: userId,
-              }),
-            });
-
-            const verifyData = await verifyRes.json();
-            if (verifyRes.ok && verifyData.verified) {
-              setPaymentProcessing(false);
-              setPaymentVerified(true);
-              localStorage.setItem('brewpluse::payment_verified', 'true');
-              toast.success('Account verified successfully!', {
-                description: 'Verification payment of ₹1.00 confirmed and recorded.',
-              });
-              setTimeout(() => {
-                setCurrentState('CAFE_NAME');
-              }, 600);
-            } else {
-              setPaymentProcessing(false);
-              setVerificationError(verifyData.error || 'Payment signature verification failed.');
-              toast.error('Verification Failed', {
-                description: verifyData.error || 'Server rejected payment signature.',
-              });
-            }
-          } catch (vErr: any) {
-            setPaymentProcessing(false);
-            setVerificationError(vErr.message);
-            toast.error('Verification Error', { description: vErr.message });
-          }
-        },
-        modal: {
-          ondismiss: function () {
-            setPaymentProcessing(false);
-            toast.info('Verification Cancelled', {
-              description: 'Payment was not completed. You must verify with ₹1.00 to continue setup.',
-            });
-          },
-        },
-      });
-
-      rzp.on('payment.failed', function (resp: any) {
-        setPaymentProcessing(false);
-        const failDesc = resp.error?.description || 'Transaction declined.';
-        setVerificationError(failDesc);
-        toast.error('Payment Failed', { description: failDesc });
-      });
-
-      rzp.open();
-    } catch (err: any) {
-      setPaymentProcessing(false);
-      setVerificationError(err.message || 'Payment initiation failed.');
-      toast.error('Payment Error', { description: err.message });
-    }
+    setIsUpiModalOpen(true);
   }
 
   // Handle "Already completed payment? Check status" strictly via server check
@@ -346,7 +202,7 @@ export default function SetupPage() {
 
     try {
       const res = await fetch(
-        `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
+        `/api/payments/upi/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`
       );
       const data = await res.json();
 
@@ -354,7 +210,7 @@ export default function SetupPage() {
         setPaymentVerified(true);
         localStorage.setItem('brewpluse::payment_verified', 'true');
         toast.success('Account verification confirmed!', {
-          description: `Payment ID: ${data.paymentId || 'verified'}`,
+          description: `UTR / Reference: ${data.paymentId || 'verified'}`,
         });
         setTimeout(() => {
           setCurrentState('CAFE_NAME');
@@ -368,7 +224,7 @@ export default function SetupPage() {
         );
         toast.error('Payment Not Verified', {
           description:
-            data.message || 'No payment record found. Please click "Verify with ₹1.00" to complete payment.',
+            data.message || 'No payment record found. Please click "Pay & Verify with UPI" to complete verification.',
         });
         setCurrentState('PAYMENT');
       }
@@ -393,7 +249,7 @@ export default function SetupPage() {
       const uid = userId || '';
       if (email || uid) {
         await fetch(
-          `/api/payments/razorpay/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`,
+          `/api/payments/upi/verify-setup?email=${encodeURIComponent(email)}&uid=${encodeURIComponent(uid)}`,
           { method: 'DELETE' }
         );
       }
@@ -756,20 +612,10 @@ export default function SetupPage() {
                   <button
                     type="button"
                     onClick={handleVerifyPayment}
-                    disabled={paymentProcessing}
-                    className="flex w-full h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#875200] via-[#a06200] to-[#875200] text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-[#875200]/30 hover:brightness-110 active:scale-[0.98] transition cursor-pointer disabled:opacity-60"
+                    className="flex w-full h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#875200] via-[#a06200] to-[#875200] text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-[#875200]/30 hover:brightness-110 active:scale-[0.98] transition cursor-pointer"
                   >
-                    {paymentProcessing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin text-white" />
-                        <span>Verifying Payment...</span>
-                      </>
-                    ) : (
-                      <>
-                        <CreditCard className="h-4 w-4" />
-                        <span>Verify with ₹1.00</span>
-                      </>
-                    )}
+                    <QrCode className="h-4 w-4" />
+                    <span>Pay &amp; Verify with Direct UPI (₹1.00)</span>
                   </button>
 
                   <button
@@ -1300,6 +1146,41 @@ export default function SetupPage() {
           <LogOut className="h-4 w-4" />
         </button>
       </div>
+
+      {/* Direct UPI ₹1 Verification Modal */}
+      <DirectUpiModal
+        isOpen={isUpiModalOpen}
+        onClose={() => setIsUpiModalOpen(false)}
+        amount={1}
+        title="BrewPluse Account Verification"
+        description="Nominal ₹1.00 setup verification to prevent automated registrations. Instant auto-credit."
+        note={`BP-SETUP-${(userId || userEmail || 'USER').slice(-6).toUpperCase()}`}
+        onConfirmUtr={async (utr) => {
+          const res = await fetch('/api/payments/upi/verify-setup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              utr,
+              email: userEmail,
+              uid: userId,
+              amount: 1,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.verified) {
+            throw new Error(data.error || 'Verification failed. Please check your UTR.');
+          }
+          setPaymentVerified(true);
+          localStorage.setItem('brewpluse::payment_verified', 'true');
+          setIsUpiModalOpen(false);
+          toast.success('Account verified successfully!', {
+            description: `Verification recorded with UTR: ${utr}.`,
+          });
+          setTimeout(() => {
+            setCurrentState('CAFE_NAME');
+          }, 600);
+        }}
+      />
     </main>
   );
 }
