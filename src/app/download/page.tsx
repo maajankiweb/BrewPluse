@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://brewpluse.com/download',
   },
+  openGraph: {
+    title: "Download Android APK & Desktop POS Software | BrewPluse",
+    description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
+    url: 'https://brewpluse.com/download',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Download Android APK & Desktop POS Software | BrewPluse",
+    description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
+  },
 };
 
 export default function DownloadPage() {

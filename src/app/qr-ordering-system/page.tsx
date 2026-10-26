@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "QR Ordering System for Cafes & Restaurants | Contactless Table Orders | BrewPluse",
-  description: "Empower guests with contactless QR code table ordering for cafes and restaurants. Instant digital menu, zero app downloads, UPI payments, and direct kitchen KDS sync with BrewPluse CafePOS.",
+  description: "Contactless QR code table ordering system for cafes & restaurants. Instant digital menu, zero app downloads, direct UPI payments & live kitchen KDS sync.",
   keywords: [
     'qr ordering system',
     'qr table ordering',
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/qr-ordering-system',
+  },
+  openGraph: {
+    title: "QR Ordering System for Cafes & Restaurants | BrewPluse",
+    description: "Contactless QR code table ordering system for cafes & restaurants. Instant digital menu, zero app downloads, direct UPI payments & live kitchen KDS sync.",
+    url: 'https://brewpluse.com/qr-ordering-system',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "QR Ordering System for Cafes & Restaurants | BrewPluse",
+    description: "Contactless QR code table ordering system for cafes & restaurants. Instant digital menu, zero app downloads, direct UPI payments & live kitchen KDS sync.",
   },
 };
 

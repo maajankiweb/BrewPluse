@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Restaurant POS Software & Billing System | Cloud Restaurant POS (Resturant POS) | BrewPluse",
-  description: "Comprehensive cloud restaurant POS software (Resturant POS) with visual floor plan management, split billing, multi-station KOT routing, staff roles, and ₹0/month subscription.",
+  description: "Cloud restaurant POS system with visual table plans, split billing, multi-station KOT routing & kitchen display screens. 100% free with ₹0/month fees.",
   keywords: [
     'restaurant pos',
     'resturant pos',
@@ -17,6 +17,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/restaurant-pos',
+  },
+  openGraph: {
+    title: "Restaurant POS Software & Billing System | BrewPluse",
+    description: "Cloud restaurant POS system with visual table plans, split billing, multi-station KOT routing & kitchen display screens. 100% free with ₹0/month fees.",
+    url: 'https://brewpluse.com/restaurant-pos',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Restaurant POS Software & Billing System | BrewPluse",
+    description: "Cloud restaurant POS system with visual table plans, split billing, multi-station KOT routing & kitchen display screens. 100% free with ₹0/month fees.",
   },
 };
 

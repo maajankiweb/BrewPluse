@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Kitchen Display System (KDS) for Cafes & Restaurants | Paperless Kitchen | BrewPluse",
-  description: "Upgrade to a real-time digital Kitchen Display System (KDS) for cafes and restaurants. Paperless order routing, color-coded prep timers, station management, and zero monthly software fees.",
+  description: "Real-time Kitchen Display System (KDS) for cafes & restaurants. Paperless order routing, color-coded prep timers, station filters & ₹0/month software fees.",
   keywords: [
     'kitchen display system',
     'kds',
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/kitchen-display-system',
+  },
+  openGraph: {
+    title: "Kitchen Display System (KDS) for Cafes & Restaurants | BrewPluse",
+    description: "Real-time Kitchen Display System (KDS) for cafes & restaurants. Paperless order routing, color-coded prep timers, station filters & ₹0/month software fees.",
+    url: 'https://brewpluse.com/kitchen-display-system',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Kitchen Display System (KDS) for Cafes & Restaurants | BrewPluse",
+    description: "Real-time Kitchen Display System (KDS) for cafes & restaurants. Paperless order routing, color-coded prep timers, station filters & ₹0/month software fees.",
   },
 };
 

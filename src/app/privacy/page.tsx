@@ -3,9 +3,20 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Privacy Notice & Data Protection Policy (India DPDP 2023 Aligned) | BrewPluse",
-  description: "BrewPluse's Privacy Notice details our itemized personal data collection, processing purposes, retention periods, and your rights under the Digital Personal Data Protection Act, 2023.",
+  description: "BrewPluse Privacy Policy & data rights under India DPDP Act 2023. Learn how cafe POS data, customer information, and cloud orders are safeguarded with us.",
   alternates: {
     canonical: 'https://brewpluse.com/privacy',
+  },
+  openGraph: {
+    title: "Privacy Notice & Data Protection Policy | BrewPluse",
+    description: "BrewPluse Privacy Policy & data rights under India DPDP Act 2023. Learn how cafe POS data, customer information, and cloud orders are safeguarded with us.",
+    url: 'https://brewpluse.com/privacy',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Privacy Notice & Data Protection Policy | BrewPluse",
+    description: "BrewPluse Privacy Policy & data rights under India DPDP Act 2023. Learn how cafe POS data, customer information, and cloud orders are safeguarded with us.",
   },
 };
 

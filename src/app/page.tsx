@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import HeroPosMockup from '@/components/HeroPosMockup';
 import TrustBar from '@/components/TrustBar';
@@ -8,6 +9,40 @@ import PricingCalculator from '@/components/PricingCalculator';
 import FeatureGrid from '@/components/FeatureGrid';
 import WhyAndFaqSection from '@/components/WhyAndFaqSection';
 import CtaBanner from '@/components/CtaBanner';
+
+export const metadata: Metadata = {
+  title: 'BrewPluse – Free AI Cafe POS & Restaurant Management System',
+  description:
+    'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
+  alternates: {
+    canonical: 'https://brewpluse.com',
+  },
+  openGraph: {
+    title: 'BrewPluse – AI-Powered Cafe Management System & POS Software',
+    description:
+      'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, and recipe inventory. Zero monthly software fees for modern coffee shops.',
+    url: 'https://brewpluse.com',
+    siteName: 'BrewPluse',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/storefront.png',
+        width: 1200,
+        height: 630,
+        alt: 'BrewPluse – Cloud Point of Sale and Cafe Operating System',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BrewPluse – Cloud POS & Cafe Management Software',
+    description:
+      'Manage cafe billing, table QR ordering, live KDS screens, and inventory with BrewPluse. Zero monthly fees for modern cafes, coffee shops & restaurants.',
+    images: ['/storefront.png'],
+    creator: '@brewpluse',
+  },
+};
 
 export default function HomePage() {
   return (

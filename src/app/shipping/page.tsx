@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://brewpluse.com/shipping',
   },
+  openGraph: {
+    title: "Shipping & Digital Cloud Delivery Policy | BrewPluse",
+    description: "Read the official service delivery and cloud fulfillment policy for BrewPluse's instant software account activation, POS app downloads, and support services.",
+    url: 'https://brewpluse.com/shipping',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Shipping & Digital Cloud Delivery Policy | BrewPluse",
+    description: "Read the official service delivery and cloud fulfillment policy for BrewPluse's instant software account activation, POS app downloads, and support services.",
+  },
 };
 
 export default function ShippingPage() {

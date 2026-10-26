@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "How to Set Up & Run Cafe POS in 5 Minutes | BrewPluse Playbook",
-  description: "Step-by-step setup guide for BrewPluse Cafe POS (CafePOS) and Restaurant POS: import digital menus, print table QR codes, connect kitchen displays, and start billing in under 5 minutes.",
+  description: "Step-by-step setup guide for Cafe POS & Restaurant POS. Import digital menus, print table QR codes, connect kitchen KDS & start billing in under 5 mins.",
   keywords: [
     "how to setup cafe pos",
     "cafe pos guide",
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://brewpluse.com/how-to-use",
+  },
+  openGraph: {
+    title: "How to Set Up & Run Cafe POS in 5 Minutes | BrewPluse Playbook",
+    description: "Step-by-step setup guide for Cafe POS & Restaurant POS. Import digital menus, print table QR codes, connect kitchen KDS & start billing in under 5 mins.",
+    url: 'https://brewpluse.com/how-to-use',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "How to Set Up & Run Cafe POS in 5 Minutes | BrewPluse Playbook",
+    description: "Step-by-step setup guide for Cafe POS & Restaurant POS. Import digital menus, print table QR codes, connect kitchen KDS & start billing in under 5 mins.",
   },
 };
 

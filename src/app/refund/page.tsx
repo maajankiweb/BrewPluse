@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://brewpluse.com/refund',
   },
+  openGraph: {
+    title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+    description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
+    url: 'https://brewpluse.com/refund',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+    description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
+  },
 };
 
 export default function RefundPage() {

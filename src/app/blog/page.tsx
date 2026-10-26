@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Cafe POS & Restaurant POS Operations, Technology & Growth Blog | BrewPluse",
-  description: "Expert guides, Cafe POS (CafePOS) benchmarks, Restaurant POS (Resturant POS) comparisons, recipe inventory best practices, and free POS setup tutorials for modern cafe and coffee shop operators.",
+  description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
   keywords: [
     "Cafe POS blog",
     "CafePOS guide",
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://brewpluse.com/blog",
+  },
+  openGraph: {
+    title: "Cafe POS & Restaurant POS Operations & Growth Blog | BrewPluse",
+    description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
+    url: 'https://brewpluse.com/blog',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Cafe POS & Restaurant POS Operations & Growth Blog | BrewPluse",
+    description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
   },
 };
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
-  description: "Transparent Cafe POS (CafePOS) and Restaurant POS pricing: ₹1 per order, ₹0/month forever. Full access to cloud POS billing, table QR ordering, KDS kitchen screens, and recipe inventory.",
+  description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
   keywords: [
     'cafe pos pricing',
     'free cafe pos',
@@ -15,6 +15,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/pricing',
+  },
+  openGraph: {
+    title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
+    description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
+    url: 'https://brewpluse.com/pricing',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
+    description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
   },
 };
 

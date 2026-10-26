@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://brewpluse.com/terms',
   },
+  openGraph: {
+    title: "Terms of Service & Platform Merchant Agreement | BrewPluse",
+    description: "Review the Terms of Service and user agreement governing your use of BrewPluse's cafe point of sale billing, QR table ordering, and cloud management platform.",
+    url: 'https://brewpluse.com/terms',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Terms of Service & Platform Merchant Agreement | BrewPluse",
+    description: "Review the Terms of Service and user agreement governing your use of BrewPluse's cafe point of sale billing, QR table ordering, and cloud management platform.",
+  },
 };
 
 export default function TermsPage() {

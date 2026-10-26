@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Cafe Management Software & POS System | All-in-One Cafe Operating System | BrewPluse",
-  description: "The complete all-in-one cafe management software (CafePOS). Cloud POS, QR table ordering, kitchen KDS, recipe inventory tracking, customer loyalty, and ₹0/month subscription.",
+  description: "All-in-one cafe management software (CafePOS) & Cloud POS. QR table ordering, live KDS screens, recipe inventory tracking & loyalty with ₹0/month fees.",
   keywords: [
     'cafe management software',
     'cafe pos',
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/cafe-management-software',
+  },
+  openGraph: {
+    title: "Cafe Management Software & POS System | BrewPluse",
+    description: "All-in-one cafe management software (CafePOS) & Cloud POS. QR table ordering, live KDS screens, recipe inventory tracking & loyalty with ₹0/month fees.",
+    url: 'https://brewpluse.com/cafe-management-software',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Cafe Management Software & POS System | BrewPluse",
+    description: "All-in-one cafe management software (CafePOS) & Cloud POS. QR table ordering, live KDS screens, recipe inventory tracking & loyalty with ₹0/month fees.",
   },
 };
 

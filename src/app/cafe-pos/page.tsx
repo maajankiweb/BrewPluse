@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Cafe POS (CafePOS) Software & Billing System | Free Coffee Shop Point of Sale | BrewPluse",
-  description: "Fast, cloud-based cafe POS software (CafePOS) designed for coffee shops, bakeries, and quick-service cafes. 2-tap billing, thermal KOT printing, offline cash mode & ₹0/mo subscription.",
+  description: "Fast cloud cafe POS software (CafePOS) for coffee shops & bakeries. 2-tap billing, thermal KOT printing, offline mode & ₹0/month fees. Free setup today!",
   keywords: [
     'cafe pos',
     'cafepos',
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/cafe-pos',
+  },
+  openGraph: {
+    title: "Cafe POS Software & Coffee Shop Billing System | BrewPluse",
+    description: "Fast cloud cafe POS software (CafePOS) for coffee shops & bakeries. 2-tap billing, thermal KOT printing, offline mode & ₹0/month fees. Free setup today!",
+    url: 'https://brewpluse.com/cafe-pos',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Cafe POS Software & Coffee Shop Billing System | BrewPluse",
+    description: "Fast cloud cafe POS software (CafePOS) for coffee shops & bakeries. 2-tap billing, thermal KOT printing, offline mode & ₹0/month fees. Free setup today!",
   },
 };
 

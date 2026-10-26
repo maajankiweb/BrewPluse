@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Staff & Waiter Ordering System | Handheld Table Ordering App for Cafes & Restaurants | BrewPluse",
-  description: "Equip your waitstaff with mobile handheld table ordering. Take orders on any smartphone or tablet, fire KOT tickets instantly to the kitchen display (KDS), and accelerate table turns.",
+  description: "Equip waitstaff with handheld table ordering on any smartphone or tablet. Fire instant KOTs to kitchen KDS screens and accelerate cafe table turns.",
   keywords: [
     'staff ordering system',
     'waiter ordering system',
@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: 'https://brewpluse.com/staff-ordering-system',
+  },
+  openGraph: {
+    title: "Staff & Waiter Ordering System | Handheld Table Ordering | BrewPluse",
+    description: "Equip waitstaff with handheld table ordering on any smartphone or tablet. Fire instant KOTs to kitchen KDS screens and accelerate cafe table turns.",
+    url: 'https://brewpluse.com/staff-ordering-system',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Staff & Waiter Ordering System | Handheld Table Ordering | BrewPluse",
+    description: "Equip waitstaff with handheld table ordering on any smartphone or tablet. Fire instant KOTs to kitchen KDS screens and accelerate cafe table turns.",
   },
 };
 

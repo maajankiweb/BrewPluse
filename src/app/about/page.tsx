@@ -5,18 +5,24 @@ import { ShieldCheck, Zap, Heart, Award, Users, Coffee, ArrowRight } from 'lucid
 export const metadata: Metadata = {
   title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
   description:
-    'Learn about BrewPluse: our mission to eliminate predatory monthly SaaS fees for cafes, coffee shops, and restaurants with cloud-native POS, QR ordering, and live KDS technology.',
+    'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
   alternates: {
     canonical: 'https://brewpluse.com/about',
   },
   openGraph: {
     title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
     description:
-      'Empowering independent coffee shops and restaurants worldwide with enterprise-grade POS and zero subscription fees.',
+      'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
     url: 'https://brewpluse.com/about',
     siteName: 'BrewPluse',
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
+    description:
+      'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
   },
 };
 

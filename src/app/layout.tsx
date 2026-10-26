@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s | BrewPluse Cafe OS',
   },
   description:
-    'Free AI-powered Cafe POS (CafePOS) & Restaurant POS system. Contactless QR table ordering, live kitchen display (KDS), thermal billing, and recipe inventory with zero monthly subscription fees for modern cafes and restaurants.',
+    'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
   keywords: [
     'cafe POS',
     'CafePOS',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'BrewPluse – AI-Powered Cafe Management System & POS Software',
     description:
-      'Cloud-native Point of Sale (POS) and cafe operating system powering independent coffee shops, bakeries, and tea bars worldwide. Zero monthly subscriptions.',
+      'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, and recipe inventory. Zero monthly software fees for modern coffee shops.',
     url: 'https://brewpluse.com',
     siteName: 'BrewPluse',
     locale: 'en_US',
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'BrewPluse – Cloud POS & Cafe Management Software',
     description:
-      'Manage billing, QR ordering, KDS, inventory, and staff with BrewPluse with ₹0/month software subscription.',
+      'Manage cafe billing, table QR ordering, live KDS screens, and inventory with BrewPluse. Zero monthly fees for modern cafes, coffee shops & restaurants.',
     images: ['/storefront.png'],
     creator: '@brewpluse',
   },

@@ -8,22 +8,39 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard/', '/api/'],
+        disallow: ['/dashboard/', '/api/', '/setup/'],
+      },
+      {
+        userAgent: [
+          'Googlebot',
+          'Bingbot',
+          'Slurp',
+          'DuckDuckBot',
+          'Baiduspider',
+          'YandexBot',
+        ],
+        allow: '/',
+        disallow: ['/dashboard/', '/api/', '/setup/'],
       },
       {
         userAgent: [
           'GPTBot',
           'ChatGPT-User',
+          'OAI-SearchBot',
           'PerplexityBot',
           'Google-Extended',
           'ClaudeBot',
+          'anthropic-ai',
           'Applebot',
           'CCBot',
+          'cohere-ai',
         ],
-        allow: ['/', '/llms.txt', '/features', '/pricing', '/faq', '/blog'],
-        disallow: ['/dashboard/', '/api/'],
+        allow: '/',
+        disallow: ['/dashboard/', '/api/', '/setup/'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }
+
