@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Digital Menu for Cafes & Restaurants | Interactive QR Digital Menu | BrewPluse",
+  title: "Interactive Digital Menu for Cafes",
   description: "Create interactive digital QR menus for cafes & restaurants. Live item stock toggles, photo menus, dietary badges & 1-second price updates with BrewPluse.",
   keywords: [
     'digital menu',
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     canonical: 'https://brewpluse.com/digital-menu',
   },
   openGraph: {
-    title: "Digital Menu for Cafes & Restaurants | BrewPluse",
+    title: "Interactive Digital Menu for Cafes | BrewPluse",
     description: "Create interactive digital QR menus for cafes & restaurants. Live item stock toggles, photo menus, dietary badges & 1-second price updates with BrewPluse.",
     url: 'https://brewpluse.com/digital-menu',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Digital Menu for Cafes & Restaurants | BrewPluse",
+    title: "Interactive Digital Menu for Cafes | BrewPluse",
     description: "Create interactive digital QR menus for cafes & restaurants. Live item stock toggles, photo menus, dietary badges & 1-second price updates with BrewPluse.",
   },
 };

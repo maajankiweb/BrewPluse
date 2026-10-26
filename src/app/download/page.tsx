@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Download Android APK & Desktop POS Software | BrewPluse",
+  title: "Download Android POS APK & Desktop App",
   description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
   alternates: {
     canonical: 'https://brewpluse.com/download',
   },
   openGraph: {
-    title: "Download Android APK & Desktop POS Software | BrewPluse",
+    title: "Download Android POS APK & Desktop App | BrewPluse",
     description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
     url: 'https://brewpluse.com/download',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Download Android APK & Desktop POS Software | BrewPluse",
+    title: "Download Android POS APK & Desktop App | BrewPluse",
     description: "Download the official BrewPluse Android application for instant thermal printing, offline billing, table management, and real-time mobile order alerts.",
   },
 };

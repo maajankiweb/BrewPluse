@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Restaurant Management Software & POS | Complete Restaurant System (Resturant POS) | BrewPluse",
+  title: "Cloud Restaurant Management Software",
   description: "Cloud restaurant management software & Restaurant POS (Resturant POS). Visual tables, split checks, multi-station KDS routing & inventory. ₹0/month fees.",
   keywords: [
     'restaurant management software',
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     canonical: 'https://brewpluse.com/restaurant-management-software',
   },
   openGraph: {
-    title: "Restaurant Management Software & POS | BrewPluse",
+    title: "Cloud Restaurant Management Software | BrewPluse",
     description: "Cloud restaurant management software & Restaurant POS (Resturant POS). Visual tables, split checks, multi-station KDS routing & inventory. ₹0/month fees.",
     url: 'https://brewpluse.com/restaurant-management-software',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Restaurant Management Software & POS | BrewPluse",
+    title: "Cloud Restaurant Management Software | BrewPluse",
     description: "Cloud restaurant management software & Restaurant POS (Resturant POS). Visual tables, split checks, multi-station KDS routing & inventory. ₹0/month fees.",
   },
 };

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Cafe POS & Restaurant POS Features | QR Table Ordering & KDS | BrewPluse",
+  title: "Cafe POS & Restaurant System Features",
   description: "Explore complete Cafe POS (CafePOS) & Restaurant POS features: rapid billing, table QR ordering, live KDS, inventory & Google AI reviews with ₹0/mo fees.",
   keywords: [
     "Cafe POS features",
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     canonical: "https://brewpluse.com/features",
   },
   openGraph: {
-    title: "Cafe POS & Restaurant POS Features | QR Table Ordering & KDS | BrewPluse",
+    title: "Cafe POS & Restaurant System Features | BrewPluse",
     description: "Explore complete Cafe POS (CafePOS) & Restaurant POS features: rapid billing, table QR ordering, live KDS, inventory & Google AI reviews with ₹0/mo fees.",
     url: 'https://brewpluse.com/features',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Cafe POS & Restaurant POS Features | QR Table Ordering & KDS | BrewPluse",
+    title: "Cafe POS & Restaurant System Features | BrewPluse",
     description: "Explore complete Cafe POS (CafePOS) & Restaurant POS features: rapid billing, table QR ordering, live KDS, inventory & Google AI reviews with ₹0/mo fees.",
   },
 };

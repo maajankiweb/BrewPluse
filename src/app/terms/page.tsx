@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Terms of Service & Platform Merchant Agreement | BrewPluse",
+  title: "Terms of Service & Merchant Agreement",
   description: "Review the Terms of Service and user agreement governing your use of BrewPluse's cafe point of sale billing, QR table ordering, and cloud management platform.",
   alternates: {
     canonical: 'https://brewpluse.com/terms',
   },
   openGraph: {
-    title: "Terms of Service & Platform Merchant Agreement | BrewPluse",
+    title: "Terms of Service & Merchant Agreement | BrewPluse",
     description: "Review the Terms of Service and user agreement governing your use of BrewPluse's cafe point of sale billing, QR table ordering, and cloud management platform.",
     url: 'https://brewpluse.com/terms',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Terms of Service & Platform Merchant Agreement | BrewPluse",
+    title: "Terms of Service & Merchant Agreement | BrewPluse",
     description: "Review the Terms of Service and user agreement governing your use of BrewPluse's cafe point of sale billing, QR table ordering, and cloud management platform.",
   },
 };

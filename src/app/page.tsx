@@ -11,17 +11,17 @@ import WhyAndFaqSection from '@/components/WhyAndFaqSection';
 import CtaBanner from '@/components/CtaBanner';
 
 export const metadata: Metadata = {
-  title: 'BrewPluse – Free AI Cafe POS & Restaurant Management System',
+  title: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
   description:
     'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
   alternates: {
-    canonical: 'https://brewpluse.com',
+    canonical: 'https://brewpluse.com/',
   },
   openGraph: {
-    title: 'BrewPluse – AI-Powered Cafe Management System & POS Software',
+    title: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
     description:
       'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, and recipe inventory. Zero monthly software fees for modern coffee shops.',
-    url: 'https://brewpluse.com',
+    url: 'https://brewpluse.com/',
     siteName: 'BrewPluse',
     locale: 'en_US',
     type: 'website',

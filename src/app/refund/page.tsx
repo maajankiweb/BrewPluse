@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+  title: "Refund & Cancellation Policy",
   description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
   alternates: {
     canonical: 'https://brewpluse.com/refund',
   },
   openGraph: {
-    title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+    title: "Refund & Cancellation Policy | BrewPluse",
     description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
     url: 'https://brewpluse.com/refund',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Refund & Cancellation Policy Guidelines | BrewPluse",
+    title: "Refund & Cancellation Policy | BrewPluse",
     description: "Review BrewPluse's refund and cancellation guidelines for prepaid coins, zero-retainer software models, and merchant customer dispute resolution policies.",
   },
 };

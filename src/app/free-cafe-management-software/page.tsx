@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Free Cafe Management Software & Free Cafe POS (CafePOS) | ₹0/Mo | BrewPluse",
+  title: "Free Cafe Management Software & POS",
   description: "100% free cafe management software & Free Cafe POS (CafePOS). High-speed billing, QR dine-in ordering, live KDS screens & inventory with ₹0/month fees.",
   keywords: [
     'free cafe management software',
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     canonical: 'https://brewpluse.com/free-cafe-management-software',
   },
   openGraph: {
-    title: "Free Cafe Management Software & Free Cafe POS (CafePOS) | BrewPluse",
+    title: "Free Cafe Management Software & POS | BrewPluse",
     description: "100% free cafe management software & Free Cafe POS (CafePOS). High-speed billing, QR dine-in ordering, live KDS screens & inventory with ₹0/month fees.",
     url: 'https://brewpluse.com/free-cafe-management-software',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Free Cafe Management Software & Free Cafe POS (CafePOS) | BrewPluse",
+    title: "Free Cafe Management Software & POS | BrewPluse",
     description: "100% free cafe management software & Free Cafe POS (CafePOS). High-speed billing, QR dine-in ordering, live KDS screens & inventory with ₹0/month fees.",
   },
 };

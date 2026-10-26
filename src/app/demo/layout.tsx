@@ -7,7 +7,7 @@ import CommandPaletteModal from '@/components/demo/CommandPaletteModal';
 import DemoNotificationToast from '@/components/demo/DemoNotificationToast';
 
 export const metadata = {
-  title: 'BrewPluse – Executive Cafe Portal Demo',
+  title: 'Interactive Live Cafe POS Demo',
   description: 'Interactive live demo of BrewPluse cafe POS, KDS, inventory, and management portal.',
   alternates: {
     canonical: 'https://brewpluse.com/demo',

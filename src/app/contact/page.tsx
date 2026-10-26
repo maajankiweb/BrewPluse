@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Contact Customer Support & Partner Onboarding | BrewPluse",
+  title: "Contact Support & Cafe Onboarding",
   description: "Get in touch with BrewPluse support for 5-minute cafe onboarding, thermal printer hardware compatibility assistance, billing inquiries & partnership help.",
   alternates: {
     canonical: 'https://brewpluse.com/contact',
   },
   openGraph: {
-    title: "Contact Customer Support & Partner Onboarding | BrewPluse",
+    title: "Contact Support & Cafe Onboarding | BrewPluse",
     description: "Get in touch with BrewPluse support for 5-minute cafe onboarding, thermal printer hardware compatibility assistance, billing inquiries & partnership help.",
     url: 'https://brewpluse.com/contact',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Contact Customer Support & Partner Onboarding | BrewPluse",
+    title: "Contact Support & Cafe Onboarding | BrewPluse",
     description: "Get in touch with BrewPluse support for 5-minute cafe onboarding, thermal printer hardware compatibility assistance, billing inquiries & partnership help.",
   },
 };

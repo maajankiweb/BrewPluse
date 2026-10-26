@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { ShieldCheck, Zap, Heart, Award, Users, Coffee, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
+  title: 'About Our Free Cafe POS Platform',
   description:
     'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
   alternates: {
     canonical: 'https://brewpluse.com/about',
   },
   openGraph: {
-    title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
+    title: 'About Our Free Cafe POS Platform | BrewPluse',
     description:
       'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
     url: 'https://brewpluse.com/about',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About BrewPluse – Modern Cafe Operating System & Intelligent POS',
+    title: 'About Our Free Cafe POS Platform | BrewPluse',
     description:
       'Learn about BrewPluse: our mission to eliminate monthly SaaS fees for cafes and restaurants with cloud POS, QR table ordering & live kitchen technology.',
   },

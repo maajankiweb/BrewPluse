@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const routes = [
-    { url: '', priority: 1.0, changeFrequency: 'daily' as const },
+    { url: '/', priority: 1.0, changeFrequency: 'daily' as const },
     { url: '/cafe-pos', priority: 0.95, changeFrequency: 'weekly' as const },
     { url: '/restaurant-pos', priority: 0.95, changeFrequency: 'weekly' as const },
     { url: '/free-cafe-management-software', priority: 0.9, changeFrequency: 'weekly' as const },

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Cafe POS & Restaurant POS Operations, Technology & Growth Blog | BrewPluse",
+  title: "Cafe POS & Operations Blog",
   description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
   keywords: [
     "Cafe POS blog",
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     canonical: "https://brewpluse.com/blog",
   },
   openGraph: {
-    title: "Cafe POS & Restaurant POS Operations & Growth Blog | BrewPluse",
+    title: "Cafe POS & Operations Blog | BrewPluse",
     description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
     url: 'https://brewpluse.com/blog',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Cafe POS & Restaurant POS Operations & Growth Blog | BrewPluse",
+    title: "Cafe POS & Operations Blog | BrewPluse",
     description: "Expert guides, Cafe POS benchmarks, restaurant management comparisons & recipe inventory tutorials for modern cafe, bakery and coffee shop operators.",
   },
 };

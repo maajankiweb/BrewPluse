@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
+  title: "Free POS Pricing – ₹0/Month Software",
   description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
   keywords: [
     'cafe pos pricing',
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     canonical: 'https://brewpluse.com/pricing',
   },
   openGraph: {
-    title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
+    title: "Free POS Pricing – ₹0/Month Software | BrewPluse",
     description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
     url: 'https://brewpluse.com/pricing',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Pricing – Free Cafe POS & Restaurant POS Software (₹0/Mo) | BrewPluse",
+    title: "Free POS Pricing – ₹0/Month Software | BrewPluse",
     description: "Transparent Cafe POS & Restaurant POS pricing: ₹0/month software fees forever. Full access to POS billing, QR table ordering, live KDS & recipe inventory.",
   },
 };

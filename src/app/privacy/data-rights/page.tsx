@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Data Rights Portal | BrewPluse – Brew Excellence. Automate Everything.",
+  title: "Personal Data Rights Portal",
   description: "Exercise your DPDP Act personal data rights with BrewPluse. Access, export, correct, or erase your cafe and account information securely.",
   alternates: {
     canonical: 'https://brewpluse.com/privacy/data-rights',

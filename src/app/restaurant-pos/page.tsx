@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Restaurant POS Software & Billing System | Cloud Restaurant POS (Resturant POS) | BrewPluse",
+  title: "Restaurant POS Software & Billing System",
   description: "Cloud restaurant POS system with visual table plans, split billing, multi-station KOT routing & kitchen display screens. 100% free with ₹0/month fees.",
   keywords: [
     'restaurant pos',

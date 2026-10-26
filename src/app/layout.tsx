@@ -13,8 +13,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://brewpluse.com'),
   title: {
-    default: 'BrewPluse – Free AI Cafe POS & Management System',
-    template: '%s | BrewPluse Cafe OS',
+    default: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
+    template: '%s | BrewPluse',
   },
   description:
     'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   publisher: 'BrewPluse',
   manifest: '/site.webmanifest',
   alternates: {
-    canonical: 'https://brewpluse.com',
+    canonical: 'https://brewpluse.com/',
   },
   icons: {
     icon: [
@@ -59,10 +59,10 @@ export const metadata: Metadata = {
     shortcut: ['/favicon.ico'],
   },
   openGraph: {
-    title: 'BrewPluse – AI-Powered Cafe Management System & POS Software',
+    title: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
     description:
       'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, and recipe inventory. Zero monthly software fees for modern coffee shops.',
-    url: 'https://brewpluse.com',
+    url: 'https://brewpluse.com/',
     siteName: 'BrewPluse',
     locale: 'en_US',
     type: 'website',
