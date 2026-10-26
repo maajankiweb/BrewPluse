@@ -86,7 +86,7 @@ const HardwareOrderSchema = new Schema<IHardwareOrder>(
       enum: ['pending', 'paid', 'failed'],
       default: 'pending',
     },
-    paymentMode: { type: String, default: 'Direct UPI' },
+    paymentMode: { type: String, default: 'Razorpay' },
     upiReference: { type: String, index: true },
     razorpayOrderId: { type: String, index: true },
     razorpayPaymentId: { type: String },
@@ -147,7 +147,7 @@ export function updateRuntimeHardwareOrderPayment(
   orderNumber: string,
   paymentRef: string,
   razorpayOrderId?: string,
-  paymentMode: string = 'Direct UPI'
+  paymentMode: string = 'Razorpay'
 ) {
   const existing = runtimeHardwareOrders.get(orderNumber);
   if (!existing) return null;

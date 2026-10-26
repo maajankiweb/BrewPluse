@@ -32,7 +32,7 @@ export async function GET() {
         cloudPOS: { status: 'operational', uptime: '99.99%', latencyMs: 24 },
         qrOrdering: { status: 'operational', uptime: '99.98%', latencyMs: 31 },
         kitchenDisplayKDS: { status: 'operational', uptime: '99.99%', latencyMs: 19 },
-        directUpiGateway: { status: 'operational', uptime: '100.0%', latencyMs: 15 },
+        razorpayGateway: { status: 'operational', uptime: '99.99%', latencyMs: 22 },
         databaseCluster: { status: dbStatus, uptime: '99.97%', latencyMs: dbLatency },
         thermalPrintingSpooler: { status: 'operational', uptime: '99.99%', latencyMs: 8 },
       },

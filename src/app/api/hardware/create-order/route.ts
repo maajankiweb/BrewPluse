@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getRazorpay } from '@/lib/razorpay';
 import { connectMongoDB } from '@/lib/mongodb';
 import { HardwareOrder, createRuntimeHardwareOrder } from '@/lib/models/HardwareOrder';
 
@@ -56,6 +57,37 @@ export async function POST(req: Request) {
     const hardwareOrderNumber = `BP-HW-${Date.now().toString().slice(-6)}${Math.floor(10 + Math.random() * 90)}`;
     const receipt = hardwareOrderNumber.slice(0, 40);
 
+    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    const razorpay = getRazorpay();
+
+    let razorpayOrderId = '';
+
+    if (razorpay && keyId) {
+      try {
+        const order = await razorpay.orders.create({
+          amount: finalAmountPaise,
+          currency: 'INR',
+          receipt,
+          notes: {
+            platform: 'BrewPluse Hardware Store',
+            hardwareOrderNumber,
+            storeSlug,
+            cafeName,
+            contactPerson,
+            phone,
+          },
+        });
+        razorpayOrderId = order.id;
+      } catch (err: any) {
+        console.warn('[Hardware Razorpay] Orders API note:', err?.message);
+      }
+    }
+
+    if (!razorpayOrderId) {
+      // Test mode / Mock order fallback
+      razorpayOrderId = `order_hw_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
     // Save initial pending hardware order
     const orderData = {
       orderNumber: hardwareOrderNumber,
@@ -79,7 +111,8 @@ export async function POST(req: Request) {
       tax: verifiedTax,
       total: finalAmountInr,
       paymentStatus: 'pending',
-      paymentMode: 'Direct UPI',
+      paymentMode: 'Razorpay',
+      razorpayOrderId,
       status: 'confirmed',
     };
 
@@ -98,9 +131,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
+      orderId: razorpayOrderId,
+      amount: finalAmountPaise,
       amountInr: finalAmountInr,
       currency: 'INR',
+      keyId: keyId || 'rzp_test_placeholder',
       hardwareOrderNumber,
+      isLive: !!(razorpay && keyId),
     });
   } catch (error: any) {
     console.error('[Hardware create-order error]:', error);
