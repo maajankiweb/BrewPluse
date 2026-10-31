@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
-    "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
@@ -43,7 +42,8 @@
     "@firebase/rules-unit-testing": "^6.0.0",
     "@types/nodemailer": "^8.0.2",
     "@types/qrcode": "^1.5.6",
-    "firebase-tools": "^15.33.0"
+    "firebase-tools": "^15.33.0",
+    "@capacitor/cli": "^8.5.3"
   },
   "overrides": {
     "basic-ftp": "6.2.1",
@@ -52,6 +52,10 @@
     "uuid": "11.1.1",
     "postcss-selector-parser": "7.1.6",
     "@opentelemetry/core": "2.8.0",
-    "braces": "3.0.3"
+    "braces": "3.0.3",
+    "follow-redirects": "1.16.2",
+    "re2js": "2.9.1",
+    "@google-cloud/firestore": "^9.4.0",
+    "gaxios": "^7.3.1"
   }
 }
