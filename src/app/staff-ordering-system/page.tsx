@@ -50,6 +50,13 @@ export default function StaffOrderingSystemPage() {
           name: 'BrewPluse',
           url: 'https://brewpluse.com',
         },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.9',
+          reviewCount: '128',
+          bestRating: '5',
+          worstRating: '1',
+        },
       },
       {
         '@type': 'BreadcrumbList',

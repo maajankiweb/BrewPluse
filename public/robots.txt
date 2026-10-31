@@ -2,60 +2,73 @@ User-agent: *
 Allow: /
 Disallow: /dashboard/
 Disallow: /api/
-
-User-agent: GPTBot
-Allow: /
-Allow: /llms.txt
-Allow: /features
-Allow: /pricing
-Allow: /faq
-Allow: /blog
-Disallow: /dashboard/
-Disallow: /api/
-
-User-agent: ChatGPT-User
-Allow: /
-Allow: /llms.txt
-Allow: /features
-Allow: /pricing
-Allow: /faq
-Allow: /blog
-Disallow: /dashboard/
-Disallow: /api/
-
-User-agent: PerplexityBot
-Allow: /
-Allow: /llms.txt
-Allow: /features
-Allow: /pricing
-Allow: /faq
-Allow: /blog
-Disallow: /dashboard/
-Disallow: /api/
-
-User-agent: ClaudeBot
-Allow: /
-Allow: /llms.txt
-Allow: /features
-Allow: /pricing
-Allow: /faq
-Allow: /blog
-Disallow: /dashboard/
-Disallow: /api/
-
-User-agent: Applebot
-Allow: /
-Disallow: /dashboard/
-Disallow: /api/
-
-User-agent: bingbot
-Allow: /
-Disallow: /dashboard/
-Disallow: /api/
+Disallow: /setup/
 
 User-agent: Googlebot
 Allow: /
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /setup/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
+
+User-agent: Applebot
+Allow: /
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /setup/
 
 Sitemap: https://brewpluse.com/sitemap.xml

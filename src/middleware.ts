@@ -7,6 +7,14 @@ export function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get('brewpluse_session')?.value;
   const authHeader = request.headers.get('authorization');
 
+  // 301 Permanent Redirect for alias/typo domains (e.g. brewpluseh.com or www.brewpluse.com)
+  if (host.includes('brewpluseh.com') || host === 'www.brewpluse.com') {
+    const canonicalUrl = new URL(pathname, 'https://brewpluse.com');
+    canonicalUrl.search = request.nextUrl.search;
+    return NextResponse.redirect(canonicalUrl, 301);
+  }
+
+
   // Subdomain routing for status.brewpluse.com
   if (host.startsWith('status.') || host.includes('status.brewpluse.com')) {
     if (pathname === '/' || pathname === '') {
@@ -46,10 +54,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/status',
-    '/dashboard/:path*',
-    '/api/setup',
-    '/api/extension/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|storefront.png|site.webmanifest).*)',
   ],
 };

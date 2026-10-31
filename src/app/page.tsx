@@ -13,7 +13,7 @@ import CtaBanner from '@/components/CtaBanner';
 export const metadata: Metadata = {
   title: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
   description:
-    'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
+    'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month for modern coffee shops.',
   alternates: {
     canonical: 'https://brewpluse.com/',
   },

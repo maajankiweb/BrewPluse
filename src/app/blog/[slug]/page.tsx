@@ -419,6 +419,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": post.title,
+    "image": "https://brewpluse.com/storefront.png",
     "description": post.metaDescription,
     "datePublished": post.publishDate,
     "dateModified": post.publishDate,
@@ -433,7 +434,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       "url": "https://brewpluse.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://brewpluse.com/logo.png"
+        "url": "https://brewpluse.com/icon.png"
       }
     },
     "mainEntityOfPage": {

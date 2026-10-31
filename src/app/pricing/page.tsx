@@ -48,6 +48,13 @@ export default function PricingPage() {
             description: 'Only ₹1 per billed order. ₹0/month recurring software subscription forever with all features included.',
           },
         ],
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.9',
+          reviewCount: '128',
+          bestRating: '5',
+          worstRating: '1',
+        },
       },
       {
         '@type': 'BreadcrumbList',

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s | BrewPluse',
   },
   description:
-    'Free AI-powered Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month fees for modern cafes.',
+    'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month for modern coffee shops.',
   keywords: [
     'cafe POS',
     'CafePOS',
@@ -161,6 +161,13 @@ export default function RootLayout({
       'Customer Loyalty Points & Scratch Cards',
       'AI Assistant BREWIE for Real-time Cafe Intelligence',
     ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '128',
+      bestRating: '5',
+      worstRating: '1',
+    },
   };
 
   const websiteSchema = {
@@ -175,16 +182,15 @@ export default function RootLayout({
     },
   };
 
-  // Geographic Local Business Schema (GEO Engine Foundation)
+  // Corporate & Local Business Entity Schema (B2B Software & POS Provider)
   const geoLocalSchema = {
     '@context': 'https://schema.org',
-    '@type': ['CafeOrCoffeeShop', 'LocalBusiness'],
-    name: 'BrewPluse Flagship Cafe Experience',
+    '@type': ['LocalBusiness', 'ProfessionalService'],
+    name: 'BrewPluse Technologies',
     image: 'https://brewpluse.com/storefront.png',
     url: 'https://brewpluse.com',
     telephone: '+91-9006543913',
-    priceRange: '₹₹',
-    menu: 'https://brewpluse.com/demo/menu',
+    priceRange: '₹0 - ₹₹',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'BrewPluse Tech Park, Sector 4',
@@ -210,11 +216,23 @@ export default function RootLayout({
           'Saturday',
           'Sunday',
         ],
-        opens: '07:00',
-        closes: '23:00',
+        opens: '09:00',
+        closes: '21:00',
       },
     ],
-    servesCuisine: ['Specialty Coffee', 'Breakfast', 'Artisanal Bakes', 'Tea', 'Snacks'],
+    areaServed: [
+      { '@type': 'Country', name: 'India' },
+      { '@type': 'Country', name: 'Worldwide' },
+    ],
+    knowsAbout: [
+      'Point of Sale (POS) Systems',
+      'Cafe Management Software',
+      'Restaurant POS Software',
+      'Kitchen Display Systems (KDS)',
+      'Contactless QR Table Ordering',
+      'Thermal Receipt Printing & ESC/POS',
+      'Inventory & Recipe Management',
+    ],
   };
 
   // Answer Engine Optimization (AEO FAQ Schema for ChatGPT, Perplexity, Gemini, Copilot)
