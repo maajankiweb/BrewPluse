@@ -171,7 +171,6 @@ export default function SetupPage() {
     const unsubscribe = onAuthChange((user) => {
       if (user) {
         if (user.email) setUserEmail(user.email);
-        if (user.displayName && !ownerName) setOwnerName(user.displayName);
         if (user.uid) setUserId(user.uid);
       }
     });
@@ -460,12 +459,18 @@ export default function SetupPage() {
         .replace(/^-|-$/g, '') || 'my-cafe';
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('brewpluse::session_token') : null;
       const res = await fetch('/api/setup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           email: userEmail || 'owner@brewpluse.com',
+          uid: userId || undefined,
           businessName: storeTitle,
+          ownerName: ownerName.trim() || 'Cafe Owner',
           address: address.trim() || '100ft Main Road, Floor 1',
           imageUrl: cafeLogo,
           latitude: latitude || 12.9716,
@@ -478,16 +483,23 @@ export default function SetupPage() {
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.error || 'Failed to complete cafe setup.');
+      }
+
       const finalSlug = data.store?.slug || cleanSlug;
 
       try {
         localStorage.setItem('brewpluse::store_slug', finalSlug);
+        if (data.token) {
+          localStorage.setItem('brewpluse::session_token', data.token);
+        }
         localStorage.setItem(
           'brewpluse::store_profile',
           JSON.stringify({
             name: storeTitle,
             slug: finalSlug,
-            ownerName,
+            ownerName: ownerName.trim() || 'Cafe Owner',
             address: address.trim(),
             imageUrl: cafeLogo,
             latitude: latitude || 12.9716,
@@ -505,8 +517,8 @@ export default function SetupPage() {
       });
 
       setTimeout(() => {
-        router.push(`/dashboard/${finalSlug}`);
-      }, 800);
+        window.location.href = `/dashboard/${finalSlug}`;
+      }, 600);
     } catch (err: any) {
       toast.error(err.message || 'Failed to activate workspace.');
       setLaunching(false);
@@ -853,8 +865,11 @@ export default function SetupPage() {
                   I&apos;ll use <strong className="text-white">{cafeName}</strong> as your cafe name.
                 </p>
                 <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight pt-2">
-                  And what is the owner&apos;s full name?
+                  Cafe Owner&apos;s Full Legal Name
                 </h2>
+                <p className="text-neutral-400 text-xs sm:text-sm">
+                  Enter the cafe owner / proprietor&apos;s real name. This will appear on invoices, tax filings, and cafe receipts, and does not need to match your Google/login email name.
+                </p>
               </div>
 
               <div className="space-y-4">
@@ -867,7 +882,7 @@ export default function SetupPage() {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') setCurrentState('CAFE_LOGO');
                     }}
-                    placeholder="Enter owner full name..."
+                    placeholder="e.g. Ramesh Sharma (Cafe Owner's Real Name)"
                     className="w-full h-14 bg-[#1e1b14] border border-white/10 rounded-2xl px-6 pr-14 text-base sm:text-lg text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#eebd8e] transition-all shadow-sm font-medium"
                   />
                   <button

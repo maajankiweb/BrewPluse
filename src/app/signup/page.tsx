@@ -219,6 +219,25 @@ function SignupFormContent() {
         })
       );
 
+      // Establish server session cookie immediately
+      try {
+        const authRes = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+          }),
+        });
+        const authData = await authRes.json();
+        if (authData?.token) {
+          localStorage.setItem('brewpluse::session_token', authData.token);
+        }
+      } catch (authErr) {
+        console.warn('[Google SignUp] Session sync note:', authErr);
+      }
+
       toast.success('Account created with Google!', {
         description: `Welcome, ${user.displayName || user.email}!`,
       });

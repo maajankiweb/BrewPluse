@@ -142,12 +142,44 @@ function LoginFormContent() {
         })
       );
 
+      // Establish server session cookie immediately
+      let targetSlug = '';
+      try {
+        const authRes = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+          }),
+        });
+        const authData = await authRes.json();
+        if (authData?.token) {
+          localStorage.setItem('brewpluse::session_token', authData.token);
+        }
+        if (authData?.hasStore && authData?.storeSlug) {
+          targetSlug = authData.storeSlug;
+          localStorage.setItem('brewpluse::store_slug', targetSlug);
+        }
+      } catch (authErr) {
+        console.warn('[Google Login] Session sync note:', authErr);
+      }
+
       toast.success('Google Sign-in successful!', {
         description: `Welcome, ${user.displayName || user.email}!`,
       });
 
       setTimeout(() => {
-        handleRedirect();
+        if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/login') {
+          window.location.href = nextUrl;
+          return;
+        }
+        if (targetSlug) {
+          window.location.href = `/dashboard/${targetSlug}`;
+          return;
+        }
+        window.location.href = '/dashboard';
       }, 500);
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);

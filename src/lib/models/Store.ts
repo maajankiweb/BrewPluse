@@ -14,6 +14,7 @@ export interface IStore extends Document {
   name: string;
   slug: string;
   email: string;
+  ownerName?: string;
   phone?: string;
   address?: string;
   gstin?: string;
@@ -53,6 +54,7 @@ const StoreSchema = new Schema<IStore>(
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
     email: { type: String, required: true, lowercase: true, trim: true },
+    ownerName: { type: String, trim: true, default: '' },
     phone: { type: String },
     address: { type: String },
     gstin: { type: String },

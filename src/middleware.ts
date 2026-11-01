@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Protect sensitive setup & extension routes
-  if (pathname.startsWith('/api/setup') || pathname.startsWith('/api/extension')) {
+  if (pathname.startsWith('/api/extension')) {
     if (!sessionCookie && (!authHeader || !authHeader.startsWith('Bearer '))) {
       return NextResponse.json(
         { error: 'Unauthorized. Valid authentication session required.' },
