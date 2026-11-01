@@ -263,20 +263,33 @@ export default function MenuPage() {
     setAiMenuPhoto(null);
   };
 
-  // Load menu items scoped by storeSlug
+  // Load menu items scoped by storeSlug - strictly real dishes only for real stores
   useEffect(() => {
     let loadedFromLocal = false;
     const scopedKey = `brewpluse::menu_items_${storeSlug}`;
 
     try {
-      const stored = localStorage.getItem(scopedKey) || localStorage.getItem('brewpluse::menu_items');
+      const stored = localStorage.getItem(scopedKey);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setMenuItems(parsed);
-          loadedFromLocal = true;
-          // Ensure scoped key is synced
-          localStorage.setItem(scopedKey, stored);
+        if (Array.isArray(parsed)) {
+          if (storeSlug !== 'demo') {
+            // Check if stored items are old dummy defaults
+            const hasCustomItems = parsed.some(
+              (p: any) => !p.id?.startsWith('bp-') || !DEFAULT_MENU_CATALOG.some((d) => d.id === p.id)
+            );
+            if (hasCustomItems) {
+              setMenuItems(parsed);
+              loadedFromLocal = true;
+            } else {
+              // Legacy dummy items found, purge them!
+              localStorage.removeItem(scopedKey);
+              localStorage.removeItem('brewpluse::menu_items');
+            }
+          } else {
+            setMenuItems(parsed);
+            loadedFromLocal = true;
+          }
         }
       }
     } catch (e) {}
@@ -285,30 +298,28 @@ export default function MenuPage() {
     fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`)
       .then((r) => r.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          if (data.isDefaultFallback && loadedFromLocal) {
-            try {
-              const current = JSON.parse(localStorage.getItem(scopedKey) || '[]');
-              if (current.length > 0) {
-                fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ storeSlug, items: current }),
-                }).catch(() => {});
-              }
-            } catch (e) {}
+        if (data.success && Array.isArray(data.items)) {
+          if (storeSlug === 'demo' && data.items.length === 0) {
+            setMenuItems(DEFAULT_MENU_CATALOG);
+            localStorage.setItem(scopedKey, JSON.stringify(DEFAULT_MENU_CATALOG));
             return;
           }
+          // Real store: display exact items
           setMenuItems(data.items);
           localStorage.setItem(scopedKey, JSON.stringify(data.items));
         } else if (!loadedFromLocal) {
-          setMenuItems(DEFAULT_MENU_CATALOG);
-          localStorage.setItem(scopedKey, JSON.stringify(DEFAULT_MENU_CATALOG));
+          if (storeSlug === 'demo') {
+            setMenuItems(DEFAULT_MENU_CATALOG);
+            localStorage.setItem(scopedKey, JSON.stringify(DEFAULT_MENU_CATALOG));
+          } else {
+            setMenuItems([]);
+            localStorage.setItem(scopedKey, JSON.stringify([]));
+          }
         }
       })
       .catch(() => {
         if (!loadedFromLocal) {
-          setMenuItems(DEFAULT_MENU_CATALOG);
+          setMenuItems(storeSlug === 'demo' ? DEFAULT_MENU_CATALOG : []);
         }
       });
   }, [storeSlug]);
@@ -580,13 +591,41 @@ export default function MenuPage() {
           ))}
         </div>
 
-        {filteredItems.length === 0 && (
+        {menuItems.length === 0 ? (
+          <div className="text-center py-16 bg-white dark:bg-[#0E2018] rounded-3xl border border-dashed border-[#EAE8E4] dark:border-[#1E382E] p-8 max-w-xl mx-auto shadow-xs">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto text-amber-600 dark:text-amber-400 mb-4">
+              <Utensils className="w-8 h-8" />
+            </div>
+            <h3 className="font-bold text-lg text-[#191716] dark:text-white">Aapka Menu Abhi Khali Hai</h3>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-2 max-w-md mx-auto leading-relaxed">
+              Yahan wahi dishes dikhengi jo aap add karenge. Cafe customer QR menu aur POS me bhi wahi items aayenge. Nayi dish add karne ke liye niche click karein.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => handleOpenAddModal()}
+                className="flex items-center gap-2 bg-[#0B2B1A] text-white hover:bg-[#13442A] px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Add First Dish
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsAiModalOpen(true)}
+                className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white hover:from-amber-700 hover:to-amber-800 px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4" />
+                Scan Menu with AI
+              </button>
+            </div>
+          </div>
+        ) : filteredItems.length === 0 ? (
           <div className="text-center py-12 bg-white dark:bg-[#0E2018] rounded-2xl border border-[#EAE8E4] p-6 text-gray-500">
             <Utensils className="w-10 h-10 mx-auto text-gray-300 mb-2" />
             <h3 className="font-bold text-sm text-[#191716]">No dishes match your filter</h3>
             <p className="text-xs mt-1">Try another category or click &quot;Add New Dish&quot; above.</p>
           </div>
-        )}
+        ) : null}
 
         {/* Modal: Add or Edit Dish with Real Photo Upload */}
         {isModalOpen && (

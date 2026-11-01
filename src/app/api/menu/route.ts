@@ -62,14 +62,24 @@ export async function GET(request: Request) {
       console.warn('[Menu API GET DB error]:', dbErr);
     }
 
-    // 3. Fallback to default catalog
-    const items = DEFAULT_CATALOG.map((i) => ({ ...i, category: i.cat }));
-    global.storeMenuCaches[storeSlug] = items;
+    // 3. Fallback to default catalog ONLY for 'demo' store!
+    if (storeSlug === 'demo') {
+      const items = DEFAULT_CATALOG.map((i) => ({ ...i, category: i.cat }));
+      global.storeMenuCaches[storeSlug] = items;
+      return NextResponse.json({
+        success: true,
+        items,
+        count: items.length,
+        isDefaultFallback: true,
+      });
+    }
+
+    // Real cafe with no menu yet: return strictly empty list (no dummy items)
+    global.storeMenuCaches[storeSlug] = [];
     return NextResponse.json({
       success: true,
-      items,
-      count: items.length,
-      isDefaultFallback: true,
+      items: [],
+      count: 0,
     });
   } catch (error: any) {
     return NextResponse.json(
@@ -97,7 +107,7 @@ export async function POST(request: Request) {
     }
 
     if (!global.storeMenuCaches[storeSlug]) {
-      global.storeMenuCaches[storeSlug] = [...DEFAULT_CATALOG];
+      global.storeMenuCaches[storeSlug] = storeSlug === 'demo' ? [...DEFAULT_CATALOG] : [];
     }
 
     let updatedItems: any[] = [];

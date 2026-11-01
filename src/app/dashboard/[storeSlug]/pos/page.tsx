@@ -73,16 +73,24 @@ export default function PosPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const scoped =
-          localStorage.getItem(`brewpluse::menu_items_${storeSlug}`) ||
-          localStorage.getItem('brewpluse::menu_items');
+        const scoped = localStorage.getItem(`brewpluse::menu_items_${storeSlug}`);
         if (scoped) {
           const parsed = JSON.parse(scoped);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (storeSlug !== 'demo') {
+              const hasCustom = parsed.some(
+                (p: any) => !p.id?.startsWith('bp-') || !DEFAULT_MENU_CATALOG.some((d) => d.id === p.id)
+              );
+              if (hasCustom) return parsed;
+              localStorage.removeItem(`brewpluse::menu_items_${storeSlug}`);
+              return [];
+            }
+            return parsed;
+          }
         }
       } catch (e) {}
     }
-    return DEFAULT_MENU_CATALOG;
+    return storeSlug === 'demo' ? DEFAULT_MENU_CATALOG : [];
   });
   const [selectedCat, setSelectedCat] = useState<string>('all');
   const [search, setSearch] = useState('');
@@ -194,20 +202,12 @@ export default function PosPage() {
       fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.items && data.items.length > 0) {
-            // If API returned default fallback, do NOT overwrite user's saved dishes!
-            const localRaw =
-              localStorage.getItem(`brewpluse::menu_items_${storeSlug}`) ||
-              localStorage.getItem('brewpluse::menu_items');
-            if (data.isDefaultFallback && localRaw) {
-              try {
-                const parsed = JSON.parse(localRaw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                  setMenuItems(parsed);
-                  return;
-                }
-              } catch (e) {}
+          if (data.success && Array.isArray(data.items)) {
+            if (storeSlug === 'demo' && data.items.length === 0) {
+              setMenuItems(DEFAULT_MENU_CATALOG);
+              return;
             }
+            // Real cafe items only
             setMenuItems(data.items);
             try {
               localStorage.setItem(`brewpluse::menu_items_${storeSlug}`, JSON.stringify(data.items));
@@ -626,6 +626,28 @@ export default function PosPage() {
                   <p className="text-[10px] text-[#65736D] dark:text-[#9AB2A8]">Unlisted / manual price</p>
                 </div>
               </div>
+
+              {filteredCatalog.length === 0 && (
+                <div className="col-span-full py-12 text-center bg-white dark:bg-[#0E2018] rounded-2xl border border-dashed border-[#E5ECE8] dark:border-[#1E382E] p-6">
+                  <Coffee className="w-8 h-8 mx-auto text-amber-500/80 mb-2" />
+                  <p className="text-sm font-bold text-[#12201B] dark:text-white">
+                    {menuItems.length === 0 ? 'Aapke Menu Me Koi Dish Nahi Hai' : 'Is filter me koi item match nahi hua'}
+                  </p>
+                  <p className="text-xs text-[#65736D] dark:text-[#9AB2A8] mt-1 max-w-sm mx-auto">
+                    {menuItems.length === 0
+                      ? 'Nayi dish add karne ke liye Menu page me jayein, ya upar "+ Custom Item" dabakar manual billing karein.'
+                      : 'Dusri category select karein ya search filter clear karein.'}
+                  </p>
+                  {menuItems.length === 0 && (
+                    <a
+                      href={`/dashboard/${storeSlug}/menu`}
+                      className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 rounded-xl bg-[#0B5C45] text-white text-xs font-bold hover:bg-[#094735] transition-colors"
+                    >
+                      Menu Me Nayi Dish Add Karein &rarr;
+                    </a>
+                  )}
+                </div>
+              )}
 
               {filteredCatalog.map((item) => {
                 const inCart = cart.find((c) => c.id === item.id);

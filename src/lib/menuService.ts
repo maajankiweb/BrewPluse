@@ -217,7 +217,12 @@ export async function getStoreMenu(storeSlug: string): Promise<MenuItemDetailed[
     }));
   }
 
-  return BASE_MENU_CATALOG;
+  // Return sample base catalog ONLY for 'demo' store! Real cafes only show what the owner added.
+  if (normalized === 'demo') {
+    return BASE_MENU_CATALOG;
+  }
+
+  return [];
 }
 
 /**
@@ -241,7 +246,8 @@ export async function setItemAvailability(
 ): Promise<boolean> {
   if (!global.storeMenuRegistry) global.storeMenuRegistry = {};
   if (!global.storeMenuRegistry[storeSlug]) {
-    global.storeMenuRegistry[storeSlug] = JSON.parse(JSON.stringify(BASE_MENU_CATALOG));
+    const currentMenu = await getStoreMenu(storeSlug);
+    global.storeMenuRegistry[storeSlug] = JSON.parse(JSON.stringify(currentMenu));
   }
   const item = global.storeMenuRegistry[storeSlug].find((i) => i.id === itemId);
   if (item) {

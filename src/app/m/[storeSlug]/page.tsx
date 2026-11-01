@@ -180,9 +180,19 @@ export default function CustomerQrOrderingPage() {
         }
       })
       .catch(() => {});
+
+    fetch(`/api/admin/store-settings?storeSlug=${encodeURIComponent(storeSlug)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.settings?.platformFeeMode) {
+          setPlatformFeeMode(d.settings.platformFeeMode);
+        }
+      })
+      .catch(() => {});
   }, [storeSlug]);
 
-  const [menu, setMenu] = useState<MenuItem[]>(DEFAULT_MENU);
+  const [platformFeeMode, setPlatformFeeMode] = useState<'cafe' | 'customer'>('cafe');
+  const [menu, setMenu] = useState<MenuItem[]>(storeSlug === 'demo' ? DEFAULT_MENU : []);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -322,11 +332,18 @@ export default function CustomerQrOrderingPage() {
 
       // 1. Try local storage first for instant render
       try {
-        const local = localStorage.getItem(scopedKey) || localStorage.getItem('brewpluse::menu_items');
+        const local = localStorage.getItem(scopedKey);
         if (local) {
           const parsed = JSON.parse(local);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            setMenu(parsed.map(normalizeItem));
+            if (storeSlug !== 'demo') {
+              const hasCustom = parsed.some(
+                (p: any) => !p.id?.startsWith('bp-') && !p.id?.startsWith('dish-')
+              );
+              if (hasCustom) setMenu(parsed.map(normalizeItem));
+            } else {
+              setMenu(parsed.map(normalizeItem));
+            }
           }
         }
       } catch (e) {}
@@ -335,7 +352,11 @@ export default function CustomerQrOrderingPage() {
       try {
         const res = await fetch(`/api/menu?storeSlug=${encodeURIComponent(storeSlug)}`);
         const data = await res.json();
-        if (data && data.success && Array.isArray(data.items) && data.items.length > 0) {
+        if (data && data.success && Array.isArray(data.items)) {
+          if (storeSlug === 'demo' && data.items.length === 0) {
+            setMenu(DEFAULT_MENU.map(normalizeItem));
+            return;
+          }
           const normalized = data.items.map(normalizeItem);
           setMenu(normalized);
           try {
@@ -403,7 +424,7 @@ export default function CustomerQrOrderingPage() {
 
   const cartTotalItems = cart.reduce((sum, item) => sum + item.qty, 0);
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const platformFee = 1; // ₹1 per order model
+  const platformFee = platformFeeMode === 'customer' ? 1 : 0;
   const finalTotal = Math.max(0, cartSubtotal - discountAmount + platformFee);
 
   // Apply Coupon
@@ -1181,10 +1202,12 @@ export default function CustomerQrOrderingPage() {
                     <span className="font-mono">-₹{discountAmount}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-neutral-600">
-                  <span>BrewPluse Platform Fee</span>
-                  <span className="font-mono font-bold text-[#0B2B1A]">₹{platformFee}</span>
-                </div>
+                {platformFee > 0 && (
+                  <div className="flex justify-between text-neutral-600">
+                    <span>BrewPluse Platform Fee</span>
+                    <span className="font-mono font-bold text-[#0B2B1A]">₹{platformFee}</span>
+                  </div>
+                )}
                 <div className="pt-1.5 border-t border-neutral-200 flex justify-between font-black text-sm text-neutral-900">
                   <span>Grand Total</span>
                   <span className="font-mono text-emerald-800">₹{finalTotal}</span>
