@@ -22,8 +22,8 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Protect dashboard routes: require active session cookie
-  if (pathname.startsWith('/dashboard')) {
+  // Protect dashboard routes: require active session cookie (demo is public)
+  if (pathname.startsWith('/dashboard') && !pathname.startsWith('/dashboard/demo')) {
     if (!sessionCookie) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
