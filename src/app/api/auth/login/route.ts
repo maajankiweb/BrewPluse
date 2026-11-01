@@ -3,6 +3,7 @@ import { rateLimit, getClientIp } from '@/lib/rateLimit';
 import { createSessionToken, verifyPassword } from '@/lib/authService';
 import { connectMongoDB } from '@/lib/mongodb';
 import { User } from '@/lib/models/User';
+import { Store } from '@/lib/models/Store';
 import { createStaffFirebaseCustomToken } from '@/lib/firebaseAdmin';
 
 export async function POST(req: Request) {
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
     let userId = 'usr_' + Buffer.from(cleanEmail).toString('hex').slice(0, 12);
     let userRole = 'owner';
     let storeName = 'BrewPluse Cafe';
+    let storeSlug = '';
 
     // Demo Cafe Account setup
     const isDemoAccount =
@@ -56,6 +58,7 @@ export async function POST(req: Request) {
       userId = 'usr_demo_brewpluse_owner';
       userRole = 'owner';
       storeName = 'BrewPluse Specialty Cafe';
+      storeSlug = 'brewpluse-specialty-cafe';
     } else {
       // Verify against MongoDB
       try {
@@ -63,6 +66,21 @@ export async function POST(req: Request) {
         if (mongo) {
           const userDoc = await User.findOne({ email: cleanEmail });
           if (userDoc) {
+            // Handle Google OAuth registered accounts
+            if (
+              userDoc.passwordHash?.startsWith('oauth') ||
+              userDoc.passwordHash === 'oauth2_google_provider' ||
+              userDoc.passwordHash === 'oauth_verified_setup'
+            ) {
+              return NextResponse.json(
+                {
+                  error:
+                    'This account is registered with Google Sign-In. Please click "Continue with Google" above to sign in.',
+                },
+                { status: 400 }
+              );
+            }
+
             const isValid = verifyPassword(password, userDoc.passwordHash, userDoc.passwordSalt);
             if (!isValid) {
               return NextResponse.json(
@@ -73,12 +91,23 @@ export async function POST(req: Request) {
 
             userId = userDoc._id.toString();
             userRole = userDoc.role;
-            storeName = userDoc.storeName;
+            storeName = userDoc.storeName || storeName;
+
+            // Fetch actual store slug from Store collection
+            const storeDoc = await Store.findOne({
+              $or: [{ email: cleanEmail }, { ownerUid: userId }, { ownerUid: cleanEmail }],
+            });
+            if (storeDoc) {
+              storeName = storeDoc.name || storeName;
+              if (storeDoc.slug) {
+                storeSlug = storeDoc.slug;
+              }
+            }
           } else {
             // If user doesn't exist in MongoDB yet
             if (process.env.NODE_ENV === 'production') {
               return NextResponse.json(
-                { error: 'Account not found. Please sign up to create your cafe account.' },
+                { error: 'Account not found. Please click "Continue with Google" or complete setup to create your cafe account.' },
                 { status: 404 }
               );
             }
@@ -89,11 +118,13 @@ export async function POST(req: Request) {
       }
     }
 
-    const storeSlug =
-      storeName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '') || 'brewpluse';
+    if (!storeSlug) {
+      storeSlug =
+        storeName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '') || 'brewpluse';
+    }
 
     // Authenticated user payload
     const user = {

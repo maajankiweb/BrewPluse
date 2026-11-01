@@ -19,7 +19,7 @@ import { useToast } from '@/components/Toast';
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextUrl = searchParams.get('next');
+  const redirectParam = searchParams.get('redirect') || searchParams.get('next');
   const toast = useToast();
 
   const [email, setEmail] = useState('');
@@ -41,12 +41,26 @@ function LoginFormContent() {
     } catch (e) {}
   }, []);
 
-  function handleRedirect() {
-    if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/login') {
-      router.replace(nextUrl);
+  function handleRedirect(slug?: string) {
+    if (
+      redirectParam &&
+      redirectParam.startsWith('/') &&
+      redirectParam !== '/login' &&
+      redirectParam !== '/dashboard'
+    ) {
+      window.location.href = redirectParam;
       return;
     }
-    router.replace('/dashboard');
+    const finalSlug = slug || localStorage.getItem('brewpluse::store_slug');
+    if (finalSlug && finalSlug !== 'brewpluse' && finalSlug !== 'my-cafe') {
+      window.location.href = `/dashboard/${finalSlug}`;
+      return;
+    }
+    if (finalSlug) {
+      window.location.href = `/dashboard/${finalSlug}`;
+      return;
+    }
+    window.location.href = '/dashboard';
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -108,12 +122,16 @@ function LoginFormContent() {
         })
       );
 
+      if (loginData?.user?.storeSlug) {
+        localStorage.setItem('brewpluse::store_slug', loginData.user.storeSlug);
+      }
+
       toast.success('Welcome back!', {
         description: 'Successfully authenticated with BrewPluse.',
       });
 
       setTimeout(() => {
-        handleRedirect();
+        handleRedirect(loginData?.user?.storeSlug);
       }, 500);
     } catch (err: any) {
       const msg = err.message || 'Please check your credentials and try again.';
@@ -144,26 +162,27 @@ function LoginFormContent() {
 
       // Establish server session cookie immediately
       let targetSlug = '';
-      try {
-        const authRes = await fetch('/api/auth/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-          }),
-        });
-        const authData = await authRes.json();
-        if (authData?.token) {
-          localStorage.setItem('brewpluse::session_token', authData.token);
-        }
-        if (authData?.hasStore && authData?.storeSlug) {
-          targetSlug = authData.storeSlug;
-          localStorage.setItem('brewpluse::store_slug', targetSlug);
-        }
-      } catch (authErr) {
-        console.warn('[Google Login] Session sync note:', authErr);
+      const authRes = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        }),
+      });
+
+      const authData = await authRes.json();
+      if (!authRes.ok) {
+        throw new Error(authData?.error || 'Authentication server synchronization failed.');
+      }
+
+      if (authData?.token) {
+        localStorage.setItem('brewpluse::session_token', authData.token);
+      }
+      if (authData?.storeSlug) {
+        targetSlug = authData.storeSlug;
+        localStorage.setItem('brewpluse::store_slug', targetSlug);
       }
 
       toast.success('Google Sign-in successful!', {
@@ -171,15 +190,7 @@ function LoginFormContent() {
       });
 
       setTimeout(() => {
-        if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/login') {
-          window.location.href = nextUrl;
-          return;
-        }
-        if (targetSlug) {
-          window.location.href = `/dashboard/${targetSlug}`;
-          return;
-        }
-        window.location.href = '/dashboard';
+        handleRedirect(targetSlug);
       }, 500);
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);

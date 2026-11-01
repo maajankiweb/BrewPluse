@@ -131,7 +131,14 @@ export default function SetupPage() {
           email = parsed.email;
           setUserEmail(parsed.email);
         }
-        if (parsed.displayName) setOwnerName(parsed.displayName);
+        // Do not force Google/Email display name - allow genuine owner real name
+        const storeProfileRaw = localStorage.getItem('brewpluse::store_profile');
+        if (storeProfileRaw) {
+          try {
+            const sp = JSON.parse(storeProfileRaw);
+            if (sp.ownerName) setOwnerName(sp.ownerName);
+          } catch (e) {}
+        }
         if (parsed.uid) {
           uid = parsed.uid;
           setUserId(parsed.uid);
@@ -892,6 +899,11 @@ export default function SetupPage() {
                   >
                     <ArrowRight className="h-5 w-5" />
                   </button>
+                </div>
+
+                <div className="text-[12px] text-amber-300/90 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2">
+                  <span className="text-base leading-none">💡</span>
+                  <span><strong>Important:</strong> Cafe Owner ka original legal name yahan enter karein. Google ya Email ID ka display name cafe owner ke real name se match hona zaruri nahi hai.</span>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-neutral-500 px-2">
