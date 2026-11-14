@@ -175,11 +175,6 @@ export default function RootLayout({
     '@type': 'WebSite',
     name: 'BrewPluse',
     url: 'https://brewpluse.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://brewpluse.com/blog?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
   };
 
   // Corporate & Local Business Entity Schema (B2B Software & POS Provider)

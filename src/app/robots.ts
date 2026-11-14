@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard/', '/api/', '/setup/'],
+        disallow: ['/dashboard/', '/api/', '/setup/', '/*?*'],
       },
       {
         userAgent: [
@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
           'YandexBot',
         ],
         allow: '/',
-        disallow: ['/dashboard/', '/api/', '/setup/'],
+        disallow: ['/dashboard/', '/api/', '/setup/', '/*?*'],
       },
       {
         userAgent: [
@@ -36,7 +36,7 @@ export default function robots(): MetadataRoute.Robots {
           'cohere-ai',
         ],
         allow: '/',
-        disallow: ['/dashboard/', '/api/', '/setup/'],
+        disallow: ['/dashboard/', '/api/', '/setup/', '/*?*'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

@@ -3,18 +3,21 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: Googlebot
 Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: Bingbot
 Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: GPTBot
 Allow: /
@@ -22,6 +25,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: ChatGPT-User
 Allow: /
@@ -29,6 +33,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -36,6 +41,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: PerplexityBot
 Allow: /
@@ -43,6 +49,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: ClaudeBot
 Allow: /
@@ -50,6 +57,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: anthropic-ai
 Allow: /
@@ -57,6 +65,7 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: Google-Extended
 Allow: /
@@ -64,11 +73,13 @@ Allow: /llms.txt
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 User-agent: Applebot
 Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /setup/
+Disallow: /*?*
 
 Sitemap: https://brewpluse.com/sitemap.xml
