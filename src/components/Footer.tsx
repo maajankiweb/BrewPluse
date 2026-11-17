@@ -70,6 +70,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/qr-ordering-software">
+                  QR Ordering Software
+                </Link>
+              </li>
+              <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/qr-table-ordering">
                   QR Self-Ordering for Restaurants
                 </Link>
@@ -161,6 +166,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block text-emerald-400 font-semibold" href="/product">
+                  Product Architecture &amp; Sync
+                </Link>
+              </li>
+              <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/pricing">
                   Pricing (₹0 for Cafe Owners)
                 </Link>
@@ -208,6 +218,21 @@ export default function Footer() {
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/documentation">
                   Product Documentation • API
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/cafe-pos-vs-traditional-pos">
+                  Cloud POS vs Traditional POS
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/how-to-choose-restaurant-management-software">
+                  Choosing Software Buyer&apos;s Guide
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/how-to-manage-a-small-cafe">
+                  How to Manage a Small Cafe
                 </Link>
               </li>
               <li>
@@ -360,6 +385,21 @@ export default function Footer() {
             </Link>
             <Link href="/blog/best-cafe-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               Best Cafe Software 2026
+            </Link>
+            <Link href="/product" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Restaurant System Architecture
+            </Link>
+            <Link href="/qr-ordering-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              QR Ordering Software
+            </Link>
+            <Link href="/cafe-pos-vs-traditional-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Cloud vs Legacy POS
+            </Link>
+            <Link href="/how-to-choose-restaurant-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              POS Evaluation Guide
+            </Link>
+            <Link href="/how-to-manage-a-small-cafe" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Manage a Small Cafe
             </Link>
           </div>
         </div>

@@ -39,6 +39,14 @@ export default function Navbar() {
             <span>Features</span>
           </Link>
 
+          {/* Product Architecture Link */}
+          <Link
+            href="/product"
+            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-colors"
+          >
+            Product
+          </Link>
+
           {/* Modules Dropdown */}
           <div
             className="nav-dropdown relative group py-2"
@@ -478,6 +486,57 @@ export default function Navbar() {
                   </Link>
 
                   <Link
+                    href="/cafe-pos-vs-traditional-pos"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">sync_alt</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                        Cloud vs Traditional POS
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Hardware &amp; TCO cost comparison
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/how-to-choose-restaurant-management-software"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">checklist</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                        Software Buyer&apos;s Guide
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        7 evaluation criteria &amp; red flags
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/how-to-manage-a-small-cafe"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-orange-50 text-orange-800 flex items-center justify-center shrink-0 group-hover/item:bg-orange-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">storefront</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-orange-800 transition-colors">
+                        How to Manage a Small Cafe
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Operational guide &amp; lean workflows
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
                     href="/contact"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
@@ -540,6 +599,14 @@ export default function Navbar() {
                 Core Modules
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                <Link
+                  href="/product"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-emerald-800 font-semibold"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-emerald-700">hub</span>
+                  <span>Product Architecture</span>
+                </Link>
                 <Link
                   href="/cafe-pos"
                   onClick={() => setMobileMenuOpen(false)}
@@ -710,6 +777,27 @@ export default function Navbar() {
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
                 >
                   <span>Download APK &amp; Apps</span>
+                </Link>
+                <Link
+                  href="/cafe-pos-vs-traditional-pos"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Cloud vs Traditional POS</span>
+                </Link>
+                <Link
+                  href="/how-to-choose-restaurant-management-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Software Buyer&apos;s Guide</span>
+                </Link>
+                <Link
+                  href="/how-to-manage-a-small-cafe"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Manage a Small Cafe</span>
                 </Link>
                 <Link
                   href="/contact"
