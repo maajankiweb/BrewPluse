@@ -1,8 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function PricingCalculator() {
+  const [dailyOrders, setDailyOrders] = useState(60);
+  const [feeMode, setFeeMode] = useState<'diner' | 'cafe'>('diner');
+
+  const annualOrders = dailyOrders * 30 * 12;
+  const cafeAnnualFee = feeMode === 'diner' ? 0 : annualOrders * 1;
+  const legacyAnnualCost = 24000;
+  const annualSavings = legacyAnnualCost - cafeAnnualFee;
   return (
     <section id="pricing" className="py-20 sm:py-28 bg-[#0b120e] text-white relative overflow-hidden">
       {/* Background ambient radial gradients */}
@@ -159,6 +167,130 @@ export default function PricingCalculator() {
             </p>
           </div>
 
+        </div>
+
+        {/* Interactive Dynamic ROI & Savings Calculator */}
+        <div className="rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-[#121c15] to-[#0a110c] border border-emerald-500/30 shadow-2xl mb-16 text-left">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10 mb-8">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                INTERACTIVE COST & SAVINGS CALCULATOR
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                See Your Exact Annual Savings
+              </h3>
+            </div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Real-Time Estimation Engine</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Column: Interactive Controls */}
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono text-gray-300 mb-2.5">
+                  <span className="uppercase text-gray-400">Daily Completed Orders:</span>
+                  <span className="text-emerald-400 font-bold text-base px-2.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                    {dailyOrders} orders / day
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="500"
+                  step="5"
+                  value={dailyOrders}
+                  onChange={(e) => setDailyOrders(parseInt(e.target.value))}
+                  className="w-full h-2.5 bg-black/60 rounded-lg appearance-none cursor-pointer accent-emerald-500 border border-white/10"
+                />
+                <div className="flex justify-between text-[11px] font-mono text-gray-500 mt-2">
+                  <span>10 (Boutique Cafe)</span>
+                  <span>150 (Busy Espresso Bar)</span>
+                  <span>500 (High-Speed QSR)</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-3">
+                <span className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  Select Payer Settlement Mode:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setFeeMode('diner')}
+                    className={`py-2.5 px-3.5 rounded-xl text-xs font-semibold text-left transition-all ${
+                      feeMode === 'diner'
+                        ? 'bg-emerald-600 text-white shadow-md border border-emerald-400'
+                        : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    <div className="font-bold flex items-center justify-between">
+                      <span>Diner Convenience Fee</span>
+                      {feeMode === 'diner' && <span>✓</span>}
+                    </div>
+                    <div className="text-[11px] opacity-80 mt-0.5">Cafe net cost = ₹0/year</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setFeeMode('cafe')}
+                    className={`py-2.5 px-3.5 rounded-xl text-xs font-semibold text-left transition-all ${
+                      feeMode === 'cafe'
+                        ? 'bg-emerald-600 text-white shadow-md border border-emerald-400'
+                        : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    <div className="font-bold flex items-center justify-between">
+                      <span>Cafe Absorbs ₹1</span>
+                      {feeMode === 'cafe' && <span>✓</span>}
+                    </div>
+                    <div className="text-[11px] opacity-80 mt-0.5">Clean customer bill slip</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Visual Savings Ledger */}
+            <div className="lg:col-span-5 p-6 rounded-2xl bg-[#080E0B] border border-emerald-900/60 shadow-xl space-y-4">
+              <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider block border-b border-white/10 pb-2">
+                PROJECTED ANNUAL EXPENSE LEDGER
+              </span>
+
+              <div className="flex justify-between items-baseline text-xs font-mono text-gray-300">
+                <span>BrewPluse Software License:</span>
+                <span className="text-emerald-400 font-bold text-sm">₹0 / year</span>
+              </div>
+
+              <div className="flex justify-between items-baseline text-xs font-mono text-gray-300">
+                <span>Platform Order Fees:</span>
+                <span className="text-white font-bold text-sm">
+                  {feeMode === 'diner' ? '₹0 (Paid by Diner)' : `₹${cafeAnnualFee.toLocaleString('en-IN')} / year`}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-baseline text-xs font-mono text-gray-400 border-b border-white/10 pb-3">
+                <span>Legacy POS (Petpooja/Posist):</span>
+                <span className="text-rose-400 font-bold text-sm line-through">
+                  ₹{legacyAnnualCost.toLocaleString('en-IN')} / year
+                </span>
+              </div>
+
+              <div className="pt-2">
+                <span className="text-[11px] text-gray-400 uppercase font-mono block">
+                  Net Annual Cafe Savings:
+                </span>
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono mt-1">
+                  ₹{Math.max(0, annualSavings).toLocaleString('en-IN')}
+                  <span className="text-xs text-gray-400 font-normal ml-1">/ year</span>
+                </div>
+                <p className="text-[11px] text-gray-400 font-mono mt-2 leading-relaxed">
+                  Calculated based on {dailyOrders * 30} orders/mo vs ₹24,000/yr legacy software &amp; AMC fees.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Who pays the ₹1? Block */}

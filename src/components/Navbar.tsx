@@ -7,6 +7,7 @@ export default function Navbar() {
   const [modulesOpen, setModulesOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#EBE8E3] transition-all duration-300">
@@ -26,7 +27,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Items */}
+        {/* Desktop Navigation Items */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[14px] font-medium text-[#4a4642]">
 
           {/* Features badge link */}
@@ -55,7 +56,7 @@ export default function Navbar() {
             </button>
 
             {modulesOpen && (
-              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[580px] z-50 animate-fade-in">
+              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[600px] z-50 animate-fade-in">
                 <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5">
                   <div className="grid grid-cols-2 gap-2">
                     <Link
@@ -67,27 +68,10 @@ export default function Navbar() {
                       </div>
                       <div>
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
-                          Cafe POS (CafePOS)
+                          Point of Sale (POS)
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Rapid 2-tap counter billing &amp; KOT
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/restaurant-pos"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
-                        <span className="material-symbols-outlined text-[20px]">table_bar</span>
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
-                          Restaurant POS System
-                        </div>
-                        <div className="text-xs text-gray-500 leading-snug">
-                          Dining floor layout &amp; split checks
+                          Fast counter billing &amp; KOT print
                         </div>
                       </div>
                     </Link>
@@ -104,7 +88,7 @@ export default function Navbar() {
                           QR Table Ordering
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Contactless self-ordering &amp; UPI
+                          Contactless dine-in ordering
                         </div>
                       </div>
                     </Link>
@@ -121,7 +105,7 @@ export default function Navbar() {
                           Kitchen Display (KDS)
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Paperless kitchen &amp; barista screen
+                          Paperless kitchen &amp; barista
                         </div>
                       </div>
                     </Link>
@@ -138,24 +122,75 @@ export default function Navbar() {
                           Digital QR Menu
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Visual food photos &amp; live 86 toggle
+                          Visual photos &amp; live 86 toggle
                         </div>
                       </div>
                     </Link>
 
                     <Link
-                      href="/staff-ordering-system"
+                      href="/restaurant-order-management-system"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                        <span className="material-symbols-outlined text-[20px]">receipt_long</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                          Order Management System (OMS)
+                        </div>
+                        <div className="text-xs text-gray-500 leading-snug">
+                          Centralized kitchen order flow
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/restaurant-staff-management-software"
                       className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                     >
                       <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
-                        <span className="material-symbols-outlined text-[20px]">devices</span>
+                        <span className="material-symbols-outlined text-[20px]">badge</span>
                       </div>
                       <div>
                         <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
-                          Staff Waiter Ordering
+                          Staff &amp; Waiter App
                         </div>
                         <div className="text-xs text-gray-500 leading-snug">
-                          Handheld mobile order taking
+                          Handheld table order taking
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/cafe-loyalty-program-software"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                        <span className="material-symbols-outlined text-[20px]">military_tech</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                          Cafe Loyalty Software
+                        </div>
+                        <div className="text-xs text-gray-500 leading-snug">
+                          Digital stamp cards &amp; rewards
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/ai-review-management-for-restaurants"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-800 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors duration-200">
+                        <span className="material-symbols-outlined text-[20px]">reviews</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-indigo-800 transition-colors">
+                          AI Review Management
+                        </div>
+                        <div className="text-xs text-gray-500 leading-snug">
+                          Google review booster &amp; rep
                         </div>
                       </div>
                     </Link>
@@ -166,8 +201,14 @@ export default function Navbar() {
                       className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 transition-colors"
                       href="/features"
                     >
-                      <span>Explore All 18+ Features &amp; POS Modules</span>
-                      <span>→</span>
+                      <span>Explore All 18+ Features in Detail →</span>
+                    </Link>
+                    <Link
+                      className="text-xs font-semibold text-gray-600 hover:text-black flex items-center gap-1 transition-colors"
+                      href="/demo"
+                      target="_blank"
+                    >
+                      <span>Live Demo ↗</span>
                     </Link>
                   </div>
                 </div>
@@ -192,8 +233,8 @@ export default function Navbar() {
             </button>
 
             {solutionsOpen && (
-              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[500px] z-50 animate-fade-in">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1.5">
+              <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[520px] z-50 animate-fade-in">
+                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1">
                   <Link
                     href="/cafe-management-software"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
@@ -203,10 +244,10 @@ export default function Navbar() {
                     </div>
                     <div>
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
-                        Cafe Management Software
+                        Cafe Management
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        Built for coffee shops, bakeries &amp; tea cafes
+                        Coffee shops, bakeries &amp; tea cafes
                       </div>
                     </div>
                   </Link>
@@ -220,27 +261,10 @@ export default function Navbar() {
                     </div>
                     <div>
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-orange-800 transition-colors">
-                        Restaurant Management Software
+                        Restaurant Management
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        Full-service dining rooms, multi-station KOTs &amp; bar
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/free-cafe-management-software"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
-                      <span className="material-symbols-outlined text-[20px]">money_off</span>
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
-                        Free Cafe POS &amp; Software
-                      </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        ₹0/month subscription model for modern cafes
+                        Floor plans, multi-station KOT &amp; KDS
                       </div>
                     </div>
                   </Link>
@@ -249,15 +273,66 @@ export default function Navbar() {
                     href="/free-restaurant-pos"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
+                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">money_off</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                        Free Restaurant POS
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        ₹0/mo software subscription forever
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/best-free-pos-software-india"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
                     <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
-                      <span className="material-symbols-outlined text-[20px]">savings</span>
+                      <span className="material-symbols-outlined text-[20px]">currency_rupee</span>
                     </div>
                     <div>
                       <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
-                        Free Restaurant POS System
+                        Free POS India Edition
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        Table floor plans, split checks &amp; KDS at ₹0/month
+                        UPI QR &amp; 5% / 18% GST compliance
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/qr-table-ordering"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">table_bar</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
+                        QR Table Ordering
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Scan to order &amp; pay with geofencing
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/free-cafe-management-software"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">coffee</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
+                        Free Cafe Software
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Zero upfront fees forever for cafe owners
                       </div>
                     </div>
                   </Link>
@@ -271,6 +346,14 @@ export default function Navbar() {
             href="/pricing"
           >
             Pricing
+          </Link>
+
+          <Link
+            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-colors font-medium flex items-center gap-1 text-emerald-800"
+            href="/compare"
+          >
+            <span>Compare</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold">VS</span>
           </Link>
 
           {/* Resources Dropdown */}
@@ -290,17 +373,51 @@ export default function Navbar() {
             </button>
 
             {resourcesOpen && (
-              <div className="nav-dropdown-menu absolute top-full right-0 pt-2 w-[380px] z-50 animate-fade-in">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1.5">
+              <div className="nav-dropdown-menu absolute top-full right-0 pt-2 w-[400px] z-50 animate-fade-in">
+                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1">
+                  <Link
+                    href="/documentation"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">description</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                        Documentation &amp; Tech Manual
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        System architecture &amp; setup guides
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/how-pricing-works"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                      <span className="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                        How Pricing Works
+                      </div>
+                      <div className="text-xs text-gray-500 leading-snug">
+                        Transparent ₹0/mo economics breakdown
+                      </div>
+                    </div>
+                  </Link>
+
                   <Link
                     href="/how-to-use"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">menu_book</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
                         How to Use &amp; Setup Guide
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
@@ -313,11 +430,11 @@ export default function Navbar() {
                     href="/blog"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">article</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
                         Blog &amp; Knowledge Base
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
@@ -327,14 +444,14 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    href="/#faq"
+                    href="/faq"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">quiz</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
                         FAQ &amp; Honest Answers
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
@@ -347,15 +464,15 @@ export default function Navbar() {
                     href="/download"
                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-cyan-50 text-cyan-800 flex items-center justify-center shrink-0 group-hover/item:bg-cyan-600 group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">download</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-cyan-800 transition-colors">
                         Download Software
                       </div>
                       <div className="text-xs text-gray-500 leading-snug">
-                        POS Bridge &amp; mobile apps
+                        Android APK &amp; desktop apps
                       </div>
                     </div>
                   </Link>
@@ -383,7 +500,7 @@ export default function Navbar() {
 
         </nav>
 
-        {/* Action Buttons */}
+        {/* Action Buttons & Mobile Hamburger */}
         <div className="flex items-center gap-3">
           <Link
             href="/login"
@@ -400,8 +517,229 @@ export default function Navbar() {
             <span>→</span>
           </Link>
 
+          {/* Mobile Menu Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 focus:outline-none"
+            aria-label="Toggle navigation menu"
+          >
+            <span className="material-symbols-outlined text-[26px]">
+              {mobileMenuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay & Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-20 bottom-0 bg-white z-50 overflow-y-auto px-6 py-6 border-t border-[#EBE8E3] animate-fade-in">
+          <div className="space-y-6">
+            <div>
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+                Core Modules
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                <Link
+                  href="/cafe-pos"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-emerald-700">point_of_sale</span>
+                  <span>Point of Sale (POS)</span>
+                </Link>
+                <Link
+                  href="/qr-ordering-system"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-amber-700">qr_code_2</span>
+                  <span>QR Table Ordering</span>
+                </Link>
+                <Link
+                  href="/kitchen-display-system"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-purple-700">skillet</span>
+                  <span>Kitchen Display (KDS)</span>
+                </Link>
+                <Link
+                  href="/digital-menu"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-rose-700">restaurant_menu</span>
+                  <span>Digital QR Menu</span>
+                </Link>
+                <Link
+                  href="/restaurant-order-management-system"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-blue-700">receipt_long</span>
+                  <span>Order Management (OMS)</span>
+                </Link>
+                <Link
+                  href="/restaurant-staff-management-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-teal-700">badge</span>
+                  <span>Staff &amp; Waiter App</span>
+                </Link>
+                <Link
+                  href="/cafe-loyalty-program-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-amber-700">military_tech</span>
+                  <span>Cafe Loyalty Software</span>
+                </Link>
+                <Link
+                  href="/ai-review-management-for-restaurants"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-indigo-700">reviews</span>
+                  <span>AI Review Booster</span>
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+                Solutions
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                <Link
+                  href="/cafe-management-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Cafe Management</span>
+                </Link>
+                <Link
+                  href="/restaurant-management-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Restaurant Management</span>
+                </Link>
+                <Link
+                  href="/free-restaurant-pos"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Free Restaurant POS</span>
+                </Link>
+                <Link
+                  href="/best-free-pos-software-india"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Free POS India Edition</span>
+                </Link>
+                <Link
+                  href="/qr-table-ordering"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>QR Table Ordering</span>
+                </Link>
+                <Link
+                  href="/free-cafe-management-software"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Free Cafe Software</span>
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+                Resources &amp; Pricing
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800 font-semibold"
+                >
+                  <span>Pricing (₹0/Mo)</span>
+                </Link>
+                <Link
+                  href="/compare"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-emerald-800 font-semibold"
+                >
+                  <span>Compare vs Competitors</span>
+                </Link>
+                <Link
+                  href="/documentation"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Documentation &amp; Manuals</span>
+                </Link>
+                <Link
+                  href="/how-pricing-works"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>How Pricing Works</span>
+                </Link>
+                <Link
+                  href="/how-to-use"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>How to Use &amp; Setup</span>
+                </Link>
+                <Link
+                  href="/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>FAQ &amp; Honest Answers</span>
+                </Link>
+                <Link
+                  href="/download"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Download APK &amp; Apps</span>
+                </Link>
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                >
+                  <span>Contact Support</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-3 rounded-xl border border-gray-200 text-center font-semibold text-sm text-gray-800"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-3 rounded-xl bg-[#0b2b1a] text-center font-semibold text-sm text-white shadow-sm"
+              >
+                Start Free with BrewPluse →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

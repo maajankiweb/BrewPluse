@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Coffee, Zap } from 'lucide-react';
@@ -68,6 +70,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/qr-table-ordering">
+                  QR Self-Ordering for Restaurants
+                </Link>
+              </li>
+              <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/digital-menu">
                   Digital Menu for Cafes
                 </Link>
@@ -83,13 +90,33 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/restaurant-billing-software">
+                  Restaurant Billing Software
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/restaurant-order-management-system">
+                  Order Management System (OMS)
+                </Link>
+              </li>
+              <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/kitchen-display-system">
                   Kitchen Display System (KDS)
                 </Link>
               </li>
               <li>
-                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/staff-ordering-system">
-                  Staff &amp; Waiter Ordering
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/restaurant-staff-management-software">
+                  Staff &amp; Waiter Management
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/cafe-loyalty-program-software">
+                  Cafe Loyalty &amp; Rewards
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/ai-review-management-for-restaurants">
+                  AI Google Review Growth
                 </Link>
               </li>
               <li>
@@ -100,6 +127,11 @@ export default function Footer() {
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/restaurant-management-software">
                   Restaurant Management Software
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/restaurant-inventory-management-software">
+                  Recipe &amp; Stock Inventory
                 </Link>
               </li>
             </ul>
@@ -130,7 +162,27 @@ export default function Footer() {
               </li>
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/pricing">
-                  Pricing (₹1/Order)
+                  Pricing (₹0 for Cafe Owners)
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block font-semibold text-emerald-400" href="/how-pricing-works">
+                  How Pricing Works (₹1 Micro-Fee)
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block font-semibold text-emerald-400" href="/compare">
+                  Software Comparison (vs Petpooja)
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/best-free-restaurant-software">
+                  Best Free Restaurant Software
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/free-restaurant-software">
+                  Why BrewPluse Is Free
                 </Link>
               </li>
               <li>
@@ -139,8 +191,28 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/best-free-cafe-management-software">
+                  Best Cafe Software 2026
+                </Link>
+              </li>
+              <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/free-restaurant-pos">
                   Free Restaurant POS
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/best-free-pos-software-india">
+                  Best Free POS in India
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/documentation">
+                  Product Documentation • API
+                </Link>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/faq">
+                  Frequently Asked Questions (FAQ)
                 </Link>
               </li>
               <li>
@@ -155,7 +227,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/blog">
-                  Knowledge Base &amp; Blog
+                  Knowledge Base &amp; Blog Guides
                 </Link>
               </li>
             </ul>
@@ -190,6 +262,11 @@ export default function Footer() {
                 >
                   Manage Privacy Choices
                 </button>
+              </li>
+              <li>
+                <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/privacy/preferences">
+                  Privacy &amp; Cookie Choices
+                </Link>
               </li>
               <li>
                 <Link className="hover:text-white hover:translate-x-0.5 transition-all inline-block" href="/privacy/data-rights">
@@ -242,9 +319,6 @@ export default function Footer() {
             <Link href="/restaurant-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               Restaurant POS System
             </Link>
-            <Link href="/restaurant-pos" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
-              Resturant POS
-            </Link>
             <Link href="/free-cafe-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               Free Cafe POS Software
             </Link>
@@ -266,11 +340,17 @@ export default function Footer() {
             <Link href="/digital-menu" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               Digital QR Menu for Cafes
             </Link>
-            <Link href="/staff-ordering-system" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
-              Staff Waiter Handheld POS
+            <Link href="/restaurant-staff-management-software" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              Staff &amp; Waiter Handheld POS
             </Link>
             <Link href="/pricing" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               ₹0/Mo POS Pricing
+            </Link>
+            <Link href="/compare" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              POS Software Comparison
+            </Link>
+            <Link href="/how-pricing-works" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
+              How Pricing Works
             </Link>
             <Link href="/blog/free-pos-systems-for-coffee-shops" className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-emerald-950/60 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/40 transition-all">
               Coffee Shop POS Comparison

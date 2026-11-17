@@ -292,6 +292,43 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Homepage FAQ Schema.org (AEO) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'How does the ₹0 monthly software fee work?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'BrewPluse does not charge fixed monthly software subscriptions or upfront software license fees. You get full access to all POS, KDS, inventory, and table QR features with transparent, usage-based per-order economics.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What is the difference between Guest Convenience and Merchant Absorbed billing?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'In the Guest Convenience Model, a transparent ₹1 convenience fee is added to the guest digital checkout slip. In the Merchant Absorbed Model, your cafe absorbs the nominal fee so the guest pays exactly the menu price. Both options keep your software subscription at ₹0/month.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Does BrewPluse require special POS hardware or proprietary terminals?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. BrewPluse operates in any web browser and on any Android tablet, iPad, MacBook, or Windows PC. It connects effortlessly to standard 58mm and 80mm thermal receipt printers over Web Bluetooth, USB, or LAN.',
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* Section 7: Why BrewPluse Table + Honest Answers FAQ Accordion */}
       <WhyAndFaqSection />
 

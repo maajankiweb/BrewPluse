@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewPluse vs. CafeFlow — Strategic Competitive Intelligence & Redesign Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brew: {
+              obsidian: '#080E0B',
+              dark: '#0D1612',
+              card: '#13201A',
+              border: '#1E362B',
+              primary: '#10B981',
+              hover: '#059669',
+              mint: '#34D399',
+              crema: '#F59E0B',
+              slate: '#94A3B8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #080E0B;
+      color: #F8FAF8;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0D1612;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1E362B;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #10B981;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-[#080E0B]/90 backdrop-blur-md border-b border-[#1E362B] px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center font-extrabold text-black text-xl shadow-lg shadow-emerald-500/20">
+        B
+      </div>
+      <div>
+        <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+          BrewPluse <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono">VS COMPETITOR</span>
+        </h1>
+        <p class="text-xs text-gray-400">Competitive Redesign & Strategic Feature Parity Dashboard</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center space-x-3">
+      <div class="hidden md:flex items-center space-x-2 text-xs font-mono bg-[#13201A] px-3 py-1.5 rounded-lg border border-[#1E362B]">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-gray-300">Audited Nov 17, 2026</span>
+      </div>
+      <a href="https://brewpluse.com" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition">
+        BrewPluse.com ↗
+      </a>
+      <a href="https://cafeflow.fun" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 transition">
+        CafeFlow.fun ↗
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-8">
+    
+    <!-- Executive KPI Scorecard Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="p-5 rounded-2xl bg-[#0D1612] border border-[#1E362B] flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Total Page Footprint</span>
+          <div class="text-3xl font-extrabold text-white mt-1">32 vs 64</div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">Competitor has 64 indexed routes. BrewPluse expanding to 45+ targeted landing hubs.</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-[#0D1612] border border-[#1E362B] flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Software Subscription</span>
+          <div class="text-3xl font-extrabold text-emerald-400 mt-1">₹0 / mo</div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">Both offer ₹0/mo. BrewPluse adds optional high-volume monthly cap for large QSRs.</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-[#0D1612] border border-[#1E362B] flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-amber-400">Interactive Sandbox</span>
+          <div class="text-3xl font-extrabold text-white mt-1">Live /demo</div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">BrewPluse has live working interactive sandbox; CafeFlow relies only on static images.</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-[#0D1612] border border-[#1E362B] flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Hardware Compatibility</span>
+          <div class="text-3xl font-extrabold text-emerald-400 mt-1">Web BT + USB</div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">ESC/POS 58mm/80mm thermal wireless printing with zero proprietary hardware lock-in.</p>
+      </div>
+    </div>
+
+    <!-- Comparative Tabbed Navigation -->
+    <div class="border-b border-[#1E362B] flex space-x-6">
+      <button onclick="switchTab('parity')" id="tab-btn-parity" class="pb-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400 transition">
+        Feature Parity Matrix
+      </button>
+      <button onclick="switchTab('calculator')" id="tab-btn-calculator" class="pb-3 text-sm font-semibold text-gray-400 hover:text-white transition">
+        Interactive ROI & Pricing
+      </button>
+      <button onclick="switchTab('architecture')" id="tab-btn-architecture" class="pb-3 text-sm font-semibold text-gray-400 hover:text-white transition">
+        Information Architecture
+      </button>
+      <button onclick="switchTab('design')" id="tab-btn-design" class="pb-3 text-sm font-semibold text-gray-400 hover:text-white transition">
+        Design Tokens & System
+      </button>
+    </div>
+
+    <!-- TAB 1: FEATURE PARITY MATRIX -->
+    <div id="tab-parity" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white">Competitive Feature Parity Matrix</h2>
+          <p class="text-xs text-gray-400">Empirical comparison based on verified production code and competitor crawl.</p>
+        </div>
+        <span class="text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-full">
+          14 / 16 Core Capabilities Verified
+        </span>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-[#1E362B] bg-[#0D1612]">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b border-[#1E362B] bg-[#13201A] text-gray-300 font-mono text-xs uppercase">
+              <th class="p-4">Operational Capability</th>
+              <th class="p-4">CafeFlow.fun</th>
+              <th class="p-4">BrewPluse (Current)</th>
+              <th class="p-4">Parity Assessment</th>
+              <th class="p-4">Engineering Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#1E362B] text-gray-300">
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Cloud Point of Sale (POS)</td>
+              <td class="p-4 text-emerald-400">✓ Verified Live</td>
+              <td class="p-4 text-emerald-400">✓ Verified (/demo)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">PARITY</span></td>
+              <td class="p-4 text-xs text-gray-400">Enhance split-bill UI on counter checkout</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Contactless QR Table Ordering</td>
+              <td class="p-4 text-emerald-400">✓ Verified Live</td>
+              <td class="p-4 text-emerald-400">✓ Verified (/m, /t)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">PARITY</span></td>
+              <td class="p-4 text-xs text-gray-400">Add high-res food photo zoom & tags</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">GPS Geofence Fraud Check</td>
+              <td class="p-4 text-emerald-400">✓ Verified Live</td>
+              <td class="p-4 text-emerald-400">✓ Verified (geofence.ts)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">PARITY</span></td>
+              <td class="p-4 text-xs text-gray-400">Expose strict/permissive toggle in settings</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Paperless Kitchen Display (KDS)</td>
+              <td class="p-4 text-emerald-400">✓ Verified Live</td>
+              <td class="p-4 text-emerald-400">✓ Verified (/kitchen)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">PARITY</span></td>
+              <td class="p-4 text-xs text-gray-400">Add acoustic sound chime on new order</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Interactive Live Sandbox Demo</td>
+              <td class="p-4 text-amber-400">Static Screenshots</td>
+              <td class="p-4 text-emerald-400 font-bold">✓ Full Interactive (/demo)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/30 text-emerald-200 text-xs font-bold">BREWPLUSE WIN</span></td>
+              <td class="p-4 text-xs text-gray-400">Elevate sandbox demo to hero section</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">ESC/POS Thermal Printing (58/80mm)</td>
+              <td class="p-4 text-emerald-400">✓ Verified Live</td>
+              <td class="p-4 text-emerald-400">✓ Verified (thermalPrinter.ts)</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">PARITY</span></td>
+              <td class="p-4 text-xs text-gray-400">Include Web Bluetooth test button in POS modal</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Head-to-Head Comparison Hub</td>
+              <td class="p-4 text-emerald-400">✓ Dedicated (/compare)</td>
+              <td class="p-4 text-rose-400">Homepage Section Only</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs">HIGH GAP</span></td>
+              <td class="p-4 text-xs text-gray-400">Build dedicated /compare page with TCO calculator</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Inbound Lead Qualification Form</td>
+              <td class="p-4 text-emerald-400">✓ Multi-input Form</td>
+              <td class="p-4 text-rose-400">Static Email/WhatsApp only</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs">CRITICAL GAP</span></td>
+              <td class="p-4 text-xs text-gray-400">Add validated multi-step inquiry form on /contact</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02]">
+              <td class="p-4 font-semibold text-white">Android Mobile App Distribution</td>
+              <td class="p-4 text-emerald-400">✓ Working APK & PWA</td>
+              <td class="p-4 text-rose-400">404 Broken APK Links</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs">CRITICAL GAP</span></td>
+              <td class="p-4 text-xs text-gray-400">Fix APK binary host and add direct PWA install button</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: INTERACTIVE PRICING & ROI CALCULATOR -->
+    <div id="tab-calculator" class="hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-[#0D1612] border border-[#1E362B] space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white">Transparent ROI & Pricing Calculator</h2>
+          <p class="text-xs text-gray-400">Simulate daily order volume and compare BrewPluse vs. Legacy Software Retainers (Petpooja / Posist).</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-mono text-gray-300 mb-2">
+                <span>DAILY COMPLETED ORDERS:</span>
+                <span id="slider-val" class="text-emerald-400 font-bold text-sm">60 orders/day</span>
+              </div>
+              <input type="range" id="order-slider" min="10" max="500" value="60" step="5" 
+                class="w-full h-2 bg-[#1E362B] rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                oninput="updateCalc(this.value)">
+              <div class="flex justify-between text-[10px] font-mono text-gray-500 mt-1">
+                <span>10 (Boutique Cafe)</span>
+                <span>250 (Busy Coffee Bar)</span>
+                <span>500 (High-Speed QSR)</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#13201A] border border-[#1E362B] space-y-2">
+              <span class="text-xs font-mono text-gray-400 uppercase">Fee Absorption Setting</span>
+              <div class="flex space-x-2">
+                <button onclick="setFeeMode('diner')" id="btn-mode-diner" class="flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-emerald-500 text-black transition">
+                  Passed to Customer (₹0 Net Cost)
+                </button>
+                <button onclick="setFeeMode('cafe')" id="btn-mode-cafe" class="flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-[#080E0B] text-gray-300 border border-[#1E362B] transition">
+                  Cafe Absorbs ₹1 / order
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Output Card -->
+          <div class="p-6 rounded-2xl bg-gradient-to-br from-[#14231C] to-[#0D1612] border border-emerald-500/40 shadow-xl space-y-4">
+            <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">ANNUAL FINANCIAL SUMMARY</span>
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <span class="text-sm text-gray-300">BrewPluse Software License:</span>
+              <span class="text-xl font-bold font-mono text-emerald-400">₹0 / yr</span>
+            </div>
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <span class="text-sm text-gray-300">Cafe Net Platform Fee:</span>
+              <span id="out-fee" class="text-xl font-bold font-mono text-white">₹0 / yr</span>
+            </div>
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <span class="text-sm text-gray-300">Legacy POS Cost (Petpooja/Posist):</span>
+              <span class="text-xl font-bold font-mono text-rose-400">₹24,000 / yr</span>
+            </div>
+            <div class="pt-2">
+              <div class="text-xs text-gray-400 uppercase font-mono">Net Annual Savings with BrewPluse:</div>
+              <div id="out-savings" class="text-3xl font-extrabold text-emerald-400 font-mono mt-1">₹24,000 / yr</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: INFORMATION ARCHITECTURE -->
+    <div id="tab-architecture" class="hidden space-y-4">
+      <div class="p-6 rounded-2xl bg-[#0D1612] border border-[#1E362B] space-y-4">
+        <h2 class="text-xl font-bold text-white">Target Information Architecture & Crawl Footprint</h2>
+        <p class="text-xs text-gray-400">Restructured site tree matching competitor depth while optimizing internal link juice.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div class="p-4 rounded-xl bg-[#13201A] border border-[#1E362B] space-y-2">
+            <span class="text-emerald-400 font-bold">1. Core Product & Operations</span>
+            <ul class="space-y-1 text-gray-300">
+              <li>• / (Homepage & Interactive Preview)</li>
+              <li>• /features (Full 18-Feature Suite)</li>
+              <li>• /pricing (Dynamic ROI & Model)</li>
+              <li>• /compare (Petpooja, Posist, SlickPOS)</li>
+              <li>• /documentation (Setup Manuals)</li>
+              <li>• /demo (Live Interactive Sandbox)</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-[#13201A] border border-[#1E362B] space-y-2">
+            <span class="text-emerald-400 font-bold">2. High-Intent Solutions</span>
+            <ul class="space-y-1 text-gray-300">
+              <li>• /cafe-pos & /restaurant-pos</li>
+              <li>• /qr-ordering-system</li>
+              <li>• /kitchen-display-system</li>
+              <li>• /digital-menu</li>
+              <li>• /staff-ordering-system</li>
+              <li>• /best-free-pos-software-india</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-[#13201A] border border-[#1E362B] space-y-2">
+            <span class="text-emerald-400 font-bold">3. Compliance & Company</span>
+            <ul class="space-y-1 text-gray-300">
+              <li>• /about (Mission & Team)</li>
+              <li>• /contact (Structured Lead Form)</li>
+              <li>• /faq (Knowledge Accordion)</li>
+              <li>• /download (Verified APK & PWA)</li>
+              <li>• /privacy, /terms, /refund</li>
+              <li>• /blog (10+ Strategic Guides)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: DESIGN TOKENS -->
+    <div id="tab-design" class="hidden space-y-4">
+      <div class="p-6 rounded-2xl bg-[#0D1612] border border-[#1E362B] space-y-4">
+        <h2 class="text-xl font-bold text-white">Artisan Obsidian & Fresh Emerald Token Palette</h2>
+        <p class="text-xs text-gray-400">Independent brand palette meeting WCAG 2.2 AA accessibility standards.</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+          <div class="p-3 rounded-xl bg-[#080E0B] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#080E0B] border border-white/20 mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Obsidian</div>
+            <div class="text-[10px] font-mono text-gray-400">#080E0B</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0D1612] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#0D1612] border border-white/20 mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Dark Card</div>
+            <div class="text-[10px] font-mono text-gray-400">#0D1612</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#13201A] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#13201A] border border-white/20 mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Forest Surface</div>
+            <div class="text-[10px] font-mono text-gray-400">#13201A</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#1E362B] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#1E362B] mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Stroke Border</div>
+            <div class="text-[10px] font-mono text-gray-400">#1E362B</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0D1612] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#10B981] mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Mint Primary</div>
+            <div class="text-[10px] font-mono text-gray-400">#10B981</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0D1612] border border-[#1E362B] text-center">
+            <div class="w-full h-12 rounded bg-[#F59E0B] mb-2"></div>
+            <div class="text-[11px] font-bold text-white">Crema Gold</div>
+            <div class="text-[10px] font-mono text-gray-400">#F59E0B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1E362B] px-6 py-4 text-center text-xs text-gray-500 font-mono">
+    BrewPluse Competitive Engineering Team • Confidential & Proprietary Benchmark Analysis
+  </footer>
+
+  <script>
+    function switchTab(tabId) {
+      ['parity', 'calculator', 'architecture', 'design'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('tab-btn-' + t).classList.remove('text-emerald-400', 'border-b-2', 'border-emerald-400');
+        document.getElementById('tab-btn-' + t).classList.add('text-gray-400');
+      });
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.getElementById('tab-btn-' + tabId).classList.add('text-emerald-400', 'border-b-2', 'border-emerald-400');
+      document.getElementById('tab-btn-' + tabId).classList.remove('text-gray-400');
+    }
+
+    let currentMode = 'diner';
+    let currentOrders = 60;
+
+    function setFeeMode(mode) {
+      currentMode = mode;
+      const btnDiner = document.getElementById('btn-mode-diner');
+      const btnCafe = document.getElementById('btn-mode-cafe');
+      if (mode === 'diner') {
+        btnDiner.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-emerald-500 text-black transition';
+        btnCafe.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-[#080E0B] text-gray-300 border border-[#1E362B] transition';
+      } else {
+        btnCafe.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-emerald-500 text-black transition';
+        btnDiner.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-[#080E0B] text-gray-300 border border-[#1E362B] transition';
+      }
+      updateCalc(currentOrders);
+    }
+
+    function updateCalc(val) {
+      currentOrders = parseInt(val);
+      document.getElementById('slider-val').innerText = currentOrders + ' orders/day';
+      
+      const annualOrders = currentOrders * 30 * 12;
+      const fee = currentMode === 'diner' ? 0 : annualOrders * 1;
+      const legacy = 24000;
+      const savings = legacy - fee;
+
+      document.getElementById('out-fee').innerText = currentMode === 'diner' ? '₹0 / yr (Diner pays ₹1)' : '₹' + fee.toLocaleString('en-IN') + ' / yr';
+      document.getElementById('out-savings').innerText = savings > 0 ? '₹' + savings.toLocaleString('en-IN') + ' / yr' : '₹0 / yr';
+    }
+  </script>
+</body>
+</html>

@@ -177,107 +177,6 @@ export default function RootLayout({
     url: 'https://brewpluse.com',
   };
 
-  // Corporate & Local Business Entity Schema (B2B Software & POS Provider)
-  const geoLocalSchema = {
-    '@context': 'https://schema.org',
-    '@type': ['LocalBusiness', 'ProfessionalService'],
-    name: 'BrewPluse Technologies',
-    image: 'https://brewpluse.com/storefront.png',
-    url: 'https://brewpluse.com',
-    telephone: '+91-9006543913',
-    priceRange: '₹0 - ₹₹',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'BrewPluse Tech Park, Sector 4',
-      addressLocality: 'Bangalore',
-      addressRegion: 'Karnataka',
-      postalCode: '560001',
-      addressCountry: 'IN',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 12.9716,
-      longitude: 77.5946,
-    },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday',
-        ],
-        opens: '09:00',
-        closes: '21:00',
-      },
-    ],
-    areaServed: [
-      { '@type': 'Country', name: 'India' },
-      { '@type': 'Country', name: 'Worldwide' },
-    ],
-    knowsAbout: [
-      'Point of Sale (POS) Systems',
-      'Cafe Management Software',
-      'Restaurant POS Software',
-      'Kitchen Display Systems (KDS)',
-      'Contactless QR Table Ordering',
-      'Thermal Receipt Printing & ESC/POS',
-      'Inventory & Recipe Management',
-    ],
-  };
-
-  // Answer Engine Optimization (AEO FAQ Schema for ChatGPT, Perplexity, Gemini, Copilot)
-  const aeoFaqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is BrewPluse?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'BrewPluse is a modern cloud-based Point of Sale (POS) and complete operating system for cafes, coffee shops, bakeries, and quick-service restaurants. It unifies QR table ordering, kitchen display systems (KDS), inventory management, staff tracking, thermal receipt printing, and customer loyalty into one interface with zero monthly software fees.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is BrewPluse free to use for cafes and restaurants?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. BrewPluse charges ₹0 per month for software subscriptions. Cafe owners get full access to the POS, digital QR menus, Kitchen Display System, and analytics without recurring monthly SaaS fees.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How does BrewPluse QR table ordering work?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Customers simply scan a dynamic QR stand on their table using any mobile smartphone camera. The live digital menu opens instantly without requiring any app download. Customers select dishes, add custom modifiers, and pay via UPI or request cash settlement. Orders route instantly to the Kitchen Display System (KDS).',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Does BrewPluse support thermal receipt printers and hardware?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. BrewPluse supports standard 58mm and 80mm ESC/POS thermal printers via USB, Bluetooth, LAN Ethernet, and Wi-Fi, alongside official NFC tap-to-review hardware cards and acrylic QR stands.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is BREWIE AI Assistant in BrewPluse?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'BREWIE is an integrated artificial intelligence assistant trained on cafe operations and restaurant workflows. It provides real-time sales velocity audits, low-stock threshold forecasting, happy-hour discount suggestions, and automated floor layout configurations directly inside the merchant dashboard.',
-        },
-      },
-    ],
-  };
-
   // Site Navigation Structured Data (Internal Links Hierarchy)
   const siteNavigationSchema = {
     '@context': 'https://schema.org',
@@ -293,9 +192,13 @@ export default function RootLayout({
       { '@type': 'SiteNavigationElement', position: 8, name: 'QR Ordering System', url: 'https://brewpluse.com/qr-ordering-system' },
       { '@type': 'SiteNavigationElement', position: 9, name: 'Digital QR Menu', url: 'https://brewpluse.com/digital-menu' },
       { '@type': 'SiteNavigationElement', position: 10, name: 'Staff Waiter Ordering System', url: 'https://brewpluse.com/staff-ordering-system' },
-      { '@type': 'SiteNavigationElement', position: 11, name: 'Features', url: 'https://brewpluse.com/features' },
-      { '@type': 'SiteNavigationElement', position: 12, name: 'Pricing', url: 'https://brewpluse.com/pricing' },
-      { '@type': 'SiteNavigationElement', position: 13, name: 'Knowledge Base & Blog', url: 'https://brewpluse.com/blog' },
+      { '@type': 'SiteNavigationElement', position: 11, name: 'Features Suite', url: 'https://brewpluse.com/features' },
+      { '@type': 'SiteNavigationElement', position: 12, name: 'Pricing & Transparent ROI', url: 'https://brewpluse.com/pricing' },
+      { '@type': 'SiteNavigationElement', position: 13, name: 'Competitor Comparison Hub', url: 'https://brewpluse.com/compare' },
+      { '@type': 'SiteNavigationElement', position: 14, name: 'Documentation & Hardware Specs', url: 'https://brewpluse.com/documentation' },
+      { '@type': 'SiteNavigationElement', position: 15, name: 'FAQ Center', url: 'https://brewpluse.com/faq' },
+      { '@type': 'SiteNavigationElement', position: 16, name: 'Best Free POS Software India', url: 'https://brewpluse.com/best-free-pos-software-india' },
+      { '@type': 'SiteNavigationElement', position: 17, name: 'Knowledge Base & Blog', url: 'https://brewpluse.com/blog' },
     ],
   };
 
@@ -329,16 +232,6 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-        {/* Structured Data: LocalBusiness & GeoCoordinates (GEO) */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(geoLocalSchema) }}
-        />
-        {/* Structured Data: FAQPage (AEO) */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqSchema) }}
         />
         {/* Structured Data: Site Navigation (Internal Linking SEO) */}
         <script

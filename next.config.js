@@ -5,7 +5,7 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
   },
   webpack: (config) => {
     config.resolve.alias = {
@@ -20,7 +20,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/((?!_next/static|_next/image|favicon.ico).*)',
+        source: '/(api|dashboard|kitchen)/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -33,6 +33,15 @@ const nextConfig = {
           {
             key: 'Expires',
             value: '0',
+          },
+        ],
+      },
+      {
+        source: '/((?!api|dashboard|kitchen|_next/static|_next/image|favicon.ico).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
           },
           {
             key: 'X-Robots-Tag',

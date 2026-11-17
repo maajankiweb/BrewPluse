@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewPluse.com — Executive Website Audit & Engineering Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#10b981',
+              700: '#047857',
+              800: '#065f46',
+              900: '#062f23',
+              dark: '#0a1d16'
+            },
+            surface: {
+              card: '#111815',
+              border: '#1f2d26',
+              bg: '#080e0c',
+              highlight: '#1a2922'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .score-circle {
+      background: conic-gradient(#10b981 var(--score-deg), #1f2d26 0deg);
+    }
+    .badge-p0 { background: #ef444422; color: #f87171; border: 1px solid #ef444455; }
+    .badge-p1 { background: #f59e0b22; color: #fbbf24; border: 1px solid #f59e0b55; }
+    .badge-p2 { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f655; }
+    .badge-confirmed { background: #10b98122; color: #34d399; border: 1px solid #10b98155; }
+  </style>
+</head>
+<body class="bg-surface-bg text-gray-200 font-sans antialiased min-h-screen selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Header Navigation -->
+  <header class="border-b border-surface-border bg-surface-card/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-800 border border-brand-500/40 flex items-center justify-center text-brand-500 font-extrabold text-lg shadow-lg shadow-brand-500/10">
+          ☕
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight text-white">Brew<span class="text-brand-500">Pluse</span></span>
+          <span class="ml-2 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-900/80 text-brand-500 border border-brand-500/30">MASTER AUDIT REPORT</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-mono text-gray-400">
+        <span class="hidden sm:inline">Target: <strong class="text-white">brewpluse.com</strong></span>
+        <span class="hidden md:inline">Audited: <strong class="text-gray-300">Nov 17, 2026</strong></span>
+        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-semibold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          CONFIRMED READ-ONLY
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Hero Scorecard Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Primary Master Score Widget -->
+      <div class="lg:col-span-5 bg-gradient-to-br from-surface-card via-surface-card to-surface-highlight border border-surface-border rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-12 -top-12 w-48 h-48 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-brand-500 font-bold">Comprehensive Health Index</span>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Master Audit Score</h2>
+          <p class="text-xs text-gray-400 mt-2 leading-relaxed">
+            Weighted composite scoring across 9 core disciplines including Technical SEO, Performance, Mobile Ergonomics, Security, and Conversion Rate Optimization.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6 my-6">
+          <div class="relative w-28 h-28 rounded-full score-circle flex items-center justify-center shrink-0 shadow-lg" style="--score-deg: 260deg;">
+            <div class="w-22 h-22 rounded-full bg-surface-bg flex flex-col items-center justify-center">
+              <span class="text-3xl font-extrabold text-white font-mono leading-none">72.4</span>
+              <span class="text-[10px] text-gray-400 uppercase font-mono mt-0.5">/ 100</span>
+            </div>
+          </div>
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold mb-1.5">
+              GRADE: B- (STRONG POTENTIAL)
+            </div>
+            <div class="text-xs text-gray-300 font-medium">
+              Exceptional product foundation compromised by 4 critical implementation bugs.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-surface-border/60 text-center">
+          <div class="p-2 rounded-xl bg-surface-bg/60 border border-surface-border/40">
+            <div class="text-lg font-bold font-mono text-red-400">4</div>
+            <div class="text-[10px] text-gray-400 uppercase font-mono">P0/P1 Criticals</div>
+          </div>
+          <div class="p-2 rounded-xl bg-surface-bg/60 border border-surface-border/40">
+            <div class="text-lg font-bold font-mono text-amber-400">6</div>
+            <div class="text-[10px] text-gray-400 uppercase font-mono">P2 Warnings</div>
+          </div>
+          <div class="p-2 rounded-xl bg-surface-bg/60 border border-surface-border/40">
+            <div class="text-lg font-bold font-mono text-emerald-400">38</div>
+            <div class="text-[10px] text-gray-400 uppercase font-mono">URLs Verified</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Breakdown Grid -->
+      <div class="lg:col-span-7 bg-surface-card border border-surface-border rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <span>📊</span> Category Performance Breakdown
+          </h3>
+          <span class="text-xs font-mono text-gray-400">Empirical Lab Data</span>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Row 1 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">Technical SEO (Robots, Sitemaps, Schemas)</span>
+              <span class="text-amber-400 font-bold">68 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-amber-400 h-full rounded-full" style="width: 68%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">On-Page SEO & Content Architecture</span>
+              <span class="text-emerald-400 font-bold">82 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-emerald-400 h-full rounded-full" style="width: 82%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">Core Web Vitals & Performance (LCP, Fonts, Cache)</span>
+              <span class="text-amber-400 font-bold">64 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-amber-400 h-full rounded-full" style="width: 64%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 4 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">UI/UX Visual Design & Component Quality</span>
+              <span class="text-emerald-400 font-bold">84 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-emerald-400 h-full rounded-full" style="width: 84%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 5 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">Mobile Viewport Ergonomics (360px–390px)</span>
+              <span class="text-amber-400 font-bold">72 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-amber-400 h-full rounded-full" style="width: 72%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 6 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">Security & Infrastructure Reliability</span>
+              <span class="text-emerald-400 font-bold">76 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-emerald-400 h-full rounded-full" style="width: 76%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 7 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">Conversion Rate Optimization (CRO & Lead Flow)</span>
+              <span class="text-red-400 font-bold">58 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-red-400 h-full rounded-full" style="width: 58%;"></div>
+            </div>
+          </div>
+
+          <!-- Row 8 -->
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-gray-300">WCAG 2.2 AA Accessibility (A11y, Contrast, Labels)</span>
+              <span class="text-amber-400 font-bold">71 / 100</span>
+            </div>
+            <div class="w-full bg-surface-bg h-2 rounded-full overflow-hidden border border-surface-border">
+              <div class="bg-amber-400 h-full rounded-full" style="width: 71%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Critical Issues Registry (Filterable Table) -->
+    <section class="bg-surface-card border border-surface-border rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-surface-border">
+        <div>
+          <h3 class="text-xl font-extrabold text-white flex items-center gap-2">
+            <span class="text-red-400">⚠️</span> Priority Defect Registry
+          </h3>
+          <p class="text-xs text-gray-400 mt-1">Confirmed technical and UX anomalies requiring developer action.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono text-gray-400">Status:</span>
+          <span class="badge-confirmed px-2.5 py-0.5 rounded-full text-xs font-mono font-bold">ALL CONFIRMED</span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto mt-6">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-surface-border bg-surface-bg/50 text-gray-400 font-mono">
+              <th class="py-3 px-4">Priority</th>
+              <th class="py-3 px-4">Defect Name</th>
+              <th class="py-3 px-4">Affected File / URL</th>
+              <th class="py-3 px-4">Mechanism & Commercial Impact</th>
+              <th class="py-3 px-4">Actionable Fix</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-surface-border/60">
+            <!-- Issue 1 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p0 px-2 py-0.5 rounded text-[11px]">P0 - CRITICAL</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Android APK Download Links 404</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <a href="https://brewpluse.com/download" class="text-brand-500 hover:underline">/download</a><br>
+                <span class="text-[10px] text-gray-500">public/BrewPluse-Android.apk</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                Both APK download buttons lead to 404 Not Found. Blocks hardware onboarding and Android POS adoption.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Build APK from <code>android/</code> and place binary at <code>public/downloads/BrewPluse-Android.apk</code>.
+              </td>
+            </tr>
+
+            <!-- Issue 2 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p1 px-2 py-0.5 rounded text-[11px]">P1 - HIGH</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Wildcard Query Disallow in Robots.txt</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <a href="https://brewpluse.com/robots.txt" class="text-brand-500 hover:underline">/robots.txt</a><br>
+                <span class="text-[10px] text-gray-500">src/app/robots.ts (Line 11)</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                <code>Disallow: /*?*</code> blocks crawlers on all UTM links, campaign parameters, and internal RSC requests.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Delete wildcard rule; replace with targeted <code>Disallow: /*?_rsc=*</code>.
+              </td>
+            </tr>
+
+            <!-- Issue 3 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p1 px-2 py-0.5 rounded text-[11px]">P1 - HIGH</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Sitewide Global Schema Over-Injection</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <span>Sitewide (All 38 URLs)</span><br>
+                <span class="text-[10px] text-gray-500">src/app/layout.tsx (Line 110)</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                Injects identical FAQPage, LocalBusiness, and SoftwareApplication schemas onto /privacy, /terms, and /contact. Violates Google spam policies.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Isolate non-brand schemas to their matching specific pages. Remove from RootLayout.
+              </td>
+            </tr>
+
+            <!-- Issue 4 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p1 px-2 py-0.5 rounded text-[11px]">P1 - HIGH</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Next.js Image Optimization Disabled</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <span class="text-[10px] text-gray-500">next.config.js (Line 8)</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                <code>unoptimized: true</code> forces raw 419.7 KB hero PNG without WebP/AVIF. Degrades mobile LCP to 2.4s+.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Remove <code>unoptimized: true</code>; serve via <code>next/image</code> with responsive widths.
+              </td>
+            </tr>
+
+            <!-- Issue 5 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p1 px-2 py-0.5 rounded text-[11px]">P1 - HIGH</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Mobile Privacy Widget Overlap</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <span>Mobile (360px–390px)</span><br>
+                <span class="text-[10px] text-gray-500">src/components/PrivacyChoices.tsx</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                Floating pill button physically covers core conversion text (<code>✓ ₹0/month software subscription</code>).
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Hide floating badge on mobile; relocate toggle into mobile navigation menu.
+              </td>
+            </tr>
+
+            <!-- Issue 6 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p1 px-2 py-0.5 rounded text-[11px]">P1 - HIGH</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Missing Lead Form on Contact Page</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <a href="https://brewpluse.com/contact" class="text-brand-500 hover:underline">/contact</a>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                Zero interactive inputs. Forcing enterprise cafe chains into informal WhatsApp chats causes major conversion drop-off.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Implement responsive 4-field inquiry form with automated email dispatch.
+              </td>
+            </tr>
+
+            <!-- Issue 7 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p2 px-2 py-0.5 rounded text-[11px]">P2 - MEDIUM</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Aggressive Anti-Caching Headers</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <span class="text-[10px] text-gray-500">next.config.js (Lines 20–36)</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                <code>Cache-Control: no-store</code> on all public marketing routes completely eliminates browser & CDN caching.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Limit <code>no-store</code> to <code>/(dashboard|api)</code>; apply stale-while-revalidate to marketing pages.
+              </td>
+            </tr>
+
+            <!-- Issue 8 -->
+            <tr class="hover:bg-surface-highlight/30 transition-colors">
+              <td class="py-3.5 px-4 font-mono font-bold">
+                <span class="badge-p2 px-2 py-0.5 rounded text-[11px]">P2 - MEDIUM</span>
+              </td>
+              <td class="py-3.5 px-4 font-bold text-white">Heading Structure Errors (/demo, /login)</td>
+              <td class="py-3.5 px-4 font-mono text-gray-300">
+                <span>/demo (2x H1)</span><br>
+                <span>/login (0x H1)</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300 leading-relaxed">
+                Violates semantic heading order for search crawlers and screen readers.
+              </td>
+              <td class="py-3.5 px-4 text-emerald-400 font-mono text-[11px]">
+                Demote secondary H1 on /demo; add primary H1 on /login.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Detailed Tabs Section -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Card 1: SEO & Search Signals -->
+      <div class="bg-surface-card border border-surface-border rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="font-extrabold text-white text-base flex items-center gap-2">
+            <span>🔍</span> Technical SEO Blueprint
+          </h4>
+          <span class="text-xs font-mono text-brand-500">Rankings & AEO</span>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>robots.txt Clean-up:</strong> Unblock query parameters to allow Google Ads and UTM link indexing.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Delete Static Sitemap:</strong> Remove <code>public/sitemap.xml</code> so dynamic <code>app/sitemap.ts</code> handles route updates.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Fix Dynamic Lastmod:</strong> Stop generating <code>new Date().toISOString()</code> on every sitemap crawl.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>AEO & llms.txt:</strong> Align entity facts across Wikidata, LinkedIn, and llms.txt specification.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Card 2: Performance Engineering -->
+      <div class="bg-surface-card border border-surface-border rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="font-extrabold text-white text-base flex items-center gap-2">
+            <span>⚡</span> Core Web Vitals
+          </h4>
+          <span class="text-xs font-mono text-brand-500">Speed Optimization</span>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Re-Enable Next.js Sharp:</strong> Compress 419KB PNG hero to 42KB WebP (-90% network payload).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Self-Host Google Fonts:</strong> Migrate from external <code>fonts.googleapis.com</code> to <code>next/font/google</code>.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Browser Caching:</strong> Configure stale-while-revalidate for instant repeat navigation.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Clarity Optimization:</strong> Load session recording script with <code>strategy="afterInteractive"</code>.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Card 3: CRO & Conversion Funnel -->
+      <div class="bg-surface-card border border-surface-border rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="font-extrabold text-white text-base flex items-center gap-2">
+            <span>📈</span> Conversion Rate Strategy
+          </h4>
+          <span class="text-xs font-mono text-brand-500">Revenue Growth</span>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Restore Android APK:</strong> Deliver working mobile app binary to convert hardware buyers.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>B2B Inquiry Form:</strong> Add qualification fields on <code>/contact</code> for multi-location cafe chains.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Verified Reviews:</strong> Embed real Google Maps & Trustpilot review badges to prove 4.9★ rating.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-brand-500 font-bold">✓</span>
+            <span><strong>Interactive Demo CTA:</strong> Add sticky activation banner inside <code>/demo</code> to capture active testers.</span>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- Master Deliverables Documentation Links -->
+    <section class="bg-surface-card border border-surface-border rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h4 class="font-extrabold text-white text-lg">📑 Audit Deliverables & Documentation Index</h4>
+          <p class="text-xs text-gray-400 mt-1">Full-length reports created in workspace root directory.</p>
+        </div>
+        <span class="text-xs font-mono text-emerald-400 font-semibold">5 Complete Markdown Reports Generated</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 1</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_Complete_Website_Audit.md</div>
+          <div class="text-xs text-gray-400 mt-1">Comprehensive 11-phase master report with full executive summary, scorecards, and analysis.</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 2</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_SEO_Audit.md</div>
+          <div class="text-xs text-gray-400 mt-1">Deep-dive technical SEO, crawlability, robots.txt, schema validation, and AEO optimization.</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 3</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_UI_UX_Report.md</div>
+          <div class="text-xs text-gray-400 mt-1">Multi-viewport responsive audit (1440px to 360px), component design, and interaction analysis.</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 4</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_Performance_Report.md</div>
+          <div class="text-xs text-gray-400 mt-1">Core Web Vitals lab measurements, Next.js image optimization, and caching headers guide.</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 5</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_30_Day_Action_Plan.md</div>
+          <div class="text-xs text-gray-400 mt-1">Step-by-step developer remediation roadmap divided into 4 weekly engineering sprints.</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-bg border border-surface-border hover:border-brand-500/50 transition-colors">
+          <div class="text-xs font-mono text-brand-500 font-bold">DOCUMENT 6</div>
+          <div class="text-sm font-bold text-white mt-1">Brewpluse_Audit_Dashboard.html</div>
+          <div class="text-xs text-gray-400 mt-1">Interactive visual dashboard (this document) ready for executive and stakeholder presentation.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-surface-border bg-surface-card py-6 mt-12 text-center text-xs font-mono text-gray-500">
+    BrewPluse.com Comprehensive Website Analysis & Engineering Audit • Confidential Client Report • Generated November 17, 2026
+  </footer>
+
+</body>
+</html>

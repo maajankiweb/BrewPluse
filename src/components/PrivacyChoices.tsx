@@ -153,7 +153,7 @@ export default function PrivacyChoices() {
           type="button"
           onClick={() => setModalOpen(true)}
           aria-label="Open Privacy Choices"
-          className="fixed bottom-[74px] lg:bottom-5 left-3 sm:left-5 z-40 inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#1c1e1d]/95 hover:bg-[#252b27] border border-[#2e3731] hover:border-emerald-500/50 shadow-xl shadow-black/50 text-[#e2e8f0] hover:text-white transition-all duration-200 cursor-pointer group active:scale-95"
+          className="fixed bottom-[74px] lg:bottom-5 left-3 sm:left-5 z-40 hidden sm:inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#1c1e1d]/95 hover:bg-[#252b27] border border-[#2e3731] hover:border-emerald-500/50 shadow-xl shadow-black/50 text-[#e2e8f0] hover:text-white transition-all duration-200 cursor-pointer group active:scale-95"
         >
           {/* Quartered Shield Icon matching exact reference */}
           <svg
