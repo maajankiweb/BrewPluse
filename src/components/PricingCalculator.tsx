@@ -1,379 +1,293 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
 export default function PricingCalculator() {
-  const [dailyOrders, setDailyOrders] = useState(60);
-  const [feeMode, setFeeMode] = useState<'diner' | 'cafe'>('diner');
-
-  const annualOrders = dailyOrders * 30 * 12;
-  const cafeAnnualFee = feeMode === 'diner' ? 0 : annualOrders * 1;
-  const legacyAnnualCost = 24000;
-  const annualSavings = legacyAnnualCost - cafeAnnualFee;
   return (
-    <section id="pricing" className="py-20 sm:py-28 bg-[#0b120e] text-white relative overflow-hidden">
-      {/* Background ambient radial gradients */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="pricing" className="py-20 sm:py-28 bg-[#001F19] text-[#F7F5EC] relative overflow-hidden border-y border-[#002D23] reveal-on-scroll">
+      {/* Background radial dots and ambient glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#B99A5B_1px,transparent_1px)] [background-size:32px_32px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#002D23]/40 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-[#B99A5B]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section 5 Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-block text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase mb-3">
-            TRANSPARENT PRICING ARCHITECTURE
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        {/* Header */}
+        <div className="max-w-3xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002D23] border border-[#B99A5B]/30 text-[#B99A5B] font-mono text-[11px] font-bold tracking-wider uppercase mb-6 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#B99A5B] animate-pulse" />
+            <span>TRANSPARENT PRICING ARCHITECTURE</span>
           </div>
-          <div className="text-xs sm:text-sm font-mono text-gray-400 mb-2">
-            Most cafe software starts with a bill. <br className="sm:hidden" />
-            <span className="text-gray-300">₹999/month</span> • <span className="text-gray-300">₹1,999/month</span> • Annual plans • Setup fees
-          </div>
-          <div className="text-sm font-mono text-gray-400 mb-4">
-            BrewPluse starts with:
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
-            Run BrewPluse for <br />
-            <span className="text-emerald-400">₹0 / month. Forever.</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#F7F5EC] tracking-tight leading-[1.1] mb-4">
+            Free for cafe owners.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F7F5EC] via-[#FFFEFA] to-[#B99A5B]">
+              Clear for customers.
+            </span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto">
-            No subscription. No setup fee. No upfront software payment.
+          <p className="text-sm sm:text-base text-[#64736D] max-w-2xl mx-auto leading-relaxed mb-6 font-normal">
+            Manage your cafe with BrewPluse without paying a monthly subscription or per-order software fee as a cafe owner.
           </p>
-          <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10 max-w-xl mx-auto text-xs text-gray-300 leading-relaxed font-mono">
-            <span className="text-emerald-400 font-bold">How BrewPluse works:</span> We don&apos;t charge your cafe a monthly software subscription. For eligible orders, a small <span className="text-white font-bold">₹1 BrewPluse fee</span> is applied through the order payment flow.
+          <div className="p-4 rounded-2xl bg-[#002D23]/40 border border-[#002D23] max-w-2xl mx-auto text-xs sm:text-sm text-[#F7F5EC] leading-relaxed font-normal">
+            <strong className="text-[#B99A5B]">Core Pricing Rule:</strong> Cafe owners pay{' '}
+            <strong className="text-white">₹0 to use BrewPluse</strong>. The{' '}
+            <strong className="text-[#B99A5B]">₹1 per-order BrewPluse fee</strong> is paid by the customer, not deducted from the cafe owner&apos;s pocket.
           </div>
         </div>
 
-        {/* 2 Side-by-side Pricing Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16 text-left">
-          
-          {/* Card 1: Subscription */}
-          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#141e17] to-[#0e1610] border border-emerald-900/60 shadow-xl flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-                <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    1. CAFE SOFTWARE SUBSCRIPTION
-                  </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                    YOUR CAFE PAYS
-                  </div>
+        {/* 2 Main Cards */}
+        <div className="max-w-5xl mx-auto mb-12 text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            {/* Card 1: For Cafe Owners */}
+            <div className="p-8 sm:p-10 rounded-3xl bg-[#002D23] border-2 border-[#B99A5B]/30 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#B99A5B]/10 rounded-full blur-2xl pointer-events-none" />
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#001F19] border border-[#B99A5B]/30 text-[#B99A5B] font-mono text-[10px] font-bold uppercase tracking-wider mb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B99A5B]" />
+                  <span>FOR CAFE OWNERS</span>
                 </div>
-                <div className="text-right">
-                  <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono">
-                    ₹0
+                <div className="text-xs font-mono uppercase tracking-wider text-[#64736D] mb-1 font-semibold">
+                  YOUR CAFE PAYS
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-6xl sm:text-7xl font-black text-white font-mono tracking-tighter">₹0</span>
+                  <span className="text-lg font-mono text-[#B99A5B] font-bold uppercase tracking-wider">/ month</span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-[#001F19] border border-[#B99A5B]/20 text-[#B99A5B] text-xs sm:text-sm font-bold mb-6 font-mono">
+                  Your cafe doesn&apos;t pay BrewPluse per order.
+                </div>
+                <div className="space-y-3 text-xs sm:text-sm text-gray-200 font-mono mb-8">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B99A5B] text-[18px]">check_circle</span>
+                    <span><strong>Monthly software subscription:</strong> ₹0 forever</span>
                   </div>
-                  <div className="text-[10px] font-mono text-gray-400">/ month FOREVER</div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B99A5B] text-[18px]">check_circle</span>
+                    <span><strong>Per-order fee charged to cafe:</strong> ₹0</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B99A5B] text-[18px]">check_circle</span>
+                    <span><strong>Setup or onboarding fees:</strong> ₹0</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B99A5B] text-[18px]">check_circle</span>
+                    <span><strong>No paid trial:</strong> Free for life with full feature access</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B99A5B] text-[18px]">check_circle</span>
+                    <span><strong>Food revenue:</strong> Cafe keeps 100% of all food &amp; drinks billed</span>
+                  </div>
                 </div>
               </div>
-
-              <ul className="space-y-3.5 text-xs text-gray-300 mb-8">
-                <li className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
-                  <span><strong>Software subscription:</strong> ₹0 / month</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
-                  <span><strong>Setup fee:</strong> ₹0</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
-                  <span><strong>Upfront software payment:</strong> ₹0</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
-                  <span><strong>Full feature access:</strong> POS, QR, KDS &amp; Inventory</span>
-                </li>
-              </ul>
-
-              <p className="text-xs text-gray-400 leading-relaxed mb-6">
-                You use the entire platform without a software bill. No monthly retainers, no contract lock-in.
-              </p>
+              <div>
+                <Link
+                  href="/signup"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[10px] bg-[#B99A5B] hover:bg-[#A8894A] text-[#001F19] text-sm font-bold shadow-lg transition-all hover:scale-[1.01]"
+                >
+                  <span>Start Your Free Cafe</span>
+                  <span>→</span>
+                </Link>
+                <div className="text-center text-[10px] font-mono text-[#64736D] mt-2">
+                  No credit card required • Setup in &lt; 5 minutes
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <a
-                href="/signup"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow-lg"
-              >
-                <span>Start Your Cafe — Free</span>
-                <span>→</span>
-              </a>
-              <div className="text-center text-[10px] font-mono text-gray-500">
-                No credit card required
+            {/* Card 2: For Customers */}
+            <div className="p-8 sm:p-10 rounded-3xl bg-[#001F19] border border-[#002D23] shadow-2xl flex flex-col justify-between font-mono">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23] border border-[#B99A5B]/30 text-[#B99A5B] font-mono text-[10px] font-bold uppercase tracking-wider mb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B99A5B]" />
+                  <span>FOR CUSTOMERS</span>
+                </div>
+                <div className="text-xs uppercase tracking-wider text-[#64736D] mb-1 font-semibold">
+                  CUSTOMER TRANSACTION FEE
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-4xl sm:text-5xl font-black text-[#B99A5B] font-mono tracking-tight">₹1</span>
+                  <span className="text-xs font-mono text-[#64736D] font-semibold">/ order</span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-[#002D23]/60 border border-[#002D23] text-[#F7F5EC] text-xs sm:text-sm font-bold mb-6 font-mono">
+                  The ₹1 BrewPluse fee is paid by the customer, not the cafe owner.
+                </div>
+                <div className="space-y-3 text-xs sm:text-sm text-[#F7F5EC]/80 font-mono mb-6">
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-[#B99A5B] font-bold">•</span>
+                    <span>A ₹1 per-order BrewPluse fee applies to the customer under the current India pricing model.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-[#B99A5B] font-bold">•</span>
+                    <span>The fee must be disclosed before the customer confirms an order.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-[#B99A5B] font-bold">•</span>
+                    <span>This is a platform digital convenience fee — not a tax and not a payment-processing charge.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-[#B99A5B] font-bold">•</span>
+                    <span>Zero deduction from the cafe owner&apos;s earnings on any transaction.</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#001712] border border-[#002D23] text-[11px] text-[#F7F5EC]/80 space-y-1">
+                <div className="text-[#B99A5B] font-bold flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[15px]">verified</span>
+                  <span>100% Payout Protection for Cafes</span>
+                </div>
+                <div className="text-[#64736D] text-[10px]">
+                  BrewPluse does not take a percentage cut of your food sales or deduct software fees from your menu payouts.
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Card 2: Order-level fee */}
-          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#141e17] to-[#0e1610] border border-emerald-900/60 shadow-xl flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
+        {/* How an Order Works in Practice */}
+        <div className="max-w-4xl mx-auto mb-16 text-left reveal-on-scroll">
+          <div className="p-6 sm:p-8 rounded-3xl bg-[#001F19] border border-[#002D23] shadow-xl">
+            <div className="flex items-center gap-2.5 text-base font-bold text-[#F7F5EC] mb-2">
+              <span className="material-symbols-outlined text-[#B99A5B] text-[20px]">calculate</span>
+              <h3 className="text-lg font-bold text-[#F7F5EC]">How an Order Works in Practice</h3>
+            </div>
+            <p className="text-xs sm:text-sm text-[#64736D] leading-relaxed mb-6 font-normal">
+              If a customer places an order, the customer pays the applicable order amount plus the ₹1 BrewPluse fee. The cafe owner does not pay that ₹1 fee to BrewPluse.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+              <div className="p-4 rounded-2xl bg-[#002D23]/50 border border-[#002D23] flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
-                    2. ORDER-LEVEL BREWPLUSE FEE
-                  </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                    APPLIED PER TRANSACTION
+                  <div className="text-[10px] text-[#64736D] uppercase tracking-wider mb-2 font-bold">1. Customer Checkout</div>
+                  <div className="space-y-1.5 text-gray-300 mb-3">
+                    <div className="flex justify-between">
+                      <span>Cappuccino (Menu Price)</span>
+                      <span className="font-bold text-white">₹120</span>
+                    </div>
+                    <div className="flex justify-between text-[#B99A5B] font-semibold">
+                      <span>BrewPluse customer fee</span>
+                      <span>+₹1</span>
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-3xl sm:text-4xl font-extrabold text-amber-400 font-mono">
-                    ₹1
-                  </div>
-                  <div className="text-xs font-mono text-gray-400">/ eligible order</div>
+                <div className="pt-2 border-t border-[#002D23] flex justify-between font-bold text-white">
+                  <span>Customer pays total:</span>
+                  <span className="text-[#B99A5B]">₹121</span>
                 </div>
               </div>
 
-              {/* Order summary preview */}
-              <div className="rounded-2xl p-4 bg-black/40 border border-white/5 space-y-2 text-xs font-mono mb-6">
-                <div className="flex justify-between text-gray-400 text-xs pb-2 border-b border-white/10">
-                  <span>BREWPLUSE TICKET</span>
-                  <span>Order #BP-8421 • Table 6 (Dine-in)</span>
+              <div className="p-4 rounded-2xl bg-[#002D23] border border-[#B99A5B]/30 flex flex-col justify-between">
+                <div>
+                  <div className="text-[10px] text-[#B99A5B] uppercase tracking-wider mb-2 font-bold">2. Cafe Owner Receives</div>
+                  <div className="space-y-1.5 text-gray-300 mb-3">
+                    <div className="flex justify-between">
+                      <span>Food &amp; Beverage Payout</span>
+                      <span className="font-bold text-[#B99A5B]">₹120</span>
+                    </div>
+                    <div className="text-[10px] text-gray-400 leading-relaxed">
+                      100% of your food ticket is yours. No percentage cut taken by BrewPluse.
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between text-gray-300">
-                  <span>Single Origin Cortado (Oat Milk)</span>
-                  <span>₹180</span>
-                </div>
-                <div className="flex justify-between text-gray-300">
-                  <span>Wild Mushroom Sourdough Toast</span>
-                  <span>₹260</span>
-                </div>
-                <div className="flex justify-between text-gray-300">
-                  <span>Belgian Dark Chocolate Cookie</span>
-                  <span>₹140</span>
-                </div>
-                <div className="flex justify-between text-gray-400 pt-1 border-t border-white/10">
-                  <span>Subtotal</span>
-                  <span>₹580</span>
-                </div>
-                <div className="flex justify-between text-emerald-400 font-bold">
-                  <span>Cloud Sync &amp; Platform Fee</span>
-                  <span>₹1</span>
-                </div>
-                <div className="flex justify-between text-white font-extrabold text-sm pt-1 border-t border-white/10">
-                  <span>Total Amount</span>
-                  <span className="text-emerald-300">₹580 + ₹1</span>
+                <div className="pt-2 border-t border-[#001F19] flex justify-between font-bold text-[#F7F5EC]">
+                  <span>Cafe revenue:</span>
+                  <span>₹120 (100%)</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300 font-mono mb-4">
-                <span className="material-symbols-outlined text-[18px] text-emerald-400">verified</span>
-                <span>Your BrewPluse software subscription: <strong>₹0 /month</strong></span>
+              <div className="p-4 rounded-2xl bg-[#001712] border border-[#002D23] flex flex-col justify-between">
+                <div>
+                  <div className="text-[10px] text-[#64736D] uppercase tracking-wider mb-2 font-bold">3. Cafe Owner Cost</div>
+                  <div className="space-y-1.5 text-gray-300 mb-3">
+                    <div className="flex justify-between">
+                      <span>Monthly software bill:</span>
+                      <span className="font-bold text-white">₹0</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Order fee paid by cafe:</span>
+                      <span className="font-bold text-white">₹0</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[#002D23] flex justify-between font-bold text-[#B99A5B]">
+                  <span>Total cost to cafe:</span>
+                  <span>₹0</span>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <p className="text-xs text-gray-300 leading-relaxed">
-              The ₹1 fee is an order-level platform fee — never a software subscription charge.
+        {/* Video Walkthrough Section */}
+        <div className="max-w-5xl mx-auto mb-16 text-left reveal-on-scroll">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23] border border-[#B99A5B]/30 text-[#B99A5B] font-mono text-[10px] font-bold uppercase tracking-wider mb-3 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#B99A5B] animate-pulse" />
+              <span>VIDEO WALKTHROUGH • HOW TO USE BREWPLUSE</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#F7F5EC] tracking-tight mb-2">
+              See How to Run Your Cafe on BrewPluse
+            </h3>
+            <p className="text-xs sm:text-sm text-[#64736D] max-w-xl mx-auto font-normal">
+              Watch our complete step-by-step video guide on configuring your menu, table QR ordering, cashier billing, and thermal receipt printing.
             </p>
           </div>
-
-        </div>
-
-        {/* Interactive Dynamic ROI & Savings Calculator */}
-        <div className="rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-[#121c15] to-[#0a110c] border border-emerald-500/30 shadow-2xl mb-16 text-left">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10 mb-8">
-            <div>
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-                INTERACTIVE COST & SAVINGS CALCULATOR
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                See Your Exact Annual Savings
-              </h3>
-            </div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Real-Time Estimation Engine</span>
-            </div>
+          <div className="relative rounded-3xl overflow-hidden bg-[#001F19] border-2 border-[#002D23] shadow-2xl aspect-video">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/pt-x6OqOvIA"
+              title="How to Use BrewPluse: Step-by-Step Operations & POS Setup Guide"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Column: Interactive Controls */}
-            <div className="lg:col-span-7 space-y-6">
-              <div>
-                <div className="flex justify-between items-center text-xs font-mono text-gray-300 mb-2.5">
-                  <span className="uppercase text-gray-400">Daily Completed Orders:</span>
-                  <span className="text-emerald-400 font-bold text-base px-2.5 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
-                    {dailyOrders} orders / day
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="10"
-                  max="500"
-                  step="5"
-                  value={dailyOrders}
-                  onChange={(e) => setDailyOrders(parseInt(e.target.value))}
-                  className="w-full h-2.5 bg-black/60 rounded-lg appearance-none cursor-pointer accent-emerald-500 border border-white/10"
-                />
-                <div className="flex justify-between text-[11px] font-mono text-gray-500 mt-2">
-                  <span>10 (Boutique Cafe)</span>
-                  <span>150 (Busy Espresso Bar)</span>
-                  <span>500 (High-Speed QSR)</span>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-3">
-                <span className="text-xs font-mono text-gray-400 uppercase tracking-wider">
-                  Select Payer Settlement Mode:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setFeeMode('diner')}
-                    className={`py-2.5 px-3.5 rounded-xl text-xs font-semibold text-left transition-all ${
-                      feeMode === 'diner'
-                        ? 'bg-emerald-600 text-white shadow-md border border-emerald-400'
-                        : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10'
-                    }`}
-                  >
-                    <div className="font-bold flex items-center justify-between">
-                      <span>Diner Convenience Fee</span>
-                      {feeMode === 'diner' && <span>✓</span>}
-                    </div>
-                    <div className="text-[11px] opacity-80 mt-0.5">Cafe net cost = ₹0/year</div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setFeeMode('cafe')}
-                    className={`py-2.5 px-3.5 rounded-xl text-xs font-semibold text-left transition-all ${
-                      feeMode === 'cafe'
-                        ? 'bg-emerald-600 text-white shadow-md border border-emerald-400'
-                        : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10'
-                    }`}
-                  >
-                    <div className="font-bold flex items-center justify-between">
-                      <span>Cafe Absorbs ₹1</span>
-                      {feeMode === 'cafe' && <span>✓</span>}
-                    </div>
-                    <div className="text-[11px] opacity-80 mt-0.5">Clean customer bill slip</div>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Visual Savings Ledger */}
-            <div className="lg:col-span-5 p-6 rounded-2xl bg-[#080E0B] border border-emerald-900/60 shadow-xl space-y-4">
-              <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider block border-b border-white/10 pb-2">
-                PROJECTED ANNUAL EXPENSE LEDGER
-              </span>
-
-              <div className="flex justify-between items-baseline text-xs font-mono text-gray-300">
-                <span>BrewPluse Software License:</span>
-                <span className="text-emerald-400 font-bold text-sm">₹0 / year</span>
-              </div>
-
-              <div className="flex justify-between items-baseline text-xs font-mono text-gray-300">
-                <span>Platform Order Fees:</span>
-                <span className="text-white font-bold text-sm">
-                  {feeMode === 'diner' ? '₹0 (Paid by Diner)' : `₹${cafeAnnualFee.toLocaleString('en-IN')} / year`}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-baseline text-xs font-mono text-gray-400 border-b border-white/10 pb-3">
-                <span>Legacy POS (Petpooja/Posist):</span>
-                <span className="text-rose-400 font-bold text-sm line-through">
-                  ₹{legacyAnnualCost.toLocaleString('en-IN')} / year
-                </span>
-              </div>
-
-              <div className="pt-2">
-                <span className="text-[11px] text-gray-400 uppercase font-mono block">
-                  Net Annual Cafe Savings:
-                </span>
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono mt-1">
-                  ₹{Math.max(0, annualSavings).toLocaleString('en-IN')}
-                  <span className="text-xs text-gray-400 font-normal ml-1">/ year</span>
-                </div>
-                <p className="text-[11px] text-gray-400 font-mono mt-2 leading-relaxed">
-                  Calculated based on {dailyOrders * 30} orders/mo vs ₹24,000/yr legacy software &amp; AMC fees.
-                </p>
-              </div>
-            </div>
+          <div className="mt-4 flex items-center justify-between flex-wrap gap-3 text-xs font-mono text-[#64736D] px-2">
+            <a
+              href="https://youtu.be/pt-x6OqOvIA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[#B99A5B] hover:underline font-bold"
+            >
+              <span className="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+              <span>Watch on YouTube</span>
+              <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+            </a>
+            <Link href="/how-to-use" className="text-[#F7F5EC]/80 hover:text-white underline">
+              Read step-by-step setup documentation →
+            </Link>
           </div>
         </div>
 
-        {/* Who pays the ₹1? Block */}
-        <div className="rounded-3xl p-6 sm:p-10 bg-[#121914] border border-emerald-900/40 shadow-xl mb-16 text-left">
-          <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold mb-2">
-            <span className="material-symbols-outlined text-[20px]">help</span>
-            <span>Who pays the ₹1 platform fee?</span>
-          </div>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
-            BrewPluse gives complete billing freedom to cafe owners. You choose the settlement model that fits your brand:
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-white/10">
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs sm:text-sm">
-                <span className="material-symbols-outlined text-[18px]">person</span>
-                <span>Guest Convenience Model</span>
-              </div>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                The nominal ₹1 convenience fee is added to the digital checkout slip transparently for the guest.
-              </p>
-              <div className="text-xs text-gray-300 font-mono space-y-1 pt-1">
-                <div>• Cafe retains 100% of dish revenue</div>
-                <div>• Cafe pays <strong>₹0 monthly fees &amp; ₹0 per order</strong></div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
-              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs sm:text-sm">
-                <span className="material-symbols-outlined text-[18px]">store</span>
-                <span>Merchant Absorbed Model</span>
-              </div>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                Your cafe settles the nominal platform fee in the backend. Customers experience completely clean bills with no added fees.
-              </p>
-              <div className="text-xs text-gray-300 font-mono space-y-1 pt-1">
-                <div>• Frictionless guest ordering experience</div>
-                <div>• Software subscription remains <strong>₹0 /month</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-gray-400">
-            <span>Toggle between modes anytime in your BrewPluse business settings.</span>
-            <span className="text-emerald-400 font-bold">Both options = ₹0 monthly software bill</span>
-          </div>
-        </div>
-
-        {/* Bottom Banner of Section 5 */}
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-block text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase mb-3">
+        {/* Bottom Conversion Banner */}
+        <div className="max-w-2xl mx-auto text-center reveal-on-scroll">
+          <div className="inline-block text-xs font-mono font-bold tracking-widest text-[#B99A5B] uppercase mb-3">
             CLEAR • HONEST • TRANSPARENT
           </div>
-          <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-3">
-            Free to run.<br />
-            Simple to understand.<br />
-            Built to grow with your cafe.
+          <div className="text-3xl sm:text-4xl font-extrabold text-[#F7F5EC] tracking-tight leading-tight mb-3">
+            Free for cafe owners.<br />
+            Built to grow with your business.
           </div>
-          <p className="text-base font-semibold text-emerald-400 font-mono mb-1">
-            ₹0/month software subscription.
+          <p className="text-base font-semibold text-[#B99A5B] font-mono mb-1">
+            ₹0/month software subscription. ₹0 software fee per order for cafes.
           </p>
-          <p className="text-xs text-gray-400 font-mono mb-6">
-            Order-level fees apply where applicable.
+          <p className="text-xs text-[#64736D] font-mono mb-6">
+            The ₹1 fee is paid by the customer, not deducted from the cafe owner.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            <a
+            <Link
               href="/signup"
-              className="px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors shadow-lg"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001712] text-[#FFFEFA] text-sm font-bold shadow-xl border border-[#B99A5B]/30 transition-all hover:scale-[1.02]"
             >
-              Start Your Cafe — Free →
-            </a>
+              <span>Start Your Free Cafe</span>
+              <span>→</span>
+            </Link>
             <a
               href="/demo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-[10px] bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/15 transition-all"
             >
-              <span className="material-symbols-outlined text-[18px] text-emerald-400">play_circle</span>
+              <span className="material-symbols-outlined text-[18px]">play_circle</span>
               <span>Explore Live Demo</span>
             </a>
           </div>
         </div>
-
       </div>
     </section>
   );

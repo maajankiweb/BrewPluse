@@ -292,7 +292,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased text-[#1a1715] bg-[#FBFBFA] min-h-screen flex flex-col selection:bg-emerald-200 selection:text-emerald-950">
+      <body className="font-sans antialiased text-[#0B1714] bg-[#F7F5EC] min-h-screen flex flex-col selection:bg-[#002D23]/20 selection:text-[#002D23]">
         <AppShell>{children}</AppShell>
       </body>
     </html>

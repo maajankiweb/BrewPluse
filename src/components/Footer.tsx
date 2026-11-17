@@ -6,10 +6,10 @@ import { Coffee, Zap } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0b120e] text-gray-300 pt-16 pb-12 px-4 sm:px-6 lg:px-8 border-t border-emerald-950/80 relative overflow-hidden">
+    <footer className="bg-[#001F19] text-[#DDE3DD] pt-16 pb-12 px-4 sm:px-6 lg:px-8 border-t border-[#002D23] relative overflow-hidden">
       {/* Ambient background glows */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-600/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#002D23]/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#B99A5B]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-14 text-left">
@@ -17,39 +17,39 @@ export default function Footer() {
           {/* Brand Info & Legal box */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-2 focus:outline-none group">
-              <div className="w-8 h-8 rounded-xl bg-emerald-900 border border-emerald-500/20 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Coffee className="w-4 h-4 text-emerald-400" />
+              <div className="w-8 h-8 rounded-xl bg-[#002D23] border border-[#B99A5B]/30 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Coffee className="w-4 h-4 text-[#B99A5B]" />
               </div>
               <span className="text-xl font-extrabold tracking-tight text-white">
-                Brew<span className="text-emerald-400">Pluse</span>
+                Brew<span className="text-[#B99A5B]">Pluse</span>
               </span>
             </Link>
 
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-4">
+            <p className="text-xs sm:text-sm text-[#DDE3DD]/75 leading-relaxed mb-4">
               The complete operating system for modern cafes and restaurants. POS billing, contactless QR table ordering, live kitchen display (KDS), waiter ordering, and recipe inventory with ₹0/month software fees.
             </p>
 
-            <div className="space-y-2 text-xs font-mono text-gray-400 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+            <div className="space-y-2 text-xs font-mono text-[#DDE3DD]/70 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
               <div>
-                <span className="text-gray-300 font-bold">Legal Name:</span> Ashish Kumar
+                <span className="text-[#F7F5EC] font-bold">Legal Name:</span> Ashish Kumar
               </div>
               <div>
-                <span className="text-gray-300 font-bold">Trade Name:</span> BrewPluse
+                <span className="text-[#F7F5EC] font-bold">Trade Name:</span> BrewPluse
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-gray-300 font-bold">Support Email:</span>
+                <span className="text-[#F7F5EC] font-bold">Support Email:</span>
                 <a
                   href="mailto:support@brewpluse.com"
-                  className="text-emerald-400 hover:text-emerald-300 transition-colors underline"
+                  className="text-[#B99A5B] hover:text-[#d3b677] transition-colors underline"
                 >
                   support@brewpluse.com
                 </a>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-gray-300 font-bold">Support Phone:</span>
+                <span className="text-[#F7F5EC] font-bold">Support Phone:</span>
                 <a
                   href="tel:+919471273041"
-                  className="text-emerald-400 hover:text-emerald-300 transition-colors underline"
+                  className="text-[#B99A5B] hover:text-[#d3b677] transition-colors underline"
                 >
                   +91 9471273041
                 </a>
@@ -59,8 +59,8 @@ export default function Footer() {
 
           {/* Solutions Column */}
           <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#B99A5B] mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B99A5B]" />
               <span>SOLUTIONS</span>
             </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
@@ -144,8 +144,8 @@ export default function Footer() {
 
           {/* Resources & Free Tools */}
           <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#B99A5B] mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B99A5B]" />
               <span>RESOURCES &amp; FREE TOOLS</span>
             </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
@@ -260,8 +260,8 @@ export default function Footer() {
 
           {/* Help & Legal */}
           <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#B99A5B] mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B99A5B]" />
               <span>HELP &amp; LEGAL</span>
             </h3>
             <ul className="space-y-2.5 text-xs text-gray-400">
@@ -330,7 +330,7 @@ export default function Footer() {
         {/* SEO Keyword Clusters & Internal Linking Directory */}
         <div className="pt-10 pb-8 border-t border-white/10 text-left">
           <div className="mb-4">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#B99A5B]">
               POPULAR CAFE &amp; RESTAURANT POS KEYWORDS &amp; SOLUTIONS
             </span>
           </div>

@@ -7,179 +7,175 @@ export default function WhyAndFaqSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const comparisonRows = [
-    { name: 'Zero Monthly SaaS Retainers', brew: '✔ (₹0/month)', trad: '₹3,000 - ₹8,000/mo', multi: 'Multiple SaaS Bills' },
-    { name: 'Flexible Fee Settlement (Guest or Merchant)', brew: '✔ (Full Control)', trad: '✕', multi: '✕' },
-    { name: 'Offline Write-Ahead Resilience', brew: '✔ (Zero Drop)', trad: '✕ (Freezes)', multi: 'Differs' },
-    { name: 'Instant UPI Soundbox Audio Dispatch', brew: '✔ (Built-in)', trad: 'Separate Device', multi: '✕' },
-    { name: 'Interactive Table QR & Self-Checkout', brew: '✔ (Dynamic)', trad: '✕ or Expensive Addon', multi: 'Separate QR App' },
-    { name: 'Runs on Any Phone, Tablet, or PC', brew: '✔', trad: 'Proprietary Terminal Required', multi: 'Differs' },
-    { name: 'Real-time Barista KDS Synchronization', brew: '✔ (Sub-second)', trad: 'Manual Printing Only', multi: 'Scattered Tickets' },
-    { name: 'Recipe Batch & Ingredient Depletion', brew: '✔ (Automated)', trad: 'Manual Excel', multi: 'Disconnected ERP' },
+    {
+      feature: 'Monthly Software Fee',
+      brew: '₹0 / month for life',
+      trad: '₹1,500–₹5,000/mo',
+      multi: 'Multiple SaaS Bills',
+    },
+    {
+      feature: 'Upfront Setup Fee',
+      brew: '₹0',
+      trad: 'Mandatory',
+      multi: 'Setup Costs',
+    },
+    {
+      feature: 'Proprietary Hardware',
+      brew: 'Not required',
+      trad: 'Locked Terminals',
+      multi: 'Varies',
+    },
+    {
+      feature: 'Cafe Owner Order Fee',
+      brew: '₹0 (Never charged to cafe)',
+      trad: 'Fixed Regardless',
+      multi: 'Fixed Monthly',
+    },
+    {
+      feature: 'Customer Per-Order Fee',
+      brew: '₹1 (Paid by customer)',
+      trad: 'None (Cafe pays SaaS)',
+      multi: 'None (Cafe pays SaaS)',
+    },
+    {
+      feature: 'Voided / Cancelled Orders',
+      brew: '₹0 fee',
+      trad: 'N/A',
+      multi: 'N/A',
+    },
+    {
+      feature: 'Works on Standard Devices',
+      brew: '✓ (Phones, tablets, PCs)',
+      trad: '✕',
+      multi: 'Differs',
+    },
+    {
+      feature: 'Real-Time KDS & QR Sync',
+      brew: '✓',
+      trad: 'Extra addon fee',
+      multi: 'Scattered Data',
+    },
   ];
 
-  const faqs: { q: string; a: React.ReactNode }[] = [
+  const faqs = [
     {
-      q: 'How does the ₹0 monthly software fee work?',
-      a: (
-        <span>
-          BrewPluse doesn&apos;t charge fixed monthly software subscriptions or expensive upfront software licenses. You get full access to all POS, KDS, inventory, and table QR features with transparent, usage-based per-order economics. Explore our full{' '}
-          <Link href="/pricing" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            ₹0/mo pricing structure
-          </Link>.
-        </span>
-      ),
+      q: 'Is BrewPluse really free for cafe owners?',
+      a: 'Yes. Cafe owners pay ₹0 per month to use BrewPluse, with no BrewPluse software fee charged to the cafe owner per order.',
     },
     {
-      q: 'What is the difference between Guest Convenience and Merchant Absorbed billing?',
-      a: (
-        <span>
-          In the <strong>Guest Convenience Model</strong>, a transparent ₹1 convenience fee is added to the guest’s digital checkout slip. In the <strong>Merchant Absorbed Model</strong>, your cafe absorbs the nominal fee so the guest pays exactly the menu price. See how our{' '}
-          <Link href="/free-cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Free Cafe POS Software
-          </Link>{' '}
-          and{' '}
-          <Link href="/free-restaurant-pos" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Free Restaurant POS
-          </Link>{' '}
-          eliminate heavy recurring software overhead.
-        </span>
-      ),
+      q: 'Why is there a ₹1 per-order fee?',
+      a: "Under BrewPluse's current India pricing model, the ₹1 BrewPluse fee is charged to the customer rather than the cafe owner. The applicable fee is clearly displayed before the customer confirms the order.",
     },
     {
-      q: 'Can I switch between fee models at any time?',
-      a: 'Yes, absolutely. You can toggle between Guest Convenience and Merchant Absorbed modes at any time with a single click in your cafe dashboard settings.',
+      q: "Will BrewPluse deduct ₹1 from my cafe's earnings for every order?",
+      a: 'No. The ₹1 BrewPluse customer fee is not a per-order software fee charged to the cafe owner. Your cafe keeps 100% of the food and beverage order revenue.',
     },
     {
-      q: 'Does BrewPluse require special POS hardware or proprietary terminals?',
-      a: (
-        <span>
-          No. BrewPluse operates in any web browser and on any Android tablet, iPad, MacBook, or Windows PC. It connects effortlessly to standard 58mm and 80mm thermal receipt printers over USB, LAN, or Bluetooth. Learn more on our{' '}
-          <Link href="/cafe-pos" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Cafe POS Software page
-          </Link>.
-        </span>
-      ),
+      q: 'Are there any other charges?',
+      a: 'Any applicable taxes, payment-processing charges, or other charges depend on the relevant transaction and payment method. Review the applicable terms and payment details before completing a transaction.',
     },
     {
-      q: 'Can I manage multiple cafe or restaurant locations from a single dashboard?',
-      a: (
-        <span>
-          Yes. You can switch between outlets, compare sales trajectories, sync master menus, and manage staff permissions across all locations from one unified account with our{' '}
-          <Link href="/cafe-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Cafe Management Software
-          </Link>{' '}
-          and{' '}
-          <Link href="/restaurant-management-software" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Restaurant Operations Platform
-          </Link>.
-        </span>
-      ),
+      q: 'What features are included?',
+      a: 'Every core operational capability is included: fast counter POS billing, contactless table QR ordering, digital menu management with instant stock toggles, real-time Kitchen Display System (KDS), waiter mobile ordering, table layout management, customer loyalty rewards, discount coupons, and daily sales performance reports.',
     },
     {
-      q: 'How does contactless QR table ordering connect to the Kitchen Display?',
-      a: (
-        <span>
-          When a customer places an order via table QR code, the ticket immediately routes to the{' '}
-          <Link href="/kitchen-display-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            Kitchen Display System (KDS)
-          </Link>{' '}
-          with audio alerts and color-coded timers. Cashiers can also see the running tab on their{' '}
-          <Link href="/qr-ordering-system" className="text-emerald-700 font-semibold underline hover:text-emerald-950">
-            QR Ordering System
-          </Link>.
-        </span>
-      ),
+      q: 'Can my staff use BrewPluse?',
+      a: 'Yes. You can add your managers, waitstaff, cashiers, and kitchen team with role-based permissions (Owner, Admin, Manager, Staff) without per-user license penalties or seat fees.',
+    },
+    {
+      q: 'Does BrewPluse work on phones and tablets?',
+      a: 'Yes. BrewPluse is completely web-based and responsive. It operates smoothly across iPads, Android tablets, iPhones, Android smartphones, Windows laptops, and Macs. It also connects to standard 58mm/80mm USB, Bluetooth, and LAN thermal receipt printers.',
+    },
+    {
+      q: 'How do I get started?',
+      a: "Getting started takes less than 5 minutes. Click 'Start Your Free Cafe', enter your cafe details, configure your menu categories, and start punching orders immediately without credit cards or long-term contracts.",
     },
   ];
+
+  const toggleFaq = (idx: number) => {
+    setOpenFaq(openFaq === idx ? null : idx);
+  };
 
   return (
-    <section className="py-16 sm:py-24 bg-[#FBFBFA] border-t border-[#EBE8E3] px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-20">
-        
-        {/* Section A: Comparison Table */}
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700 mb-2 block">
-            WHY BREWPLUSE?
-          </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#141210] tracking-tight mb-4">
-            Everything connected. Everything under control.
-          </h2>
-          <p className="text-sm sm:text-base text-[#5a554f] max-w-xl mx-auto leading-relaxed mb-8">
-            Compare BrewPluse against outdated traditional POS machines and fragmented multi-app setups.
-          </p>
-
-          <div className="w-full overflow-x-auto rounded-2xl border border-[#E7E5E0] bg-white shadow-2xs text-left">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-[#EBE8E3] bg-[#F8F7F4]">
-                  <th className="py-3.5 px-4 font-bold text-gray-700">Features</th>
-                  <th className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/70">BrewPluse</th>
-                  <th className="py-3.5 px-4 font-bold text-gray-500">Traditional POS</th>
-                  <th className="py-3.5 px-4 font-bold text-gray-500">Multiple Apps</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {comparisonRows.map((r, i) => (
-                  <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="py-3 px-4 font-semibold text-gray-800">{r.name}</td>
-                    <td className="py-3 px-4 font-bold text-emerald-700 bg-emerald-50/40">
-                      {r.brew}
-                    </td>
-                    <td className="py-3 px-4 text-gray-400 font-normal">
-                      {r.trad}
-                    </td>
-                    <td className="py-3 px-4 text-gray-400 font-normal">
-                      {r.multi}
-                    </td>
+    <section className="py-16 sm:py-24 bg-[#F7F5EC] border-t border-[#DDE3DD] px-4 sm:px-6 lg:px-8 reveal-on-scroll">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          
+          {/* Left Column: Comparison Table */}
+          <div className="lg:col-span-6 text-left">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#002D23] mb-2 block">
+              WHY BREWPLUSE?
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-6">
+              Everything connected. Everything under control.
+            </h2>
+            <div className="w-full overflow-x-auto rounded-[16px] border border-[#DDE3DD] bg-[#FFFEFA] shadow-2xs">
+              <table className="w-full text-left border-collapse text-[11px]">
+                <thead>
+                  <tr className="border-b border-[#DDE3DD] bg-[#F7F5EC]">
+                    <th className="py-3 px-3.5 font-bold text-gray-700">Features</th>
+                    <th className="py-3 px-3 font-bold text-[#002D23] bg-[#002D23]/5">BrewPluse</th>
+                    <th className="py-3 px-3 font-bold text-gray-500">Traditional POS</th>
+                    <th className="py-3 px-3 font-bold text-gray-500">Multiple Apps</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {comparisonRows.map((r, i) => (
+                    <tr key={i}>
+                      <td className="py-2.5 px-3.5 font-semibold text-gray-800">{r.feature}</td>
+                      <td className="py-2.5 px-3 font-bold text-[#002D23] bg-[#002D23]/5">{r.brew}</td>
+                      <td className={`py-2.5 px-3 ${r.trad.includes('₹') || r.trad.includes('Mandatory') || r.trad.includes('Locked') || r.trad === '✕' ? 'text-red-500 font-bold' : 'text-gray-500'}`}>
+                        {r.trad}
+                      </td>
+                      <td className={`py-2.5 px-3 ${r.multi.includes('Multiple') || r.multi.includes('Setup') || r.multi.includes('Fixed') ? 'text-red-500 font-bold' : 'text-gray-500'}`}>
+                        {r.multi}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        {/* Section B: FAQ Accordion */}
-        <div id="faq" className="max-w-3xl mx-auto text-center">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700 mb-2 block">
-            YOUR QUESTIONS
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#141210] tracking-tight mb-4">
-            Honest Answers for Cafe Operators
-          </h2>
-          <p className="text-sm sm:text-base text-[#5a554f] max-w-lg mx-auto leading-relaxed mb-8">
-            Clear, transparent answers about our ₹0 software fees, billing modes, and device compatibility.
-          </p>
-
-          <div className="space-y-3 text-left">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-2xl border border-[#E7E5E0] bg-white overflow-hidden shadow-2xs transition-all"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-[#141210] hover:bg-[#F8F7F4] transition-colors cursor-pointer"
-                    aria-expanded={isOpen}
+          {/* Right Column: FAQ Accordion */}
+          <div id="faq" className="lg:col-span-6 text-left">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#002D23] mb-2 block">
+              QUESTIONS &amp; ANSWERS
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-6">
+              Clear Answers for Cafe Operators
+            </h2>
+            <div className="space-y-3">
+              {faqs.map((faq, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-[16px] border border-[#DDE3DD] bg-[#FFFEFA] overflow-hidden shadow-2xs transition-all"
                   >
-                    <span>{faq.q}</span>
-                    <span className="text-amber-600 text-lg font-bold shrink-0 transition-transform duration-200">
-                      {isOpen ? '−' : '+'}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-[#5a554f] leading-relaxed border-t border-gray-100">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    <button
+                      type="button"
+                      onClick={() => toggleFaq(idx)}
+                      className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-[13px] text-[#0B1714] hover:bg-[#F7F5EC] transition-colors cursor-pointer"
+                      aria-expanded={isOpen}
+                    >
+                      <span>{faq.q}</span>
+                      <span className="text-[#B99A5B] text-lg font-bold shrink-0 transition-transform duration-200">
+                        {isOpen ? '−' : '+'}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="px-4 pb-4 text-xs sm:text-[13px] text-[#64736D] leading-relaxed border-t border-[#DDE3DD]/40 pt-3">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </section>
   );

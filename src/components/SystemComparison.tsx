@@ -1,109 +1,94 @@
 import React from 'react';
-import Link from 'next/link';
 
 export default function SystemComparison() {
   return (
-    <section id="solutions" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-      <div className="max-w-3xl mx-auto mb-12 sm:mb-16">
-        <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-2 block">
-          OPERATIONAL VELOCITY
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#141210] tracking-tight mb-4">
-          Stop juggling disconnected tablets and loose thermal slips.
-        </h2>
-        <p className="text-sm sm:text-base text-[#5a554f] max-w-xl mx-auto leading-relaxed">
-          High-volume coffee bars and bistros lose time and revenue when billing, table ordering, kitchen displays, and payments run on separate silos.
-        </p>
-      </div>
+    <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center reveal-on-scroll">
+      <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#002D23] mb-2 block">
+        SYSTEM SIMPLIFICATION
+      </span>
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0B1714] tracking-tight mb-4">
+        Your cafe shouldn&apos;t need 5 separate tools.
+      </h2>
+      <p className="text-sm sm:text-base text-[#64736D] max-w-2xl mx-auto mb-12">
+        Independent cafes lose revenue and customer goodwill when stitching together disconnected apps that don&apos;t communicate.
+      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
-        
-        {/* Left Card: The Fragmented Stack */}
-        <div className="rounded-3xl p-6 sm:p-8 border border-red-200/80 bg-gradient-to-b from-red-50/40 to-white flex flex-col justify-between shadow-2xs">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left items-stretch">
+        {/* The Traditional Way */}
+        <div className="p-7 sm:p-9 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD] flex flex-col justify-between shadow-xs">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-xs font-mono font-bold tracking-normal text-red-700">
-                The Disjointed Stack
-              </span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0B1714]/5 text-[#64736D] border border-[#DDE3DD] font-mono text-[10px] font-bold uppercase tracking-wider mb-4">
+              <span>•</span> THE TRADITIONAL WAY
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold text-[#141210] mb-3">
-              Friction at every counter touchpoint.
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0B1714] mb-2.5">
+              5 apps, 0 communication.
             </h3>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
-              Cashiers shout coffee mods across the bar, payment screens require manual checking, and paper tickets pile up by the espresso grinder.
+            <p className="text-xs sm:text-sm text-[#64736D] leading-relaxed mb-6">
+              A legacy POS misses orders. Static PDF menus on Google Drive go stale. Staff juggle manual slips. Chaos ensues during peak rush hours.
             </p>
-
-            <ul className="space-y-3.5 text-xs text-gray-700 font-medium">
-              <li className="flex items-start gap-2.5">
-                <span className="text-red-500 font-bold shrink-0 text-sm">✕</span>
-                <div>
-                  <strong className="text-red-900 font-bold">Manual UPI Verification Bottleneck:</strong> Cashiers must pause billing to inspect guest phone screens for screenshot fraud during peak morning queues.
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-red-500 font-bold shrink-0 text-sm">✕</span>
-                <div>
-                  <strong className="text-red-900 font-bold">Kitchen &amp; Barista Mismatches:</strong> Special customization notes (oat milk, less sugar, single-origin switch) get lost between handwritten receipts and the prep counter.
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-red-500 font-bold shrink-0 text-sm">✕</span>
-                <div>
-                  <strong className="text-red-900 font-bold">Hefty Monthly SaaS Rent:</strong> Legacy systems charge ₹3,000 to ₹6,000 every month even during off-seasons and monsoon lulls.
-                </div>
-              </li>
-            </ul>
+            <div className="space-y-3 text-xs sm:text-[13px] text-[#0B1714] mb-8">
+              <div className="flex items-start gap-2.5">
+                <span className="text-red-500 font-bold text-sm shrink-0">✕</span>
+                <span>
+                  <strong>Lost Counter Tickets:</strong> Handwritten slips get lost between baristas and kitchen lines.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="text-red-500 font-bold text-sm shrink-0">✕</span>
+                <span>
+                  <strong>Heavy Monthly Software SaaS:</strong> Paying ₹2,000–₹5,000 every single month even during slow seasons.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="text-red-500 font-bold text-sm shrink-0">✕</span>
+                <span>
+                  <strong>Proprietary Hardware Lock-In:</strong> Forced to buy expensive vendor-locked terminals and printers.
+                </span>
+              </div>
+            </div>
           </div>
-
-          <div className="mt-8 pt-4 border-t border-red-100 text-xs font-mono text-red-700 font-semibold">
-            Result: Bottlenecks at the till, delayed table turns, and barista burnout
+          <div className="p-3.5 rounded-[10px] bg-[#0B1714]/5 border border-[#DDE3DD] text-[#64736D] font-mono text-xs font-semibold">
+            Result: Unhappy rush lines, lost ticket revenue, wasted operational hours
           </div>
         </div>
 
-        {/* Right Card: The BrewPluse Way */}
-        <div className="rounded-3xl p-6 sm:p-8 border border-emerald-300 bg-gradient-to-b from-emerald-50/40 to-white flex flex-col justify-between shadow-2xs">
+        {/* The BrewPluse Way */}
+        <div className="p-7 sm:p-9 rounded-[16px] bg-[#FFFEFA] border-2 border-[#002D23]/30 shadow-md flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-mono font-bold tracking-normal text-emerald-800">
-                The BrewPluse Velocity Stack
-              </span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#002D23]/10 text-[#002D23] border border-[#002D23]/20 font-mono text-[10px] font-bold uppercase tracking-wider mb-4">
+              <span>•</span> THE BREWPLUSE WAY
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold text-[#141210] mb-3">
-              Instant synchronization across every station.
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0B1714] mb-2.5">
+              One synchronized heartbeat.
             </h3>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
-              When a guest scans a table QR or orders at the register, tickets route directly to the barista KDS with real-time soundbox confirmation and automated inventory deduction.
+            <p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed mb-6">
+              When an order is placed on Table 4, it routes immediately to the kitchen screen. Stock updates. Loyalty points accrue. Your entire team operates in unison.
             </p>
-
-            <ul className="space-y-3.5 text-xs text-gray-700 font-medium">
-              <li className="flex items-start gap-2.5">
-                <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
-                <div>
-                  <strong className="text-emerald-950 font-bold">Instant Soundbox Audio Dispatch:</strong> Real-time audio alerts for UPI payments so cashiers keep brewing without inspecting customer phones.
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
-                <div>
-                  <strong className="text-emerald-950 font-bold">Dynamic Table QR &amp; Self-Pay:</strong> Guests view live photo menus, customize roast profiles, and split tabs directly from their mobile browser without downloading apps.
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-emerald-600 font-bold shrink-0 text-sm">✔</span>
-                <div>
-                  <strong className="text-emerald-950 font-bold">Offline Write-Ahead Resilience:</strong> Keep punching orders and printing receipts through local network cache if broadband drops.
-                </div>
-              </li>
-            </ul>
+            <div className="space-y-3 text-xs sm:text-[13px] text-[#0B1714] mb-8">
+              <div className="flex items-start gap-2.5">
+                <span className="text-[#002D23] font-bold text-sm shrink-0">✓</span>
+                <span>
+                  <strong>Instant Multi-Station Sync:</strong> Table QR scans, counter billing, and kitchen KDS in one unified stream.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="text-[#002D23] font-bold text-sm shrink-0">✓</span>
+                <span>
+                  <strong>₹0/Month Forever for Cafe Owners:</strong> Zero monthly subscription and zero per-order software fees charged to the cafe. The ₹1 per-order fee is paid by the customer.
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="text-[#002D23] font-bold text-sm shrink-0">✓</span>
+                <span>
+                  <strong>Works on Any Existing Device:</strong> Use standard iPads, Android tablets, laptops, phones, and thermal receipt printers.
+                </span>
+              </div>
+            </div>
           </div>
-
-          <div className="mt-8 pt-4 border-t border-emerald-100 text-xs font-mono text-emerald-800 font-semibold">
-            Result: 3x faster counter turns, accurate espresso tickets, and higher guest spend
+          <div className="p-3.5 rounded-[10px] bg-[#002D23]/10 border border-[#002D23]/20 text-[#002D23] font-mono text-xs font-semibold">
+            Result: Smooth kitchen flow, faster table turnarounds, happier customers
           </div>
         </div>
-
       </div>
     </section>
   );

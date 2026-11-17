@@ -10,39 +10,39 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#EBE8E3] transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full bg-[#FFFEFA]/95 backdrop-blur-md border-b border-[#DDE3DD] transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
 
         {/* Brand Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2.5 focus:outline-none group">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0b2b1a] text-white flex items-center justify-center border border-[#E7E5E0] shadow-2xs group-hover:scale-105 transition-transform duration-200">
-              <span className="material-symbols-outlined text-[20px] text-emerald-400">local_cafe</span>
+            <div className="w-9 h-9 rounded-xl bg-[#002D23] text-white flex items-center justify-center border border-[#B99A5B]/30 shadow-xs group-hover:scale-105 transition-transform duration-200">
+              <span className="material-symbols-outlined text-[20px] text-[#B99A5B]">local_cafe</span>
             </div>
             <div className="flex items-center gap-0.5">
-              <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#141210]">
-                Brew<span className="text-emerald-700">Pluse</span>
+              <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0B1714]">
+                Brew<span className="text-[#002D23]">Pluse</span>
               </span>
             </div>
           </Link>
         </div>
 
         {/* Desktop Navigation Items */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[14px] font-medium text-[#4a4642]">
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[14px] font-medium text-[#64736D]">
 
           {/* Features badge link */}
           <Link
             href="/features"
-            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] transition-colors font-semibold text-emerald-800 hover:text-emerald-950 flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-colors font-semibold text-[#002D23] flex items-center gap-1.5"
           >
-            <span className="material-symbols-outlined text-[18px] text-emerald-700">stars</span>
+            <span className="material-symbols-outlined text-[18px] text-[#B99A5B]">stars</span>
             <span>Features</span>
           </Link>
 
           {/* Product Architecture Link */}
           <Link
             href="/product"
-            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-colors"
+            className="px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-colors"
           >
             Product
           </Link>
@@ -55,7 +55,7 @@ export default function Navbar() {
           >
             <button
               type="button"
-              className="flex items-center gap-1 px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F5F4F0] group-hover:text-black"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F7F5EC] group-hover:text-[#0B1714]"
             >
               <span>Modules</span>
               <span className="material-symbols-outlined text-[18px] opacity-60 group-hover:rotate-180 group-hover:opacity-100 transition-transform duration-300">
@@ -65,20 +65,20 @@ export default function Navbar() {
 
             {modulesOpen && (
               <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[600px] z-50 animate-fade-in">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5">
+                <div className="bg-[#FFFEFA] rounded-2xl p-4 shadow-2xl border border-[#DDE3DD] ring-1 ring-black/5">
                   <div className="grid grid-cols-2 gap-2">
                     <Link
                       href="/cafe-pos"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">point_of_sale</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           Point of Sale (POS)
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Fast counter billing &amp; KOT print
                         </div>
                       </div>
@@ -86,16 +86,16 @@ export default function Navbar() {
 
                     <Link
                       href="/qr-ordering-system"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">qr_code_2</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           QR Table Ordering
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Contactless dine-in ordering
                         </div>
                       </div>
@@ -103,16 +103,16 @@ export default function Navbar() {
 
                     <Link
                       href="/kitchen-display-system"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">skillet</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           Kitchen Display (KDS)
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Paperless kitchen &amp; barista
                         </div>
                       </div>
@@ -120,16 +120,16 @@ export default function Navbar() {
 
                     <Link
                       href="/digital-menu"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center shrink-0 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">restaurant_menu</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-rose-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           Digital QR Menu
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Visual photos &amp; live 86 toggle
                         </div>
                       </div>
@@ -137,16 +137,16 @@ export default function Navbar() {
 
                     <Link
                       href="/restaurant-order-management-system"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">receipt_long</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
-                          Order Management System (OMS)
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
+                          Order Management System
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Centralized kitchen order flow
                         </div>
                       </div>
@@ -154,16 +154,16 @@ export default function Navbar() {
 
                     <Link
                       href="/restaurant-staff-management-software"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">badge</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           Staff &amp; Waiter App
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Handheld table order taking
                         </div>
                       </div>
@@ -171,16 +171,16 @@ export default function Navbar() {
 
                     <Link
                       href="/cafe-loyalty-program-software"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">military_tech</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           Cafe Loyalty Software
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Digital stamp cards &amp; rewards
                         </div>
                       </div>
@@ -188,31 +188,31 @@ export default function Navbar() {
 
                     <Link
                       href="/ai-review-management-for-restaurants"
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-800 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors duration-200">
+                      <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                         <span className="material-symbols-outlined text-[20px]">reviews</span>
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#141210] group-hover/item:text-indigo-800 transition-colors">
+                        <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                           AI Review Management
                         </div>
-                        <div className="text-xs text-gray-500 leading-snug">
+                        <div className="text-xs text-[#64736D] leading-snug">
                           Google review booster &amp; rep
                         </div>
                       </div>
                     </Link>
                   </div>
 
-                  <div className="mt-3 pt-3 border-t border-[#EBE8E3] flex items-center justify-between px-2">
+                  <div className="mt-3 pt-3 border-t border-[#DDE3DD] flex items-center justify-between px-2">
                     <Link
-                      className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 transition-colors"
+                      className="text-xs font-bold text-[#002D23] hover:underline flex items-center gap-1 transition-colors"
                       href="/features"
                     >
                       <span>Explore All 18+ Features in Detail →</span>
                     </Link>
                     <Link
-                      className="text-xs font-semibold text-gray-600 hover:text-black flex items-center gap-1 transition-colors"
+                      className="text-xs font-semibold text-[#64736D] hover:text-[#0B1714] flex items-center gap-1 transition-colors"
                       href="/demo"
                       target="_blank"
                     >
@@ -232,7 +232,7 @@ export default function Navbar() {
           >
             <button
               type="button"
-              className="flex items-center gap-1 px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F5F4F0] group-hover:text-black"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F7F5EC] group-hover:text-[#0B1714]"
             >
               <span>Solutions</span>
               <span className="material-symbols-outlined text-[18px] opacity-60 group-hover:rotate-180 group-hover:opacity-100 transition-transform duration-300">
@@ -242,105 +242,105 @@ export default function Navbar() {
 
             {solutionsOpen && (
               <div className="nav-dropdown-menu absolute top-full left-0 pt-2 w-[520px] z-50 animate-fade-in">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1">
+                <div className="bg-[#FFFEFA] rounded-2xl p-4 shadow-2xl border border-[#DDE3DD] ring-1 ring-black/5 space-y-1">
                   <Link
                     href="/cafe-management-software"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">local_cafe</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Cafe Management
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Coffee shops, bakeries &amp; tea cafes
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        Coffee shops &amp; bakeries
                       </div>
                     </div>
                   </Link>
 
                   <Link
                     href="/restaurant-management-software"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-orange-50 text-orange-800 flex items-center justify-center shrink-0 group-hover/item:bg-orange-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">restaurant</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-orange-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Restaurant Management
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Floor plans, multi-station KOT &amp; KDS
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        Floor plans, KOT &amp; KDS
                       </div>
                     </div>
                   </Link>
 
                   <Link
                     href="/free-restaurant-pos"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">money_off</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Free Restaurant POS
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        ₹0/mo software subscription forever
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        ₹0/mo software subscription
                       </div>
                     </div>
                   </Link>
 
                   <Link
                     href="/best-free-pos-software-india"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">currency_rupee</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Free POS India Edition
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        UPI QR &amp; 5% / 18% GST compliance
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        UPI QR &amp; GST compliance
                       </div>
                     </div>
                   </Link>
 
                   <Link
                     href="/qr-table-ordering"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">table_bar</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         QR Table Ordering
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Scan to order &amp; pay with geofencing
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        Scan to order &amp; pay
                       </div>
                     </div>
                   </Link>
 
                   <Link
                     href="/free-cafe-management-software"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">coffee</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Free Cafe Software
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Zero upfront fees forever for cafe owners
+                      <div className="text-xs text-[#64736D] leading-snug">
+                        Zero upfront fees forever
                       </div>
                     </div>
                   </Link>
@@ -350,18 +350,18 @@ export default function Navbar() {
           </div>
 
           <Link
-            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-colors"
+            className="px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-colors"
             href="/pricing"
           >
             Pricing
           </Link>
 
           <Link
-            className="px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-colors font-medium flex items-center gap-1 text-emerald-800"
+            className="px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-colors font-medium flex items-center gap-1 text-[#002D23]"
             href="/compare"
           >
             <span>Compare</span>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold">VS</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#002D23]/10 text-[#002D23] font-bold">VS</span>
           </Link>
 
           {/* Resources Dropdown */}
@@ -372,7 +372,7 @@ export default function Navbar() {
           >
             <button
               type="button"
-              className="flex items-center gap-1 px-3.5 py-2 rounded-full hover:bg-[#F5F4F0] hover:text-black transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F5F4F0] group-hover:text-black"
+              className="flex items-center gap-1 px-3.5 py-2 rounded-[10px] hover:text-[#0B1714] hover:bg-[#F7F5EC] transition-all duration-150 focus:outline-none cursor-pointer group-hover:bg-[#F7F5EC] group-hover:text-[#0B1714]"
             >
               <span>Resources</span>
               <span className="material-symbols-outlined text-[18px] opacity-60 group-hover:rotate-180 group-hover:opacity-100 transition-transform duration-300">
@@ -381,20 +381,20 @@ export default function Navbar() {
             </button>
 
             {resourcesOpen && (
-              <div className="nav-dropdown-menu absolute top-full right-0 pt-2 w-[400px] z-50 animate-fade-in">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl border border-[#E7E5E0] ring-1 ring-black/5 space-y-1">
+              <div className="nav-dropdown-menu absolute top-full right-0 pt-2 w-[420px] z-50 animate-fade-in">
+                <div className="bg-[#FFFEFA] rounded-2xl p-4 shadow-2xl border border-[#DDE3DD] ring-1 ring-black/5 space-y-1">
                   <Link
                     href="/documentation"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">description</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-blue-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Documentation &amp; Tech Manual
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         System architecture &amp; setup guides
                       </div>
                     </div>
@@ -402,16 +402,16 @@ export default function Navbar() {
 
                   <Link
                     href="/how-pricing-works"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">account_balance_wallet</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         How Pricing Works
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         Transparent ₹0/mo economics breakdown
                       </div>
                     </div>
@@ -419,16 +419,16 @@ export default function Navbar() {
 
                   <Link
                     href="/how-to-use"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">menu_book</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         How to Use &amp; Setup Guide
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         5-minute step-by-step tutorial
                       </div>
                     </div>
@@ -436,16 +436,16 @@ export default function Navbar() {
 
                   <Link
                     href="/blog"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">article</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-purple-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Blog &amp; Knowledge Base
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         Guides on cafe profit &amp; POS setup
                       </div>
                     </div>
@@ -453,16 +453,16 @@ export default function Navbar() {
 
                   <Link
                     href="/faq"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center shrink-0 group-hover/item:bg-teal-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">quiz</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-teal-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         FAQ &amp; Honest Answers
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         Pricing, hardware &amp; safety details
                       </div>
                     </div>
@@ -470,84 +470,33 @@ export default function Navbar() {
 
                   <Link
                     href="/download"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-cyan-50 text-cyan-800 flex items-center justify-center shrink-0 group-hover/item:bg-cyan-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">download</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-cyan-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Download Software
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         Android APK &amp; desktop apps
                       </div>
                     </div>
                   </Link>
 
                   <Link
-                    href="/cafe-pos-vs-traditional-pos"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors duration-200">
-                      <span className="material-symbols-outlined text-[20px]">sync_alt</span>
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-emerald-800 transition-colors">
-                        Cloud vs Traditional POS
-                      </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Hardware &amp; TCO cost comparison
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/how-to-choose-restaurant-management-software"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors duration-200">
-                      <span className="material-symbols-outlined text-[20px]">checklist</span>
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-amber-800 transition-colors">
-                        Software Buyer&apos;s Guide
-                      </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        7 evaluation criteria &amp; red flags
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/how-to-manage-a-small-cafe"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-orange-50 text-orange-800 flex items-center justify-center shrink-0 group-hover/item:bg-orange-600 group-hover/item:text-white transition-colors duration-200">
-                      <span className="material-symbols-outlined text-[20px]">storefront</span>
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-orange-800 transition-colors">
-                        How to Manage a Small Cafe
-                      </div>
-                      <div className="text-xs text-gray-500 leading-snug">
-                        Operational guide &amp; lean workflows
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link
                     href="/contact"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F8F7F4] transition-colors group/item"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#F7F5EC] transition-colors group/item"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center shrink-0 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors duration-200">
+                    <div className="w-9 h-9 rounded-lg bg-[#002D23]/10 text-[#002D23] flex items-center justify-center shrink-0 group-hover/item:bg-[#002D23] group-hover/item:text-white transition-colors duration-200">
                       <span className="material-symbols-outlined text-[20px]">support_agent</span>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#141210] group-hover/item:text-rose-800 transition-colors">
+                      <div className="text-xs font-bold text-[#0B1714] group-hover/item:text-[#002D23] transition-colors">
                         Contact &amp; Support
                       </div>
-                      <div className="text-xs text-gray-500 leading-snug">
+                      <div className="text-xs text-[#64736D] leading-snug">
                         Get in touch with our team
                       </div>
                     </div>
@@ -563,25 +512,25 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="hidden sm:inline-block text-[14px] font-medium text-[#4a4642] hover:text-black transition-colors px-3 py-2 rounded-full hover:bg-[#F5F4F0]"
+            className="hidden sm:inline-block text-[14px] font-medium text-[#64736D] hover:text-[#0B1714] transition-colors px-3 py-2 rounded-[10px] hover:bg-[#F7F5EC]"
           >
             Login
           </Link>
 
           <Link
             href="/signup"
-            className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full bg-[#0b2b1a] text-white text-[13px] font-semibold hover:bg-black hover:shadow-md transition-all duration-200"
+            className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-[10px] bg-[#002D23] text-[#FFFEFA] text-[13px] font-semibold hover:bg-[#001F19] hover:shadow-md transition-all duration-200"
           >
-            <span>Start Free</span>
-            <span>→</span>
+            <span>Start Your Free Cafe</span>
+            <span className="text-[#B99A5B]">→</span>
           </Link>
 
           {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 focus:outline-none"
-            aria-label="Toggle navigation menu"
+            className="lg:hidden p-2 rounded-xl text-[#0B1714] hover:bg-[#F7F5EC] focus:outline-none transition-colors"
+            aria-label="Toggle Navigation Menu"
           >
             <span className="material-symbols-outlined text-[26px]">
               {mobileMenuOpen ? 'close' : 'menu'}
@@ -592,132 +541,132 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay & Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-20 bottom-0 bg-white z-50 overflow-y-auto px-6 py-6 border-t border-[#EBE8E3] animate-fade-in">
+        <div className="lg:hidden fixed inset-x-0 top-20 bottom-0 bg-[#FFFEFA] z-50 overflow-y-auto px-6 py-6 border-t border-[#DDE3DD] animate-fade-in">
           <div className="space-y-6">
             <div>
-              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-3">
                 Core Modules
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <Link
                   href="/product"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-emerald-800 font-semibold"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#002D23] font-semibold"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-emerald-700">hub</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">widgets</span>
                   <span>Product Architecture</span>
                 </Link>
                 <Link
                   href="/cafe-pos"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-emerald-700">point_of_sale</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">point_of_sale</span>
                   <span>Point of Sale (POS)</span>
                 </Link>
                 <Link
                   href="/qr-ordering-system"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-amber-700">qr_code_2</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">qr_code_2</span>
                   <span>QR Table Ordering</span>
                 </Link>
                 <Link
                   href="/kitchen-display-system"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-purple-700">skillet</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">skillet</span>
                   <span>Kitchen Display (KDS)</span>
                 </Link>
                 <Link
                   href="/digital-menu"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-rose-700">restaurant_menu</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">restaurant_menu</span>
                   <span>Digital QR Menu</span>
                 </Link>
                 <Link
                   href="/restaurant-order-management-system"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-blue-700">receipt_long</span>
-                  <span>Order Management (OMS)</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">receipt_long</span>
+                  <span>Order Management</span>
                 </Link>
                 <Link
                   href="/restaurant-staff-management-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-teal-700">badge</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">badge</span>
                   <span>Staff &amp; Waiter App</span>
                 </Link>
                 <Link
                   href="/cafe-loyalty-program-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-amber-700">military_tech</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">military_tech</span>
                   <span>Cafe Loyalty Software</span>
                 </Link>
                 <Link
                   href="/ai-review-management-for-restaurants"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-indigo-700">reviews</span>
+                  <span className="material-symbols-outlined text-[18px] text-[#002D23]">reviews</span>
                   <span>AI Review Booster</span>
                 </Link>
               </div>
             </div>
 
             <div>
-              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-3">
                 Solutions
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <Link
                   href="/cafe-management-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Cafe Management</span>
                 </Link>
                 <Link
                   href="/restaurant-management-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Restaurant Management</span>
                 </Link>
                 <Link
                   href="/free-restaurant-pos"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Free Restaurant POS</span>
                 </Link>
                 <Link
                   href="/best-free-pos-software-india"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Free POS India Edition</span>
                 </Link>
                 <Link
                   href="/qr-table-ordering"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>QR Table Ordering</span>
                 </Link>
                 <Link
                   href="/free-cafe-management-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Free Cafe Software</span>
                 </Link>
@@ -725,102 +674,102 @@ export default function Navbar() {
             </div>
 
             <div>
-              <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 mb-3">
+              <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-3">
                 Resources &amp; Pricing
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <Link
                   href="/pricing"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800 font-semibold"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714] font-semibold"
                 >
                   <span>Pricing (₹0/Mo)</span>
                 </Link>
                 <Link
                   href="/compare"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-emerald-800 font-semibold"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#002D23] font-semibold"
                 >
                   <span>Compare vs Competitors</span>
                 </Link>
                 <Link
                   href="/documentation"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Documentation &amp; Manuals</span>
                 </Link>
                 <Link
                   href="/how-pricing-works"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>How Pricing Works</span>
                 </Link>
                 <Link
                   href="/how-to-use"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>How to Use &amp; Setup</span>
                 </Link>
                 <Link
-                  href="/faq"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
-                >
-                  <span>FAQ &amp; Honest Answers</span>
-                </Link>
-                <Link
-                  href="/download"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
-                >
-                  <span>Download APK &amp; Apps</span>
-                </Link>
-                <Link
                   href="/cafe-pos-vs-traditional-pos"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Cloud vs Traditional POS</span>
                 </Link>
                 <Link
                   href="/how-to-choose-restaurant-management-software"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Software Buyer&apos;s Guide</span>
                 </Link>
                 <Link
                   href="/how-to-manage-a-small-cafe"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Manage a Small Cafe</span>
                 </Link>
                 <Link
+                  href="/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
+                >
+                  <span>FAQ &amp; Honest Answers</span>
+                </Link>
+                <Link
+                  href="/download"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
+                >
+                  <span>Download APK &amp; Apps</span>
+                </Link>
+                <Link
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 text-gray-800"
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F7F5EC] text-[#0B1714]"
                 >
                   <span>Contact Support</span>
                 </Link>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+            <div className="pt-4 border-t border-[#DDE3DD] flex flex-col gap-3">
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-xl border border-gray-200 text-center font-semibold text-sm text-gray-800"
+                className="w-full py-3 rounded-xl border border-[#DDE3DD] text-center font-semibold text-sm text-[#0B1714] hover:bg-[#F7F5EC]"
               >
                 Log In
               </Link>
               <Link
                 href="/signup"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-xl bg-[#0b2b1a] text-center font-semibold text-sm text-white shadow-sm"
+                className="w-full py-3 rounded-xl bg-[#002D23] text-center font-semibold text-sm text-white shadow-sm hover:bg-[#001F19]"
               >
                 Start Free with BrewPluse →
               </Link>
