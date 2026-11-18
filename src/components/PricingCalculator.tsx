@@ -214,45 +214,6 @@ export default function PricingCalculator() {
           </div>
         </div>
 
-        {/* Video Walkthrough Section */}
-        <div className="max-w-5xl mx-auto mb-16 text-left reveal-on-scroll">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23] border border-[#B99A5B]/30 text-[#B99A5B] font-mono text-[10px] font-bold uppercase tracking-wider mb-3 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#B99A5B] animate-pulse" />
-              <span>VIDEO WALKTHROUGH • HOW TO USE BREWPLUSE</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#F7F5EC] tracking-tight mb-2">
-              See How to Run Your Cafe on BrewPluse
-            </h3>
-            <p className="text-xs sm:text-sm text-[#64736D] max-w-xl mx-auto font-normal">
-              Watch our complete step-by-step video guide on configuring your menu, table QR ordering, cashier billing, and thermal receipt printing.
-            </p>
-          </div>
-          <div className="relative rounded-3xl overflow-hidden bg-[#001F19] border-2 border-[#002D23] shadow-2xl aspect-video">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/pt-x6OqOvIA"
-              title="How to Use BrewPluse: Step-by-Step Operations & POS Setup Guide"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-          <div className="mt-4 flex items-center justify-between flex-wrap gap-3 text-xs font-mono text-[#64736D] px-2">
-            <a
-              href="https://youtu.be/pt-x6OqOvIA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[#B99A5B] hover:underline font-bold"
-            >
-              <span className="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
-              <span>Watch on YouTube</span>
-              <span className="material-symbols-outlined text-[14px]">open_in_new</span>
-            </a>
-            <Link href="/how-to-use" className="text-[#F7F5EC]/80 hover:text-white underline">
-              Read step-by-step setup documentation →
-            </Link>
-          </div>
-        </div>
 
         {/* Bottom Conversion Banner */}
         <div className="max-w-2xl mx-auto text-center reveal-on-scroll">

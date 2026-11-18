@@ -8,15 +8,16 @@ export default function CtaBanner() {
         {/* Radial gold dot pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(#B99A5B_1.5px,transparent_1.5px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_50%,#000_60%,transparent_100%)]" />
 
-        {/* Ambient deep green glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/4 -translate-y-1/2 w-[420px] h-[420px] bg-[#002D23]/40 rounded-full blur-3xl pointer-events-none" />
+        {/* Ambient deep green and gold glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/4 -translate-y-1/2 w-[420px] h-[420px] bg-[#002D23]/50 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-[#B99A5B]/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Right half: Storefront image with fade mask */}
-        <div className="relative lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:w-[50%] xl:w-[52%] w-full h-72 sm:h-96 lg:h-full flex items-center justify-end overflow-hidden z-10 order-2 lg:order-none">
+        {/* Right half: BrewPluse Storefront image with subtle edge fade masks */}
+        <div className="relative lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:w-[50%] xl:w-[52%] w-full h-80 sm:h-96 lg:h-full flex items-center justify-end overflow-hidden z-10 order-2 lg:order-none">
           <img
-            src="/cafeflow-storefront.png"
+            src="/brewpluse-storefront.jpg"
             alt="BrewPluse Cafe Storefront"
-            className="w-full h-full object-cover object-left lg:object-center select-none pointer-events-none"
+            className="w-full h-full object-cover object-center select-none"
           />
           <div className="hidden lg:block absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-[#001F19] via-[#001F19]/70 to-transparent pointer-events-none" />
           <div className="lg:hidden absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#001F19] to-transparent pointer-events-none" />
