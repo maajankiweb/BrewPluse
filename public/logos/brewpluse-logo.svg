@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" width="100%" height="100%">
+  <defs>
+    <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002D23" />
+      <stop offset="100%" stop-color="#001F19" />
+    </linearGradient>
+    <linearGradient id="logo-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#B99A5B" />
+    </linearGradient>
+    <linearGradient id="logo-sprout" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left Icon Emblem -->
+  <g transform="translate(10, 10)">
+    <rect width="60" height="60" rx="16" fill="url(#logo-bg)" stroke="#B99A5B" stroke-width="1.8" stroke-opacity="0.35"/>
+    <g transform="translate(6, 6) scale(0.65)">
+      <path d="M36 18 C36 8, 48 4, 52 2 C52 14, 42 20, 36 20 Z" fill="url(#logo-sprout)"/>
+      <path d="M36 18 C36 10, 26 6, 22 4 C22 15, 30 20, 36 20 Z" fill="url(#logo-sprout)" opacity="0.85"/>
+      <circle cx="36" cy="21" r="2.5" fill="#34D399"/>
+      <path d="M12 26 L60 26 C60 48, 52 56, 36 56 C20 56, 12 48, 12 26 Z" fill="none" stroke="url(#logo-gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M60 32 C68 32, 72 37, 72 41 C72 45, 68 49, 58 49" fill="none" stroke="url(#logo-gold)" stroke-width="4.5" stroke-linecap="round"/>
+      <rect x="23" y="40" width="5" height="10" rx="1.5" fill="url(#logo-gold)" />
+      <rect x="33" y="34" width="5" height="16" rx="1.5" fill="url(#logo-gold)" />
+      <rect x="43" y="30" width="5" height="20" rx="1.5" fill="#34D399" />
+      <path d="M16 61 L56 61" stroke="url(#logo-gold)" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Wordmark Typography -->
+  <text x="86" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-0.8">
+    <tspan fill="#0B1714">Brew</tspan><tspan fill="#002D23">Pluse</tspan>
+  </text>
+</svg>

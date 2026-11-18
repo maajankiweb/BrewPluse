@@ -1,4 +1,4 @@
-# Recon map: CafeFlow (Web SaaS) -> BrewPluse
+# Recon map: BrewPluse (Web SaaS) -> BrewPluse
 
 Scope: Public Marketing & Operating Systems Landing Pages, Architecture, UX Flow, and Modules
 For: BrewPluse Cafe POS & Restaurant Operating System
@@ -8,15 +8,15 @@ Date: 2026-11-17
 
 | # | source | URL | notes |
 | --- | --- | --- | --- |
-| 1 | Homepage | https://cafeflow.fun/ | 9 Synchronized sections with interactive tablet mockup |
-| 2 | Features | https://cafeflow.fun/features | Full breakdown of POS, KDS, QR ordering, variants, loyalty |
-| 3 | Pricing | https://cafeflow.fun/pricing | ₹0 cafe owner fee, ₹1 customer convenience fee architecture |
-| 4 | Compare | https://cafeflow.fun/compare | Side-by-side comparison against traditional POS & aggregators |
-| 5 | Documentation | https://cafeflow.fun/documentation | Step-by-step operator guides and technical specs |
-| 6 | Download | https://cafeflow.fun/download | PWA, browser support, hardware specs, thermal printer guides |
-| 7 | FAQ | https://cafeflow.fun/faq | Categorized operator Q&A accordion system |
-| 8 | How To Use | https://cafeflow.fun/how-to-use | Walkthrough workflows & video operations guide |
-| 9 | Contact | https://cafeflow.fun/contact | Operator inquiries, enterprise onboarding, support channels |
+| 1 | Homepage | https://brewpluse.com/ | 9 Synchronized sections with interactive tablet mockup |
+| 2 | Features | https://brewpluse.com/features | Full breakdown of POS, KDS, QR ordering, variants, loyalty |
+| 3 | Pricing | https://brewpluse.com/pricing | ₹0 cafe owner fee, ₹1 customer convenience fee architecture |
+| 4 | Compare | https://brewpluse.com/compare | Side-by-side comparison against traditional POS & aggregators |
+| 5 | Documentation | https://brewpluse.com/documentation | Step-by-step operator guides and technical specs |
+| 6 | Download | https://brewpluse.com/download | PWA, browser support, hardware specs, thermal printer guides |
+| 7 | FAQ | https://brewpluse.com/faq | Categorized operator Q&A accordion system |
+| 8 | How To Use | https://brewpluse.com/how-to-use | Walkthrough workflows & video operations guide |
+| 9 | Contact | https://brewpluse.com/contact | Operator inquiries, enterprise onboarding, support channels |
 
 ## Core loop
 

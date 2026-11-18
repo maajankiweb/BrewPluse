@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/cafeflow-storefront.png',
+        url: '/brewpluse-storefront.jpg',
         width: 1200,
         height: 630,
         alt: 'BrewPluse – Cloud POS and Cafe Operating System',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     description:
       'The ₹0/month operating system for modern cafes. QR table ordering, barista KDS, rapid counter billing, and customer loyalty — unified into one platform.',
-    images: ['/cafeflow-storefront.png'],
+    images: ['/brewpluse-storefront.jpg'],
     creator: '@brewpluse',
   },
 };

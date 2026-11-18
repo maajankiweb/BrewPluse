@@ -16,8 +16,8 @@ export default function Navbar() {
         {/* Brand Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2.5 focus:outline-none group">
-            <div className="w-9 h-9 rounded-xl bg-[#002D23] text-white flex items-center justify-center border border-[#B99A5B]/30 shadow-xs group-hover:scale-105 transition-transform duration-200">
-              <span className="material-symbols-outlined text-[20px] text-[#B99A5B]">local_cafe</span>
+            <div className="w-9 h-9 rounded-xl bg-[#002D23] text-white flex items-center justify-center border border-[#B99A5B]/30 shadow-xs group-hover:scale-105 transition-transform duration-200 overflow-hidden p-0.5">
+              <img src="/logos/brewpluse-icon.svg" alt="BrewPluse" className="w-full h-full object-contain" />
             </div>
             <div className="flex items-center gap-0.5">
               <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0B1714]">
