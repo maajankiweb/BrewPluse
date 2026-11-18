@@ -54,3 +54,7 @@ marketing_kit/
 
 # Firebase local CLI cache
 .firebase/
+
+# Founder internal analysis & planning dossier (local only)
+/founder/
+founder/
