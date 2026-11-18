@@ -142,12 +142,12 @@ export default function HardwareOrdersModal({
                             {it.title}
                           </p>
                           <p className="text-[11px] text-neutral-500">
-                            Qty: {it.quantity} &times; ₹{Number(it.price || 1500).toLocaleString('en-IN')}
+                            Qty: {it.quantity} &times; ₹{Number(it.price || (it.id === 'nfc-card' ? 499 : 1500)).toLocaleString('en-IN')}
                           </p>
                         </div>
                       </div>
                       <span className="font-bold text-neutral-900 dark:text-white shrink-0">
-                        ₹{(Number(it.quantity || 1) * Number(it.price || 1500)).toLocaleString('en-IN')}.00
+                        ₹{(Number(it.quantity || 1) * Number(it.price || (it.id === 'nfc-card' ? 499 : 1500))).toLocaleString('en-IN')}.00
                       </span>
                     </div>
                   ))}

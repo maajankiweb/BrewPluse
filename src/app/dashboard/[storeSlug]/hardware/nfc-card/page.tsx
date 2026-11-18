@@ -37,7 +37,7 @@ export default function NfcCardDetailPage() {
   const [cartAdded, setCartAdded] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  const unitPrice = 1500;
+  const unitPrice = 499;
   const subtotal = quantity * unitPrice;
 
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function NfcCardDetailPage() {
               </h1>
               <div className="flex items-baseline gap-2 pt-1">
                 <span className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
-                  ₹1,500.00
+                  ₹499.00
                 </span>
                 <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
                   per custom card

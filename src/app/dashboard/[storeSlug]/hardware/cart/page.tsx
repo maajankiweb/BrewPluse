@@ -448,7 +448,7 @@ export default function HardwareCartPage() {
                           </h3>
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-extrabold text-neutral-900 dark:text-white">
-                              ₹1,500.00
+                              ₹{(item.price || (item.id === 'nfc-card' ? 499 : 1500)).toLocaleString('en-IN')}.00
                             </span>
                             <span className="text-[10px] text-neutral-500">per piece</span>
                           </div>
@@ -480,7 +480,7 @@ export default function HardwareCartPage() {
                         {/* Item Total */}
                         <div className="text-right min-w-[70px]">
                           <span className="text-sm font-bold text-neutral-900 dark:text-white">
-                            ₹{(item.quantity * 1500).toLocaleString('en-IN')}.00
+                            ₹{(item.quantity * (item.price || (item.id === 'nfc-card' ? 499 : 1500))).toLocaleString('en-IN')}.00
                           </span>
                         </div>
 

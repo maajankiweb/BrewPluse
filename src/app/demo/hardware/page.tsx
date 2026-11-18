@@ -19,7 +19,7 @@ export default function DemoHardwarePage() {
     {
       title: 'Smart NFC Table Cards',
       tagline: 'Tap-to-Order for iPhone & Android',
-      price: '₹1,500 / piece',
+      price: '₹499 / piece',
       desc: 'Matte waterproof PVC cards embedded with high-frequency NTAG213 chips. Customers tap their phone to instantly open your digital menu.',
       url: '/demo/hardware/nfc-card',
       icon: CreditCard,

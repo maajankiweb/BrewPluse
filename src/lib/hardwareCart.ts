@@ -2,7 +2,7 @@ export interface HardwareCartItem {
   id: 'nfc-card' | 'qr-code-stand' | string;
   name: string;
   title: string;
-  price: number; // in INR (1500)
+  price: number; // in INR (₹499 for NFC card, ₹1500 for QR stand)
   image: string;
   quantity: number;
   badge?: string;
@@ -14,7 +14,7 @@ export const HARDWARE_CATALOG: Record<string, Omit<HardwareCartItem, 'quantity'>
     id: 'nfc-card',
     name: 'NFC Card',
     title: 'Smart NFC Table Card',
-    price: 1500,
+    price: 499,
     image: '/hardware-images/NFC-img.png',
     badge: 'NFC Contactless',
     description: 'Tap, connect, explore. Share your digital menu, Google reviews, and social profiles with just a tap.',
@@ -29,6 +29,11 @@ export const HARDWARE_CATALOG: Record<string, Omit<HardwareCartItem, 'quantity'>
     description: 'Stylish, scratch-resistant acrylic QR standee pre-linked for seamless contactless table ordering.',
   },
 };
+
+export function getHardwareItemPrice(id: string): number {
+  if (id === 'nfc-card') return 499;
+  return HARDWARE_CATALOG[id]?.price || 1500;
+}
 
 const getStorageKey = (storeSlug?: string) =>
   `brewpluse_hardware_cart_${storeSlug ? storeSlug.toLowerCase().trim() : 'default'}`;
@@ -48,8 +53,8 @@ export function getHardwareCart(storeSlug?: string): HardwareCartItem[] {
     if (!Array.isArray(parsed)) return [];
     return parsed.map((item) => ({
       ...item,
-      // Ensure prices are consistently updated to ₹1500
-      price: 1500,
+      // Ensure prices are consistently resolved based on catalog
+      price: getHardwareItemPrice(item.id),
     }));
   } catch (e) {
     console.error('[hardwareCart] Failed to load cart:', e);
@@ -74,20 +79,21 @@ export function addToHardwareCart(
   const current = getHardwareCart(storeSlug);
   const qtyToAdd = Math.max(1, item.quantity || 1);
   const catalogItem = HARDWARE_CATALOG[item.id];
+  const itemPrice = getHardwareItemPrice(item.id);
 
   const existingIndex = current.findIndex((i) => i.id === item.id);
   let updated: HardwareCartItem[];
 
   if (existingIndex > -1) {
     updated = current.map((i, idx) =>
-      idx === existingIndex ? { ...i, quantity: i.quantity + qtyToAdd, price: 1500 } : i
+      idx === existingIndex ? { ...i, quantity: i.quantity + qtyToAdd, price: itemPrice } : i
     );
   } else {
     const newItem: HardwareCartItem = {
       id: item.id,
       name: item.name || catalogItem?.name || item.id,
       title: catalogItem?.title || item.name || item.id,
-      price: 1500,
+      price: itemPrice,
       image: item.image || catalogItem?.image || '/hardware-images/NFC-img.png',
       quantity: qtyToAdd,
       badge: catalogItem?.badge || 'Official Hardware',
@@ -109,8 +115,9 @@ export function updateHardwareCartQuantity(
   if (quantity <= 0) {
     return removeFromHardwareCart(id, storeSlug);
   }
+  const itemPrice = getHardwareItemPrice(id);
   const updated = current.map((item) =>
-    item.id === id ? { ...item, quantity: Math.min(100, quantity), price: 1500 } : item
+    item.id === id ? { ...item, quantity: Math.min(100, quantity), price: itemPrice } : item
   );
   saveHardwareCart(updated, storeSlug);
   return updated;
@@ -141,7 +148,7 @@ export function getHardwareCartCount(storeSlug?: string): number {
 export function getHardwareCartTotals(storeSlug?: string) {
   const items = getHardwareCart(storeSlug);
   const itemCount = items.reduce((acc, item) => acc + (item.quantity || 0), 0);
-  const subtotal = items.reduce((acc, item) => acc + item.quantity * 1500, 0);
+  const subtotal = items.reduce((acc, item) => acc + item.quantity * getHardwareItemPrice(item.id), 0);
   const shipping = 0; // Free pan-India delivery
   const tax = itemCount > 0 ? 270 : 0; // Flat ₹270 GST per order regardless of quantity
   const total = subtotal + shipping + tax;

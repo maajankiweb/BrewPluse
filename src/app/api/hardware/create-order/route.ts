@@ -41,10 +41,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Calculate verified total on backend (₹1500 per unit + Flat ₹270 GST per order)
+    const getItemPrice = (id: string) => (id === 'nfc-card' ? 499 : 1500);
+
+    // Calculate verified total on backend (₹499 for NFC card, ₹1500 for QR stand + Flat ₹270 GST per order)
     const verifiedSubtotal = items.reduce((sum: number, item: any) => {
       const qty = Math.max(1, Number(item.quantity) || 1);
-      return sum + qty * 1500;
+      const unitPrice = getItemPrice(item.id);
+      return sum + qty * unitPrice;
     }, 0);
 
     const verifiedTax = items.length > 0 ? 270 : 0; // Flat ₹270 GST per order regardless of quantity
@@ -98,14 +101,18 @@ export async function POST(req: Request) {
       email,
       shippingAddress,
       gstin,
-      items: items.map((it: any) => ({
-        id: it.id,
-        title: it.title || it.name || it.id,
-        price: 1500,
-        quantity: Math.max(1, Number(it.quantity) || 1),
-        total: Math.max(1, Number(it.quantity) || 1) * 1500,
-        image: it.image || '',
-      })),
+      items: items.map((it: any) => {
+        const qty = Math.max(1, Number(it.quantity) || 1);
+        const unitPrice = getItemPrice(it.id);
+        return {
+          id: it.id,
+          title: it.title || it.name || it.id,
+          price: unitPrice,
+          quantity: qty,
+          total: qty * unitPrice,
+          image: it.image || '',
+        };
+      }),
       subtotal: verifiedSubtotal,
       shippingFee: 0,
       tax: verifiedTax,

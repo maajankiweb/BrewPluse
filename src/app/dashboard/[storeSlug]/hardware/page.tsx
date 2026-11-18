@@ -155,7 +155,7 @@ export default function HardwarePage() {
                 <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-zinc-800">
                   <div className="text-left sm:text-right">
                     <span className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white tracking-tight">
-                      ₹1,500.00
+                      ₹499.00
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
