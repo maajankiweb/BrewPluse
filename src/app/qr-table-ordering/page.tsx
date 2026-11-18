@@ -1,121 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Free QR Table Ordering Software for Restaurants | Contactless Dine-In | BrewPluse',
-  description:
-    'Free QR code table ordering software for restaurants and cafes. Enable contactless ordering, live modifiers, UPI payments, and geofence fraud prevention with ₹0/month software fees.',
-  alternates: {
-    canonical: 'https://brewpluse.com/qr-table-ordering',
-  },
-  openGraph: {
-    title: 'Free QR Table Ordering Software for Restaurants | BrewPluse',
-    description:
-      'Turn dining tables into self-checkout terminals. Instant camera scan, high-res photos, UPI payments, and zero monthly software retainers.',
-    url: 'https://brewpluse.com/qr-table-ordering',
-    type: 'website',
-  },
-};
-
 export default function QrTableOrderingPage() {
-  const benefits = [
-    {
-      title: 'Higher Average Order Value (+22%)',
-      desc: 'Visual food photos, item recommendations, and easy modifier customization encourage diners to add sides, desserts, and premium beverages.',
-    },
-    {
-      title: 'Faster Table Turnarounds',
-      desc: 'Guests order the moment they are seated and pay immediately without waiting for busy waiters to bring paper menus or bill folders.',
-    },
-    {
-      title: 'GPS Geofence Fraud Guard',
-      desc: 'Built-in geolocation verification blocks fake orders placed by users outside your cafe perimeter, keeping kitchen queues clean.',
-    },
-  ];
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow */}
-      <div className="absolute top-10 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Hero */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>CONTACTLESS TABLE COMMERCE</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Free QR Table Ordering Software for <span className="text-emerald-400">Restaurants &amp; Cafes.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Turn dining tables into instant self-ordering hubs. No app download required for guests—just scan, customize, and pay via UPI with ₹0/month software fees.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3.5">
-            <Link
-              href="/signup"
-              className="py-3.5 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-lg"
-            >
-              Deploy QR Ordering Free →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3.5 px-8 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Test Mobile QR Demo
-            </Link>
-          </div>
-        </div>
-
-        {/* Section 1: Benefits */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] shadow-xl mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-2xl font-bold text-white mb-2">
-              Why Table QR Codes Outperform Traditional Waiter Ordering
-            </h2>
-            <p className="text-xs text-gray-400">
-              Deliver faster hospitality while keeping front-of-house labor lean.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {benefits.map((b, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-[#080E0B] border border-white/5 space-y-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                  ✓
-                </div>
-                <h3 className="text-base font-bold text-white">{b.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 2: Final CTA */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Deploy QR Table Ordering in 5 Minutes
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            Generate printable high-resolution table QR stands and launch today.
-          </p>
-          <div className="pt-2 flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Start Free Now →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Test Live Sandbox
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"SoftwareApplication\",\"name\":\"BrewPluse Free QR Table Ordering Software\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web, iOS, Android, Windows, macOS\",\"description\":\"Free contactless QR table ordering software for restaurants and cafes featuring zero-app browser ordering, GPS geofencing fraud prevention, dynamic UPI table checkout, and real-time KDS integration.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"INR\",\"description\":\"₹0/month software subscription forever for restaurant and cafe operators.\"},\"featureList\":[\"Zero-app browser instant table ordering in under 500ms\",\"GPS geofence fraud prevention to block remote prank orders\",\"Dynamic UPI QR code payments pre-filled with exact table totals\",\"Split bills and Pay at Counter payment options\",\"Automatic KDS kitchen display routing and thermal KOT prints\",\"High-resolution dish photos with dietary and modifier tags\"],\"author\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\"}},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Features\",\"item\":\"https://brewpluse.com/features\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"QR Table Ordering\",\"item\":\"https://brewpluse.com/qr-table-ordering\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is QR table ordering software for restaurants?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"QR table ordering software is a contactless hospitality platform where guests scan a designated QR code on their dining table using their mobile camera to open an interactive digital menu, place food and drink orders directly to the kitchen, and pay electronically without waiting for waitstaff.\"}},{\"@type\":\"Question\",\"name\":\"Do diners need to install a mobile app to order from their table?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"No. BrewPluse's QR table ordering works 100% inside mobile web browsers (Safari, Chrome, Edge) in under 500 milliseconds. Guests do not need to download an app or register an account.\"}},{\"@type\":\"Question\",\"name\":\"How does BrewPluse prevent people outside the restaurant from placing fake orders?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"BrewPluse features built-in GPS Geofencing verification. The system checks the customer's physical device coordinates against your restaurant's geographic location, instantly rejecting unauthorized orders attempted from outside your premises.\"}},{\"@type\":\"Question\",\"name\":\"Can customers split their bill when ordering via table QR codes?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. Guests seated at the same table can order items onto a shared table tab, and select individual items to pay or choose 'Pay at Counter' upon departure to divide the bill across cash, cards, and UPI.\"}}]}]}" }} />
+      <div className="w-full bg-[#F7F5EC] text-[#0B1714]"><section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFFEFA] to-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto text-center"><nav className="inline-flex items-center gap-2 text-xs font-mono text-gray-500 mb-6 bg-[#FFFEFA] px-3.5 py-1.5 rounded-[8px] border border-[#DDE3DD] shadow-2xs"><a className="hover:text-[#002D23] transition-colors" href="/">Home</a><span>/</span><a className="hover:text-[#002D23] transition-colors" href="/features">Features</a><span>/</span><span className="text-[#002D23] font-bold">QR Table Ordering</span></nav><div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002D23]/10 border border-[#002D23]/20 text-[#002D23] font-mono text-[11px] font-bold tracking-wider uppercase mb-5"><span className="w-2 h-2 rounded-full bg-[#002D23] animate-pulse"></span>Contactless Table Ordering &amp; Payments</div><h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0B1714] tracking-tight leading-[1.15] mb-5">Free QR Table Ordering Software for <span className="text-[#002D23] underline decoration-[#B99A5B] decoration-wavy decoration-2">Restaurants &amp; Cafes</span></h1><p className="text-base sm:text-lg text-[#64736D] max-w-3xl mx-auto leading-relaxed mb-8">Turn every dining table into an interactive ordering kiosk. Zero-app guest scan, GPS geofencing fraud prevention, dynamic UPI checkout, and instant KDS sync with <strong>₹0/month software fees</strong>.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-10"><a href="https://app.brewpluse.com/signup" className="w-full sm:w-auto px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001F19] text-[#FFFEFA] text-sm font-bold shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"><span>Setup Free QR Tables</span><span>→</span></a><a href="https://app.brewpluse.com/dashboard/demo/orders" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-4 rounded-[10px] bg-[#FFFEFA] hover:bg-[#F7F5EC] text-[#0B1714] text-sm font-semibold border border-[#DDE3DD] transition-all">Try Live Table Demo ↗</a></div><div className="max-w-4xl mx-auto bg-[#FFFEFA] border border-[#DDE3DD] rounded-[16px] p-6 text-left shadow-xs"><div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-2"><span className="material-symbols-outlined text-[18px] text-[#B99A5B]">qr_code</span><span>What is QR Table Ordering Software?</span></div><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed"><strong>QR table ordering software</strong> is a digital hospitality solution that lets restaurant and cafe guests scan an acrylic table QR code to browse high-resolution menus, customize food and drink options, send tickets directly to the kitchen display (KDS), and pay electronically. It eliminates wait times, increases average check sizes by 22%, and boosts table turnover by up to 35% without recurring software subscription costs.</p></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-14"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">Why Table QR Codes Outperform Traditional Waiter Ordering</h2><p className="text-sm sm:text-base text-gray-600">During peak dinner and lunch hours, servers are stretched thin. Let your guests order and re-order without delays.</p></div><div className="grid grid-cols-1 md:grid-cols-4 gap-6"><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">01</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Zero App Installs</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Guests simply point their iPhone or Android camera at the QR code. The digital menu opens in under 500ms in their native mobile browser.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">02</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">GPS Geofencing</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Integrated GPS verification confirms the diner is physically present inside your dining room, blocking malicious orders from outside.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">03</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Dynamic UPI Payments</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Guests pay table-side with pre-filled exact bill amounts on Google Pay, PhonePe, or Paytm, or choose “Pay at Counter”.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">04</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Instant KDS Sync</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Tickets route to kitchen display screens and thermal KOT printers immediately with table numbers and guest special instructions.</p></div></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-4xl mx-auto"><div className="text-center mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight">Frequently Asked Questions About QR Table Ordering</h2></div><div className="space-y-4"><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">What is QR table ordering software for restaurants?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">QR table ordering software is a contactless hospitality platform where guests scan a designated QR code on their dining table using their mobile camera to open an interactive digital menu, place food and drink orders directly to the kitchen, and pay electronically without waiting for waitstaff.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">Do diners need to install a mobile app to order from their table?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">No. BrewPluse&#x27;s QR table ordering works 100% inside mobile web browsers (Safari, Chrome, Edge) in under 500 milliseconds. Guests do not need to download an app or register an account.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">How does BrewPluse prevent people outside the restaurant from placing fake orders?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">BrewPluse features built-in GPS Geofencing verification. The system checks the customer&#x27;s physical device coordinates against your restaurant&#x27;s geographic location, instantly rejecting unauthorized orders attempted from outside your premises.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">Can customers split their bill when ordering via table QR codes?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Yes. Guests seated at the same table can order items onto a shared table tab, and select individual items to pay or choose “Pay at Counter” upon departure to divide the bill across cash, cards, and UPI.</p></div></div></div></section><section className="py-14 px-4 sm:px-6 lg:px-8 bg-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><h2 className="text-xl font-bold text-[#0B1714] mb-6 text-center sm:text-left">Connected Dining Modules</h2><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/qr-ordering-system"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Core Tech</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">QR Ordering System →</h3><p className="text-[11px] text-gray-500">Contactless table ordering overview and architecture.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/digital-menu"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Visual Menu</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Digital QR Menu →</h3><p className="text-[11px] text-gray-500">High-res dish photos and 1-second price updates.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/kitchen-display-system"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Kitchen Queue</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Kitchen Display (KDS) →</h3><p className="text-[11px] text-gray-500">Real-time order routing with preparation timers.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/restaurant-pos"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">POS Billing</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Restaurant POS →</h3><p className="text-[11px] text-gray-500">Visual table floor plans, split checks, and inventory.</p></a></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#001F19] text-white text-center"><div className="max-w-3xl mx-auto"><h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Deploy QR Table Ordering in 5 Minutes</h2><p className="text-sm text-gray-300 max-w-lg mx-auto mb-8">Download print-ready table QR codes today. No setup fees, no monthly software retainers.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5"><a href="https://app.brewpluse.com/signup" className="px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001712] border border-[#B99A5B]/30 text-[#FFFEFA] text-sm font-bold shadow-xl transition-all hover:scale-[1.02]">Start Free Today →</a><a className="px-6 py-4 rounded-[10px] bg-white/10 hover:bg-white/15 text-[#FFFEFA] text-sm font-semibold border border-white/20 transition-all" href="/pricing">Pricing Details</a></div></div></section></div>
     </div>
   );
 }

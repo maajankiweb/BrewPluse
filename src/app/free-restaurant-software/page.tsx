@@ -1,115 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Why BrewPluse Is Free for Restaurants — Transparent Pricing Model Explained | BrewPluse',
-  description:
-    'Learn why BrewPluse charges ₹0/month software fees forever. Discover our modern cloud architecture, transparent ₹1 micro-fee model, and how we keep operations sustainable.',
-  alternates: {
-    canonical: 'https://brewpluse.com/free-restaurant-software',
-  },
-  openGraph: {
-    title: 'Why BrewPluse Is Free for Restaurants & Cafes | BrewPluse',
-    description:
-      'The honest economic breakdown behind BrewPluse ₹0/month cafe software: serverless cloud efficiency, zero legacy overhead, and transparent micro-fees.',
-    url: 'https://brewpluse.com/free-restaurant-software',
-    type: 'website',
-  },
-};
+export default function FreeRestaurantSoftwarePage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-export default function WhyFreeRestaurantSoftwarePage() {
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow */}
-      <div className="absolute top-10 left-1/3 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-5xl mx-auto relative z-10">
-        
-        {/* Hero */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>RADICAL ECONOMIC TRANSPARENCY</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Why BrewPluse Is Free for <span className="text-emerald-400">Restaurants &amp; Cafes.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Every business tool starts with a price tag. Discover how modern cloud architecture, zero bloated sales teams, and a transparent ₹1 micro-fee make ₹0/month software sustainable forever.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3.5">
-            <Link
-              href="/pricing"
-              className="py-3.5 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-lg"
-            >
-              See Pricing Details →
-            </Link>
-            <Link
-              href="/compare"
-              className="py-3.5 px-8 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Compare Total Cost of Ownership
-            </Link>
-          </div>
-        </div>
-
-        {/* Section 1 & 2: Architectural Breakdown */}
-        <div className="space-y-8 mb-20">
-          <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-4">
-            <span className="text-xs font-mono text-rose-400 font-bold uppercase tracking-wider">
-              THE OLD LEGACY MODEL
-            </span>
-            <h2 className="text-2xl font-bold text-white">1. Why Traditional POS Software Is So Expensive</h2>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Legacy POS vendors like Petpooja, Posist, and Toast spend massive amounts on field sales agents, local branch offices, manual hardware technicians, and aggressive advertising. To cover these immense operational overheads, they lock cafe owners into ₹15,000–₹35,000 annual licensing contracts plus mandatory maintenance contracts (AMCs).
-            </p>
-          </div>
-
-          <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-4">
-            <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-              THE BREWPLUSE CLOUD MODEL
-            </span>
-            <h2 className="text-2xl font-bold text-white">2. How Modern Architecture Makes ₹0/Month Sustainable</h2>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              BrewPluse was engineered from day one as a cloud-native platform running on modern edge infrastructure. We have zero commissioned on-field sales reps pushing proprietary hardware. Our self-serve onboarding allows cafe owners to launch in 5 minutes using their existing iPads, tablets, or phones. Because our server cost per cafe is pennies, we pass those savings directly to you.
-            </p>
-          </div>
-
-          <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-4">
-            <span className="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider">
-              FAIR USAGE ECONOMICS
-            </span>
-            <h2 className="text-2xl font-bold text-white">3. The Transparent Micro-Order Fee</h2>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Instead of forcing a struggling new coffee shop to pay thousands before serving its first cup, BrewPluse only monetizes when you succeed. A tiny ₹1 micro-fee applies to completed orders—and cafe owners can choose whether they absorb this fee or pass it transparently to the diner as a convenience fee. When passed to diners, your cafe pays literally <strong>₹0 net software costs</strong> forever.
-            </p>
-          </div>
-        </div>
-
-        {/* Final CTA */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Join the Modern Cafe Movement
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            Zero contracts. Zero proprietary terminal lock-in. 100% data ownership.
-          </p>
-          <div className="pt-2 flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Start Your Free Cafe →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Explore Live Demo
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https://brewpluse.com/free-restaurant-software#article\",\"headline\":\"Why BrewPluse Is Free for Restaurants: The Economics of Modern Cloud Hospitality\",\"description\":\"An in-depth explanation of why BrewPluse provides a ₹0/month software subscription forever for restaurant and cafe owners, breaking down cloud infrastructure costs and transparent micro-order fees.\",\"url\":\"https://brewpluse.com/free-restaurant-software\",\"inLanguage\":\"en-US\",\"datePublished\":\"2026-03-01T08:00:00+05:30\",\"dateModified\":\"2026-11-07T12:00:00+05:30\",\"author\":{\"@type\":\"Person\",\"name\":\"Shiv Akbari\",\"url\":\"https://brewpluse.com/about\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\",\"logo\":\"https://brewpluse.com/icon-512.png\"},\"mainEntityOfPage\":\"https://brewpluse.com/free-restaurant-software\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Free Restaurant Software\",\"item\":\"https://brewpluse.com/free-restaurant-software\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Is BrewPluse truly free for restaurant owners?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. BrewPluse charges a ₹0/month software subscription forever. All modules—POS billing, QR table ordering, kitchen display screens (KDS), waiter apps, recipe inventory, and customer loyalty—are 100% unlocked from day one without tier gating.\"}},{\"@type\":\"Question\",\"name\":\"How does BrewPluse sustain itself without monthly subscriptions?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"BrewPluse is engineered with serverless cloud edge architecture (Cloudflare edge & D1 distributed database), keeping operational hosting costs exceptionally lean. Revenue is generated via a transparent, nominal order-level micro-fee (e.g. ₹1 per order in India), aligning our success directly with your transaction volume.\"}},{\"@type\":\"Question\",\"name\":\"Are there any hidden cancellation or setup fees?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"No. There are zero setup fees, zero cancellation fees, zero mandatory hardware bundles, and zero multi-year lock-in contracts.\"}}]}]}" }} />
+      <div className="bg-[#F7F5EC] text-[#0B1714] min-h-screen"><section className="pt-24 pb-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-b border-[#DDE3DD]"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23]/10 text-[#002D23] text-xs font-semibold mb-6"><span className="material-symbols-outlined text-[16px]">money_off</span><span>Transparent Pricing Philosophy • ₹0 Software Subscription Forever</span></div><h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#002D23] mb-5 leading-tight">Why BrewPluse Is Free for Restaurants &amp; Cafes</h1><p className="text-lg sm:text-xl text-[#4A5550] leading-relaxed mb-6">When restaurant owners hear “free software,” they are rightfully skeptical. Usually, “free” means a 14-day trial, crippled features, or surprise charges. Here is an honest, transparent breakdown of how BrewPluse works and why our software is ₹0/month forever.</p><div className="bg-[#FFFEFA] border-l-4 border-[#002D23] p-6 rounded-r-2xl shadow-xs"><h3 className="text-sm font-bold text-[#002D23] mb-1 font-mono uppercase">The Fundamental Promise</h3><p className="text-sm sm:text-base text-[#0B1714] leading-relaxed">BrewPluse provides a <strong>₹0/month software subscription forever</strong> for cafe and restaurant owners. We never lock POS billing, QR table ordering, kitchen displays, or inventory behind paid tiers. We operate on a tiny, transparent order-level micro-fee (e.g., ₹1 per order in India) processed only when you make a sale.</p></div></section><section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12"><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">1. Why Traditional Restaurant POS Software Is So Expensive</h2><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed mb-6">Legacy restaurant POS software was architected decades ago. Their business models carry massive corporate overhead:</p><div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm"><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-2 flex items-center gap-1.5"><span className="material-symbols-outlined text-amber-600 text-[18px]">group</span><span>Expensive Sales Forces</span></h4><p className="text-[#4A5550] leading-relaxed">Legacy vendors maintain hundreds of commission-based sales reps and local field technicians, passing those payroll costs onto restaurant owners via high monthly bills.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-2 flex items-center gap-1.5"><span className="material-symbols-outlined text-amber-600 text-[18px]">dns</span><span>Legacy Server Overhead</span></h4><p className="text-[#4A5550] leading-relaxed">Traditional software requires dedicated local on-premise servers or bloated virtual machines that cost thousands of dollars per month to run.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-2 flex items-center gap-1.5"><span className="material-symbols-outlined text-amber-600 text-[18px]">price_change</span><span>Per-Module Add-on Gating</span></h4><p className="text-[#4A5550] leading-relaxed">They sell a “cheap” base POS, but charge an extra ₹500/mo for KDS, ₹800/mo for QR menus, and ₹1,000/mo for inventory, compounding monthly fees.</p></div></div></div><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">2. How Modern Architecture Makes ₹0/Month Sustainable</h2><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed mb-4">BrewPluse was engineered from the ground up using 2026-era cloud-native edge computing. Instead of heavy monolithic servers, BrewPluse runs on Cloudflare Global Edge network and distributed serverless SQL databases.</p><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-6 rounded-2xl space-y-3 text-xs sm:text-sm text-[#4A5550]"><p>• <strong>Near-Zero Marginal Server Cost:</strong> Serving a digital menu or syncing a kitchen ticket at edge locations costs fractions of a cent. We pass these architectural savings directly to restaurant owners.</p><p>• <strong>100% Self-Serve Onboarding:</strong> Restaurant owners sign up, import their menu, print QR codes, and start billing in under 5 minutes without needing an on-site technician.</p><p>• <strong>Hardware Independence:</strong> BrewPluse runs in Chrome, Safari, and Edge on any existing PC, MacBook, iPad, or Android phone, saving you ₹40,000+ on dedicated terminal boxes.</p></div></div><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">3. The Transparent Micro-Order Fee</h2><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed mb-6">So how does BrewPluse generate revenue? Through a transparent, tiny transaction fee on completed orders.</p><div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm"><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-6 rounded-2xl"><h3 className="text-base font-bold text-[#002D23] mb-2">Option A: Cafe Absorbed</h3><p className="text-[#4A5550] leading-relaxed mb-3">The cafe pays a nominal fee (e.g. ₹1 per completed order in India, or country equivalent) out of overall daily sales. If you have a slow rainy day with only 10 orders, your total software cost for that day is just ₹10.</p><span className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md font-bold">Ideal for cafes wanting completely invisible checkout</span></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-6 rounded-2xl"><h3 className="text-base font-bold text-[#002D23] mb-2">Option B: Customer Convenience Fee</h3><p className="text-[#4A5550] leading-relaxed mb-3">The nominal order fee (₹1) is added transparently to the customer&#x27;s digital checkout invoice as a technology fee, meaning your cafe&#x27;s out-of-pocket software subscription cost is literally ₹0.</p><span className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md font-bold">100% Zero Cost for Restaurant Owners</span></div></div></div><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">4. Traditional Subscription vs. BrewPluse Economics</h2><div className="overflow-x-auto border border-[#DDE3DD] rounded-2xl bg-[#FFFEFA]"><table className="w-full text-left text-xs sm:text-sm"><thead className="bg-[#002D23] text-[#F7F5EC] uppercase font-mono text-[11px]"><tr><th className="p-4">Cost Factor</th><th className="p-4 bg-[#001F19] text-[#B99A5B] font-bold">BrewPluse</th><th className="p-4">Typical Paid Restaurant POS</th></tr></thead><tbody className="divide-y divide-[#DDE3DD] text-[#4A5550]"><tr><td className="p-4 font-bold text-[#0B1714]">Monthly Software Subscription</td><td className="p-4 font-bold text-emerald-700 bg-emerald-50/50">₹0 / month forever</td><td className="p-4 text-red-600">₹1,500 – ₹4,000 / month</td></tr><tr><td className="p-4 font-bold text-[#0B1714]">Upfront Hardware Costs</td><td className="p-4 font-bold text-emerald-700 bg-emerald-50/50">₹0 (Use existing devices)</td><td className="p-4 text-red-600">₹35,000 – ₹70,000 touch terminal</td></tr><tr><td className="p-4 font-bold text-[#0B1714]">KDS &amp; Kitchen Screens</td><td className="p-4 font-bold text-emerald-700 bg-emerald-50/50">Included Free</td><td className="p-4 text-red-600">₹500 – ₹1,000 / month add-on</td></tr><tr><td className="p-4 font-bold text-[#0B1714]">QR Table Ordering System</td><td className="p-4 font-bold text-emerald-700 bg-emerald-50/50">Included Free + Geofence</td><td className="p-4 text-red-600">₹800 – ₹1,500 / month add-on</td></tr><tr><td className="p-4 font-bold text-[#0B1714]">Cancellation / Lock-in</td><td className="p-4 font-bold text-emerald-700 bg-emerald-50/50">Zero contracts, leave anytime</td><td className="p-4 text-red-600">12–36 month contracts</td></tr></tbody></table></div></div><div className="bg-[#002D23] text-[#F7F5EC] p-8 sm:p-10 rounded-2xl text-center"><h3 className="text-2xl sm:text-3xl font-bold mb-3">Stop Paying Fixed Software Bills Every Month</h3><p className="text-sm sm:text-base text-[#DDE3DD] max-w-xl mx-auto mb-6 leading-relaxed">Create your account in under 5 minutes and get full access to modern cloud POS, QR table ordering, and kitchen screens.</p><div className="flex flex-col sm:flex-row gap-4 justify-center"><a href="https://app.brewpluse.com/signup" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#B99A5B] text-[#002D23] font-bold hover:bg-[#d3b677] transition-all shadow-md">Sign Up for ₹0/Month Software →</a><a className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all" href="/compare">Compare with Petpooja &amp; Others</a></div></div></section></div>
     </div>
   );
 }

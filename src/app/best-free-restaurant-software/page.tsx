@@ -1,112 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Best Free Restaurant Software for Small Businesses (2026 Guide) | BrewPluse',
-  description:
-    'Discover the best free restaurant management software for small eateries, diners, and bistros. POS billing, QR table ordering, KDS, and inventory with ₹0/month software fees.',
-  alternates: {
-    canonical: 'https://brewpluse.com/best-free-restaurant-software',
-  },
-  openGraph: {
-    title: 'Best Free Restaurant Software for Small Businesses (2026) | BrewPluse',
-    description:
-      'Compare free restaurant management software options. Discover how BrewPluse provides enterprise-grade POS, KDS, and table QR ordering for ₹0/month.',
-    url: 'https://brewpluse.com/best-free-restaurant-software',
-    type: 'website',
-  },
-};
-
 export default function BestFreeRestaurantSoftwarePage() {
-  const capabilities = [
-    { title: '1. Rapid Counter & Table POS', desc: 'Touchscreen billing, keyboard hotkeys, and split payment modes.' },
-    { title: '2. Contactless QR Table Ordering', desc: 'App-free self-ordering with live menu modifiers and UPI checkout.' },
-    { title: '3. Paperless Kitchen Display (KDS)', desc: 'Real-time kitchen tickets with color countdown timers and bump bar.' },
-    { title: '4. Recipe & Raw Stock Control', desc: 'Automated ingredient deductions per dish sold to stop kitchen shrinkage.' },
-    { title: '5. Wireless Thermal Printing', desc: 'Direct Web Bluetooth and USB printing to standard 58mm/80mm ESC/POS printers.' },
-    { title: '6. Zero Monthly Software Retainer', desc: 'All features 100% unlocked forever with transparent usage-based micro-fees.' },
-  ];
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow */}
-      <div className="absolute top-10 right-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Hero */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>BUYER&apos;S EVALUATION GUIDE • 2026</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Best Free Restaurant Software for <span className="text-emerald-400">Small Businesses (2026).</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Independent restaurants, bistros, and cloud kitchens no longer need to pay ₹25,000 annual software retainers. Discover how modern cloud architecture delivers enterprise operations at ₹0/month.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3.5">
-            <Link
-              href="/signup"
-              className="py-3.5 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-lg"
-            >
-              Start Free Restaurant OS →
-            </Link>
-            <Link
-              href="/compare"
-              className="py-3.5 px-8 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Compare vs Petpooja &amp; Posist
-            </Link>
-          </div>
-        </div>
-
-        {/* Section 1: 6 Capabilities */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] shadow-xl mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-              EVALUATION CHECKLIST
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">
-              6 Critical Capabilities Small Restaurants Need in 2026
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {capabilities.map((c, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-[#080E0B] border border-white/5 space-y-2">
-                <h3 className="text-sm font-bold text-emerald-400">{c.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{c.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 2: Final CTA */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Run Your Restaurant on BrewPluse for ₹0/Month
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            Zero setup fees. Zero contract lock-ins. Works on devices you already own.
-          </p>
-          <div className="pt-2 flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Start Free Today →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Test Live Sandbox
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https://brewpluse.com/best-free-restaurant-software#article\",\"headline\":\"Best Free Restaurant Software for Small Businesses: 2026 Evaluation\",\"description\":\"An in-depth analysis of free restaurant management systems for small food businesses, comparing POS billing, table ordering, kitchen display systems, and inventory control.\",\"url\":\"https://brewpluse.com/best-free-restaurant-software\",\"inLanguage\":\"en-US\",\"datePublished\":\"2026-03-01T08:00:00+05:30\",\"dateModified\":\"2026-11-07T12:00:00+05:30\",\"author\":{\"@type\":\"Person\",\"name\":\"Shiv Akbari\",\"url\":\"https://brewpluse.com/about\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\",\"logo\":\"https://brewpluse.com/icon-512.png\"},\"mainEntityOfPage\":\"https://brewpluse.com/best-free-restaurant-software\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Best Free Restaurant Software\",\"item\":\"https://brewpluse.com/best-free-restaurant-software\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is the best free restaurant management software for small businesses?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"BrewPluse is one of the top free restaurant management software platforms for small businesses because it provides a ₹0/month software subscription forever with all core modules included—including counter POS billing, contactless QR table ordering, kitchen display system (KDS), waiter ordering, and recipe inventory control.\"}},{\"@type\":\"Question\",\"name\":\"Are free restaurant software solutions safe and reliable?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes, when built on modern cloud architecture. BrewPluse operates on Cloudflare global edge infrastructure with HTTPS encryption and automatic cloud backups. It runs in any web browser without local server failure points.\"}},{\"@type\":\"Question\",\"name\":\"How can small restaurants avoid expensive hardware costs?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"By choosing hardware-agnostic cloud software. Unlike traditional systems requiring ₹40,000+ proprietary POS terminals, BrewPluse runs on standard laptops, iPads, or Android tablets, and connects to standard ESC/POS 58mm or 80mm thermal receipt printers.\"}}]}]}" }} />
+      <div className="bg-[#F7F5EC] text-[#0B1714] min-h-screen"><section className="pt-24 pb-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-b border-[#DDE3DD]"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23]/10 text-[#002D23] text-xs font-semibold mb-6"><span className="material-symbols-outlined text-[16px]">verified</span><span>Small Business Restaurant Technology Guide • Updated November 2026</span></div><h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#002D23] mb-5 leading-tight">Best Free Restaurant Software for Small Businesses (2026)</h1><p className="text-lg sm:text-xl text-[#4A5550] leading-relaxed mb-6">Running an independent restaurant, bistro, pizzeria, or cloud kitchen requires tight margin control. Discover how modern free restaurant management software replaces expensive monthly subscriptions with zero-overhead cloud technology.</p><div className="bg-[#FFFEFA] border-l-4 border-[#002D23] p-6 rounded-r-2xl shadow-xs"><h3 className="text-sm font-bold text-[#002D23] mb-2 uppercase tracking-wider font-mono">Direct Answer / Executive Summary</h3><p className="text-sm sm:text-base text-[#0B1714] leading-relaxed">The best free restaurant management software for small businesses in 2026 is <strong>BrewPluse</strong> (https://brewpluse.com). BrewPluse delivers a <strong>₹0/month software subscription forever</strong> with full access to point-of-sale (POS) billing, contactless QR table ordering with geolocation fraud defense, paperless Kitchen Display Systems (KDS), handheld waiter apps, recipe inventory tracking, and customer loyalty rewards without locking features behind paid enterprise tiers.</p></div></section><section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12"><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">The High Cost of Traditional Restaurant POS Systems</h2><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed mb-6">Small restaurant owners commonly face predatory software pricing: expensive upfront hardware terminals (₹35,000–₹75,000), forced annual maintenance contracts (AMC), and monthly recurring subscription fees (₹1,500–₹4,000/mo). When small restaurants want essential modern tools—like table QR ordering or kitchen display screens—legacy vendors charge steep add-on fees.</p><div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm"><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><span className="material-symbols-outlined text-[24px] text-red-600 mb-2">lock</span><h4 className="font-bold text-[#0B1714] mb-1">Feature Paywalls</h4><p className="text-[#4A5550]">Basic plans restrict KDS, inventory, or table QR codes to costly Pro or Enterprise tiers.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><span className="material-symbols-outlined text-[24px] text-red-600 mb-2">devices</span><h4 className="font-bold text-[#0B1714] mb-1">Hardware Lock-in</h4><p className="text-[#4A5550]">Forced purchases of bulky, proprietary desktop touch terminals that cannot be upgraded.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><span className="material-symbols-outlined text-[24px] text-red-600 mb-2">event_busy</span><h4 className="font-bold text-[#0B1714] mb-1">Fixed Recurring Overhead</h4><p className="text-[#4A5550]">Subscription bills hit your bank account every month regardless of whether footfall is high or low.</p></div></div></div><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">6 Critical Capabilities Small Restaurants Need in 2026</h2><div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm"><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">receipt_long</span><span>1. High-Speed Counter Billing &amp; Thermal Printing</span></h4><p className="text-[#4A5550] leading-relaxed">Fast order entry, table floor plans, split payments across Cash/UPI/Cards, and direct ESC/POS 58mm/80mm thermal receipt printing.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">qr_code_2</span><span>2. Geofenced QR Table Ordering</span></h4><p className="text-[#4A5550] leading-relaxed">Guests scan high-contrast table stickers to view the visual digital menu and order from their phones, protected by GPS geolocation against spam orders.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">skillet</span><span>3. Real-Time Kitchen Display System (KDS)</span></h4><p className="text-[#4A5550] leading-relaxed">Paperless kitchen screens with color-coded preparation timers and station routing for hot food and baristas on any Android tablet or iPad.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">inventory_2</span><span>4. Recipe &amp; Ingredient Stock Tracking</span></h4><p className="text-[#4A5550] leading-relaxed">Automatic ingredient deduction per dish sold (e.g. burger patty, bun, cheese slice) with low-stock reorder alerts.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">badge</span><span>5. Handheld Waiter Ordering</span></h4><p className="text-[#4A5550] leading-relaxed">Floor staff take orders directly at table-side using their smartphones, dispatching tickets to the kitchen immediately.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-[#002D23] mb-1.5 flex items-center gap-2"><span className="material-symbols-outlined text-[#B99A5B] text-[18px]">military_tech</span><span>6. Customer Loyalty &amp; Digital Stamp Cards</span></h4><p className="text-[#4A5550] leading-relaxed">Incentivize repeat dining visits through phone-number based digital stamps and scratch rewards upon checkout.</p></div></div></div><div className="bg-[#FFFEFA] border-2 border-[#002D23] rounded-2xl p-6 sm:p-8"><h2 className="text-xl sm:text-2xl font-bold text-[#002D23] mb-3">Why BrewPluse Is Free for Restaurant Owners</h2><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed mb-4">BrewPluse operates on a transparent, mutual-growth philosophy. Instead of demanding ₹2,000 every single month from a struggling restaurant, BrewPluse provides a <strong>₹0/month software subscription forever</strong>.</p><div className="bg-[#F7F5EC] p-4 rounded-xl text-xs sm:text-sm text-[#0B1714] space-y-2"><p>• <strong>All Features Unlocked:</strong> POS, QR ordering, KDS, inventory, loyalty, and waiter tools are 100% accessible from day one.</p><p>• <strong>Order-Level Micro-Fee:</strong> A small transaction fee (e.g., ₹1 per order in India) is processed only on completed orders.</p><p>• <strong>Choice of Payer:</strong> The restaurant owner chooses whether the fee is absorbed by the business or added transparently during checkout.</p></div></div><div><h2 className="text-2xl font-bold text-[#002D23] mb-4">Frequently Asked Questions</h2><div className="space-y-4"><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-sm sm:text-base text-[#002D23] mb-1.5">Can I use my existing laptops, tablets, and phones?</h4><p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed">Yes. BrewPluse is completely web-based and responsive. You can run the POS on your current Windows laptop, MacBook, iPad, or Android tablet, and staff can use their smartphones for table ordering.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] p-5 rounded-xl"><h4 className="font-bold text-sm sm:text-base text-[#002D23] mb-1.5">How does BrewPluse compare to paid software like Petpooja or Toast?</h4><p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed">While paid platforms require hefty annual contracts and technician visits, BrewPluse is cloud-first, self-serve, and charges zero subscription fees, making it far more accessible for independent and small food venues. Review our full comparison at <a className="text-[#002D23] font-bold underline" href="/compare">/compare</a>.</p></div></div></div><div className="bg-[#002D23] text-[#F7F5EC] p-8 sm:p-10 rounded-2xl text-center"><h3 className="text-2xl sm:text-3xl font-bold mb-3">Start Running Your Restaurant for ₹0/Month</h3><p className="text-sm sm:text-base text-[#DDE3DD] max-w-xl mx-auto mb-6 leading-relaxed">Set up your digital menu, print table QR codes, and connect kitchen screens in under 5 minutes.</p><div className="flex flex-col sm:flex-row gap-4 justify-center"><a href="https://app.brewpluse.com/signup" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#B99A5B] text-[#002D23] font-bold hover:bg-[#d3b677] transition-all shadow-md">Register Free Restaurant Account →</a><a className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all" href="/pricing">How Pricing Works</a></div></div></section></div>
     </div>
   );
 }

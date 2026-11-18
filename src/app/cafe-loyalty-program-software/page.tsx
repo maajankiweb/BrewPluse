@@ -1,149 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Cafe Loyalty Program Software for Customer Retention | Digital Stamp Cards | BrewPluse',
-  description:
-    'Turn first-time coffee drinkers into lifetime regulars with phone-based digital stamp cards, customer store wallets, and instant post-order rewards with ₹0/month software fees.',
-  alternates: {
-    canonical: 'https://brewpluse.com/cafe-loyalty-program-software',
-  },
-  openGraph: {
-    title: 'Cafe Loyalty Program Software | Digital Stamp Cards | BrewPluse',
-    description:
-      'Phone number based digital stamp cards and customer loyalty software built directly into BrewPluse POS with zero monthly subscriptions.',
-    url: 'https://brewpluse.com/cafe-loyalty-program-software',
-    type: 'website',
-  },
-};
-
 export default function CafeLoyaltyProgramSoftwarePage() {
-  const loyaltyFeatures = [
-    {
-      icon: '📱',
-      title: 'Phone-Number Based Stamps',
-      desc: 'No apps for guests to download. Customers simply enter their phone number at checkout or QR ordering to earn stamps (e.g. 5th coffee free).',
-    },
-    {
-      icon: '💳',
-      title: 'Customer Store Credit Wallet',
-      desc: 'Let frequent guests preload credit into their cafe wallet for instant checkouts, boosting upfront cash flow float for your coffee shop.',
-    },
-    {
-      icon: '🎁',
-      title: 'Surprise Scratch Rewards',
-      desc: 'Delight customers with interactive digital scratch cards on their mobile screen after paying via table QR code.',
-    },
-  ];
-
-  const faqs = [
-    {
-      q: 'Do customers need to download a separate loyalty app?',
-      a: 'No. The entire loyalty engine operates natively through their mobile web browser when they scan table QR codes or punch their phone number at the counter POS.',
-    },
-    {
-      q: 'Can I customize the stamp card rules (e.g. Buy 6 get 1 free)?',
-      a: 'Yes. You can configure stamp rules, qualifying items, reward expiration dates, and discount voucher values directly from your BrewPluse business settings.',
-    },
-    {
-      q: 'Does BrewPluse charge extra fees for loyalty members or SMS?',
-      a: 'BrewPluse includes full customer CRM and loyalty logic with ₹0/month software subscription fees.',
-    },
-  ];
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow */}
-      <div className="absolute top-10 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Hero */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>CUSTOMER RETENTION ENGINE</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Cafe Loyalty Program Software for <span className="text-emerald-400">Customer Retention.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Replace easily lost paper punch cards with seamless digital stamps, prepaid store wallets, and automated rewards built directly into your Point of Sale.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3.5">
-            <Link
-              href="/signup"
-              className="py-3.5 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-lg"
-            >
-              Start Free Retention Engine →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3.5 px-8 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Explore Live Sandbox
-            </Link>
-          </div>
-        </div>
-
-        {/* Section 1: Comparison - Paper vs Digital */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1612] border border-[#1E362B] shadow-xl mb-20">
-          <div className="max-w-2xl mb-8">
-            <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-              RETENTION ARCHITECTURE
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">Why Paper Punch Cards Fail (And Digital Loyalty Wins)</h2>
-            <p className="text-xs text-gray-400 mt-1">
-              Traditional paper stamp cards get lost in wallets, forgotten at home, or exploited with counterfeit stamp ink.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {loyaltyFeatures.map((f, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-[#080E0B] border border-white/5 space-y-3">
-                <span className="text-3xl">{f.icon}</span>
-                <h3 className="text-base font-bold text-white">{f.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 2: FAQs */}
-        <div className="mb-20 space-y-4 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-6">Frequently Asked Questions</h2>
-          {faqs.map((f, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-[#0D1612] border border-[#1E362B]">
-              <h3 className="text-sm font-bold text-white mb-2">{f.q}</h3>
-              <p className="text-xs text-gray-300 leading-relaxed">{f.a}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Section 3: Final CTA */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Build Long-Term Customer Loyalty Today
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            Turn your coffee shop visitors into brand ambassadors with BrewPluse.
-          </p>
-          <div className="pt-2 flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Start Free Today →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Test Live Sandbox
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"SoftwareApplication\",\"name\":\"BrewPluse Cafe Loyalty Program Software\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web, iOS, Android, Windows, macOS\",\"description\":\"Digital loyalty and customer retention platform for cafes and restaurants featuring mobile stamp cards, reward scratch cards, VIP perks, and POS billing integration.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"INR\",\"description\":\"₹0/month software subscription forever for cafe and restaurant owners.\"},\"featureList\":[\"Zero-app digital loyalty stamp cards accessible via table QR and SMS\",\"Automated reward triggers on 5th and 10th coffee purchases\",\"Interactive digital scratch cards for instant customer delight\",\"POS counter billing integration with 1-tap customer phone lookup\",\"Automated 5-star Google Review prompt for verified loyal guests\",\"Customer lifetime value (LTV) and visit frequency analytics\"],\"author\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\"}},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Features\",\"item\":\"https://brewpluse.com/features\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Cafe Loyalty Software\",\"item\":\"https://brewpluse.com/cafe-loyalty-program-software\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is cafe loyalty program software?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Cafe loyalty program software is a customer retention system designed for coffee shops, bakeries, and restaurants that rewards patrons for repeat purchases. It replaces easily lost paper punch cards with digital stamp cards that customers view on their smartphones without downloading a separate mobile app.\"}},{\"@type\":\"Question\",\"name\":\"Do customers need to download an app to earn loyalty points?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"No. BrewPluse loyalty cards run directly inside mobile web browsers. Customers simply enter their phone number during counter billing or table QR checkout to automatically accumulate digital stamps and unlock free drinks or discounts.\"}},{\"@type\":\"Question\",\"name\":\"How does BrewPluse connect loyalty rewards to POS billing?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"When a customer visits your cafe and the cashier enters their phone number at the POS counter or the guest orders via table QR, BrewPluse instantly recognizes their profile, displays available rewards (e.g., 'Free Cappuccino Available'), and automatically deducts earned rewards in 1 tap.\"}},{\"@type\":\"Question\",\"name\":\"How does the loyalty system help generate more Google reviews?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"When customers reach a reward milestone or redeem a loyalty perk, BrewPluse gently presents a 1-tap Google Review booster screen inviting them to share their positive experience on Google Maps.\"}}]}]}" }} />
+      <div className="w-full bg-[#F7F5EC] text-[#0B1714]"><section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFFEFA] to-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto text-center"><nav className="inline-flex items-center gap-2 text-xs font-mono text-gray-500 mb-6 bg-[#FFFEFA] px-3.5 py-1.5 rounded-[8px] border border-[#DDE3DD] shadow-2xs"><a className="hover:text-[#002D23] transition-colors" href="/">Home</a><span>/</span><a className="hover:text-[#002D23] transition-colors" href="/features">Features</a><span>/</span><span className="text-[#002D23] font-bold">Cafe Loyalty Software</span></nav><div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002D23]/10 border border-[#002D23]/20 text-[#002D23] font-mono text-[11px] font-bold tracking-wider uppercase mb-5"><span className="w-2 h-2 rounded-full bg-[#002D23] animate-pulse"></span>Customer Retention &amp; Rewards Engine</div><h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0B1714] tracking-tight leading-[1.15] mb-5">Cafe Loyalty Program Software for <span className="text-[#002D23] underline decoration-[#B99A5B] decoration-wavy decoration-2">Customer Retention</span></h1><p className="text-base sm:text-lg text-[#64736D] max-w-3xl mx-auto leading-relaxed mb-8">Turn first-time coffee drinkers into lifetime regulars. Digital loyalty stamp cards, automated rewards, and 1-tap Google Review prompts seamlessly connected to your POS with <strong>₹0/month software fees</strong>.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-10"><a href="https://app.brewpluse.com/signup" className="w-full sm:w-auto px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001F19] text-[#FFFEFA] text-sm font-bold shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"><span>Launch Free Loyalty Program</span><span>→</span></a><a href="https://app.brewpluse.com/dashboard/demo/orders" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-4 rounded-[10px] bg-[#FFFEFA] hover:bg-[#F7F5EC] text-[#0B1714] text-sm font-semibold border border-[#DDE3DD] transition-all">View Live Demo ↗</a></div><div className="max-w-4xl mx-auto bg-[#FFFEFA] border border-[#DDE3DD] rounded-[16px] p-6 text-left shadow-xs"><div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-2"><span className="material-symbols-outlined text-[18px] text-[#B99A5B]">military_tech</span><span>What is Cafe Loyalty Program Software?</span></div><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed"><strong>Cafe loyalty program software</strong> is an automated customer retention platform that tracks guest order history, awards digital stamps on coffee purchases, and provides instant rewards without paper punch cards. By linking customer phone numbers directly to POS billing and QR table orders, cafes increase repeat customer visits by up to 40% and gather 5-star Google reviews automatically.</p></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-14"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">Why Paper Punch Cards Fail (And Digital Loyalty Wins)</h2><p className="text-sm sm:text-base text-gray-600">Over 70% of paper loyalty cards are lost or forgotten at home. BrewPluse digital loyalty keeps your brand in their pocket.</p></div><div className="grid grid-cols-1 md:grid-cols-4 gap-6"><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">01</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Digital Stamp Cards</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Customers collect interactive stamps on their phone. “Buy 9 Coffees, Get the 10th Free” gamifies every morning routine.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">02</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">1-Tap POS Lookup</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Cashiers type the guest phone number or customer scans their personal QR code. Stamps accumulate automatically with zero delay.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">03</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Instant Scratch Cards</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Surprise high-spending diners with digital scratch-and-win discounts on pastries or next visit combos to spark emotional delight.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">04</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Google Review Booster</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Satisfied loyalty members receive a frictionless prompt to leave a 5-star Google rating, driving organic local discovery on Google Maps.</p></div></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">Built Directly into Your POS: No Third-Party Subscriptions</h2><p className="text-sm sm:text-base text-gray-600">Standalone loyalty apps charge $50–$150/month and force customers to download clunky apps. BrewPluse makes loyalty native and free.</p></div><div className="overflow-x-auto border border-[#DDE3DD] rounded-[16px] bg-[#FFFEFA] shadow-xs"><table className="w-full text-left text-sm"><thead className="bg-[#002D23] text-[#F7F5EC] font-mono text-xs uppercase tracking-wider"><tr><th className="p-4 sm:p-5">Feature</th><th className="p-4 sm:p-5 text-[#B99A5B] font-bold">BrewPluse Loyalty</th><th className="p-4 sm:p-5">Standalone Loyalty Software</th><th className="p-4 sm:p-5">Paper Punch Cards</th></tr></thead><tbody className="divide-y divide-[#DDE3DD] text-[#4A5550]"><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Software Fee</td><td className="p-4 sm:p-5 font-black text-[#002D23]">₹0 / month forever</td><td className="p-4 sm:p-5">$49 – $149 / month</td><td className="p-4 sm:p-5">₹1,500 per printing run</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Customer App Required</td><td className="p-4 sm:p-5 font-bold text-emerald-700">No (Web browser only)</td><td className="p-4 sm:p-5">Forced 80MB app download</td><td className="p-4 sm:p-5">Physical card required</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">POS Billing Integration</td><td className="p-4 sm:p-5 font-bold text-emerald-700">100% Native &amp; Real-time</td><td className="p-4 sm:p-5">Separate tablet / clunky API</td><td className="p-4 sm:p-5">None (Cashier manually stamps)</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Fraud &amp; Theft Protection</td><td className="p-4 sm:p-5 font-bold text-emerald-700">System verified purchases</td><td className="p-4 sm:p-5">Moderate</td><td className="p-4 sm:p-5">High risk (Fake stamps)</td></tr></tbody></table></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#DDE3DD]"><div className="max-w-4xl mx-auto"><div className="text-center mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight">Frequently Asked Questions About Cafe Loyalty Programs</h2></div><div className="space-y-4"><div className="p-5 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#0B1714] mb-2">What is cafe loyalty program software?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Cafe loyalty program software is a customer retention system designed for coffee shops, bakeries, and restaurants that rewards patrons for repeat purchases. It replaces easily lost paper punch cards with digital stamp cards that customers view on their smartphones without downloading a separate mobile app.</p></div><div className="p-5 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#0B1714] mb-2">Do customers need to download an app to earn loyalty points?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">No. BrewPluse loyalty cards run directly inside mobile web browsers. Customers simply enter their phone number during counter billing or table QR checkout to automatically accumulate digital stamps and unlock free drinks or discounts.</p></div><div className="p-5 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#0B1714] mb-2">How does BrewPluse connect loyalty rewards to POS billing?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">When a customer visits your cafe and the cashier enters their phone number at the POS counter or the guest orders via table QR, BrewPluse instantly recognizes their profile, displays available rewards (e.g., “Free Cappuccino Available”), and automatically deducts earned rewards in 1 tap.</p></div><div className="p-5 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#0B1714] mb-2">How does the loyalty system help generate more Google reviews?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">When customers reach a reward milestone or redeem a loyalty perk, BrewPluse gently presents a 1-tap Google Review booster screen inviting them to share their positive experience on Google Maps.</p></div></div></div></section><section className="py-14 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><h2 className="text-xl font-bold text-[#0B1714] mb-6 text-center sm:text-left">Connected BrewPluse Modules</h2><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><a className="p-4 rounded-xl bg-[#F7F5EC] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-pos"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Counter Billing</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe POS Software →</h3><p className="text-[11px] text-gray-500">1-tap customer phone lookup and reward redemption.</p></a><a className="p-4 rounded-xl bg-[#F7F5EC] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/qr-ordering-system"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Self Ordering</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">QR Ordering System →</h3><p className="text-[11px] text-gray-500">Earn loyalty stamps automatically on table QR orders.</p></a><a className="p-4 rounded-xl bg-[#F7F5EC] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/digital-menu"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Visual Menu</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Digital QR Menu →</h3><p className="text-[11px] text-gray-500">Showcase member perks and seasonal specials.</p></a><a className="p-4 rounded-xl bg-[#F7F5EC] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-management-software"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Full Operating Suite</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe Management →</h3><p className="text-[11px] text-gray-500">Complete POS, KDS, inventory, and retention engine.</p></a></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#001F19] text-white text-center"><div className="max-w-3xl mx-auto"><h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Build Long-Term Customer Loyalty Today</h2><p className="text-sm text-gray-300 max-w-lg mx-auto mb-8">Setup your cafe&#x27;s digital stamp program in 2 minutes. Free forever for cafe owners.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5"><a href="https://app.brewpluse.com/signup" className="px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001712] border border-[#B99A5B]/30 text-[#FFFEFA] text-sm font-bold shadow-xl transition-all hover:scale-[1.02]">Get Started Free →</a><a className="px-6 py-4 rounded-[10px] bg-white/10 hover:bg-white/15 text-[#FFFEFA] text-sm font-semibold border border-white/20 transition-all" href="/pricing">Pricing Details</a></div></div></section></div>
     </div>
   );
 }

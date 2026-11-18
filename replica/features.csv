@@ -1,0 +1,17 @@
+feature,area,priority,original,clone,notes
+₹0 Monthly Software Subscription,pricing,must,yes,yes,Free for life for cafe owners
+₹1 Customer Convenience Fee,pricing,must,yes,yes,Paid by customer at digital checkout
+High-Speed Counter POS Billing,billing,must,yes,yes,Split bills cash card UPI
+Contactless Table QR Ordering,qr,must,yes,yes,Zero customer app download required
+Live Kitchen Display System (KDS),kitchen,must,yes,yes,Paperless station routing with timers
+Instant 86 & Modifiers,menu,must,yes,yes,Live item out-of-stock and variant toggling
+Thermal Printer Integration,hardware,must,yes,yes,USB Bluetooth and LAN 58mm/80mm printers
+Zero Proprietary Hardware Lock-In,hardware,must,yes,yes,Runs on any iPad tablet laptop phone
+Role-Based Staff Permissions,staff,must,yes,yes,Admin Manager Cashier Barista roles
+Daily Sales Reports & Analytics,analytics,must,yes,yes,Real-time revenue settlement and item stats
+Google Review Booster Flow,loyalty,should,yes,yes,Post-checkout 1-tap review prompts
+Customer Loyalty & Points,loyalty,should,yes,yes,Automated visit rewards and repeat discounts
+Table Layout & Floor Management,tables,should,yes,yes,Live table status and turnover timers
+Offline Network Write-Ahead,resilience,should,yes,yes,Local cache order punch during drops
+Soundbox UPI Audio Alerts,payments,could,yes,yes,Instant payment voice confirmation
+Custom Domain White-Labeling,branding,could,yes,yes,Dedicated cafe subdomains

@@ -1,129 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'AI Review Management for Restaurants & Cafes | Google Review QR | BrewPluse',
-  description:
-    'Grow your 5-star Google Maps reviews automatically after every meal. Direct diners to Google Place reviews seamlessly upon payment with BrewPluse.',
-  alternates: {
-    canonical: 'https://brewpluse.com/ai-review-management-for-restaurants',
-  },
-  openGraph: {
-    title: 'AI Review Management for Restaurants | BrewPluse',
-    description:
-      'Boost your restaurant 5-star Google reviews with automated post-meal prompts and QR table review integration.',
-    url: 'https://brewpluse.com/ai-review-management-for-restaurants',
-    type: 'website',
-  },
-};
-
-export default function AiReviewManagementPage() {
-  const steps = [
-    {
-      num: '01',
-      title: 'Customer Scans & Settles Bill',
-      desc: 'Guest places order and pays via contactless table QR code or settles with cashier at counter.',
-    },
-    {
-      num: '02',
-      title: 'Post-Payment Experience Prompt',
-      desc: 'A friendly, non-intrusive prompt appears on their smartphone: "How was your dining experience today?"',
-    },
-    {
-      num: '03',
-      title: '5-Star Google Redirect',
-      desc: 'Happy diners are routed directly to your official Google Maps business review form in 1 tap.',
-    },
-    {
-      num: '04',
-      title: 'Private Feedback Resolution',
-      desc: 'Guests with concerns submit private feedback directly to the cafe owner before posting publicly.',
-    },
-  ];
+export default function AiReviewManagementForRestaurantsPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow */}
-      <div className="absolute top-10 right-1/3 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Hero */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>REPUTATION &amp; LOCAL SEO ACCELERATOR</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            AI Review Management for <span className="text-emerald-400">Restaurants &amp; Cafes.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Convert happy diners into authentic 5-star Google Maps reviews automatically. Increase foot traffic and outrank nearby competitors without expensive third-party reputation software.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3.5">
-            <Link
-              href="/signup"
-              className="py-3.5 px-8 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-lg"
-            >
-              Boost Your Reviews Free →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3.5 px-8 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Explore Live Demo
-            </Link>
-          </div>
-        </div>
-
-        {/* Section 1: The 4-Step Acceleration Engine */}
-        <div className="mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              The 4-Step Google Review Acceleration Engine
-            </h2>
-            <p className="text-xs text-gray-400">
-              Collect genuine reviews at the moment of highest guest satisfaction.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {steps.map((s, idx) => (
-              <div key={idx} className="p-6 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3 relative group hover:border-emerald-500/40 transition-all">
-                <span className="text-2xl font-extrabold font-mono text-emerald-400/40 group-hover:text-emerald-400 transition-colors">
-                  {s.num}
-                </span>
-                <h3 className="text-sm font-bold text-white">{s.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 2: Final CTA */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Boost Your Google Reputation Today
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            All Google Review acceleration features are built directly into BrewPluse with ₹0/month software fees.
-          </p>
-          <div className="pt-2 flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Start Free Today →
-            </Link>
-            <Link
-              href="/demo"
-              className="py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Test Live Sandbox
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"SoftwareApplication\",\"name\":\"BrewPluse Restaurant Review Booster & Reputation Integration\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web, iOS, Android, Windows, macOS\",\"description\":\"Restaurant reputation and Google review generation system featuring 1-tap post-checkout review prompts, table QR review flows, and ReviewFlow AI review management integration.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"INR\",\"description\":\"₹0/month software subscription forever for restaurant and cafe operators.\"},\"featureList\":[\"Automated 1-tap Google Review booster on table QR payment completion\",\"Dedicated Google Review QR stand generator for dining tables and counters\",\"Private feedback filter before public review submission\",\"ReviewFlow AI reputation management integration for automated review replies\",\"Local SEO visibility boost for 'cafe near me' and 'restaurant near me' searches\"],\"author\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\"}},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Features\",\"item\":\"https://brewpluse.com/features\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"AI Review Management\",\"item\":\"https://brewpluse.com/ai-review-management-for-restaurants\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is AI review management for restaurants?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"AI review management for restaurants is a software strategy that automates the collection, sentiment analysis, and response generation for customer reviews on platforms like Google Business Profile. It prompts happy diners immediately after a meal, helps draft personalized responses using AI, and protects local reputation by catching negative feedback privately.\"}},{\"@type\":\"Question\",\"name\":\"How does BrewPluse help restaurants get more Google reviews?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"When customers complete their table QR payment or settle their bill, BrewPluse presents a friendly 1-tap prompt directing satisfied diners straight to your verified Google Business review page, capturing high-intent reviews while the dining experience is fresh in their minds.\"}},{\"@type\":\"Question\",\"name\":\"What is ReviewFlow and how does it relate to BrewPluse?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"ReviewFlow is a dedicated standalone AI review generation and reputation management product specifically designed to generate authentic customer reviews, draft AI-powered responses, and manage multi-location Google Business profiles. While BrewPluse includes built-in checkout review prompts for cafe operations, ReviewFlow serves as a powerful specialized partner platform for advanced review automation.\"}},{\"@type\":\"Question\",\"name\":\"Does getting more Google reviews improve local search rankings?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. Google's local search algorithm heavily weighs review velocity, average star rating, and owner response rates when ranking venues in the Google Local 3-Pack for high-intent searches like 'best cafe near me' or 'restaurants open now'.\"}}]}]}" }} />
+      <div className="w-full bg-[#F7F5EC] text-[#0B1714]"><section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFFEFA] to-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto text-center"><nav className="inline-flex items-center gap-2 text-xs font-mono text-gray-500 mb-6 bg-[#FFFEFA] px-3.5 py-1.5 rounded-[8px] border border-[#DDE3DD] shadow-2xs"><a className="hover:text-[#002D23] transition-colors" href="/">Home</a><span>/</span><a className="hover:text-[#002D23] transition-colors" href="/features">Features</a><span>/</span><span className="text-[#002D23] font-bold">AI Review Management</span></nav><div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002D23]/10 border border-[#002D23]/20 text-[#002D23] font-mono text-[11px] font-bold tracking-wider uppercase mb-5"><span className="w-2 h-2 rounded-full bg-[#002D23] animate-pulse"></span>Local SEO &amp; Reputation Engine</div><h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0B1714] tracking-tight leading-[1.15] mb-5">AI Review Management for <span className="text-[#002D23] underline decoration-[#B99A5B] decoration-wavy decoration-2">Restaurants &amp; Cafes</span></h1><p className="text-base sm:text-lg text-[#64736D] max-w-3xl mx-auto leading-relaxed mb-8">Dominate local “cafe near me” Google searches. Turn satisfied diners into authentic 5-star Google reviews with post-meal table QR prompts and intelligent reputation workflows with <strong>₹0/month software fees</strong>.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-10"><a href="https://app.brewpluse.com/signup" className="w-full sm:w-auto px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001F19] text-[#FFFEFA] text-sm font-bold shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"><span>Start Review Booster Free</span><span>→</span></a><a href="https://app.brewpluse.com/dashboard/demo/orders" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-4 rounded-[10px] bg-[#FFFEFA] hover:bg-[#F7F5EC] text-[#0B1714] text-sm font-semibold border border-[#DDE3DD] transition-all">View Live Demo ↗</a></div><div className="max-w-4xl mx-auto bg-[#FFFEFA] border border-[#DDE3DD] rounded-[16px] p-6 text-left shadow-xs"><div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-2"><span className="material-symbols-outlined text-[18px] text-[#B99A5B]">star</span><span>What is AI Review Management for Restaurants?</span></div><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed"><strong>AI review management for restaurants</strong> is a software solution that automates the collection, monitoring, and response management of customer feedback on Google Business Profiles. By prompting guests with dynamic QR codes immediately upon bill settlement and utilizing AI to draft tailored, keyword-rich review responses, restaurants increase Google 3-Pack map rankings and attract organic foot traffic.</p></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto"><div className="p-8 sm:p-10 rounded-[20px] bg-gradient-to-br from-[#002D23] to-[#001712] text-white shadow-xl relative overflow-hidden"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B99A5B]/20 text-[#E2C98D] font-mono text-[11px] font-bold uppercase mb-4 border border-[#B99A5B]/30">Specialized AI Review Solution</div><h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">Need Advanced Multi-Channel Reputation Management? Meet ReviewFlow</h2><p className="text-sm sm:text-base text-[#DDE3DD] leading-relaxed mb-6 max-w-3xl">While BrewPluse includes a built-in 1-tap review booster at table checkout, hospitality operators seeking enterprise reputation management can leverage our specialized AI review product: <strong>ReviewFlow</strong>.</p><div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-xs sm:text-sm text-gray-200"><div className="p-4 rounded-xl bg-white/5 border border-white/10"><strong className="text-[#B99A5B] block mb-1">1. Smart Review Generation</strong>Automated SMS &amp; WhatsApp feedback invitations that guide guests to write helpful Google reviews.</div><div className="p-4 rounded-xl bg-white/5 border border-white/10"><strong className="text-[#B99A5B] block mb-1">2. AI Auto-Replies</strong>Generate context-aware, hospitable responses to every positive and critical review in seconds.</div><div className="p-4 rounded-xl bg-white/5 border border-white/10"><strong className="text-[#B99A5B] block mb-1">3. Private Feedback Shield</strong>Catch dissatisfied customer concerns internally before they escalate onto public review sites.</div></div><div className="flex flex-col sm:flex-row items-center gap-3"><a href="https://reviewflow.co" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-3 rounded-[10px] bg-[#B99A5B] hover:bg-[#d3b677] text-[#002D23] font-bold text-xs text-center transition-all shadow-md">Discover ReviewFlow AI ↗</a><a className="w-full sm:w-auto px-6 py-3 rounded-[10px] bg-white/10 hover:bg-white/15 text-white font-semibold text-xs text-center transition-all border border-white/20" href="/features#loyalty-stamps">Explore Built-in BrewPluse Booster</a></div></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-14"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">The 4-Step Google Review Acceleration Engine</h2><p className="text-sm sm:text-base text-gray-600">How BrewPluse transforms bill payment into an effortless organic growth flywheel.</p></div><div className="grid grid-cols-1 md:grid-cols-4 gap-6"><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">01</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Delightful Meal</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Guest finishes their coffee or dining experience. Fast service and accurate KDS prep ensure high customer satisfaction.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">02</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">QR Settlement</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Guest pays via dynamic UPI or cashier settles check. The digital screen confirms payment in under 2 seconds.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">03</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">1-Tap Prompt</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">A polite prompt asks: “Enjoyed your coffee today? Share your thoughts on Google Maps in 10 seconds.”</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">04</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Local 3-Pack Surge</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Consistent 5-star reviews push your cafe into Google Maps top rankings, capturing hundreds of nearby hungry diners.</p></div></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-4xl mx-auto"><div className="text-center mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight">Frequently Asked Questions About Restaurant Review Management</h2></div><div className="space-y-4"><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">What is AI review management for restaurants?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">AI review management for restaurants is a software strategy that automates the collection, sentiment analysis, and response generation for customer reviews on platforms like Google Business Profile. It prompts happy diners immediately after a meal, helps draft personalized responses using AI, and protects local reputation by catching negative feedback privately.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">How does BrewPluse help restaurants get more Google reviews?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">When customers complete their table QR payment or settle their bill, BrewPluse presents a friendly 1-tap prompt directing satisfied diners straight to your verified Google Business review page, capturing high-intent reviews while the dining experience is fresh in their minds.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">What is ReviewFlow and how does it relate to BrewPluse?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">ReviewFlow is a dedicated standalone AI review generation and reputation management product specifically designed to generate authentic customer reviews, draft AI-powered responses, and manage multi-location Google Business profiles. While BrewPluse includes built-in checkout review prompts for cafe operations, ReviewFlow serves as a powerful specialized partner platform for advanced review automation.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">Does getting more Google reviews improve local search rankings?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Yes. Google&#x27;s local search algorithm heavily weighs review velocity, average star rating, and owner response rates when ranking venues in the Google Local 3-Pack for high-intent searches like “best cafe near me” or “restaurants open now”.</p></div></div></div></section><section className="py-14 px-4 sm:px-6 lg:px-8 bg-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><h2 className="text-xl font-bold text-[#0B1714] mb-6 text-center sm:text-left">Connected Growth Modules</h2><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-loyalty-program-software"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Customer Retention</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe Loyalty Software →</h3><p className="text-[11px] text-gray-500">Digital stamp cards and rewards for repeat regulars.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/qr-ordering-system"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Table QR</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">QR Table Ordering →</h3><p className="text-[11px] text-gray-500">Post-checkout review prompts directly on phones.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-pos"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Counter POS</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe POS Billing →</h3><p className="text-[11px] text-gray-500">Fast 2-tap billing with receipt review QR links.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-management-software"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Full Suite</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe Management →</h3><p className="text-[11px] text-gray-500">Complete POS, KDS, inventory, and retention engine.</p></a></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#001F19] text-white text-center"><div className="max-w-3xl mx-auto"><h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Boost Your Google Reputation Today</h2><p className="text-sm text-gray-300 max-w-lg mx-auto mb-8">Start collecting 5-star Google reviews from every satisfied customer. Free forever for cafe owners.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5"><a href="https://app.brewpluse.com/signup" className="px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001712] border border-[#B99A5B]/30 text-[#FFFEFA] text-sm font-bold shadow-xl transition-all hover:scale-[1.02]">Get Started Free →</a><a className="px-6 py-4 rounded-[10px] bg-white/10 hover:bg-white/15 text-[#FFFEFA] text-sm font-semibold border border-white/20 transition-all" href="/pricing">Pricing Details</a></div></div></section></div>
     </div>
   );
 }

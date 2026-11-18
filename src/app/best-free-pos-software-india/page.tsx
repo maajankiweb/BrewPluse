@@ -1,140 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Best Free POS Software for Small Restaurants & Cafes in India (2026) | BrewPluse',
-  description:
-    'Discover the best free POS software for small restaurants and cafes in India. Dynamic UPI QR billing, 5% GST tax invoices, thermal KOT printing, and ₹0/month software fees.',
-  alternates: {
-    canonical: 'https://brewpluse.com/best-free-pos-software-india',
-  },
-  openGraph: {
-    title: 'Best Free POS Software for Small Restaurants in India (2026) | BrewPluse',
-    description:
-      'India-specific restaurant billing software with dynamic UPI QR generation, 5% GST calculation, ESC/POS thermal printing, and zero monthly subscriptions.',
-    url: 'https://brewpluse.com/best-free-pos-software-india',
-    type: 'website',
-  },
-};
-
 export default function BestFreePosSoftwareIndiaPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient radial glow */}
-      <div className="absolute top-10 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Header Section */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>INDIA HOSPITALITY BENCHMARK • 2026 EDITION</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Best Free POS Software for <span className="text-emerald-400">Restaurants in India.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Engineered specifically for the fast-paced Indian food and beverage industry: dynamic UPI QR billing, 5% restaurant GST compliance, ESC/POS thermal receipt printing, and zero monthly software retainers.
-          </p>
-        </div>
-
-        {/* Core Pillars for Indian Restaurants */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">🇮🇳</span>
-            <h3 className="text-lg font-bold text-white">Dynamic UPI QR Billing</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Generate dynamic UPI QR codes per order directly on customer bill slips and table screens. Diners scan via GPay, PhonePe, Paytm, or BHIM for instant reconciliation.
-            </p>
-          </div>
-
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">🧾</span>
-            <h3 className="text-lg font-bold text-white">GST 5% &amp; 18% Compliance</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Auto-split CGST and SGST on itemized bills, configure HSN codes, and export GST-ready Excel reports for your chartered accountant in one click.
-            </p>
-          </div>
-
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">🖨️</span>
-            <h3 className="text-lg font-bold text-white">58mm &amp; 80mm ESC/POS Printing</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Connect wirelessly to Bluetooth or USB thermal receipt printers (TVS, Rongta, Everycom) without installing clunky Windows printer spoolers.
-            </p>
-          </div>
-        </div>
-
-        {/* Comparison Table vs Traditional Indian Billing Softwares */}
-        <div className="p-8 rounded-3xl bg-[#0D1612] border border-[#1E362B] shadow-xl mb-16 space-y-6">
-          <h3 className="text-2xl font-bold text-white">
-            BrewPluse vs. Traditional Indian Billing Software
-          </h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm border-collapse font-mono">
-              <thead>
-                <tr className="border-b border-[#1E362B] text-gray-400 uppercase text-[11px]">
-                  <th className="pb-3">Capability</th>
-                  <th className="pb-3 text-emerald-400 font-bold">BrewPluse OS</th>
-                  <th className="pb-3">Legacy Desktop Billing</th>
-                  <th className="pb-3">Traditional SaaS (Petpooja)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#1E362B] text-gray-300 text-xs">
-                <tr>
-                  <td className="py-3.5 font-bold text-white">Software License Fee</td>
-                  <td className="py-3.5 text-emerald-400 font-bold">₹0 / month forever</td>
-                  <td className="py-3.5">₹15,000 one-time</td>
-                  <td className="py-3.5">₹12,000 – ₹20,000 / year</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 font-bold text-white">Annual Maintenance (AMC)</td>
-                  <td className="py-3.5 text-emerald-400 font-bold">₹0 (Zero AMC)</td>
-                  <td className="py-3.5">₹3,000 – ₹5,000/yr</td>
-                  <td className="py-3.5">₹3,000 – ₹6,000/yr</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 font-bold text-white">QR Table Ordering</td>
-                  <td className="py-3.5 text-emerald-400 font-bold">Included Free</td>
-                  <td className="py-3.5 text-rose-400">✕ None</td>
-                  <td className="py-3.5">Paid Add-on (₹5k+)</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 font-bold text-white">Paperless KDS</td>
-                  <td className="py-3.5 text-emerald-400 font-bold">Included Free</td>
-                  <td className="py-3.5 text-rose-400">✕ None</td>
-                  <td className="py-3.5">Paid Add-on (₹5k+)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Start Your Cafe in India with Zero Software Retainers
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            Test the live sandbox demo right now or sign up in 60 seconds.
-          </p>
-          <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
-            <Link
-              href="/demo"
-              className="py-3.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Test Live Interactive Demo →
-            </Link>
-            <Link
-              href="/signup"
-              className="py-3.5 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Launch Store Free
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"SoftwareApplication\",\"name\":\"BrewPluse Restaurant POS Software India Edition\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"Web, Android, iOS, Windows, macOS\",\"description\":\"Free cloud restaurant POS billing software engineered for Indian cafes, QSRs, and restaurants with dynamic UPI QR payments, GST invoices, thermal KOT printing, and ₹0/month software fees.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"INR\",\"description\":\"₹0/month recurring software subscription forever for Indian restaurant and cafe owners.\"},\"featureList\":[\"Dynamic UPI QR code payments (Google Pay, PhonePe, Paytm, BHIM)\",\"GST tax compliant receipts (CGST + SGST breakdown)\",\"Thermal KOT printing on standard 58mm & 80mm ESC/POS printers\",\"Contactless QR table ordering with zero customer app downloads\",\"Runs on any Android tablet, phone, laptop, or desktop PC\",\"Zero monthly software subscription fees forever\"],\"author\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\"}},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Features\",\"item\":\"https://brewpluse.com/features\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"POS India Guide\",\"item\":\"https://brewpluse.com/best-free-pos-software-india\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"What is the best free POS software for small restaurants in India?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"BrewPluse is considered the best free POS software for small restaurants and cafes in India because it charges ₹0/month software subscription fees forever, supports native dynamic UPI QR payments (GPay, PhonePe, Paytm), prints GST-compliant thermal receipts, and includes QR table ordering without requiring expensive proprietary hardware.\"}},{\"@type\":\"Question\",\"name\":\"Does BrewPluse support GST calculation on restaurant bills?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. BrewPluse includes automated GST tax engine configurations for 5% restaurant GST (2.5% CGST + 2.5% SGST) or 18% AC dining rates, generating tax-compliant itemized receipts and monthly GST summary reports.\"}},{\"@type\":\"Question\",\"name\":\"Do I need to buy expensive POS machines or touch registers?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"No. BrewPluse runs on any standard Android tablet (₹8,000–₹12,000), iPad, Windows laptop, or desktop computer using your web browser. You do not need to purchase ₹35,000+ proprietary POS terminals.\"}},{\"@type\":\"Question\",\"name\":\"How does UPI QR code billing work on customer tables and counters?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"BrewPluse generates dynamic UPI QR codes displaying the exact bill amount. Customers scan with any UPI app (Google Pay, PhonePe, Paytm, CRED) to pay instantly. The system confirms payment in real time, preventing manual cashier verification delays.\"}}]}]}" }} />
+      <div className="w-full bg-[#F7F5EC] text-[#0B1714]"><section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFFEFA] to-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto text-center"><nav className="inline-flex items-center gap-2 text-xs font-mono text-gray-500 mb-6 bg-[#FFFEFA] px-3.5 py-1.5 rounded-[8px] border border-[#DDE3DD] shadow-2xs"><a className="hover:text-[#002D23] transition-colors" href="/">Home</a><span>/</span><a className="hover:text-[#002D23] transition-colors" href="/features">Features</a><span>/</span><span className="text-[#002D23] font-bold">Free POS India</span></nav><div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#002D23]/10 border border-[#002D23]/20 text-[#002D23] font-mono text-[11px] font-bold tracking-wider uppercase mb-5"><span className="w-2 h-2 rounded-full bg-[#002D23] animate-pulse"></span>Optimized for Indian Cafes &amp; Restaurants</div><h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#0B1714] tracking-tight leading-[1.15] mb-5">Best Free POS Software for <span className="text-[#002D23] underline decoration-[#B99A5B] decoration-wavy decoration-2">Small Restaurants in India</span></h1><p className="text-base sm:text-lg text-[#64736D] max-w-3xl mx-auto leading-relaxed mb-8">Ditch expensive ₹1,500–₹3,000 monthly software retainers. BrewPluse delivers fast counter billing, dynamic UPI QR payments, GST invoices, and thermal KOT prints with <strong>₹0/month software fees</strong>.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-10"><a href="https://app.brewpluse.com/signup" className="w-full sm:w-auto px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001F19] text-[#FFFEFA] text-sm font-bold shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"><span>Start Free in India</span><span>→</span></a><a href="https://app.brewpluse.com/dashboard/demo/orders" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-4 rounded-[10px] bg-[#FFFEFA] hover:bg-[#F7F5EC] text-[#0B1714] text-sm font-semibold border border-[#DDE3DD] transition-all">Try Live Demo ↗</a></div><div className="max-w-4xl mx-auto bg-[#FFFEFA] border border-[#DDE3DD] rounded-[16px] p-6 text-left shadow-xs"><div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#002D23] mb-2"><span className="material-symbols-outlined text-[18px] text-[#B99A5B]">verified</span><span>What is the Best Free POS Software for Small Restaurants in India?</span></div><p className="text-sm sm:text-base text-[#4A5550] leading-relaxed">The <strong>best free POS software for small restaurants in India</strong> is BrewPluse. It offers a permanent ₹0/month software subscription model, native integration with Indian dynamic UPI payments (PhonePe, Google Pay, Paytm), compliant 5% GST bill formatting, and thermal kitchen order ticket (KOT) printing on any low-cost Android tablet or computer without mandatory hardware purchases.</p></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-5xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">BrewPluse vs. Traditional Indian Restaurant Billing Software</h2><p className="text-sm sm:text-base text-gray-600">Why independent cafes, dhabas, tea bars, and QSRs across Mumbai, Delhi, Bengaluru, and Pune are switching to BrewPluse.</p></div><div className="overflow-x-auto border border-[#DDE3DD] rounded-[16px] bg-[#FFFEFA] shadow-xs"><table className="w-full text-left text-sm"><thead className="bg-[#002D23] text-[#F7F5EC] font-mono text-xs uppercase tracking-wider"><tr><th className="p-4 sm:p-5">Feature</th><th className="p-4 sm:p-5 text-[#B99A5B] font-bold">BrewPluse</th><th className="p-4 sm:p-5">Petpooja / Posist</th><th className="p-4 sm:p-5">Local Offline Software</th></tr></thead><tbody className="divide-y divide-[#DDE3DD] text-[#4A5550]"><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Monthly Software Subscription</td><td className="p-4 sm:p-5 font-black text-[#002D23]">₹0 / month forever</td><td className="p-4 sm:p-5">₹1,500 – ₹3,500 / month</td><td className="p-4 sm:p-5">₹8,000 – ₹15,000 upfront + AMC</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Dynamic UPI QR Integration</td><td className="p-4 sm:p-5 font-bold text-emerald-700">✔ Included Free</td><td className="p-4 sm:p-5">Extra setup charge</td><td className="p-4 sm:p-5">Static paper standee only</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">QR Table Dine-In Ordering</td><td className="p-4 sm:p-5 font-bold text-emerald-700">✔ Built-in with Geofencing</td><td className="p-4 sm:p-5">Paid Add-on (₹500+/mo)</td><td className="p-4 sm:p-5">Not Available</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Kitchen Display System (KDS)</td><td className="p-4 sm:p-5 font-bold text-emerald-700">✔ Included Free</td><td className="p-4 sm:p-5">Paid Add-on</td><td className="p-4 sm:p-5">Not Available</td></tr><tr><td className="p-4 sm:p-5 font-bold text-[#0B1714]">Hardware Freedom</td><td className="p-4 sm:p-5 font-bold text-[#002D23]">Any phone, tablet, laptop, PC</td><td className="p-4 sm:p-5">Windows PC required</td><td className="p-4 sm:p-5">Locked to 1 single PC</td></tr></tbody></table></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><div className="text-center max-w-3xl mx-auto mb-14"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight mb-3">Engineered for the Fast-Paced Indian Food Market</h2><p className="text-sm sm:text-base text-gray-600">Designed to handle peak lunch rushes, diverse payment modes, and strict local compliance.</p></div><div className="grid grid-cols-1 md:grid-cols-4 gap-6"><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">01</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Dynamic UPI QR</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Pre-filled UPI amount prevents customers transferring ₹200 for a ₹240 bill. Instant payment confirmation on screen.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">02</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">5% GST Compliance</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Automatic 2.5% CGST and 2.5% SGST calculation on printed bills and daily Excel tax summaries for your accountant.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">03</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Thermal KOT In 1s</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Connect standard Bluetooth/USB 2-inch and 3-inch printers. Hindi and English item modifier printing supported.</p></div><div className="p-6 rounded-[16px] bg-[#FFFEFA] border border-[#DDE3DD] shadow-xs"><div className="w-10 h-10 rounded-[10px] bg-[#F7F5EC] text-[#002D23] flex items-center justify-center font-mono font-bold text-sm mb-4 border border-[#DDE3DD]">04</div><h3 className="text-lg font-bold text-[#0B1714] mb-2">Offline Cash Safety</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Wi-Fi down? No problem. Cashiers ring up counter sales and print receipts seamlessly. Syncs back when online.</p></div></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFEFA] border-b border-[#DDE3DD]"><div className="max-w-4xl mx-auto"><div className="text-center mb-12"><h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1714] tracking-tight">Frequently Asked Questions About Free POS Software in India</h2></div><div className="space-y-4"><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">What is the best free POS software for small restaurants in India?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">BrewPluse is considered the best free POS software for small restaurants and cafes in India because it charges ₹0/month software subscription fees forever, supports native dynamic UPI QR payments (GPay, PhonePe, Paytm), prints GST-compliant thermal receipts, and includes QR table ordering without requiring expensive proprietary hardware.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">Does BrewPluse support GST calculation on restaurant bills?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Yes. BrewPluse includes automated GST tax engine configurations for 5% restaurant GST (2.5% CGST + 2.5% SGST) or 18% AC dining rates, generating tax-compliant itemized receipts and monthly GST summary reports.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">Do I need to buy expensive POS machines or touch registers?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">No. BrewPluse runs on any standard Android tablet (₹8,000–₹12,000), iPad, Windows laptop, or desktop computer using your web browser. You do not need to purchase ₹35,000+ proprietary POS terminals.</p></div><div className="p-5 rounded-[16px] bg-[#F7F5EC] border border-[#DDE3DD]"><h3 className="text-base font-bold text-[#002D23] mb-2">How does UPI QR code billing work on customer tables and counters?</h3><p className="text-xs sm:text-sm text-gray-600 leading-relaxed">BrewPluse generates dynamic UPI QR codes displaying the exact bill amount. Customers scan with any UPI app (Google Pay, PhonePe, Paytm, CRED) to pay instantly. The system confirms payment in real time, preventing manual cashier verification delays.</p></div></div></div></section><section className="py-14 px-4 sm:px-6 lg:px-8 bg-[#F7F5EC] border-b border-[#DDE3DD]"><div className="max-w-6xl mx-auto"><h2 className="text-xl font-bold text-[#0B1714] mb-6 text-center sm:text-left">Related Indian Restaurant Modules</h2><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/restaurant-billing-software"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Billing Software</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Restaurant Billing →</h3><p className="text-[11px] text-gray-500">Thermal printing, UPI payments, and split checks.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/cafe-pos"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Cafe POS</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">Cafe POS System →</h3><p className="text-[11px] text-gray-500">Fast 2-tap billing for chai, coffee, and bakery items.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/qr-ordering-system"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">QR Dine-in</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">QR Table Ordering →</h3><p className="text-[11px] text-gray-500">Scan-to-order tables with instant UPI settlements.</p></a><a className="p-4 rounded-xl bg-[#FFFEFA] border border-[#DDE3DD] hover:border-[#002D23] transition-all group" href="/how-cafeflow-pricing-works"><div className="text-xs font-mono font-bold text-[#002D23] uppercase mb-1">Pricing Model</div><h3 className="text-sm font-bold text-[#0B1714] group-hover:text-[#002D23] mb-1">₹0/Mo Explained →</h3><p className="text-[11px] text-gray-500">Transparent ₹1 customer fee breakdown.</p></a></div></div></section><section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#001F19] text-white text-center"><div className="max-w-3xl mx-auto"><h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Start Your Restaurant in India with Zero Software Retainers</h2><p className="text-sm text-gray-300 max-w-lg mx-auto mb-8">Set up your menu in 5 minutes. No upfront payments, no sales rep delays. Free forever.</p><div className="flex flex-col sm:flex-row items-center justify-center gap-3.5"><a href="https://app.brewpluse.com/signup" className="px-8 py-4 rounded-[10px] bg-[#002D23] hover:bg-[#001712] border border-[#B99A5B]/30 text-[#FFFEFA] text-sm font-bold shadow-xl transition-all hover:scale-[1.02]">Launch Free Account →</a><a className="px-6 py-4 rounded-[10px] bg-white/10 hover:bg-white/15 text-[#FFFEFA] text-sm font-semibold border border-white/20 transition-all" href="/pricing">Pricing Details</a></div></div></section></div>
     </div>
   );
 }

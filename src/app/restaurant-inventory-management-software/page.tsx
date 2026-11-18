@@ -1,95 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Restaurant & Cafe Inventory Management Software | BrewPluse',
-  description:
-    'Real-time restaurant recipe inventory management: automatic raw material decrementing per dish, coffee bean and milk wastage tracking, low stock alerts, and ₹0/month software fees.',
-  alternates: {
-    canonical: 'https://brewpluse.com/restaurant-inventory-management-software',
-  },
-  openGraph: {
-    title: 'Restaurant & Cafe Inventory Management Software | BrewPluse',
-    description:
-      'Track coffee beans, dairy, packaging, and raw ingredient consumption automatically with BrewPluse Cafe POS inventory tracking.',
-    url: 'https://brewpluse.com/restaurant-inventory-management-software',
-    type: 'website',
-  },
-};
+export default function RestaurantInventoryManagementSoftwarePage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-export default function RestaurantInventoryPage() {
   return (
-    <div className="w-full bg-[#080E0B] text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient radial glow */}
-      <div className="absolute top-10 right-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        {/* Header Section */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 mb-4 shadow-sm">
-            <span>RAW MATERIAL &amp; RECIPE CONTROL</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Cafe &amp; Restaurant <span className="text-emerald-400">Inventory Management.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Stop shrinkage, track milk wastage, and automate ingredient deductions on every coffee cup and dish served—without paying thousands for complex standalone inventory ERPs.
-          </p>
-        </div>
-
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">☕</span>
-            <h3 className="text-lg font-bold text-white">Recipe-Level Deductions</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Link menu items to ingredient bills of materials (e.g. 18g specialty coffee beans + 180ml whole milk per Flat White). Raw stock decrements automatically when the order is fulfilled.
-            </p>
-          </div>
-
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">⚠️</span>
-            <h3 className="text-lg font-bold text-white">Low Stock Safety Alerts</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Set minimum reorder thresholds for high-velocity supplies like dairy, syrups, beans, and takeaway cups. Get instant dashboard warnings before you run out during rush hours.
-            </p>
-          </div>
-
-          <div className="p-7 rounded-3xl bg-[#0D1612] border border-[#1E362B] space-y-3">
-            <span className="text-3xl">📊</span>
-            <h3 className="text-lg font-bold text-white">Wastage &amp; Variance Audits</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Compare theoretical ingredient consumption against actual physical inventory counts. Identify barista spillage, prep errors, and internal shrinkage immediately.
-            </p>
-          </div>
-        </div>
-
-        {/* CTA Banner */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#14231C] to-[#0D1612] border border-emerald-500/40 text-center max-w-2xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
-            Take Control of Your Kitchen Margins Today
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            All inventory tracking tools are included in BrewPluse with ₹0/month software fees.
-          </p>
-          <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
-            <Link
-              href="/demo"
-              className="py-3.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition-all shadow-md"
-            >
-              Test Live Sandbox Demo →
-            </Link>
-            <Link
-              href="/signup"
-              className="py-3.5 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs border border-white/15 transition-all"
-            >
-              Start Free Today
-            </Link>
-          </div>
-        </div>
-
-      </div>
+    <div className="w-full bg-[#F7F5EC] text-[#0B1714]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"headline\":\"Restaurant Inventory Management Software: Real-Time Recipe & Stock Tracking\",\"description\":\"How modern cafes and restaurants automate ingredient tracking, recipe portion control, waste reduction, and real-time inventory telemetry with BrewPluse.\",\"url\":\"https://brewpluse.com/restaurant-inventory-management-software\",\"author\":{\"@type\":\"Person\",\"name\":\"Shiv Akbari\",\"url\":\"https://brewpluse.com/about\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"BrewPluse\",\"url\":\"https://brewpluse.com\",\"logo\":\"https://brewpluse.com/icon-512.png\"},\"datePublished\":\"2026-02-20T08:00:00+05:30\",\"dateModified\":\"2026-11-06T12:00:00+05:30\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://brewpluse.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Restaurant Inventory Management Software\",\"item\":\"https://brewpluse.com/restaurant-inventory-management-software\"}]},{\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"How does restaurant inventory management software work?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Restaurant inventory software connects raw ingredients to menu recipes. Whenever an order is rung up at the POS or placed via table QR code, the system automatically subtracts the exact constituent ingredients (e.g. 18g espresso beans, 200ml oat milk) from current stock balances in real time.\"}},{\"@type\":\"Question\",\"name\":\"Can BrewPluse track stock across multiple kitchen prep stations?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. BrewPluse links inventory deduction to order fulfillment, providing live stock telemetry across espresso bars, beverage counters, and hot food kitchens.\"}},{\"@type\":\"Question\",\"name\":\"Does BrewPluse alert managers when items are running low?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. BrewPluse features automated low-stock warnings that highlight ingredients reaching minimum reorder levels, preventing mid-shift stockouts.\"}}]}]}" }} />
+      <div className="bg-[#F7F5EC] text-[#0B1714] min-h-screen"><section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-b border-[#DDE3DD]"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#002D23]/10 text-[#002D23] text-xs font-semibold mb-6"><span className="material-symbols-outlined text-[16px]">inventory_2</span><span>Recipe Costing &amp; Real-Time Stock Control</span></div><h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#002D23] mb-6 leading-tight">Restaurant Inventory Management Software with Live POS &amp; KDS Sync</h1><p className="text-lg sm:text-xl text-[#4A5550] leading-relaxed mb-8">Eliminate manual inventory spreadsheets, unexpected ingredient stockouts, and food waste. BrewPluse automatically decrements raw ingredient quantities with every order punched at the POS or ordered via table QR code.</p><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-2xl p-6 shadow-sm"><h2 className="text-base font-bold text-[#002D23] uppercase tracking-wider font-mono mb-2 flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#B99A5B]"></span><span>Operational Value</span></h2><p className="text-sm text-[#4A5550] leading-relaxed">By mapping raw ingredients to menu recipes, BrewPluse gives cafe managers precise food-cost visibility, automated reorder thresholds, and zero-latency stock tracking with <strong>₹0/month software fees</strong>.</p></div></section><section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-16"><div><h2 className="text-2xl sm:text-3xl font-bold text-[#002D23] mb-6">1. Why Traditional Inventory Spreadsheets Fail During Busy Service</h2><p className="text-base text-[#4A5550] leading-relaxed mb-6">In high-volume cafes and restaurants, managing inventory manually once a week causes severe profit leaks. Portions drift, milk expires, and popular bakery items run out during peak breakfast rushes.</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6"><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl p-6"><h3 className="font-bold text-[#002D23] mb-2">Automated Recipe Mapping</h3><p className="text-sm text-[#4A5550]">Define ingredients in precise units (grams, milliliters, pieces). When a guest orders a flat white, 18g coffee beans and 160ml milk are decremented automatically.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl p-6"><h3 className="font-bold text-[#002D23] mb-2">Real-Time Low-Stock Alerts</h3><p className="text-sm text-[#4A5550]">Set threshold warnings on essential items like specialty dairy, syrups, or packaging. Receive instant alerts before you run out mid-shift.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl p-6"><h3 className="font-bold text-[#002D23] mb-2">Waste &amp; Variance Tracking</h3><p className="text-sm text-[#4A5550]">Compare theoretical ingredient usage against physical counts to pinpoint spillages, over-portioning, or unauthorized shrinkage.</p></div></div></div><div><h2 className="text-2xl sm:text-3xl font-bold text-[#002D23] mb-6">2. The Complete Recipe-to-KDS Feedback Loop</h2><ol className="space-y-4 text-base text-[#4A5550]"><li className="p-4 bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl"><strong className="text-[#002D23] block mb-1">Step 1: Ingredient Configuration</strong>Enter your master ingredient list (e.g. Colombian Espresso Roast, Oat Milk, Sourdough Bread, Butter) with wholesale purchase costs and unit measurements.</li><li className="p-4 bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl"><strong className="text-[#002D23] block mb-1">Step 2: Recipe Assembly</strong>Attach ingredient quantities to menu items and modifier options (e.g. &quot;Almond Milk Swap&quot; decrements 180ml almond milk instead of whole milk).</li><li className="p-4 bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl"><strong className="text-[#002D23] block mb-1">Step 3: Instant Live Decrementing</strong>As orders fire to the Kitchen Display System (KDS) or print at the POS counter, inventory balances update immediately across all devices.</li></ol></div><div className="bg-[#002D23] text-[#F7F5EC] rounded-2xl p-8 sm:p-10"><h2 className="text-2xl sm:text-3xl font-bold mb-4">Zero Monthly Fees for Enterprise-Grade Inventory</h2><p className="text-sm sm:text-base text-[#DDE3DD] leading-relaxed mb-6">Unlike legacy POS companies that charge an extra ₹2,000–₹4,000/month just to unlock inventory tracking, BrewPluse includes recipe-level inventory control in its <strong>₹0/month software subscription</strong>.</p><div className="flex flex-col sm:flex-row gap-4"><a href="https://app.brewpluse.com/signup" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#B99A5B] text-[#002D23] font-bold hover:bg-[#d3b677] transition-all">Start Free Cafe Account →</a><a className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all" href="/kitchen-display-system">Explore Kitchen Display System</a></div></div><div><h2 className="text-2xl sm:text-3xl font-bold text-[#002D23] mb-6">Frequently Asked Questions</h2><div className="space-y-4"><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl p-6"><h3 className="font-bold text-[#002D23] mb-2">Can I manage inventory across multiple cafe locations?</h3><p className="text-sm text-[#4A5550]">Yes. BrewPluse supports multi-outlet centralized management, allowing owners to view inventory levels and consumption rates for each branch from one login.</p></div><div className="bg-[#FFFEFA] border border-[#DDE3DD] rounded-xl p-6"><h3 className="font-bold text-[#002D23] mb-2">Does the system handle modifier add-ons like extra espresso shots?</h3><p className="text-sm text-[#4A5550]">Yes. When a customer adds an extra espresso shot or custom syrup, BrewPluse deducts the precise additional ingredient grammage from inventory.</p></div></div></div></section></div>
     </div>
   );
 }
