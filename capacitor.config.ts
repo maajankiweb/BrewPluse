@@ -2,8 +2,8 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.brewpluse.pos',
-  appName: 'BrewPluse POS',
-  webDir: 'out',
+  appName: 'BrewPluse',
+  webDir: 'android/app/src/main/assets/public',
   server: {
     androidScheme: 'https',
     cleartext: true
