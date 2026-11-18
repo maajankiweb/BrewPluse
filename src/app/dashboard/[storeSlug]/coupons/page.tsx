@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import DashboardShell from '@/components/dashboard/DashboardShell';
 import {
@@ -14,6 +14,11 @@ import {
   Trash2,
   Calendar,
   CheckCircle2,
+  MessageCircle,
+  Copy,
+  Check,
+  Share2,
+  ExternalLink,
 } from 'lucide-react';
 
 interface PromoCampaign {
@@ -86,6 +91,72 @@ export default function CouponsPage() {
   // Active Promo Campaigns
   const [campaigns, setCampaigns] = useState<PromoCampaign[]>([]);
 
+  // WhatsApp Offer Broadcast & Smart Profile State
+  const [smartConfig, setSmartConfig] = useState<any>(null);
+  const [justCreatedCampaign, setJustCreatedCampaign] = useState<PromoCampaign | null>(null);
+  const [copiedCampId, setCopiedCampId] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(`brewpluse::smart_links_${storeSlug.toLowerCase()}`);
+      if (stored) {
+        setSmartConfig(JSON.parse(stored));
+      } else {
+        const gen = localStorage.getItem('brewpluse::store_profile');
+        if (gen) setSmartConfig(JSON.parse(gen));
+      }
+    } catch (e) {}
+  }, [storeSlug]);
+
+  const getOfferWhatsAppMessage = (camp: PromoCampaign) => {
+    const cafeName = smartConfig?.cafeName || smartConfig?.name || cafeDisplayName;
+    const cleanPhone = (smartConfig?.whatsappNumber || smartConfig?.phone || '').replace(/[^0-9]/g, '');
+    const discountText =
+      camp.rateType === 'percent'
+        ? `${camp.discountValue}% OFF`
+        : `FLAT ₹${camp.discountValue} OFF`;
+
+    const conditionText = camp.minOrder ? `\n• Minimum Order: ₹${camp.minOrder}` : '';
+    const capText = camp.maxDiscount ? `\n• Max Discount: ₹${camp.maxDiscount}` : '';
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://brewpluse.com';
+    const menuLink = smartConfig?.menuUrl || `${origin}/m/${storeSlug}`;
+    const appLink = smartConfig?.appDownloadUrl || `${origin}/download?store=${storeSlug}`;
+    const waLink = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
+
+    return `🔥 *Special Offer from ${cafeName}!* ☕✨
+
+Enjoy a special discount on your favorite coffee, bakes & dishes!
+
+🎁 *Offer:* ${discountText}
+🎟️ *Coupon Code:* *${camp.code}*${conditionText}${capText}
+
+👉 *Order Online / View Live Menu:*
+${menuLink}
+
+📱 *Download our Customer App for Secret Rewards:*
+${appLink}
+${waLink ? `\n💬 *Table Bookings & Inquiries (WhatsApp):*\n${waLink}` : ''}
+
+_Hurry, offer valid for a limited time! Share with friends & family._`;
+  };
+
+  const handleShareWhatsApp = (camp: PromoCampaign) => {
+    const text = getOfferWhatsAppMessage(camp);
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank');
+    }
+  };
+
+  const handleCopyOfferText = (camp: PromoCampaign) => {
+    const text = getOfferWhatsAppMessage(camp);
+    if (typeof navigator !== 'undefined') {
+      navigator.clipboard.writeText(text);
+      setCopiedCampId(camp.id);
+      setTimeout(() => setCopiedCampId(null), 2500);
+    }
+  };
+
   // --- TAB 2: LOYALTY MILESTONES STATE ---
   const [loyaltyEnabled, setLoyaltyEnabled] = useState(false);
   const [milestoneOrdersRequired, setMilestoneOrdersRequired] = useState<number>(2);
@@ -147,6 +218,7 @@ export default function CouponsPage() {
     };
 
     setCampaigns([newCampaign, ...campaigns]);
+    setJustCreatedCampaign(newCampaign);
     setCampaignName('');
     setCouponCode('');
     setDiscountValue(10);
@@ -326,6 +398,71 @@ export default function CouponsPage() {
             {/* TAB 1: COUPONS & COMBOS */}
             {activeTab === 'coupons' && (
               <>
+                {/* WHATSAPP BROADCAST BANNER FOR CREATED CAMPAIGN */}
+                {justCreatedCampaign && (
+                  <div className="rounded-2xl border-2 border-[#25D366]/40 bg-[#25D366]/5 dark:bg-[#25D366]/10 p-4 space-y-3 shadow-md animate-in fade-in duration-300">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-xl bg-[#25D366] text-white flex items-center justify-center shadow-xs">
+                          <MessageCircle className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-black text-neutral-900 dark:text-white uppercase tracking-wider">
+                            Offer Ready to Share on WhatsApp!
+                          </h4>
+                          <p className="text-[11px] text-neutral-600 dark:text-zinc-300">
+                            Campaign <strong>{justCreatedCampaign.name}</strong> ({justCreatedCampaign.code}) is live.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setJustCreatedCampaign(null)}
+                        className="text-neutral-400 hover:text-neutral-700 dark:hover:text-white text-xs font-bold cursor-pointer"
+                      >
+                        ✕ Close
+                      </button>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-[#25D366]/20 font-mono text-[11px] text-neutral-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed max-h-36 overflow-y-auto">
+                      {getOfferWhatsAppMessage(justCreatedCampaign)}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => handleShareWhatsApp(justCreatedCampaign)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold shadow-xs transition cursor-pointer"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        <span>Send via WhatsApp</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleCopyOfferText(justCreatedCampaign)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-neutral-800 dark:text-white text-xs font-bold hover:bg-neutral-50 transition cursor-pointer"
+                      >
+                        {copiedCampId === justCreatedCampaign.id ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-600" />
+                            <span>Copied to Clipboard!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 text-neutral-600" />
+                            <span>Copy Offer Text</span>
+                          </>
+                        )}
+                      </button>
+
+                      <span className="text-[10px] text-neutral-500 pl-1">
+                        Forward to customer groups &amp; broadcast lists
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Form Card */}
                 <div className="rounded-xl border border-[#E7ECE9] dark:border-white/10 bg-white dark:bg-[#121c16] p-3.5 sm:p-4 md:p-4.5 shadow-xs space-y-3.5">
                   <div className="flex items-center justify-between pb-2.5 border-b border-neutral-100 dark:border-white/5">
@@ -672,7 +809,34 @@ export default function CouponsPage() {
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                          <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0 flex-wrap">
+                            <button
+                              type="button"
+                              onClick={() => handleCopyOfferText(camp)}
+                              className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg border border-[#E7ECE9] dark:border-white/10 bg-white dark:bg-zinc-800 hover:bg-neutral-50 text-neutral-700 dark:text-zinc-300 cursor-pointer"
+                              title="Copy promo message to clipboard"
+                            >
+                              {copiedCampId === camp.id ? (
+                                <>
+                                  <Check className="w-3 h-3 text-emerald-600" />
+                                  <span className="text-emerald-600">Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-3 h-3 text-neutral-500" />
+                                  <span>Copy</span>
+                                </>
+                              )}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleShareWhatsApp(camp)}
+                              className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white cursor-pointer shadow-2xs transition-colors"
+                              title="Broadcast this offer to customer WhatsApp groups"
+                            >
+                              <MessageCircle className="w-3 h-3" />
+                              <span>WhatsApp</span>
+                            </button>
                             <button
                               type="button"
                               onClick={() => handleToggleCampaign(camp.id)}

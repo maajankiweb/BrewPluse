@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import {
   Coffee,
@@ -700,9 +701,37 @@ export default function CustomerQrOrderingPage() {
               <p className="text-[10.5px] text-white/70">Food will be served directly to your table</p>
             </div>
           </div>
-          <span className="text-[10px] font-mono text-emerald-300 font-bold bg-white/10 px-2.5 py-1 rounded-full">
-            ₹0 APP DOWNLOAD
-          </span>
+          <Link
+            href={`/download?store=${encodeURIComponent(storeSlug)}&table=${encodeURIComponent(selectedTable || tableParam)}`}
+            className="text-[10px] font-mono text-emerald-300 hover:text-white font-bold bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-full transition flex items-center gap-1 shrink-0"
+          >
+            <span>📱 GET APP</span>
+          </Link>
+        </div>
+
+        {/* Customer App & Hub Quick Pill */}
+        <div className="bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-amber-500/10 border border-amber-500/20 rounded-2xl p-2.5 px-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm">📱</span>
+            <div className="text-[11px] leading-tight">
+              <span className="font-bold text-[#141210] capitalize">{storeSlug.replace(/-/g, ' ')} App</span>
+              <span className="text-neutral-500 block text-[10px]">Faster table ordering &amp; secret perks</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Link
+              href={`/hub/${encodeURIComponent(storeSlug)}?table=${encodeURIComponent(selectedTable || tableParam)}`}
+              className="px-2 py-1 rounded-xl bg-white border border-[#DDE3DD] text-[#002D23] font-bold text-[10px] hover:bg-neutral-50 transition shadow-2xs"
+            >
+              Bio Hub
+            </Link>
+            <Link
+              href={`/download?store=${encodeURIComponent(storeSlug)}&table=${encodeURIComponent(selectedTable || tableParam)}`}
+              className="px-2.5 py-1 rounded-xl bg-[#002D23] hover:bg-black text-white font-bold text-[10px] transition shadow-xs"
+            >
+              Get App →
+            </Link>
+          </div>
         </div>
 
         {/* Loyalty Visit Milestones Card */}

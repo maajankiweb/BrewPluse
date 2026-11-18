@@ -17,6 +17,7 @@ import {
   Search,
   Lock,
   Globe2,
+  Sparkles,
 } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
 import GlobalSetupModal from '@/components/GlobalSetupModal';
@@ -39,13 +40,19 @@ export default function SettingsHubPage() {
 
   const settingsItems = [
     {
-      category: 'BUSINESS',
+      category: 'BUSINESS & BIO-LINK',
       items: [
         {
           title: 'Business Profile',
           desc: 'Cafe identity, branding & store address',
           icon: Building2,
           href: `${basePath}/settings/business-profile`,
+        },
+        {
+          title: 'Smart Bio-Link & SuperProfile',
+          desc: 'App download link, Google reviews, WhatsApp, Menu & Instagram bio hub',
+          icon: Sparkles,
+          href: `${basePath}/settings/smart-links`,
         },
       ],
     },

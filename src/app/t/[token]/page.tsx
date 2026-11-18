@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import {
   Coffee,
@@ -12,6 +13,8 @@ import {
   RefreshCw,
   Store as StoreIcon,
   UtensilsCrossed,
+  Download,
+  Smartphone,
 } from 'lucide-react';
 
 interface TableData {
@@ -175,12 +178,21 @@ export default function TableLandingPage() {
               // Navigates to the interactive menu for this table
               router.push(`/t/${token}/menu`);
             }}
-            className="w-full py-4 px-6 rounded-2xl bg-[#062F23] hover:bg-[#0B5C45] text-white font-bold text-sm transition-all shadow-lg shadow-emerald-950/20 flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98]"
+            className="w-full py-4 px-6 rounded-2xl bg-[#062F23] hover:bg-[#0B5C45] text-white font-bold text-sm transition-all shadow-lg shadow-emerald-950/20 flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98] mb-3"
           >
             <UtensilsCrossed className="w-4 h-4 text-emerald-400 group-hover:rotate-12 transition-transform" />
             <span>Browse Full Menu &amp; Order</span>
             <ArrowRight className="w-4 h-4 text-emerald-300 group-hover:translate-x-1 transition-transform" />
           </button>
+
+          {/* App Download Link for Table */}
+          <Link
+            href={`/download?store=${encodeURIComponent(store.slug)}&table=${encodeURIComponent(table.number)}`}
+            className="w-full py-3 px-4 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100 border border-emerald-200/60 text-[#062F23] font-bold text-xs transition-all flex items-center justify-center gap-2"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Prefer using an app? Download {store.name} App</span>
+          </Link>
         </div>
 
         {/* Security / Quality guarantee badge */}
