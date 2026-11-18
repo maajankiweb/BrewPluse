@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#002D23">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>BrewPluse - Cafe & Dining</title>
+  
+  <link rel="icon" type="image/svg+xml" href="brewpluse-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols-Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    :root {
+      --brand-primary: #002D23;
+      --brand-dark: #001F19;
+      --brand-accent: #B99A5B;
+      --brand-emerald: #10B981;
+      --bg-canvas: #F7F5EC;
+      --bg-card: #FFFEFA;
+      --border-color: #DDE3DD;
+      --border-subtle: #EBECE7;
+      --text-main: #0B1714;
+      --text-muted: #64736D;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,45,35,0.06);
+      --shadow-lg: 0 10px 28px rgba(0,45,35,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      user-select: none;
+      padding-bottom: 74px; /* Space for Bottom Nav */
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+    /* =========================================================
+       1. SPLASH SCREEN
+       ========================================================= */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--brand-primary);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #splash-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .splash-bg-image {
+      position: absolute;
+      inset: 0;
+      background: url('storefront.png') center/cover no-repeat;
+      opacity: 0.22;
+      filter: blur(4px) saturate(1.2);
+      transform: scale(1.05);
+      animation: zoomSlow 10s ease-in-out infinite alternate;
+    }
+    @keyframes zoomSlow {
+      0% { transform: scale(1.02); }
+      100% { transform: scale(1.10); }
+    }
+    .splash-card {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .splash-logo-wrap {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .splash-glow {
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(185, 154, 91, 0.4) 0%, rgba(0, 45, 35, 0) 70%);
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    .splash-logo-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 22px;
+      background: #FFFFFF;
+      padding: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 2;
+    }
+    .splash-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+    .splash-title span { color: var(--brand-accent); }
+    .splash-sub {
+      font-size: 13px;
+      color: #A3BFB0;
+      margin-top: 6px;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+    .splash-bar {
+      width: 140px;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .splash-progress {
+      position: absolute;
+      top: 0; left: 0; height: 100%; width: 45%;
+      background: var(--brand-accent);
+      border-radius: 4px;
+      animation: splashSlide 1.2s infinite ease-in-out;
+    }
+    @keyframes splashSlide {
+      0% { left: -45%; }
+      100% { left: 100%; }
+    }
+
+    /* =========================================================
+       2. TOP APP BAR
+       ========================================================= */
+    .top-app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 254, 250, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .app-icon-mini {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--brand-primary);
+      border: 1px solid rgba(185, 154, 91, 0.3);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .app-icon-mini img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .cafe-header-meta {
+      display: flex;
+      flex-direction: column;
+    }
+    .cafe-name-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: -0.01em;
+    }
+    .cafe-location-pill {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .cafe-location-pill:hover {
+      color: var(--brand-primary);
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-badge-btn {
+      background: rgba(0, 45, 35, 0.08);
+      color: var(--brand-primary);
+      border: 1px solid rgba(0, 45, 35, 0.15);
+      border-radius: var(--radius-full);
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .table-badge-btn:active {
+      transform: scale(0.96);
+      background: var(--brand-primary);
+      color: #FFFFFF;
+    }
+    .top-cart-icon-btn {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-primary);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+    .cart-bubble {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--brand-emerald);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+      border: 2px solid #FFFFFF;
+    }
+
+    /* =========================================================
+       3. BOTTOM NAVIGATION BAR
+       ========================================================= */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(255, 254, 250, 0.98);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border-color);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      height: 100%;
+      transition: all 0.2s ease;
+      gap: 3px;
+    }
+    .nav-btn.active {
+      color: var(--brand-primary);
+    }
+    .nav-btn .material-symbols-outlined {
+      font-size: 22px;
+      transition: transform 0.2s ease;
+    }
+    .nav-btn.active .material-symbols-outlined {
+      transform: translateY(-2px);
+      font-variation-settings: 'FILL' 1;
+      color: var(--brand-primary);
+    }
+    .nav-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .nav-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--brand-accent);
+      position: absolute;
+      bottom: 4px;
+      display: none;
+    }
+    .nav-btn.active .nav-dot {
+      display: block;
+    }
+
+    /* =========================================================
+       4. TAB SCREENS (Single Page Application Containers)
+       ========================================================= */
+    .tab-screen {
+      display: none;
+      flex-direction: column;
+      padding: 16px;
+      max-width: 540px;
+      margin: 0 auto;
+      width: 100%;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .tab-screen.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------------------------------------------------------
+       TAB 1: HOME
+       --------------------------------------------------------- */
+    .storefront-hero {
+      position: relative;
+      height: 200px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+    }
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,45,35,0.1) 0%, rgba(0,31,25,0.92) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+    }
+    .hero-status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .hero-badge-open {
+      background: rgba(16, 185, 129, 0.25);
+      color: #34D399;
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hero-badge-rating {
+      background: rgba(185, 154, 91, 0.3);
+      color: #FDE68A;
+      border: 1px solid rgba(185, 154, 91, 0.4);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .hero-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+    .hero-subtitle {
+      font-size: 12px;
+      color: #DDE3DD;
+      margin-top: 4px;
+    }
+
+    /* Fast Action Bar */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .quick-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .quick-btn:active {
+      transform: scale(0.95);
+      border-color: var(--brand-primary);
+    }
+    .quick-btn .icon-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(0, 45, 35, 0.08);
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quick-btn span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Active Kitchen Tracker Notification Card on Home */
+    #home-active-ticket-banner {
+      display: none;
+      background: linear-gradient(135deg, var(--brand-primary) 0%, #004436 100%);
+      border: 1px solid var(--brand-accent);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      color: #FFFFFF;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      animation: pulseBorder 3s infinite ease-in-out;
+    }
+    @keyframes pulseBorder {
+      0%, 100% { border-color: rgba(185, 154, 91, 0.5); }
+      50% { border-color: rgba(185, 154, 91, 1); }
+    }
+    .banner-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .banner-badge {
+      background: rgba(16, 185, 129, 0.25);
+      color: #34D399;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .banner-timer {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #FDE68A;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .banner-msg {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .banner-sub {
+      font-size: 11px;
+      color: #A3BFB0;
+      margin-top: 2px;
+    }
+
+    /* Section Headings */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      margin-top: 6px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-link {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-primary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Horizontal Carousel Cards */
+    .bestseller-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+    }
+    .carousel-card {
+      min-width: 170px;
+      max-width: 170px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .card-thumb {
+      height: 110px;
+      background: #E5E0D5;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .veg-dot-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 16px;
+      height: 16px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .veg-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+    }
+    .non-veg-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+    }
+    .card-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+      flex: 1;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .card-price {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .card-add-btn {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .card-add-btn:active {
+      transform: scale(0.92);
+      background: var(--brand-dark);
+    }
+
+    /* ---------------------------------------------------------
+       TAB 2: MENU (Browse & Search)
+       --------------------------------------------------------- */
+    .menu-search-wrap {
+      position: sticky;
+      top: 57px;
+      z-index: 50;
+      background: var(--bg-canvas);
+      padding: 4px 0 10px 0;
+    }
+    .search-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+    .filter-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .filter-pill {
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .filter-pill.active {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      border-color: var(--brand-primary);
+    }
+
+    /* Category Navigation */
+    .category-tabs-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-bottom: 14px;
+      padding-bottom: 4px;
+    }
+    .cat-tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cat-tab-btn.active {
+      color: var(--brand-primary);
+      background: rgba(0, 45, 35, 0.08);
+    }
+
+    /* Menu Vertical List */
+    .menu-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .menu-item-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .item-img-box {
+      width: 86px;
+      height: 86px;
+      border-radius: var(--radius-sm);
+      background: #ECE7DD;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .item-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .item-info-col {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .item-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .item-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 3px 0 6px 0;
+      line-height: 1.3;
+    }
+    .item-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .item-price {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .item-customizable-tag {
+      font-size: 10px;
+      color: var(--brand-accent);
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    /* Counter Stepper */
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      background: var(--brand-primary);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .stepper-btn {
+      background: transparent;
+      border: none;
+      color: #FFFFFF;
+      padding: 4px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .stepper-val {
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 0 4px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* ---------------------------------------------------------
+       TAB 3: KITCHEN (Live KDS & Tracking)
+       --------------------------------------------------------- */
+    .kitchen-hero-card {
+      background: var(--brand-primary);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .kitchen-hero-card::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      bottom: -20px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(185, 154, 91, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .kds-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .kds-title {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kds-sound-toggle {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-full);
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Step Progress Stepper */
+    .kds-stepper-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .step-node-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 18px;
+    }
+    .step-node-row:last-child {
+      padding-bottom: 0;
+    }
+    .step-node-row::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 28px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-color);
+    }
+    .step-node-row:last-child::before {
+      display: none;
+    }
+    .step-node-row.done::before {
+      background: var(--brand-emerald);
+    }
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--border-subtle);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .step-node-row.active .step-circle {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(0, 45, 35, 0.15);
+      animation: pulseStep 2s infinite;
+    }
+    @keyframes pulseStep {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .step-node-row.done .step-circle {
+      background: var(--brand-emerald);
+      color: #FFFFFF;
+    }
+    .step-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .step-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .step-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .step-time {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--brand-accent);
+      font-weight: 700;
+    }
+
+    /* Live Kitchen Queue Tickets */
+    .kds-ticket-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .ticket-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .ticket-no {
+      font-size: 13px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--brand-primary);
+    }
+    .ticket-table-chip {
+      background: rgba(0, 45, 35, 0.08);
+      color: var(--brand-primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+    .ticket-item-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      color: var(--text-main);
+    }
+
+    /* ---------------------------------------------------------
+       TAB 4: CART & CHECKOUT
+       --------------------------------------------------------- */
+    .cart-section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .order-type-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-canvas);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 12px;
+    }
+    .switch-option-btn {
+      border: none;
+      background: transparent;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .switch-option-btn.active {
+      background: #FFFFFF;
+      color: var(--brand-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Table Selection Pills */
+    .table-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-top: 6px;
+    }
+    .tbl-pill {
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tbl-pill.active {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      border-color: var(--brand-primary);
+    }
+
+    /* Bill Breakdown */
+    .bill-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      color: var(--text-muted);
+    }
+    .bill-row.total {
+      border-top: 1px dashed var(--border-color);
+      margin-top: 6px;
+      padding-top: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .platform-fee-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--brand-emerald);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 4px;
+    }
+
+    /* Payment Methods */
+    .pay-methods-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .pay-option-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: #FFFFFF;
+      transition: all 0.2s;
+    }
+    .pay-option-card.selected {
+      border-color: var(--brand-primary);
+      background: rgba(0, 45, 35, 0.04);
+    }
+    .pay-option-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pay-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(0, 45, 35, 0.08);
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Place Order CTA */
+    .checkout-cta-btn {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 45, 35, 0.25);
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .checkout-cta-btn:active {
+      transform: scale(0.98);
+      background: var(--brand-dark);
+    }
+
+    /* ---------------------------------------------------------
+       TAB 5: EXPLORE (Public Website Features)
+       --------------------------------------------------------- */
+    .explore-feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-tag {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--brand-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .feature-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .feature-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .accordion-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .accordion-header {
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .accordion-body {
+      display: none;
+      padding: 0 14px 12px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .accordion-item.open .accordion-body {
+      display: block;
+    }
+
+    /* =========================================================
+       MODALS & SHEETS
+       ========================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .bottom-sheet {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-width: 540px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px 18px 30px 18px;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.25);
+      animation: sheetSlideUp 0.25s ease-out;
+    }
+    @keyframes sheetSlideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: var(--radius-full);
+      margin: 0 auto 16px auto;
+    }
+
+    /* Toast Notification */
+    #toast-msg {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0B1714;
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    #toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       1. SPLASH SCREEN
+       ========================================================= -->
+  <div id="splash-screen">
+    <div class="splash-bg-image"></div>
+    <div class="splash-card">
+      <div class="splash-logo-wrap">
+        <div class="splash-glow"></div>
+        <img src="brewpluse-icon.svg" alt="BrewPluse" class="splash-logo-img">
+      </div>
+      <div class="splash-title">Brew<span>Pluse</span></div>
+      <div class="splash-sub">Handcrafted Coffee &amp; Artisan Dining</div>
+      <div class="splash-bar">
+        <div class="splash-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       2. TOP APP BAR
+       ========================================================= -->
+  <header class="top-app-bar">
+    <div class="top-left">
+      <div class="app-icon-mini">
+        <img src="brewpluse-icon.svg" alt="BrewPluse">
+      </div>
+      <div class="cafe-header-meta">
+        <div class="cafe-name-title">
+          <span>BrewPluse Roastery</span>
+          <span class="material-symbols-outlined" style="font-size:16px; color:#10B981;">verified</span>
+        </div>
+        <div class="cafe-location-pill" onclick="openTableModal()">
+          <span class="material-symbols-outlined" style="font-size:13px;">location_on</span>
+          <span id="top-table-label">Table 04 · Dine-In</span>
+          <span class="material-symbols-outlined" style="font-size:14px;">expand_more</span>
+        </div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="table-badge-btn" onclick="openTableModal()">
+        <span class="material-symbols-outlined" style="font-size:14px;">table_restaurant</span>
+        <span id="top-badge-text">T-04</span>
+      </button>
+      <div class="top-cart-icon-btn" onclick="switchTab('cart')">
+        <span class="material-symbols-outlined" style="font-size:20px;">shopping_bag</span>
+        <span class="cart-bubble" id="top-cart-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       3. MAIN CONTAINER WITH 5 APP TABS
+       ========================================================= -->
+
+  <!-- TAB 1: HOME -->
+  <main class="tab-screen active" id="tab-home">
+    <!-- Storefront Showcase -->
+    <div class="storefront-hero">
+      <img src="storefront.png" alt="BrewPluse Cafe" class="hero-img">
+      <div class="hero-gradient">
+        <div class="hero-status-row">
+          <span class="hero-badge-open">
+            <span style="width:6px; height:6px; border-radius:50%; background:#34D399; display:inline-block;"></span>
+            Open Now · Closes 11:00 PM
+          </span>
+          <span class="hero-badge-rating">
+            <span class="material-symbols-outlined" style="font-size:12px;">star</span>
+            4.9 (1.2k+ Reviews)
+          </span>
+        </div>
+        <div class="hero-title">Freshly Roasted &amp; Handcrafted Everyday</div>
+        <div class="hero-subtitle">Single-origin beans, artisanal sourdough pastries &amp; gourmet brunch.</div>
+      </div>
+    </div>
+
+    <!-- Active Kitchen Ticket Floating Banner (Shown if order placed) -->
+    <div id="home-active-ticket-banner" onclick="switchTab('kitchen')">
+      <div class="banner-top-row">
+        <span class="banner-badge">
+          <span class="material-symbols-outlined" style="font-size:12px;">restaurant</span>
+          <span id="home-banner-status">Kitchen Preparing</span>
+        </span>
+        <span class="banner-timer" id="home-banner-timer">
+          <span class="material-symbols-outlined" style="font-size:13px;">schedule</span>
+          <span>~8 mins left</span>
+        </span>
+      </div>
+      <div class="banner-msg">
+        <span class="material-symbols-outlined" style="font-size:18px; color:#FDE68A;">skillet</span>
+        <span id="home-banner-text">Order #BP-1048 is on the grill!</span>
+      </div>
+      <div class="banner-sub">Tap to view live kitchen progress &rarr;</div>
+    </div>
+
+    <!-- Fast Action Buttons -->
+    <div class="quick-actions-grid">
+      <button class="quick-btn" onclick="openTableModal()">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">qr_code_scanner</span>
+        </div>
+        <span>Scan Table</span>
+      </button>
+      <button class="quick-btn" onclick="switchDiningMode('dine_in')">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">table_bar</span>
+        </div>
+        <span>Dine-In</span>
+      </button>
+      <button class="quick-btn" onclick="switchDiningMode('takeaway')">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">takeout_dining</span>
+        </div>
+        <span>Takeaway</span>
+      </button>
+      <button class="quick-btn" onclick="callWaiter()">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">room_service</span>
+        </div>
+        <span>Call Waiter</span>
+      </button>
+    </div>
+
+    <!-- Popular Brews Section -->
+    <div class="section-header">
+      <div class="section-title">
+        <span class="material-symbols-outlined" style="color:var(--brand-accent); font-size:20px;">local_fire_department</span>
+        <span>Popular Brews &amp; Specials</span>
+      </div>
+      <span class="section-link" onclick="switchTab('menu')">View All &rarr;</span>
+    </div>
+
+    <!-- Horizontal Carousel -->
+    <div class="bestseller-scroll" id="home-bestsellers-row">
+      <!-- Populated via JS -->
+    </div>
+
+    <!-- Chef's Recommendation Banner -->
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:18px; box-shadow:var(--shadow-sm);">
+      <div style="width:48px; height:48px; border-radius:12px; background:rgba(185, 154, 91, 0.15); color:var(--brand-accent); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <span class="material-symbols-outlined" style="font-size:26px;">recommend</span>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:13px; font-weight:800; color:var(--text-main);">Try Our Signature Tiramisu Latte</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Layered espresso, mascarpone foam &amp; cocoa dust.</div>
+      </div>
+      <button class="card-add-btn" onclick="addDirectToCart('item-1')">+ Add</button>
+    </div>
+
+    <!-- Explore Menu CTA Button -->
+    <button class="checkout-cta-btn" onclick="switchTab('menu')" style="margin-top:6px;">
+      <span style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span>Browse Complete 2026 Menu</span>
+      </span>
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </main>
+
+  <!-- TAB 2: MENU -->
+  <main class="tab-screen" id="tab-menu">
+    <!-- Sticky Search -->
+    <div class="menu-search-wrap">
+      <div class="search-box">
+        <span class="material-symbols-outlined" style="color:var(--text-muted); font-size:20px;">search</span>
+        <input type="text" id="menu-search-input" placeholder="Search coffee, tea, croissants, brunch..." oninput="handleMenuSearch(this.value)">
+        <span class="material-symbols-outlined" id="search-clear-btn" style="color:var(--text-muted); font-size:18px; cursor:pointer; display:none;" onclick="clearSearch()">close</span>
+      </div>
+      <div class="filter-pills-row">
+        <button class="filter-pill active" onclick="setDietFilter('all', this)">All</button>
+        <button class="filter-pill" onclick="setDietFilter('veg', this)">
+          <span class="veg-dot" style="display:inline-block;"></span> Veg Only
+        </button>
+        <button class="filter-pill" onclick="setDietFilter('nonveg', this)">
+          <span class="non-veg-dot" style="display:inline-block;"></span> Non-Veg
+        </button>
+        <button class="filter-pill" onclick="setDietFilter('bestseller', this)">
+          <span class="material-symbols-outlined" style="font-size:14px; color:var(--brand-accent);">star</span> Bestsellers
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Pills Bar -->
+    <div class="category-tabs-bar" id="category-tabs-row">
+      <button class="cat-tab-btn active" onclick="setCategory('all', this)">All Items</button>
+      <button class="cat-tab-btn" onclick="setCategory('hot_coffee', this)">☕ Hot Coffee</button>
+      <button class="cat-tab-btn" onclick="setCategory('cold_coffee', this)">🧊 Cold Brews</button>
+      <button class="cat-tab-btn" onclick="setCategory('tea', this)">🍵 Artisanal Teas</button>
+      <button class="cat-tab-btn" onclick="setCategory('bakery', this)">🥐 Bakery</button>
+      <button class="cat-tab-btn" onclick="setCategory('brunch', this)">🥪 Brunch &amp; Bites</button>
+      <button class="cat-tab-btn" onclick="setCategory('dessert', this)">🍰 Desserts</button>
+    </div>
+
+    <!-- Menu Items List -->
+    <div class="menu-items-list" id="menu-items-container">
+      <!-- Populated via JS -->
+    </div>
+  </main>
+
+  <!-- TAB 3: KITCHEN (Live KDS & Tracker) -->
+  <main class="tab-screen" id="tab-kitchen">
+    <div class="kitchen-hero-card">
+      <div class="kds-header-row">
+        <div class="kds-title">
+          <span class="material-symbols-outlined" style="color:var(--brand-accent);">skillet</span>
+          <span>Live Kitchen Display</span>
+        </div>
+        <button class="kds-sound-toggle" onclick="toggleChimeAudio()">
+          <span class="material-symbols-outlined" id="kds-sound-icon" style="font-size:14px;">volume_up</span>
+          <span id="kds-sound-label">Kitchen Chime On</span>
+        </button>
+      </div>
+      <div style="font-size:12px; color:#DDE3DD; line-height:1.4;">
+        Real-time kitchen telemetry. Watch your coffee roast, sourdough toasts &amp; dishes prepared fresh from the kitchen grill.
+      </div>
+    </div>
+
+    <!-- Active Ticket Progress -->
+    <div id="kitchen-active-tracker-wrap">
+      <div class="section-title" style="margin-bottom:10px;">
+        <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">countertops</span>
+        <span>Your Active Order Status</span>
+      </div>
+
+      <div class="kds-stepper-box">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px dashed var(--border-color); padding-bottom:8px;">
+          <div>
+            <span style="font-size:11px; color:var(--text-muted);">Ticket No.</span>
+            <div style="font-size:14px; font-weight:800; font-family:'JetBrains Mono', monospace; color:var(--brand-primary);" id="kds-ticket-number">#BP-1048</div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:11px; color:var(--text-muted);">Dining Table</span>
+            <div style="font-size:13px; font-weight:700; color:var(--text-main);" id="kds-ticket-table">Table 04</div>
+          </div>
+        </div>
+
+        <!-- 4 Step Tracker -->
+        <div class="step-node-row done" id="step-node-1">
+          <div class="step-circle"><span class="material-symbols-outlined" style="font-size:16px;">receipt_long</span></div>
+          <div class="step-info">
+            <div class="step-title">Order Received</div>
+            <div class="step-desc">Order verified and ticket routed to kitchen KDS.</div>
+            <div class="step-time" id="step-time-1">Just now</div>
+          </div>
+        </div>
+
+        <div class="step-node-row active" id="step-node-2">
+          <div class="step-circle"><span class="material-symbols-outlined" style="font-size:16px;">skillet</span></div>
+          <div class="step-info">
+            <div class="step-title">Kitchen Preparing</div>
+            <div class="step-desc">Barista pulling espresso shots &amp; chef grilling.</div>
+            <div class="step-time" id="step-time-2">In progress · ~6 mins</div>
+          </div>
+        </div>
+
+        <div class="step-node-row" id="step-node-3">
+          <div class="step-circle"><span class="material-symbols-outlined" style="font-size:16px;">notifications_active</span></div>
+          <div class="step-info">
+            <div class="step-title">Ready for Serving</div>
+            <div class="step-desc">Food plated, beverage garnished, waiter alerted.</div>
+            <div class="step-time" id="step-time-3">Pending</div>
+          </div>
+        </div>
+
+        <div class="step-node-row" id="step-node-4">
+          <div class="step-circle"><span class="material-symbols-outlined" style="font-size:16px;">check_circle</span></div>
+          <div class="step-info">
+            <div class="step-title">Served &amp; Completed</div>
+            <div class="step-desc">Delivered to your table. Enjoy your meal!</div>
+            <div class="step-time" id="step-time-4">Pending</div>
+          </div>
+        </div>
+
+        <!-- Order Items Breakdown in Ticket -->
+        <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border-subtle);" id="kds-ticket-items-list">
+          <!-- Items listed here -->
+        </div>
+
+        <!-- Simulation Control Button -->
+        <button class="table-badge-btn" onclick="advanceKitchenStage()" style="width:100%; justify-content:center; margin-top:12px; padding:10px;">
+          <span class="material-symbols-outlined">fast_forward</span>
+          <span>Simulate Next Kitchen Stage (Chime Alert)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Transparent Kitchen Queue Display -->
+    <div class="section-title" style="margin-bottom:10px;">
+      <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">queue</span>
+      <span>Live Kitchen Queue (Transparency)</span>
+    </div>
+    <div id="kitchen-queue-container">
+      <!-- Populated via JS -->
+    </div>
+  </main>
+
+  <!-- TAB 4: CART & CHECKOUT -->
+  <main class="tab-screen" id="tab-cart">
+    <div class="cart-section-card">
+      <div class="section-title" style="margin-bottom:10px;">
+        <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">restaurant</span>
+        <span>Dining Preference</span>
+      </div>
+      <div class="order-type-switch">
+        <button class="switch-option-btn active" id="btn-switch-dinein" onclick="switchDiningMode('dine_in')">
+          <span class="material-symbols-outlined" style="font-size:16px;">table_bar</span>
+          <span>Dine-In</span>
+        </button>
+        <button class="switch-option-btn" id="btn-switch-takeaway" onclick="switchDiningMode('takeaway')">
+          <span class="material-symbols-outlined" style="font-size:16px;">takeout_dining</span>
+          <span>Takeaway</span>
+        </button>
+      </div>
+
+      <div id="table-picker-section">
+        <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Select Table:</div>
+        <div class="table-picker-row">
+          <div class="tbl-pill" onclick="selectQuickTable('T-01', this)">Table 01</div>
+          <div class="tbl-pill" onclick="selectQuickTable('T-02', this)">Table 02</div>
+          <div class="tbl-pill" onclick="selectQuickTable('T-03', this)">Table 03</div>
+          <div class="tbl-pill active" onclick="selectQuickTable('T-04', this)">Table 04</div>
+          <div class="tbl-pill" onclick="selectQuickTable('T-05', this)">Table 05</div>
+          <div class="tbl-pill" onclick="selectQuickTable('T-06', this)">Table 06</div>
+          <div class="tbl-pill" onclick="selectQuickTable('T-07', this)">Table 07</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Details Input -->
+    <div class="cart-section-card">
+      <div class="section-title" style="margin-bottom:10px;">
+        <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">person</span>
+        <span>Contact for WhatsApp Bill</span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <input type="text" id="cust-name-input" placeholder="Your Name" value="Ashish Kumar" style="background:var(--bg-canvas); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px; font-size:12px; outline:none;">
+        <input type="tel" id="cust-phone-input" placeholder="Mobile Number" value="+91 98765 43210" style="background:var(--bg-canvas); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px; font-size:12px; outline:none;">
+      </div>
+    </div>
+
+    <!-- Items in Cart -->
+    <div class="cart-section-card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+        <div class="section-title">
+          <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">shopping_bag</span>
+          <span>Order Items (<span id="cart-total-qty">0</span>)</span>
+        </div>
+        <button class="section-link" onclick="switchTab('menu')">+ Add More</button>
+      </div>
+
+      <div id="cart-items-list">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Chef Note -->
+      <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);">
+        <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Special Kitchen Note:</div>
+        <input type="text" id="kitchen-note-input" placeholder="e.g. Extra hot milk, less sugar, serve with water" style="width:100%; background:var(--bg-canvas); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:8px 10px; font-size:12px; outline:none;">
+      </div>
+    </div>
+
+    <!-- Bill Breakdown Summary -->
+    <div class="cart-section-card">
+      <div class="section-title" style="margin-bottom:8px;">
+        <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">receipt</span>
+        <span>Payment &amp; Taxes</span>
+      </div>
+      <div class="bill-row">
+        <span>Item Subtotal</span>
+        <span id="bill-subtotal" style="font-family:'JetBrains Mono', monospace; font-weight:700;">₹0</span>
+      </div>
+      <div class="bill-row">
+        <span>GST &amp; Cafe Taxes (5%)</span>
+        <span id="bill-gst" style="font-family:'JetBrains Mono', monospace;">₹0</span>
+      </div>
+      <div class="bill-row">
+        <span>
+          Platform Convenience Fee
+          <span class="platform-fee-badge">₹1 FLAT</span>
+        </span>
+        <span id="bill-platform-fee" style="font-family:'JetBrains Mono', monospace;">₹1</span>
+      </div>
+      <div class="bill-row total">
+        <span>To Pay</span>
+        <span id="bill-grand-total" style="color:var(--brand-primary); font-family:'JetBrains Mono', monospace;">₹1</span>
+      </div>
+    </div>
+
+    <!-- Payment Options Grid -->
+    <div class="cart-section-card">
+      <div class="section-title" style="margin-bottom:8px;">
+        <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">payments</span>
+        <span>Select Payment Mode</span>
+      </div>
+      <div class="pay-methods-grid">
+        <div class="pay-option-card selected" id="pay-opt-upi" onclick="selectPaymentMode('upi')">
+          <div class="pay-option-left">
+            <div class="pay-icon-box"><span class="material-symbols-outlined">qr_code_2</span></div>
+            <div>
+              <div style="font-size:13px; font-weight:800; color:var(--text-main);">Instant UPI (GPay / PhonePe / QR)</div>
+              <div style="font-size:11px; color:var(--text-muted);">Zero fees, instant kitchen verification</div>
+            </div>
+          </div>
+          <span class="material-symbols-outlined" style="color:var(--brand-emerald); font-size:20px;">check_circle</span>
+        </div>
+
+        <div class="pay-option-card" id="pay-opt-card" onclick="selectPaymentMode('card')">
+          <div class="pay-option-left">
+            <div class="pay-icon-box"><span class="material-symbols-outlined">credit_card</span></div>
+            <div>
+              <div style="font-size:13px; font-weight:800; color:var(--text-main);">Cards / NetBanking (Razorpay)</div>
+              <div style="font-size:11px; color:var(--text-muted);">Visa, MasterCard, RuPay</div>
+            </div>
+          </div>
+          <span class="material-symbols-outlined" style="color:var(--border-color); font-size:20px;">radio_button_unchecked</span>
+        </div>
+
+        <div class="pay-option-card" id="pay-opt-cash" onclick="selectPaymentMode('cash')">
+          <div class="pay-option-left">
+            <div class="pay-icon-box"><span class="material-symbols-outlined">point_of_sale</span></div>
+            <div>
+              <div style="font-size:13px; font-weight:800; color:var(--text-main);">Pay at Counter (Cash / UPI)</div>
+              <div style="font-size:11px; color:var(--text-muted);">Send order to kitchen now, pay later</div>
+            </div>
+          </div>
+          <span class="material-symbols-outlined" style="color:var(--border-color); font-size:20px;">radio_button_unchecked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Order CTA -->
+    <button class="checkout-cta-btn" onclick="submitOrder()">
+      <span style="display:flex; flex-direction:column; align-items:flex-start;">
+        <span style="font-size:15px; font-weight:800;" id="cta-grand-total">Pay ₹0</span>
+        <span style="font-size:10px; color:#A3BFB0; font-weight:600;">Includes ₹1 platform fee &amp; GST</span>
+      </span>
+      <span style="display:flex; align-items:center; gap:6px;">
+        <span>Place Order &amp; Cook</span>
+        <span class="material-symbols-outlined">skillet</span>
+      </span>
+    </button>
+  </main>
+
+  <!-- TAB 5: EXPLORE (Public Website Features) -->
+  <main class="tab-screen" id="tab-explore">
+    <div class="section-title" style="margin-bottom:12px;">
+      <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">explore</span>
+      <span>About BrewPluse &amp; Digital Features</span>
+    </div>
+
+    <!-- Digital QR Feature Card -->
+    <div class="explore-feature-card">
+      <span class="feature-tag">Digital Innovation</span>
+      <div class="feature-title">Contactless QR Table Ordering</div>
+      <div class="feature-desc">Scan any QR code placed on cafe tables to browse live menu, customize drinks, and place orders directly to the kitchen display.</div>
+    </div>
+
+    <!-- Live TV Menu Board Preview -->
+    <div class="explore-feature-card">
+      <span class="feature-tag">Cafe Display System</span>
+      <div class="feature-title">Interactive TV Menu Board</div>
+      <div class="feature-desc">Real-time cafe digital billboard with automated price updates, rotating special combos, and live order status tickers.</div>
+      <button class="table-badge-btn" onclick="showDemoToast('TV Menu Board Preview Loaded!')" style="margin-top:6px; align-self:flex-start;">
+        <span class="material-symbols-outlined">tv</span>
+        <span>View TV Menu Demo</span>
+      </button>
+    </div>
+
+    <!-- Quality Beans Roasting -->
+    <div class="explore-feature-card">
+      <span class="feature-tag">Roastery Philosophy</span>
+      <div class="feature-title">100% Arabica &amp; Micro-Lot Roasting</div>
+      <div class="feature-desc">Sourced ethically from Chikmagalur and Coorg estate farms. Roasted small-batch every Tuesday for peak crema and nuanced aroma.</div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="section-title" style="margin-top:10px; margin-bottom:10px;">
+      <span class="material-symbols-outlined" style="color:var(--brand-primary); font-size:20px;">help</span>
+      <span>Frequently Asked Questions</span>
+    </div>
+
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span>How does live kitchen order tracking work?</span>
+        <span class="material-symbols-outlined">expand_more</span>
+      </div>
+      <div class="accordion-body">Once your order is confirmed, it is dispatched to the kitchen display screen. You can track real-time preparation timers, plating status, and get audio alerts when your meal is served.</div>
+    </div>
+
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span>What payment options are accepted?</span>
+        <span class="material-symbols-outlined">expand_more</span>
+      </div>
+      <div class="accordion-body">We accept Instant UPI (Google Pay, PhonePe, Paytm), Credit/Debit cards via Razorpay, and direct Cash payment at the counter.</div>
+    </div>
+
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span>Can I customize milk and sweetness?</span>
+        <span class="material-symbols-outlined">expand_more</span>
+      </div>
+      <div class="accordion-body">Yes! Tap any coffee or tea in the Menu tab to choose Oat milk, Almond milk, sugar level, and add custom instructions for the barista.</div>
+    </div>
+
+    <!-- Contact & Feedback Card -->
+    <div class="explore-feature-card" style="margin-top:10px;">
+      <span class="feature-tag">Assistance</span>
+      <div class="feature-title">Need Help or Have Feedback?</div>
+      <div class="feature-desc">Our barista team is at your service. Contact us via WhatsApp or speak to our floor captain.</div>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="table-badge-btn" onclick="callWaiter()">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span>Call Waiter</span>
+        </button>
+        <button class="table-badge-btn" onclick="showDemoToast('Connecting to WhatsApp...')">
+          <span class="material-symbols-outlined">chat</span>
+          <span>WhatsApp Us</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- App Version & Legal Links -->
+    <div style="text-align:center; padding:18px 0; font-size:11px; color:var(--text-muted); line-height:1.6;">
+      <div>BrewPluse Technologies v2.4 (Android Edition)</div>
+      <div>Designed for Patrons &amp; Coffee Lovers</div>
+      <div style="margin-top:4px;">
+        <span style="text-decoration:underline; cursor:pointer;" onclick="showDemoToast('Privacy Policy: All customer data is secured with 256-bit encryption.')">Privacy Policy</span> &middot; 
+        <span style="text-decoration:underline; cursor:pointer;" onclick="showDemoToast('Terms: Orders placed are final once kitchen starts cooking.')">Terms of Service</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       4. BOTTOM NAVIGATION BAR
+       ========================================================= -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-btn-home" onclick="switchTab('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span class="nav-label">Home</span>
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" id="nav-btn-menu" onclick="switchTab('menu')">
+      <span class="material-symbols-outlined">restaurant_menu</span>
+      <span class="nav-label">Menu</span>
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" id="nav-btn-kitchen" onclick="switchTab('kitchen')">
+      <span class="material-symbols-outlined">skillet</span>
+      <span class="nav-label">Kitchen</span>
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" id="nav-btn-cart" onclick="switchTab('cart')">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span class="nav-label">Cart</span>
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" id="nav-btn-explore" onclick="switchTab('explore')">
+      <span class="material-symbols-outlined">explore</span>
+      <span class="nav-label">Explore</span>
+      <span class="nav-dot"></span>
+    </button>
+  </nav>
+
+  <!-- =========================================================
+       5. MODALS & POPUPS
+       ========================================================= -->
+
+  <!-- Item Customization Bottom Sheet -->
+  <div class="modal-backdrop" id="customizer-modal" onclick="closeCustomizerModal(event)">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px;">
+        <div>
+          <div style="font-size:16px; font-weight:800; color:var(--text-main);" id="modal-item-name">Customizer</div>
+          <div style="font-size:13px; font-weight:800; color:var(--brand-primary); font-family:'JetBrains Mono', monospace; margin-top:2px;" id="modal-item-price">₹0</div>
+        </div>
+        <button style="background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="closeCustomizerModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Milk Selection -->
+      <div style="font-size:12px; font-weight:800; color:var(--text-main); margin-bottom:6px;">Choose Milk:</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px;" id="modal-milk-options">
+        <button class="tbl-pill active" onclick="selectModalOption('milk', 'Whole Milk', 0, this)">Whole Milk (+₹0)</button>
+        <button class="tbl-pill" onclick="selectModalOption('milk', 'Oat Milk', 30, this)">Oat Milk (+₹30)</button>
+        <button class="tbl-pill" onclick="selectModalOption('milk', 'Almond Milk', 35, this)">Almond Milk (+₹35)</button>
+        <button class="tbl-pill" onclick="selectModalOption('milk', 'Soy Milk', 25, this)">Soy Milk (+₹25)</button>
+      </div>
+
+      <!-- Size Selection -->
+      <div style="font-size:12px; font-weight:800; color:var(--text-main); margin-bottom:6px;">Cup Size:</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px;">
+        <button class="tbl-pill active" onclick="selectModalOption('size', 'Regular (250ml)', 0, this)">Regular (250ml)</button>
+        <button class="tbl-pill" onclick="selectModalOption('size', 'Large (350ml)', 40, this)">Large (+₹40)</button>
+      </div>
+
+      <!-- Sugar Level -->
+      <div style="font-size:12px; font-weight:800; color:var(--text-main); margin-bottom:6px;">Sweetness Level:</div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; margin-bottom:16px;">
+        <button class="tbl-pill" onclick="selectModalOption('sugar', 'No Sugar', 0, this)">No Sugar</button>
+        <button class="tbl-pill active" onclick="selectModalOption('sugar', 'Normal', 0, this)">Normal</button>
+        <button class="tbl-pill" onclick="selectModalOption('sugar', 'Extra Sweet', 0, this)">Extra</button>
+      </div>
+
+      <!-- Add to Cart CTA -->
+      <button class="checkout-cta-btn" onclick="confirmCustomizedItem()">
+        <span id="modal-cta-label">Add to Cart</span>
+        <span id="modal-cta-price" style="font-family:'JetBrains Mono', monospace;">₹0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Selection & QR Scanner Modal -->
+  <div class="modal-backdrop" id="table-modal" onclick="closeTableModal(event)">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div style="font-size:16px; font-weight:800; color:var(--text-main); margin-bottom:4px;">Select Dining Location</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">Pick your table number or choose takeaway for counter pickup.</div>
+
+      <div class="order-type-switch">
+        <button class="switch-option-btn active" id="modal-switch-dinein" onclick="switchDiningMode('dine_in')">
+          <span class="material-symbols-outlined" style="font-size:16px;">table_bar</span>
+          <span>Dine-In Table</span>
+        </button>
+        <button class="switch-option-btn" id="modal-switch-takeaway" onclick="switchDiningMode('takeaway')">
+          <span class="material-symbols-outlined" style="font-size:16px;">takeout_dining</span>
+          <span>Takeaway Pickup</span>
+        </button>
+      </div>
+
+      <div style="font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:8px;">Indoor &amp; Outdoor Tables:</div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:18px;">
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 01')">T-01</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 02')">T-02</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 03')">T-03</button>
+        <button class="tbl-pill active" onclick="assignTableAndClose('Table 04')">T-04</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 05')">T-05</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 06')">T-06</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 07')">T-07</button>
+        <button class="tbl-pill" onclick="assignTableAndClose('Table 08')">T-08</button>
+      </div>
+
+      <button class="table-badge-btn" onclick="simulateScanQR()" style="width:100%; justify-content:center; padding:12px;">
+        <span class="material-symbols-outlined">qr_code_scanner</span>
+        <span>Scan QR Code on Table</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Thermal Tax Invoice & Order Success Modal -->
+  <div class="modal-backdrop" id="receipt-modal" onclick="closeReceiptModal(event)">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="width:50px; height:50px; border-radius:50%; background:rgba(16, 185, 129, 0.15); color:var(--brand-emerald); display:flex; align-items:center; justify-content:center; margin:0 auto 10px auto;">
+          <span class="material-symbols-outlined" style="font-size:32px;">check_circle</span>
+        </div>
+        <div style="font-size:18px; font-weight:800; color:var(--text-main);">Order Placed Successfully!</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Dispatched to the BrewPluse Kitchen KDS.</div>
+      </div>
+
+      <!-- Thermal Bill Simulation Box -->
+      <div style="background:#FAF8F5; border:1px dashed var(--border-color); border-radius:var(--radius-md); padding:16px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#222; margin-bottom:16px;">
+        <div style="text-align:center; font-weight:800; font-size:14px; margin-bottom:2px;">BREWPLUSE CAFE &amp; ROASTERY</div>
+        <div style="text-align:center; font-size:10px; color:#666;">GSTIN: 29AABCU9603R1ZM</div>
+        <div style="text-align:center; font-size:10px; color:#666; margin-bottom:8px;">Indiranagar, 100ft Rd, Bangalore</div>
+        <div style="border-bottom:1px dashed #ccc; margin-bottom:8px;"></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px;">
+          <span>Order: <strong id="receipt-order-no">#BP-1048</strong></span>
+          <span id="receipt-table-no">Table: 04</span>
+        </div>
+        <div style="font-size:10px; color:#666; margin-bottom:8px;" id="receipt-date-time">Nov 18, 2026 &middot; 1:30 PM</div>
+        <div style="border-bottom:1px dashed #ccc; margin-bottom:8px;"></div>
+
+        <div id="receipt-items-container">
+          <!-- Items inserted here -->
+        </div>
+
+        <div style="border-bottom:1px dashed #ccc; margin:8px 0;"></div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Subtotal:</span>
+          <span id="receipt-subtotal">₹0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>GST (5%):</span>
+          <span id="receipt-gst">₹0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Platform Fee:</span>
+          <span>₹1</span>
+        </div>
+        <div style="border-bottom:1px solid #222; margin:6px 0;"></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:800;">
+          <span>TOTAL PAID:</span>
+          <span id="receipt-grand-total">₹0</span>
+        </div>
+        <div style="text-align:center; margin-top:10px; font-size:10px; color:#888;">Thank you for visiting BrewPluse! Enjoy your coffee.</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button class="table-badge-btn" onclick="window.print()" style="justify-content:center; padding:12px;">
+          <span class="material-symbols-outlined">print</span>
+          <span>Print Bill</span>
+        </button>
+        <button class="checkout-cta-btn" onclick="closeReceiptAndTrack()" style="justify-content:center; padding:12px;">
+          <span>Track in Kitchen &rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Message -->
+  <div id="toast-msg">
+    <span class="material-symbols-outlined" style="font-size:16px; color:#34D399;">check_circle</span>
+    <span id="toast-text">Message</span>
+  </div>
+
+  <!-- =========================================================
+       6. JAVASCRIPT APPLICATION CORE
+       ========================================================= -->
+  <script>
+    /* ---------------------------------------------------------
+       A. CATALOG & MENU DATA
+       --------------------------------------------------------- */
+    const MENU_CATALOG = [
+      {
+        id: 'item-1',
+        name: 'Signature Tiramisu Latte',
+        cat: 'hot_coffee',
+        price: 240,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Single-origin espresso layered with creamy mascarpone foam, Belgian cocoa dust & ladyfinger biscuit.',
+        prepTime: '4-6m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-2',
+        name: 'Spanish Cortado',
+        cat: 'hot_coffee',
+        price: 180,
+        isVeg: true,
+        isBestseller: false,
+        desc: 'Double shot of dark roasted espresso balanced 1:1 with silky textured condensed whole milk.',
+        prepTime: '3-4m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-3',
+        name: 'Velvet Flat White',
+        cat: 'hot_coffee',
+        price: 210,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Ristretto espresso shots crowned with glossy micro-foam and handcrafted tulip latte art.',
+        prepTime: '4-5m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-4',
+        name: 'Kyoto Drip Cold Brew',
+        cat: 'cold_coffee',
+        price: 220,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Slow dripped for 16 hours over ice. Crisp citrus notes, low acidity and served over a crystal rock.',
+        prepTime: '2-3m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-5',
+        name: 'Iced Spanish Latte',
+        cat: 'cold_coffee',
+        price: 230,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Cold espresso shaken with condensed sweet milk and poured over chilled ice.',
+        prepTime: '3-4m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-6',
+        name: 'Ceremonial Iced Matcha Latte',
+        cat: 'tea',
+        price: 260,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Uji Kyoto grade ceremonial matcha whisked fresh with chilled oat milk and Madagascar vanilla.',
+        prepTime: '4-5m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-7',
+        name: 'Kashmiri Saffron Kahwa',
+        cat: 'tea',
+        price: 190,
+        isVeg: true,
+        isBestseller: false,
+        desc: 'Brewed green tea with whole green cardamom, cinnamon quill, almond slivers and pure Pampore saffron.',
+        prepTime: '4-5m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-8',
+        name: 'Butter French Croissant',
+        cat: 'bakery',
+        price: 160,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Flaky 27-layered golden butter pastry with honeycomb interior. Served warm with orange marmalade.',
+        prepTime: '3-5m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-9',
+        name: 'Sourdough Avocado Poached Toast',
+        cat: 'brunch',
+        price: 290,
+        isVeg: false,
+        isBestseller: true,
+        desc: 'Toasted country sourdough, hass avocado smash, free-range organic poached egg, feta & chili oil.',
+        prepTime: '7-9m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-10',
+        name: 'Grilled Pesto Chicken Panini',
+        cat: 'brunch',
+        price: 320,
+        isVeg: false,
+        isBestseller: false,
+        desc: 'Herb roasted chicken breast, Genovese basil pesto, mozzarella and sundried tomatoes on ciabatta.',
+        prepTime: '8-10m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-11',
+        name: 'Basque Burnt Cheesecake',
+        cat: 'dessert',
+        price: 250,
+        isVeg: true,
+        isBestseller: true,
+        desc: 'Caramelized burnt top with custard-soft molten center, paired with berry compote.',
+        prepTime: '2-3m',
+        img: 'storefront.png'
+      },
+      {
+        id: 'item-12',
+        name: 'Dark Chocolate Truffle Brownie',
+        cat: 'dessert',
+        price: 190,
+        isVeg: true,
+        isBestseller: false,
+        desc: '70% Valrhona dark chocolate fudge brownie with sea salt flakes and walnuts.',
+        prepTime: '2-4m',
+        img: 'storefront.png'
+      }
+    ];
+
+    /* ---------------------------------------------------------
+       B. APP STATE
+       --------------------------------------------------------- */
+    let cart = [];
+    let currentTab = 'home';
+    let currentDietFilter = 'all';
+    let currentCategory = 'all';
+    let currentDiningMode = 'dine_in';
+    let currentTable = 'Table 04';
+    let activeTicket = null;
+    let kitchenQueue = [
+      { id: '#BP-1044', table: 'Table 02', status: 'preparing', items: '2x Flat White, 1x Croissant', elapsed: '4m' },
+      { id: '#BP-1045', table: 'Table 06', status: 'ready', items: '1x Kyoto Cold Brew', elapsed: '8m' },
+      { id: '#BP-1046', table: 'Takeaway', status: 'preparing', items: '1x Iced Matcha Latte', elapsed: '2m' }
+    ];
+    let chimeEnabled = true;
+
+    // Customizer Modal Temporary State
+    let activeCustomizerItem = null;
+    let customizerMilk = { name: 'Whole Milk', addPrice: 0 };
+    let customizerSize = { name: 'Regular (250ml)', addPrice: 0 };
+    let customizerSugar = 'Normal';
+
+    /* ---------------------------------------------------------
+       C. INITIALIZATION & LIFECYCLE
+       --------------------------------------------------------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Fade out splash screen after 1 second
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+          splash.classList.add('fade-out');
+        }
+      }, 1000);
+
+      // Seed initial cart item for a ready-to-test experience
+      cart.push({
+        id: 'item-1',
+        name: 'Signature Tiramisu Latte',
+        price: 240,
+        qty: 1,
+        custom: 'Whole Milk · Regular · Normal',
+        total: 240
+      });
+
+      // Render all views
+      renderBestsellers();
+      renderMenu();
+      updateCartUI();
+      renderKitchenQueue();
+    });
+
+    /* ---------------------------------------------------------
+       D. NAVIGATION & TABS
+       --------------------------------------------------------- */
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-screen').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+      const targetScreen = document.getElementById(`tab-${tabId}`);
+      const targetNavBtn = document.getElementById(`nav-btn-${tabId}`);
+      if (targetScreen) targetScreen.classList.add('active');
+      if (targetNavBtn) targetNavBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ---------------------------------------------------------
+       E. RENDER FUNCTIONS
+       --------------------------------------------------------- */
+    function renderBestsellers() {
+      const row = document.getElementById('home-bestsellers-row');
+      if (!row) return;
+      const best = MENU_CATALOG.filter(i => i.isBestseller).slice(0, 6);
+      row.innerHTML = best.map(item => `
+        <div class="carousel-card" onclick="openCustomizerModal('${item.id}')">
+          <div class="card-thumb">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="veg-dot-badge">
+              <span class="${item.isVeg ? 'veg-dot' : 'non-veg-dot'}"></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${item.name}</div>
+            <div class="card-desc">${item.desc}</div>
+            <div class="card-footer">
+              <span class="card-price">₹${item.price}</span>
+              <button class="card-add-btn" onclick="event.stopPropagation(); addDirectToCart('${item.id}')">+ Add</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMenu() {
+      const container = document.getElementById('menu-items-container');
+      if (!container) return;
+
+      const searchVal = (document.getElementById('menu-search-input')?.value || '').toLowerCase().trim();
+
+      const filtered = MENU_CATALOG.filter(item => {
+        // Dietary Filter
+        if (currentDietFilter === 'veg' && !item.isVeg) return false;
+        if (currentDietFilter === 'nonveg' && item.isVeg) return false;
+        if (currentDietFilter === 'bestseller' && !item.isBestseller) return false;
+
+        // Category Filter
+        if (currentCategory !== 'all' && item.cat !== currentCategory) return false;
+
+        // Search Filter
+        if (searchVal && !item.name.toLowerCase().includes(searchVal) && !item.desc.toLowerCase().includes(searchVal)) {
+          return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:40px 16px; color:var(--text-muted);">
+            <span class="material-symbols-outlined" style="font-size:48px; color:var(--border-color);">search_off</span>
+            <div style="font-size:14px; font-weight:700; margin-top:8px;">No matching items found</div>
+            <div style="font-size:12px; margin-top:2px;">Try adjusting filters or searching for another keyword.</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const inCart = cart.find(c => c.id === item.id);
+        return `
+          <div class="menu-item-row" onclick="openCustomizerModal('${item.id}')">
+            <div class="item-img-box">
+              <img src="${item.img}" alt="${item.name}">
+              <div class="veg-dot-badge">
+                <span class="${item.isVeg ? 'veg-dot' : 'non-veg-dot'}"></span>
+              </div>
+            </div>
+            <div class="item-info-col">
+              <div class="item-header">
+                <div>
+                  <span class="item-name">${item.name}</span>
+                  ${item.isBestseller ? '<span style="background:rgba(185,154,91,0.2); color:#B99A5B; font-size:9px; font-weight:800; padding:1px 5px; border-radius:4px; margin-left:4px;">★ BESTSELLER</span>' : ''}
+                </div>
+              </div>
+              <div class="item-desc">${item.desc}</div>
+              <div class="item-bottom-row">
+                <div>
+                  <span class="item-price">₹${item.price}</span>
+                  <span class="item-customizable-tag">Customizable &gt;</span>
+                </div>
+                ${inCart ? `
+                  <div class="qty-stepper" onclick="event.stopPropagation()">
+                    <button class="stepper-btn" onclick="updateQty('${item.id}', -1)">-</button>
+                    <span class="stepper-val">${inCart.qty}</span>
+                    <button class="stepper-btn" onclick="updateQty('${item.id}', 1)">+</button>
+                  </div>
+                ` : `
+                  <button class="card-add-btn" onclick="event.stopPropagation(); addDirectToCart('${item.id}')">+ Add</button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setDietFilter(filter, btn) {
+      currentDietFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderMenu();
+    }
+
+    function setCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-tab-btn').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderMenu();
+    }
+
+    function handleMenuSearch(val) {
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (clearBtn) clearBtn.style.display = val ? 'block' : 'none';
+      renderMenu();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('menu-search-input');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      renderMenu();
+    }
+
+    /* ---------------------------------------------------------
+       F. CART & CHECKOUT MANAGEMENT
+       --------------------------------------------------------- */
+    function addDirectToCart(itemId) {
+      const item = MENU_CATALOG.find(i => i.id === itemId);
+      if (!item) return;
+
+      const existing = cart.find(c => c.id === itemId);
+      if (existing) {
+        existing.qty += 1;
+        existing.total = existing.qty * existing.price;
+      } else {
+        cart.push({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          qty: 1,
+          custom: 'Standard Brew',
+          total: item.price
+        });
+      }
+      updateCartUI();
+      renderMenu();
+      showToast(`Added ${item.name} to Cart`);
+    }
+
+    function updateQty(itemId, delta) {
+      const idx = cart.findIndex(c => c.id === itemId);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      } else {
+        cart[idx].total = cart[idx].qty * cart[idx].price;
+      }
+      updateCartUI();
+      renderMenu();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((acc, c) => acc + c.qty, 0);
+      const subtotal = cart.reduce((acc, c) => acc + c.total, 0);
+      const gst = Math.round(subtotal * 0.05);
+      const platformFee = 1; // 1rs platform charge
+      const grandTotal = subtotal > 0 ? (subtotal + gst + platformFee) : 0;
+
+      // Badges
+      const topCount = document.getElementById('top-cart-count');
+      if (topCount) topCount.innerText = totalCount;
+      const totalQtySpan = document.getElementById('cart-total-qty');
+      if (totalQtySpan) totalQtySpan.innerText = totalCount;
+
+      // Bill Elements
+      const billSub = document.getElementById('bill-subtotal');
+      if (billSub) billSub.innerText = `₹${subtotal}`;
+      const billGst = document.getElementById('bill-gst');
+      if (billGst) billGst.innerText = `₹${gst}`;
+      const billGrand = document.getElementById('bill-grand-total');
+      if (billGrand) billGrand.innerText = `₹${grandTotal}`;
+      const ctaGrand = document.getElementById('cta-grand-total');
+      if (ctaGrand) ctaGrand.innerText = `Pay ₹${grandTotal}`;
+
+      // Render Cart List
+      const cartList = document.getElementById('cart-items-list');
+      if (cartList) {
+        if (cart.length === 0) {
+          cartList.innerHTML = `
+            <div style="text-align:center; padding:24px 10px; color:var(--text-muted);">
+              <span class="material-symbols-outlined" style="font-size:36px; color:var(--border-color);">shopping_basket</span>
+              <div style="font-size:13px; font-weight:700; margin-top:6px;">Your cart is empty</div>
+              <div style="font-size:11px; margin-top:2px;">Select delicious drinks and brunch from our menu!</div>
+            </div>
+          `;
+        } else {
+          cartList.innerHTML = cart.map(c => `
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+              <div style="flex:1;">
+                <div style="font-size:13px; font-weight:700; color:var(--text-main);">${c.name}</div>
+                <div style="font-size:10px; color:var(--text-muted);">${c.custom}</div>
+                <div style="font-size:12px; font-weight:800; color:var(--brand-primary); font-family:'JetBrains Mono', monospace; margin-top:2px;">₹${c.total}</div>
+              </div>
+              <div class="qty-stepper">
+                <button class="stepper-btn" onclick="updateQty('${c.id}', -1)">-</button>
+                <span class="stepper-val">${c.qty}</span>
+                <button class="stepper-btn" onclick="updateQty('${c.id}', 1)">+</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    /* ---------------------------------------------------------
+       G. DINING MODE & TABLE SELECTION
+       --------------------------------------------------------- */
+    function switchDiningMode(mode) {
+      currentDiningMode = mode;
+      const isDineIn = mode === 'dine_in';
+
+      // Update button highlights
+      document.querySelectorAll('#btn-switch-dinein, #modal-switch-dinein').forEach(el => el.classList.toggle('active', isDineIn));
+      document.querySelectorAll('#btn-switch-takeaway, #modal-switch-takeaway').forEach(el => el.classList.toggle('active', !isDineIn));
+
+      // Show/Hide Table Picker
+      const tblSec = document.getElementById('table-picker-section');
+      if (tblSec) tblSec.style.display = isDineIn ? 'block' : 'none';
+
+      // Update Top Label
+      const topLabel = document.getElementById('top-table-label');
+      const topBadge = document.getElementById('top-badge-text');
+      if (isDineIn) {
+        if (topLabel) topLabel.innerText = `${currentTable} · Dine-In`;
+        if (topBadge) topBadge.innerText = currentTable.replace('Table ', 'T-');
+      } else {
+        if (topLabel) topLabel.innerText = `Takeaway · Counter Pickup`;
+        if (topBadge) topBadge.innerText = 'Takeaway';
+      }
+      showToast(isDineIn ? `Selected ${currentTable}` : 'Selected Takeaway Pickup');
+    }
+
+    function selectQuickTable(tblNo, el) {
+      currentTable = tblNo.replace('T-', 'Table ');
+      document.querySelectorAll('.tbl-pill').forEach(p => p.classList.remove('active'));
+      if (el) el.classList.add('active');
+      switchDiningMode('dine_in');
+    }
+
+    function assignTableAndClose(tbl) {
+      currentTable = tbl;
+      switchDiningMode('dine_in');
+      closeTableModal();
+    }
+
+    function openTableModal() {
+      const modal = document.getElementById('table-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeTableModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const modal = document.getElementById('table-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function simulateScanQR() {
+      closeTableModal();
+      showToast('Scanning QR on Table...');
+      setTimeout(() => {
+        assignTableAndClose('Table 04');
+        playKitchenChime();
+        showToast('Table 04 QR Verified!');
+      }, 700);
+    }
+
+    function callWaiter() {
+      playKitchenChime();
+      showToast(`Waiter alerted for ${currentTable}! Arriving in 1 min.`);
+    }
+
+    /* ---------------------------------------------------------
+       H. CUSTOMIZER MODAL
+       --------------------------------------------------------- */
+    function openCustomizerModal(itemId) {
+      const item = MENU_CATALOG.find(i => i.id === itemId);
+      if (!item) return;
+
+      activeCustomizerItem = item;
+      customizerMilk = { name: 'Whole Milk', addPrice: 0 };
+      customizerSize = { name: 'Regular (250ml)', addPrice: 0 };
+      customizerSugar = 'Normal';
+
+      document.getElementById('modal-item-name').innerText = item.name;
+      updateCustomizerPrice();
+
+      const modal = document.getElementById('customizer-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeCustomizerModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const modal = document.getElementById('customizer-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function selectModalOption(type, name, addPrice, btn) {
+      btn.parentElement.querySelectorAll('.tbl-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (type === 'milk') customizerMilk = { name, addPrice };
+      if (type === 'size') customizerSize = { name, addPrice };
+      if (type === 'sugar') customizerSugar = name;
+
+      updateCustomizerPrice();
+    }
+
+    function updateCustomizerPrice() {
+      if (!activeCustomizerItem) return;
+      const total = activeCustomizerItem.price + customizerMilk.addPrice + customizerSize.addPrice;
+      document.getElementById('modal-item-price').innerText = `₹${total}`;
+      document.getElementById('modal-cta-price').innerText = `₹${total}`;
+    }
+
+    function confirmCustomizedItem() {
+      if (!activeCustomizerItem) return;
+      const unitPrice = activeCustomizerItem.price + customizerMilk.addPrice + customizerSize.addPrice;
+      const customNotes = `${customizerMilk.name} · ${customizerSize.name} · ${customizerSugar}`;
+
+      cart.push({
+        id: `${activeCustomizerItem.id}-${Date.now()}`,
+        name: activeCustomizerItem.name,
+        price: unitPrice,
+        qty: 1,
+        custom: customNotes,
+        total: unitPrice
+      });
+
+      updateCartUI();
+      renderMenu();
+      closeCustomizerModal();
+      showToast(`Added ${activeCustomizerItem.name} (${customizerMilk.name})`);
+    }
+
+    /* ---------------------------------------------------------
+       I. PAYMENT & SUBMISSION
+       --------------------------------------------------------- */
+    let selectedPayMode = 'upi';
+
+    function selectPaymentMode(mode) {
+      selectedPayMode = mode;
+      document.querySelectorAll('.pay-option-card').forEach(el => el.classList.remove('selected'));
+      const activeCard = document.getElementById(`pay-opt-${mode}`);
+      if (activeCard) activeCard.classList.add('selected');
+    }
+
+    function submitOrder() {
+      if (cart.length === 0) {
+        showToast('Cart is empty. Please add items first!');
+        switchTab('menu');
+        return;
+      }
+
+      const subtotal = cart.reduce((acc, c) => acc + c.total, 0);
+      const gst = Math.round(subtotal * 0.05);
+      const grandTotal = subtotal + gst + 1;
+      const orderNo = `#BP-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      activeTicket = {
+        orderNumber: orderNo,
+        table: currentDiningMode === 'dine_in' ? currentTable : 'Takeaway Counter',
+        status: 'placed',
+        stage: 1,
+        items: [...cart],
+        subtotal,
+        gst,
+        platformFee: 1,
+        grandTotal,
+        placedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      // Sound bell chime
+      playKitchenChime();
+
+      // Clear Cart
+      cart = [];
+      updateCartUI();
+      renderMenu();
+
+      // Update Kitchen Tab
+      updateKitchenActiveTicket();
+
+      // Show Receipt Modal
+      populateReceiptModal();
+      const receiptModal = document.getElementById('receipt-modal');
+      if (receiptModal) receiptModal.classList.add('active');
+
+      // Update Home Active Ticket Banner
+      const homeBanner = document.getElementById('home-active-ticket-banner');
+      if (homeBanner) homeBanner.style.display = 'block';
+    }
+
+    function populateReceiptModal() {
+      if (!activeTicket) return;
+      document.getElementById('receipt-order-no').innerText = activeTicket.orderNumber;
+      document.getElementById('receipt-table-no').innerText = activeTicket.table;
+      document.getElementById('receipt-subtotal').innerText = `₹${activeTicket.subtotal}`;
+      document.getElementById('receipt-gst').innerText = `₹${activeTicket.gst}`;
+      document.getElementById('receipt-grand-total').innerText = `₹${activeTicket.grandTotal}`;
+      document.getElementById('receipt-date-time').innerText = `${new Date().toLocaleDateString()} · ${activeTicket.placedAt}`;
+
+      const container = document.getElementById('receipt-items-container');
+      if (container) {
+        container.innerHTML = activeTicket.items.map(i => `
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+            <span>${i.qty}x ${i.name}</span>
+            <span>₹${i.total}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function closeReceiptModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const modal = document.getElementById('receipt-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function closeReceiptAndTrack() {
+      closeReceiptModal();
+      switchTab('kitchen');
+    }
+
+    /* ---------------------------------------------------------
+       J. KITCHEN SYSTEM & KDS SIMULATION
+       --------------------------------------------------------- */
+    function updateKitchenActiveTicket() {
+      if (!activeTicket) return;
+
+      document.getElementById('kds-ticket-number').innerText = activeTicket.orderNumber;
+      document.getElementById('kds-ticket-table').innerText = activeTicket.table;
+
+      // Update Step Nodes
+      const stage = activeTicket.stage || 1;
+      for (let i = 1; i <= 4; i++) {
+        const node = document.getElementById(`step-node-${i}`);
+        if (!node) continue;
+        node.classList.remove('done', 'active');
+        if (i < stage) node.classList.add('done');
+        else if (i === stage) node.classList.add('active');
+      }
+
+      // Update Items list in KDS Ticket
+      const itemsList = document.getElementById('kds-ticket-items-list');
+      if (itemsList) {
+        itemsList.innerHTML = activeTicket.items.map(i => `
+          <div class="ticket-item-line">
+            <span><strong>${i.qty}x</strong> ${i.name} (${i.custom})</span>
+            <span style="font-weight:700;">₹${i.total}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function advanceKitchenStage() {
+      if (!activeTicket) {
+        showToast('No active order. Please place an order first!');
+        return;
+      }
+
+      activeTicket.stage = (activeTicket.stage || 1) + 1;
+      if (activeTicket.stage > 4) activeTicket.stage = 1;
+
+      playKitchenChime();
+
+      const stageLabels = [
+        '',
+        'Order Received & Verified',
+        'Kitchen Preparing on Grill',
+        'Ready for Table Serving / Counter Pickup',
+        'Served & Completed! Thank you'
+      ];
+
+      updateKitchenActiveTicket();
+      showToast(`Kitchen: ${stageLabels[activeTicket.stage]}`);
+
+      // Update Home banner
+      const bannerStatus = document.getElementById('home-banner-status');
+      if (bannerStatus) bannerStatus.innerText = stageLabels[activeTicket.stage];
+    }
+
+    function renderKitchenQueue() {
+      const container = document.getElementById('kitchen-queue-container');
+      if (!container) return;
+
+      container.innerHTML = kitchenQueue.map(q => `
+        <div class="kds-ticket-card">
+          <div class="ticket-header-row">
+            <span class="ticket-no">${q.id}</span>
+            <span class="ticket-table-chip">${q.table}</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-main); font-weight:600;">${q.items}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:11px;">
+            <span style="color:var(--text-muted);">Elapsed: ${q.elapsed}</span>
+            <span style="background:${q.status === 'ready' ? 'rgba(16,185,129,0.2)' : 'rgba(185,154,91,0.2)'}; color:${q.status === 'ready' ? '#10B981' : '#B99A5B'}; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">
+              ${q.status}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ---------------------------------------------------------
+       K. WEB AUDIO SYNTHESIZED KITCHEN BELL CHIME
+       --------------------------------------------------------- */
+    function playKitchenChime() {
+      if (!chimeEnabled || typeof window === 'undefined') return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+
+        // Chime Note 1: High crisp alert (C6 - 1046.5 Hz)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'triangle';
+        osc1.frequency.setValueAtTime(1046.5, ctx.currentTime);
+        gain1.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(ctx.currentTime);
+        osc1.stop(ctx.currentTime + 0.35);
+
+        // Chime Note 2: Harmonic resolution (G5 - 784 Hz)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(783.99, ctx.currentTime + 0.12);
+        gain2.gain.setValueAtTime(0.35, ctx.currentTime + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.65);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(ctx.currentTime + 0.12);
+        osc2.stop(ctx.currentTime + 0.65);
+      } catch (e) {
+        console.warn('[Kitchen Audio Chime]:', e);
+      }
+    }
+
+    function toggleChimeAudio() {
+      chimeEnabled = !chimeEnabled;
+      const icon = document.getElementById('kds-sound-icon');
+      const label = document.getElementById('kds-sound-label');
+      if (icon) icon.innerText = chimeEnabled ? 'volume_up' : 'volume_off';
+      if (label) label.innerText = chimeEnabled ? 'Kitchen Chime On' : 'Kitchen Chime Off';
+      showToast(chimeEnabled ? 'Kitchen chime sound enabled' : 'Kitchen chime sound muted');
+    }
+
+    /* ---------------------------------------------------------
+       L. TOAST & ACCORDION HELPERS
+       --------------------------------------------------------- */
+    function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      const text = document.getElementById('toast-text');
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function showDemoToast(msg) {
+      showToast(msg);
+    }
+
+    function toggleAccordion(el) {
+      el.classList.toggle('open');
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (icon) icon.innerText = el.classList.contains('open') ? 'expand_less' : 'expand_more';
+    }
+  </script>
+</body>
+</html>
