@@ -856,6 +856,7 @@ export default function CustomerQrOrderingPage() {
                       <img
                         src={item.image}
                         alt={item.name}
+                        title={item.name}
                         className="w-full h-full object-cover"
                         loading="lazy"
                         onError={(e) => {
@@ -1325,6 +1326,7 @@ export default function CustomerQrOrderingPage() {
                       upiPayUrl
                     )}`}
                     alt="UPI Payment QR"
+                    title="UPI Payment QR Code"
                     className="w-full h-full object-contain"
                   />
                 </div>

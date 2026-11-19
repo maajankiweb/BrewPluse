@@ -920,6 +920,7 @@ export default function PosPage() {
                         <img
                           src={upiQrImageUrl}
                           alt="Dynamic UPI QR"
+                          title="Dynamic UPI QR Code"
                           className="w-full h-full object-contain"
                         />
                       ) : (

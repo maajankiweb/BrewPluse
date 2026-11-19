@@ -114,6 +114,7 @@ export default function QrCodeStandDetailPage() {
               <Image
                 src="/hardware-images/QR-img.png"
                 alt="QR Standee"
+                title="BrewPluse Acrylic QR Code Standee"
                 fill
                 className="w-full h-full object-cover object-center"
               />
@@ -132,6 +133,7 @@ export default function QrCodeStandDetailPage() {
                 <Image
                   src="/hardware-images/QR-img.png"
                   alt="Product Photo"
+                  title="BrewPluse QR Standee Product Photo"
                   fill
                   className="w-full h-full object-cover"
                 />
@@ -143,6 +145,7 @@ export default function QrCodeStandDetailPage() {
                 <Image
                   src="/hardware-images/QR-img.png"
                   alt="Video Demo"
+                  title="BrewPluse QR Standee Demo"
                   fill
                   className="w-full h-full object-cover"
                 />
@@ -397,6 +400,7 @@ export default function QrCodeStandDetailPage() {
                 <Image
                   src="/hardware-images/QR-img.png"
                   alt="QR Standee"
+                  title="BrewPluse Acrylic QR Code Standee"
                   fill
                   className="w-full h-full object-contain p-2"
                 />

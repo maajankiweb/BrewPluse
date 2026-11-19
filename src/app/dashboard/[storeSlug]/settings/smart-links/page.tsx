@@ -624,7 +624,7 @@ export default function SmartLinksSettingsPage() {
                   <div className="text-center space-y-1.5">
                     <div className="w-16 h-16 rounded-full bg-[#002D23] text-white font-extrabold text-2xl flex items-center justify-center mx-auto shadow-md border-2 border-[#B99A5B] overflow-hidden">
                       {logoUrl ? (
-                        <img src={logoUrl} alt={cafeName} className="w-full h-full object-cover" />
+                        <img src={logoUrl} alt={cafeName} title={cafeName} className="w-full h-full object-cover" />
                       ) : (
                         cafeName.charAt(0) || 'B'
                       )}
@@ -821,6 +821,7 @@ export default function SmartLinksSettingsPage() {
                     publicHubUrl
                   )}`}
                   alt="QR Code"
+                  title="Cafe Smart Bio-Link QR Code"
                   className="w-48 h-48 mx-auto"
                 />
               </div>

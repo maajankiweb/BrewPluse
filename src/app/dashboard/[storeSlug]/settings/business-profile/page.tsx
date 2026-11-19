@@ -228,6 +228,7 @@ export default function BusinessProfilePage() {
                 <img
                   src={logoUrl}
                   alt="Logo preview"
+                  title="Cafe Logo Preview"
                   className="w-10 h-10 rounded-lg object-contain bg-white dark:bg-[#0A1A14] border border-neutral-200 dark:border-white/10"
                 />
                 <div className="pr-3">

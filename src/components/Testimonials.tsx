@@ -99,6 +99,7 @@ export default function Testimonials() {
                         <img
                           src={r.avatar}
                           alt={`${r.name} - Verified Cafe Owner at ${r.outlet}`}
+                          title={`${r.name} - Verified Cafe Owner at ${r.outlet}`}
                           width={32}
                           height={32}
                           loading="lazy"

@@ -51,7 +51,7 @@ function DownloadContent() {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/10 border border-[#B99A5B]/40 flex items-center justify-center font-bold text-lg text-[#B99A5B] overflow-hidden shrink-0">
                 {logoUrl ? (
-                  <img src={logoUrl} alt={cafeName} className="w-full h-full object-cover" />
+                  <img src={logoUrl} alt={cafeName} title={cafeName} className="w-full h-full object-cover" />
                 ) : (
                   cafeName.charAt(0) || '☕'
                 )}
@@ -118,6 +118,7 @@ function DownloadContent() {
                 <img
                   src="/logos/brewpluse-icon.svg"
                   alt="BrewPluse Icon"
+                  title="BrewPluse App Download Icon"
                   className="object-contain select-none shrink-0 rounded-2xl shadow-xs border border-[#DDE3DD]"
                   style={{ width: '64px', height: '64px' }}
                 />

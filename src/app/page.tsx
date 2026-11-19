@@ -10,7 +10,9 @@ import WhyAndFaqSection from '@/components/WhyAndFaqSection';
 import CtaBanner from '@/components/CtaBanner';
 
 export const metadata: Metadata = {
-  title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
+  title: {
+    absolute: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
+  },
   description:
     'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
   alternates: {
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     description:
-      'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty.',
+      'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
     url: 'https://brewpluse.com/',
     siteName: 'BrewPluse',
     locale: 'en_US',
@@ -37,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     description:
-      'The ₹0/month operating system for modern cafes. QR table ordering, barista KDS, rapid counter billing, and customer loyalty — unified into one platform.',
+      'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
     images: ['/brewpluse-storefront.jpg'],
     creator: '@brewpluse',
   },
@@ -190,6 +192,7 @@ export default function HomePage() {
                 <img
                   src="/features/pos_billing.png"
                   alt="BrewPluse POS Counter Billing and Order Management"
+                  title="BrewPluse Rapid POS Billing & Counter Operations"
                   className="w-full h-44 sm:h-48 object-cover object-top hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>
@@ -234,6 +237,7 @@ export default function HomePage() {
                 <img
                   src="/features/kds.png"
                   alt="BrewPluse Real-Time Kitchen Display System (KDS)"
+                  title="BrewPluse Real-Time Barista Kitchen Display System (KDS)"
                   className="w-full h-44 sm:h-48 object-cover object-top hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>
@@ -278,6 +282,7 @@ export default function HomePage() {
                 <img
                   src="/features/qr_ordering.png"
                   alt="BrewPluse Contactless Customer QR Ordering and Digital Menu"
+                  title="BrewPluse Contactless Customer QR Ordering & Digital Menu"
                   className="w-full h-44 sm:h-48 object-cover object-top hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>

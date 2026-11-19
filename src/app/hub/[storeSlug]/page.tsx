@@ -175,7 +175,7 @@ export default function PublicCafeHubPage() {
           <div className="relative inline-block">
             <div className="w-22 h-22 rounded-full bg-[#002D23] text-white font-extrabold text-3xl flex items-center justify-center mx-auto shadow-lg border-3 border-[#B99A5B] overflow-hidden">
               {config.logoUrl ? (
-                <img src={config.logoUrl} alt={config.cafeName} className="w-full h-full object-cover" />
+                <img src={config.logoUrl} alt={config.cafeName} title={config.cafeName} className="w-full h-full object-cover" />
               ) : (
                 config.cafeName.charAt(0) || 'B'
               )}

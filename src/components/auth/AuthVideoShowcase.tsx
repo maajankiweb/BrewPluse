@@ -45,6 +45,7 @@ export function BrewPluseIsometricShowcase() {
         <img
           src="/logos/brewpluse-auth-building.jpg"
           alt="BrewPluse 3D Artisan Cafe"
+          title="BrewPluse 3D Artisan Cafe Architecture"
           className="w-full h-full object-cover object-center select-none pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
         {/* <video src="/logos/brewpluse-auth-building.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover object-center select-none pointer-events-none" /> */}

@@ -520,6 +520,7 @@ export default function MenuPage() {
                     <img
                       src={item.image}
                       alt={item.name}
+                      title={item.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
@@ -655,7 +656,7 @@ export default function MenuPage() {
                     <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-[#EAE8E4] overflow-hidden bg-[#F8F7F4] shrink-0 flex items-center justify-center relative">
                       {image ? (
                         <>
-                          <img src={image} alt="Preview" className="w-full h-full object-cover" />
+                          <img src={image} alt="Preview" title="Dish Photo Preview" className="w-full h-full object-cover" />
                           <button
                             type="button"
                             onClick={() => setImage('')}
@@ -954,6 +955,7 @@ Chocolate Brownie - 150"
                       <img
                         src={aiMenuPhoto}
                         alt="Scanned Paper Menu"
+                        title="Scanned Paper Menu Preview"
                         className={`w-full max-h-56 object-cover ${isAiScanning ? 'brightness-75' : ''}`}
                       />
 

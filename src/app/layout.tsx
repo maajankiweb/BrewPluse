@@ -13,11 +13,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://brewpluse.com'),
   title: {
-    default: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
+    default: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     template: '%s | BrewPluse',
   },
   description:
-    'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, thermal billing & recipe inventory. ₹0/month for modern coffee shops.',
+    'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
   keywords: [
     'cafe POS',
     'CafePOS',
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     shortcut: ['/favicon.ico'],
   },
   openGraph: {
-    title: 'BrewPluse – Free AI Cafe POS & Restaurant POS',
+    title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     description:
-      'Free AI Cafe POS & Restaurant POS with contactless QR table ordering, live KDS, and recipe inventory. Zero monthly software fees for modern coffee shops.',
+      'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
     url: 'https://brewpluse.com/',
     siteName: 'BrewPluse',
     locale: 'en_US',
@@ -77,9 +77,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BrewPluse – Cloud POS & Cafe Management Software',
+    title: 'BrewPluse – Honest Cafe Operating System | ₹0/Month POS for Cafes',
     description:
-      'Manage cafe billing, table QR ordering, live KDS screens, and inventory with BrewPluse. Zero monthly fees for modern cafes, coffee shops & restaurants.',
+      'The ₹0/month operating system for modern cafes and restaurants. Contactless QR table ordering, barista KDS, rapid counter billing, and loyalty — unified into one platform.',
     images: ['/storefront.png'],
     creator: '@brewpluse',
   },

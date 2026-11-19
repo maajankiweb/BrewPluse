@@ -194,6 +194,7 @@ export default function DemoTablesPage() {
                   <img
                     src={qrDataUrl}
                     alt={`Scannable QR for ${selectedQrTable.name}`}
+                    title={`Scannable QR for ${selectedQrTable.name}`}
                     className="w-36 h-36 object-contain rounded-lg"
                   />
                 ) : (

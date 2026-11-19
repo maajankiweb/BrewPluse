@@ -18,7 +18,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-2 focus:outline-none group">
               <div className="w-8 h-8 rounded-xl bg-[#002D23] border border-[#B99A5B]/30 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="/logos/brewpluse-icon.svg" alt="BrewPluse" className="w-full h-full object-contain" />
+                <img src="/logos/brewpluse-icon.svg" alt="BrewPluse" title="BrewPluse Cloud POS & Cafe Operating System Logo" className="w-full h-full object-contain" />
               </div>
               <span className="text-xl font-extrabold tracking-tight text-white">
                 Brew<span className="text-[#B99A5B]">Pluse</span>

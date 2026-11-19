@@ -187,6 +187,7 @@ export default function ProductWalkthrough() {
               <img
                 src={current.imageSrc}
                 alt={current.imageAlt}
+                title={current.imageAlt}
                 className="w-full h-auto object-cover max-h-[480px] rounded-xl transition-all duration-300"
               />
               <div className="absolute bottom-3 right-3 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-sm text-white text-[10px] font-mono">

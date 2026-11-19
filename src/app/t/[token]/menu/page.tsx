@@ -542,6 +542,7 @@ export default function CustomerMenuPage() {
                     <img
                       src={item.image}
                       alt={item.name}
+                      title={item.name}
                       className="w-24 h-20 rounded-2xl object-cover shadow-inner bg-gray-100 mb-2"
                     />
                   )}
@@ -1057,6 +1058,7 @@ export default function CustomerMenuPage() {
               <img
                 src={upiQrData.qrDataUrl}
                 alt="UPI Payment QR"
+                title="UPI Payment QR Code"
                 className="w-56 h-56 mx-auto rounded-2xl border border-gray-200 shadow-inner p-2 bg-white"
               />
               <p className="text-xl font-black text-gray-900 mt-2">₹{upiQrData.dueAmount.toFixed(2)}</p>

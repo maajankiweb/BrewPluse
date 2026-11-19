@@ -438,6 +438,7 @@ export default function HardwareCartPage() {
                                 : '/hardware-images/QR-img.png')
                             }
                             alt={item.name}
+                            title={item.name}
                             fill
                             className="object-cover"
                           />

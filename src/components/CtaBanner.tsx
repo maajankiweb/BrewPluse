@@ -17,6 +17,7 @@ export default function CtaBanner() {
           <img
             src="/brewpluse-storefront.jpg"
             alt="BrewPluse Cafe Storefront"
+            title="BrewPluse Modern Artisan Cafe Storefront"
             className="w-full h-full object-cover object-center select-none"
           />
           <div className="hidden lg:block absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-[#001F19] via-[#001F19]/70 to-transparent pointer-events-none" />

@@ -116,6 +116,7 @@ export default function NfcCardDetailPage() {
               <Image
                 src="/hardware-images/NFC-img.png"
                 alt="NFC Card"
+                title="BrewPluse NFC Smart Card"
                 fill
                 className="w-full h-full object-cover object-center"
               />
@@ -134,6 +135,7 @@ export default function NfcCardDetailPage() {
                 <Image
                   src="/hardware-images/NFC-img.png"
                   alt="Product Photo"
+                  title="BrewPluse NFC Card Product Photo"
                   fill
                   className="w-full h-full object-cover"
                 />
@@ -145,6 +147,7 @@ export default function NfcCardDetailPage() {
                 <Image
                   src="/hardware-images/NFC-img.png"
                   alt="Video Demo"
+                  title="BrewPluse NFC Card Demo"
                   fill
                   className="w-full h-full object-cover"
                 />
@@ -399,6 +402,7 @@ export default function NfcCardDetailPage() {
                 <Image
                   src="/hardware-images/NFC-img.png"
                   alt="NFC Card"
+                  title="BrewPluse NFC Card Hardware"
                   fill
                   className="w-full h-full object-contain p-2"
                 />

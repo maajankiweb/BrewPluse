@@ -400,6 +400,7 @@ export default function TablesPage() {
                       <img
                         src={qrData.qrDataUrl}
                         alt={`QR for ${selectedTable.number}`}
+                        title={`QR Code for ${selectedTable.number}`}
                         className="w-40 h-40 object-contain rounded-lg"
                       />
                       <span className="text-[10px] font-mono font-bold text-gray-700 uppercase mt-1">

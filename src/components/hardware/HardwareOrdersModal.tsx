@@ -133,6 +133,7 @@ export default function HardwareOrdersModal({
                           <Image
                             src={it.image || (it.id === 'nfc-card' ? '/hardware-images/NFC-img.png' : '/hardware-images/QR-img.png')}
                             alt={it.title}
+                            title={it.title}
                             fill
                             className="object-cover"
                           />
